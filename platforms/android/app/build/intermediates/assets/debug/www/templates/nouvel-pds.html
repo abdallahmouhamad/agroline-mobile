@@ -1,0 +1,249 @@
+<ion-view view-title="Nouvelle PDS" cache-view="false">
+  <ion-pane>
+    <div ng-app="starter">
+
+      <ion-content>
+
+        <style type="text/css">
+          input[readonly] {
+            background-color: transparent !important;
+            cursor: not-allowed;
+          }
+          .small_button{
+              width: 50% !important;
+              height: 50px !important;
+              margin-left: 5px;
+          }
+          .footer-button {
+            margin-bottom: 10px;
+            height: 50px !important;
+          }
+          .ml{
+            margin-left: 5px;
+          }
+          .header {
+
+            margin-top: 5px;
+            margin-bottom: 10px;
+          }
+          .content-div {
+            background: grey !important;
+          }
+          .content-div-row {
+            text-align: center !important;
+            border: 3px grey dashed !important;
+          }
+          .div-header{
+            margin-bottom: 20px !important;
+          }
+          .edit {
+             background: red !important;
+          }
+          ion-scroll p {
+          width: 5000px !important;
+          height: 100px !important;
+          white-space: nowrap  !important;
+          padding: 10px !important;
+          line-height: 100px !important;
+      }
+
+        </style>
+        <div ng-if="code == 'initiale'">
+          <div class="row">
+            <div class="col">
+              <button class="button button-block button-assertive"
+              cancel-button="{{ 'fichevisite_select_pv_return' | translate }}"
+              reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
+              cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
+              search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
+              ng-model="data.grossistechoisit" options="data.grossistes" option-getter="getOptGrossiste(option)"
+              modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
+              has-search="true">
+
+              <label for="" ng-if="!data.grossistechoisit">Choisir un Grossiste</label>
+              <label for="" ng-if="data.grossistechoisit">{{data.grossistechoisit.nom}}</label>
+              <div class="option">
+                <h2> {{option.nom}}</h2>
+              </div>
+             </button>
+           </div>
+        </div>
+
+
+        <div class="row" style="margin-top: 10px;">
+
+          <div class="col" style="font-size: 130%;">Details du PDS</div>
+
+        </div>
+
+        <div class="row" ng-if="data.recapPRC.length == 0 ||  edit == true">
+
+          <div class="col">
+            <button class="button button-block button-assertive"
+            cancel-button="{{ 'fichevisite_select_pv_return' | translate }}"
+            reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
+            cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
+            search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
+            ng-model="data.artcilechoisit" options="data.listarticles" option-getter="getOptArticle(option)"
+            modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
+            has-search="true">
+            Article
+           <div class="option">
+            <div class="row">
+
+                <div class="col" >
+                  <img src="http://test-test.h-tsoft.com/{{option.image}}" style="width:40%; height: 70%;">
+                </div>
+
+                <div class="col" style="font-size: 10px;">
+                  <label style="font-weight: bold;font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">Code article :</label> {{option.code}}<br/>
+                  <label style="font-weight: bold;font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">Libelle article :</label> {{option.libelle}}
+                </div>
+
+              </div>
+
+              <!--<div class="col" style="font-size: 50px;" >
+                {{option.libelle}}
+              </div>-->
+
+            </div>
+
+        </button>
+          </div>
+
+          <div class="col" ng-if="edit == true" >
+            <button class="button button-block button-assertive"
+              cancel-button="{{ 'fichevisite_select_pv_return' | translate }}"
+              reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
+              cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
+              search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
+              ng-model="data.motifchoisit" options="data.listmotifs" option-getter="getOptMotif(option)"
+              modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
+              has-search="true">
+              Motif
+              <div class="option">
+                <h2> {{option.libelle}}</h2>
+              </div>
+            </button>
+          </div>
+     </div>
+
+      <div class="row" ng-if="data.recapPRC.length == 0 || edit == true">
+
+        <div class="col">{{ data.artcilechoisit.libelle }}</div>
+        <div class="col">{{ data.motifchoisit.libelle }}</div>
+
+      </div>
+
+      <div class="list" ng-if="data.recapPRC.length == 0 ||  edit == true">
+        <label class="item item-input">
+          <span class="input-label">Quantité</span>
+          <input type="number" id="quantite" ng-model="data.quantite">
+        </label>
+      </div>
+
+      <div class="row" ng-if="data.recapPRC.length == 0 && edit == false">
+        <button ng-click="ajouter()" class="button button-block button-assertive footer-button" color="danger" type="submit"
+        name="submit"><span style="color:white">Ajouter detail</span></button>
+      </div>
+
+      <div class="row" ng-if="edit == true">
+        <button ng-click="valideEdit()" class="button button-block button-assertive footer-button" color="danger" type="submit"
+        name="submit"><span style="color:white">Modifier</span></button>
+      </div>
+
+
+
+            <p>
+              <div class="row" ng-repeat="item in data.recapPRC track by $index">
+                <a class="item item-icon-left">
+                  <label style="">MONTANT :</label> {{ item.montant }} FCFA
+                </a>
+
+              </div>
+
+
+
+              <div class="row header list">
+                <!--<div class="col" style="text-align: center;">Code detail</div>-->
+                <div class="col" style="text-align: center;">Article</div>
+
+                <div class="col" style="text-align: center;">Quantité</div>
+                <div class="col" style="text-align: center;">Action</div>
+              </div>
+
+              <div class="row list"  ng-repeat="d in data.detailsPDS | filter:motcle">
+
+                <!--<div class="col content-div-row" ng-click="showPopUp(d.artcilechoisit.image, 2)"><img src="http://test-test.h-tsoft.com/{{d.artcilechoisit.image}}" style="width:40%; height: 70%;"></div>-->
+                <!--<div class="col content-div-row" ng-if="d.idMotif !== 'edit'">
+                  {{d.codeDetail}}
+                </div>
+
+                <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">
+                  {{d.codeDetail}}
+                </div>-->
+
+                <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" ng-click="showPopUp(d.article, 1, d.codeArticle)">
+                  {{d.codeArticle}}
+                </div>
+
+                <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'" ng-click="showPopUp(d.article, 1, d.codeArticle)">
+                  {{d.codeArticle}}
+                </div>
+
+                <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" >
+                    <label style="margin-top: 10px;">
+                      {{ d.quantite }}
+                    </label>
+                </div>
+
+                <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">
+                    <label style="margin-top: 10px;">
+                      {{ d.quantite }}
+                    </label>
+                </div>
+
+                <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" ng-click="editDetail(d)">
+
+                    <i class="icon ion-edit"></i>
+
+                </div>
+
+                <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'" ng-click="editDetail(d)">
+
+                    <i class="icon ion-edit"></i>
+
+                </div>
+
+              </div>
+
+
+            </p>
+
+
+        </div>
+
+        <div ng-if="code == 'attente'">
+          <div class="list" >
+            <label class="item item-input">
+              <span class="input-label">Code de validation</span>
+              <input type="text" id="code" ng-model="data.code">
+            </label>
+          </div>
+
+          <div class="row" >
+            <button ng-click="submit()" class="button button-block button-assertive footer-button" color="danger" type="submit"
+            name="submit"><span style="color:white">Valider</span></button>
+          </div>
+        </div>
+
+    </ion-content>
+
+
+    </div>
+    <div  class="bar bar-footer footer-button" ng-if="code == 'initiale'">
+      <button ng-click="validerPdsAndSendCode()" class="button button-block button-assertive footer-button" color="danger" type="submit"
+        name="submit"><span style="color:white">Valider les quantites</span></button>
+    </div>
+  </ion-pane>
+</ion-view>

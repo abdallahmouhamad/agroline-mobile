@@ -1,0 +1,38 @@
+<ion-view title="Mes clients" cache-view="false">
+  <div ng-app="starter">
+
+    <ion-content padding="true" class="has-header">
+
+      <div class="list" ng-repeat="cli in data.clients | filter:motcle">
+        <a class="item item-thumbnail-left" href="#">
+          <img src="./img/client.png">
+          <div class="row">
+            <div class="col">Nom</div>
+            <div class="col"><p>{{ cli.nom }}</p></div>
+          </div>
+          <div class="row">
+            <div class="col">Code</div>
+            <div class="col"><p>{{ cli.codeClient }}</p></div>
+          </div>
+          <div class="row">
+            <div class="col">Adresse</div>
+            <div class="col"><p>{{ cli.adresse }}</p></div>
+          </div>
+          <div class="row">
+            <div class="col">Telephone</div>
+            <div class="col"><p>{{ cli.telephone }}</p></div>
+          </div>
+          <div class="row">
+            <div class="col">Région</div>
+            <div class="col"><p>{{ cli.region }}</p></div>
+          </div>
+          <div class="row">
+            <div class="col">Zone</div>
+            <div class="col"><p>{{ cli.zone }}</p></div>
+          </div>
+        </a>
+    </div>
+
+    </ion-content>
+  </div>
+  </ion-view>

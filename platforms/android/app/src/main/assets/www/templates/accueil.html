@@ -1,0 +1,33 @@
+<ion-view title="{{ 'TAB1' | translate }}" hide-nav-bar="true" hide-tabs>
+  <ion-pane>
+    <div ng-app="starter" >
+
+  <ion-content class="scroll-content-acceuil" padding="true" style="display: flex; align-items: center; justify-content: center;" overflow-scroll="false">
+      <style type="text/css">
+        input[readonly] {
+          background-color: transparent !important;
+          cursor: not-allowed;
+
+        }
+        .img {
+          border-radius: 50%;
+        }
+        .scroll-content-acceuil{
+          background-image:url("./img/agroline-top.jpg");
+        }
+
+      </style>
+    <div style="text-align: center">
+
+
+         <div>
+          <a href="#/app/login1" class="button button-block button-assertive"><i class="icon ion-log-in"></i>{{ 'btn_conn' | translate }}</a>
+        </div>
+
+    </div>
+
+  </ion-content>
+
+</div>
+</ion-pane>
+</ion-view>
