@@ -4,7 +4,20 @@
   "_inBundle": false,
   "_integrity": "sha512-CPqLTc+Pmf/8sL4+lJazQR0ESNTSLaHIp+37yLe49dRg+qF3KNvtGX/l01SoJilgAwDkZjFNtOORhHlzlbmEdA==",
   "_location": "/cordova-plugin-googlemaps",
-  "_phantomChildren": {},
+  "_phantomChildren": {
+    "ansi": "0.3.1",
+    "big-integer": "1.6.48",
+    "elementtree": "0.1.7",
+    "endent": "1.4.1",
+    "glob": "7.1.6",
+    "graceful-fs": "4.2.4",
+    "isexe": "2.0.0",
+    "minimatch": "3.0.4",
+    "nice-try": "1.0.5",
+    "plist": "3.0.1",
+    "q": "1.5.1",
+    "underscore": "1.11.0"
+  },
   "_requested": {
     "type": "range",
     "registry": true,
@@ -21,7 +34,7 @@
   "_resolved": "https://registry.npmjs.org/cordova-plugin-googlemaps/-/cordova-plugin-googlemaps-2.7.1.tgz",
   "_shasum": "8af5f721852144ff95c301f90a8bfb1e5e1218d2",
   "_spec": "cordova-plugin-googlemaps@^2.6.2",
-  "_where": "/Users/mac/Desktop/agroline/agroline-mobile",
+  "_where": "C:\\Users\\SOW\\Desktop\\HTSOFT\\PROJET AGROLINE\\agroline mobile\\Depot prive",
   "author": {
     "name": "Masashi Katsumata, Hirbod Mirjavadi"
   },

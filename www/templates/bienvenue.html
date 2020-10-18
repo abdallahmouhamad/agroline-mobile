@@ -1,4 +1,201 @@
-<ion-view view-title="AGROLINE-Vente" cache-view="false">
+<ion-view view-title="{{ 'acceuil_header' | translate }}" cache-view="false">
+  <ion-pane>
+    <div ng-app="starter">
+      <ion-content>
+        <ion-grid>
+
+          <style type="text/css">
+            input[readonly] {
+              background-color: transparent !important;
+              cursor: not-allowed;
+            }
+          </style>
+
+          <!-- <br>-->
+          <ion-slide-box show-pager="true" does-continue="true">
+            <ion-slide >
+              <br>
+             
+              <div class="row">
+                <div class="col" >
+                
+                  <div class="card" >
+                    <div class="item item-text-wrap"   style="background-color: #e30000; color: white" >
+                      <div class="itemheader">
+                           <p style="text-align: center;color:  white">2</p>
+                          <p style="color: white"><i class="ion-earth"></i>
+                           &nbsp;<a href="#/app/stocks" style="color: white;text-decoration:none;" >&nbsp;Mon Stock</a>
+                         </p>
+                         <p style="text-align: end;color: white"><i class="ion-chevron-right"></i></p>
+                    </div>
+                  </div>
+                  </div>
+              
+                </div>
+                <div class="col">
+                  <div class="card" >
+                    <div class="item item-text-wrap" style="background-color: #e30000; color: white" >
+                      <p style="text-align: center;color: white">2</p>
+                      <p style="color: white"><i class="ion-earth"></i>
+                        &nbsp;<a href="#/app/stockgrossistes" style="color: white;text-decoration:none;" >&nbsp;St. Grossiste</a>
+                      </p>
+                      <p style="text-align: end;color: white"><i class="ion-chevron-right"></i></p>
+  
+                    </div>
+                  </div>
+                </div>
+  
+              </div>
+            </ion-slide>
+            <ion-slide>
+              <br>
+              <br>
+              <div class="row">
+                <div class="col">
+                  <div class="card">
+                    <div class="item item-text-wrap" style="background-color: #e30000; color: white">
+                      <p style="text-align: center;color: white">5</p>
+                      <p style="color: white"><i class="ion-earth"></i>
+                        &nbsp;<a href="#/app/articles" style="color: white;text-decoration:none;">&nbsp;Mes articles</a>
+                      </p>
+
+                      <p style="text-align: end;color: white"><i class="ion-chevron-right"></i></p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="card">
+                    <div class="item item-text-wrap" style="background-color: #e30000; color: white">
+                      <p style="text-align: center;color: white">8</p>
+
+                      <p style="color: white"><i class="ion-earth"></i>
+                        &nbsp;<a href="#/app/clients" style="color: white;text-decoration:none;">&nbsp;Mes clients</a>
+                      </p>
+
+                      <p style="text-align: end;color: white"><i class="ion-chevron-right"></i></p>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </ion-slide>
+
+          </ion-slide-box>
+          <div class="row rowHome">
+            <div class="col col-100" style="text-align: center;">
+              <font size="4" face="Times New Roman" color="green"><b>
+                  <h3>Gestion Des Ventes<br>AGROLINE</font>
+              </h3></b>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col" >
+            <div class="bgsize">
+              <div class="card cardHome" style="background-color: #28a54c; color: white;">
+                <div class="item item-text-wrap" >
+                  <div class="itemBody">
+                  <p style="text-align: center"><img src="./img/visite.png"
+                      style="width:30%; height: 20%;margin-bottom: 8%"></p>
+                    </div>
+                </div>
+                <p style="color: white;text-align: center;margin-top: 10px">
+                  <a href="#/app/prcs" style="color: white;text-decoration:none;">&nbsp;Prise de Commande</a>
+                </p>
+
+
+              </div>
+            </div>
+            </div>
+            <div class="col">
+              
+              <div class="card cardHome" style="background-color: #28a54c; color: white">
+               
+                <div class="item item-text-wrap">
+                  <p style="text-align: center"><img src="./img/prospect.png" style="width:50%; height: 10%;"></p>
+                </div>
+                <p style="color: white;text-align: center;margin-top: 10px;">
+                  <a href="#/app/pds" style="color: white;text-decoration:none;">&nbsp;Prise de stock</a>
+                </p>
+              
+            </div>
+            </div>
+
+          </div>
+
+          <div class="row">
+
+
+            <div class="col">
+              <div class="card cardHome" style="background-color: #28a54c; color: white">
+                <div class="item item-text-wrap">
+                  <p style="text-align: center"><img src="./img/prc.jpg"
+                      style="width:50%; height: 150%;margin-bottom: 10%"></p>
+                </div>
+                <p style="color: white;text-align: center;margin-top: 10px">
+                  <a href="#/app/facturations" style="color: white;text-decoration:none;">&nbsp;Facturation</a>
+                </p>
+              </div>
+            </div>
+
+            <div class="col">
+              <div class="card cardHome" style="background-color: #28a54c; color: white">
+                <div class="item item-text-wrap">
+                  <p style="text-align: center"><img src="./img/client.png"
+                      style="width:50%; height: 150%;margin-bottom: 10%"></p>
+                </div>
+                <p style="color: white;text-align: center;margin-top: 10px">
+                  <a href="#/app/listpointvente" style="color: white;text-decoration:none;">&nbsp;Prospection</a>
+                </p>
+              </div>
+            </div>
+
+          </div>
+
+
+
+
+
+          <div class="row">
+
+            <div class="col">
+              <div class="card cardHome" style="background-color: #28a54c; color: white">
+                <div class="item item-text-wrap">
+                  <p style="text-align: center"><img src="./img/transfert.jpg" style="width:50%; height: 10%;"></p>
+                </div>
+                <p style="color: white;text-align: center;margin-top: 10px">
+                  <a href="#" style="color: white;text-decoration:none;">&nbsp;Transfert stock</a>
+                </p>
+              </div>
+            </div>
+
+            <div class="col">
+              <div class="card cardHome" style="background-color: #28a54c; color: white">
+                <div class="item item-text-wrap">
+                  <p style="text-align: center"><img src="./img/vente.png" style="width:50%; height: 10%;"></p>
+                </div>
+                <p style="color: white;text-align: center;margin-top: 10px">
+                  <a href="#" style="color: white;text-decoration:none;">&nbsp; Déchargement</a>
+                </p>
+              </div>
+            </div>
+
+
+
+
+          </div>
+
+
+
+
+        </ion-grid>
+
+      </ion-content>
+
+    </div>
+  </ion-pane>
+</ion-view>
+<!--<ion-view view-title="AGROLINE-Vente" cache-view="false">
   <ion-pane>
     <div ng-app="starter">
       <ion-content>
@@ -138,4 +335,5 @@
 
     </div>
   </ion-pane>
-</ion-view>
+</ion-view>-->
+

@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/mac/Desktop/agroline/agroline-mobile/platforms/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v16/values-v16.xml",
+            "outputFile": "C:\\Users\\SOW\\Desktop\\HTSOFT\\PROJET AGROLINE\\agroline mobile\\agroline-mobile\\platforms\\android\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v16\\values-v16.xml",
             "map": [
                 {
-                    "source": "/private/var/root/.gradle/caches/transforms-1/files-1.1/support-compat-27.1.1.aar/cae9f96eff9af2fec13505e50ccc92a8/res/values-v16/values-v16.xml",
+                    "source": "C:\\Users\\SOW\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-27.1.1.aar\\f86fdd393e7d64a6aa9cb5f845ea5c6b\\res\\values-v16\\values-v16.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

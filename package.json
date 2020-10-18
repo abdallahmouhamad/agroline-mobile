@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "An Ionic project",
   "devDependencies": {
-    "@ionic/v1-toolkit": "^1.0.15",
+    "@ionic/v1-toolkit": "1.0.22",
     "angular-translate": "^2.18.1",
     "cordova-android": "^7.1.0",
     "cordova-plugin-geolocation": "^4.0.2",

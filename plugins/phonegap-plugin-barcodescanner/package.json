@@ -4,10 +4,7 @@
   "_inBundle": false,
   "_integrity": "sha512-WQCDCoH9EQ9WEn2bce+B95jbNJduilAn2Vtske8KfcYAeGu7bdFqRD7zGCLCQao62VwoEwlX0cUvbQ/am12Jwg==",
   "_location": "/phonegap-plugin-barcodescanner",
-  "_phantomChildren": {
-    "abbrev": "1.1.1",
-    "osenv": "0.1.5"
-  },
+  "_phantomChildren": {},
   "_requested": {
     "type": "range",
     "registry": true,
@@ -24,7 +21,7 @@
   "_resolved": "https://registry.npmjs.org/phonegap-plugin-barcodescanner/-/phonegap-plugin-barcodescanner-8.1.0.tgz",
   "_shasum": "e0d53e4e850699205e915a4b91c2f202d31f8311",
   "_spec": "phonegap-plugin-barcodescanner@^8.0.1",
-  "_where": "/Users/mac/Desktop/agroline/agroline-mobile",
+  "_where": "C:\\Users\\SOW\\Desktop\\HTSOFT\\PROJET AGROLINE\\agroline mobile\\Depot prive",
   "author": {
     "name": "Adobe PhoneGap Team"
   },
