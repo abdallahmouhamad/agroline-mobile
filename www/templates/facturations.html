@@ -70,28 +70,7 @@
 
         </a>
 
-        <!--<div class="row">
-
-          <div class="col"  ng-click="goToRecapPrc(prc.codeCommerciale)">
-            <button class="button button-clear button-assertive" style="color: #1EAC4E;">
-              Recap PRC
-            </button>
-          </div>
-
-          <div class="col"  ng-click="goToFact(prc)">
-              <button class="button button-clear button-assertive" style="color: #1EAC4E;">
-                Facturation
-              </button>
-            </div>
-
-          <div class="col" ng-click="goToDetailPrc(prc.codePRC)">
-            <button class="button button-clear button-assertive" style="color: #1EAC4E;">
-              Details
-            </button>
-          </div>
-ng-click="goToDetailFact(fact.codeFacture)"
-ng-click="goToReglement(prc)"
-      </div>-->
+       
       <div class="row content-div">
 
         <div class="col"  >
@@ -99,13 +78,11 @@ ng-click="goToReglement(prc)"
         </div>
 
         <div class="col"  >
-          <button class="button button-clear button-assertive" style="color: white;">
-            Encaisser
-          </button>
+         
       </div>
 
 
-        <div class="col" >
+        <div class="col" ng-click="goToDetailFact(fact.codeFacture)">
           <button class="button button-clear button-assertive" style="color: white;">
             Details
           </button>
@@ -116,8 +93,8 @@ ng-click="goToReglement(prc)"
     </div>
 
     </ion-content>
-   <!--s <button class="button button-float" ng-click="goToNewPrc()">
+   <button class="button button-float bg" ng-click="goToNewFact()">
       <i class="icon ion-plus"></i>
-    </button>-->
+    </button>
   </div>
   </ion-view>
