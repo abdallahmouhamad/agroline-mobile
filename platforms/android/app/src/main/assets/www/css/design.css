@@ -1,0 +1,21 @@
+/*.modifCard{
+    background-color: #28a54c;
+ 
+}*/
+.item{
+    background-color: white; 
+}
+.item .itemheader
+{
+    background-color: #e30000;
+  
+}
+.item .itembody{
+    background-color: white;
+  /*  style=" background-color: #e30000;color: white"*/
+ 
+}
+
+.bgsize{
+    height: 99px;
+}

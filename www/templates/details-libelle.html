@@ -1,0 +1,61 @@
+<ion-view title="Detail Libelle" cache-view="false">
+    <div ng-app="starter">
+  
+      <ion-content padding="true" class="has-header">
+        <style type="text/css">
+          input[readonly] {
+            background-color: transparent !important;
+            cursor: not-allowed;
+          }
+          .small_button{
+              width: 50% !important;
+              height: 50px !important;
+              margin-left: 5px;
+          }
+          .footer-button {
+            margin-bottom: 10px !important;
+            height: 50px !important;
+          }
+          .ml{
+            margin-left: 5px;
+          }
+          .header {
+  
+            margin-top: 5px;
+            margin-bottom: 10px;
+          }
+          .content-div {
+              background: grey !important;
+            }
+            .content-div-row {
+              text-align: center !important;
+              border: 3px grey dashed !important;
+            }
+  
+        </style>
+  
+  
+          <div class="row header list content-div">
+            <div class="col" style="text-align: center;">Article</div>
+           
+          </div>
+  
+          <div class="row list" ng-repeat="d in data.detailsDechargement.details | filter:motcle">
+  
+            <div class="col content-div-row">{{d.article}}</div>
+           
+  
+          </div>
+  
+          <div class="row">
+            <div class="col"></div>
+            <div class="col"></div>
+          </div>
+  
+  
+  
+      </ion-content>
+  
+    </div>
+    </ion-view>
+  

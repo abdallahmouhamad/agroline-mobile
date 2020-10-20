@@ -230,6 +230,17 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
           controller: 'PdsCtrl'
         }
       }
+
+    })
+
+    .state('app.dechargements', {
+      url: '/dechargements',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/dechargements.html',
+          controller: 'dechargementsCtrl'
+        }
+      }
     })
     .state('app.details-pds', {
       url: '/details-pds',
@@ -237,6 +248,36 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
         'menuContent': {
           templateUrl: 'templates/details-pds.html',
           controller: 'DetailPdsCtrl'
+        }
+      }
+    })
+
+    .state('app.dechargement', {
+      url: '/dechargement',
+      views: {
+        'menuContent': {
+          templateUrl: 'dechargement.html',
+          controller: 'DechargementCtrl'
+        }
+      }
+    })
+
+    .state('app.details-dechargement', {
+      url: '/details-dechargement',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/details-dechargement.html',
+          controller: 'DetailDechargementCtrl'
+        }
+      }
+    })
+
+    .state('app.details-libelle', {
+      url: '/details-libelle',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/details-libelle.html',
+          controller: 'DetailsLibelleCtrl'
         }
       }
     })
