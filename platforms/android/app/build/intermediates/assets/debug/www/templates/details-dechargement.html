@@ -1,126 +1,121 @@
 <ion-view title="Detail dechargement" cache-view="false">
-  <div ng-app="starter">
+  <ion-pane>
+    <div ng-app="starter">
 
-    <ion-content padding="true" class="has-header">
-      <ion-grid>
-        <style type="text/css">
-          input[readonly] {
-            background-color: transparent !important;
-            cursor: not-allowed;
-          }
+      <ion-content padding="true" class="has-header">
+        <ion-grid>
+          <style type="text/css">
+            input[readonly] {
+              background-color: transparent !important;
+              cursor: not-allowed;
+            }
 
-          .small_button {
-            width: 50% !important;
-            height: 50px !important;
-            margin-left: 5px;
-          }
+            .small_button {
+              width: 50% !important;
+              height: 50px !important;
+              margin-left: 5px;
+            }
 
-          .footer-button {
-            margin-bottom: 10px !important;
-            height: 50px !important;
-          }
+            .footer-button {
+              margin-bottom: 10px !important;
+              height: 50px !important;
+            }
 
-          .ml {
-            margin-left: 5px;
-          }
+            .ml {
+              margin-left: 5px;
+            }
 
-          .header {
+            .header {
 
-            margin-top: 5px;
-            margin-bottom: 10px;
-          }
+              margin-top: 5px;
+              margin-bottom: 10px;
+            }
 
-          .content-div {
-            background: grey !important;
-          }
+            .content-div {
+              background: grey !important;
+            }
 
-          .content-div-row {
-            text-align: center !important;
-            border: 3px grey dashed !important;
-          }
-        </style>
-
-
-        <div class="card list">
-
-          <a class="item item-icon-left">
-            <i class="icon ion-location"></i>
-            Grossiste : {{ data.detailsDechargement.grossiste }}
-          </a>
+            .content-div-row {
+              text-align: center !important;
+              border: 3px grey dashed !important;
+            }
+          </style>
 
 
-          <a class="item item-icon-left">
-            <i class="icon ion-calendar"></i>
-            Date : {{data.detailsDechargement.dateAjout | date :  "dd.MM.y"}}
-          </a>
-        </div>
-  
+          <div class="card list">
 
-  
-        <div class="row header list content-div">
-        
-            <div class="col" style="text-align: center;">Libelle</div>
-            <div class="col" style="text-align: center;">Quantité</div>
-           
+            <a class="item item-icon-left">
+              <i class="icon ion-location"></i>
+              Grossiste : {{ data.detailsDechargement.grossiste }}
+            </a>
+
+
+            <a class="item item-icon-left">
+              <i class="icon ion-calendar"></i>
+              Date : {{data.detailsDechargement.dateAjout | date :  "dd.MM.y"}}
+            </a>
           </div>
 
 
 
-  
+          <div class="row header list content-div">
 
+            <div class="col" style="text-align: center;">Libelle</div>
+            <div class="col" style="text-align: center;">Quantité</div>
 
-          <div class="row list" ng-repeat="d in data.detailsDechargement.details | filter:motcle" style="margin-bottom: 50px;">
-            
-
-             <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" ng-click="showPopUp(d.article, 1, d.codeArticle)">
-               {{d.codeArticle}}
-             </div>
-
-             <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'" ng-click="showPopUp(d.article, 1, d.codeArticle)">
-               {{d.codeArticle}}
-             </div>
-
-             <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{d.quantite}}</div>
-
-             <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.quantite}}</div>
-        </div>
-
-        
-
- 
-
-
-       
-  </div>
-
-
-  </div>
+          </div>
 
 
 
 
 
 
-  <!--  <div class="col" >  
-              <div class="col"><p>{{ data.detailsDechargement.grossiste }}</p></div>
-           </div>
-           
-           <div class="col"><p>{{ data.detailsDechargement.dateAjout | date :  "dd.MM.y" }}</p></div>
-           
-          -->
+          <div class="row list" ng-repeat="d in data.detailsDechargement.details | filter:motcle"
+            style="margin-bottom: 50px;">
+
+
+            <div class="col content-div-row" ng-if="d.idMotif !== 'edit'"
+              ng-click="showPopUp(d.article, 1, d.codeArticle)">
+              {{d.codeArticle}}
+            </div>
+
+            <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'"
+              ng-click="showPopUp(d.article, 1, d.codeArticle)">
+              {{d.codeArticle}}
+            </div>
+
+            <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{d.quantite}}</div>
+
+            <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.quantite}}</div>
+          </div>
 
 
 
 
 
-  </ion-grid>
 
-  </ion-content>
- 
-  <div  class="bar bar-footer footer-button">
-    <button ng-click="submit()" class="button button-block button-assertive footer-button" color="danger" type="submit"
-      name="submit"><span style="color:white">Decharger</span></button>
-  </div>
-  </div>
-  
+
+
+
+
+
+
+        </ion-grid>
+
+      </ion-content>
+    </div>
+
+    <a href="#/app/dechargement">&nbsp;
+      <div class="bar bar-footer footer-button" ng-click="goToDechargementDetails(d.codePDS)">
+
+
+        <button class="button button-block button-assertive footer-button" color="danger">
+          <span style="color:white">Decharger</span>
+        </button>
+
+
+
+      </div>
+    </a>
+  </ion-pane>
 </ion-view>

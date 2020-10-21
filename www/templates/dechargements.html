@@ -37,6 +37,7 @@
  
         </style>
         <div class="list" ng-repeat="dchgmnt in data.dechargements | filter:motcle">
+         
           <a class="item item-thumbnail-left">
             <img src="./img/prc.jpg">
   
@@ -71,17 +72,20 @@
         </div>
   
   
-        <div class="col" ng-click="goToDetailPdsDechargement(dchgmnt.codePDS)">
+        <div class="col" ng-click="goToDechargement(dchgmnt.codePDS)">
             <button class="button button-clear button-assertive" style="color: white;">
                 Decharger
             </button>
           </div>
+
+         
   
       </div>
   
       </div>
   
       </ion-content>
+     
     </div>
     </ion-view>
   

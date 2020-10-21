@@ -1,0 +1,96 @@
+<ion-view title="Detail PDS" cache-view="false">
+    <div ng-app="starter">
+  
+      <ion-content padding="true" class="has-header">
+        <style type="text/css">
+          input[readonly] {
+            background-color: transparent !important;
+            cursor: not-allowed;
+          }
+          .small_button{
+              width: 50% !important;
+              height: 50px !important;
+              margin-left: 5px;
+          }
+          .footer-button {
+            margin-bottom: 10px !important;
+            height: 50px !important;
+          }
+          .ml{
+            margin-left: 5px;
+          }
+          .header {
+  
+            margin-top: 5px;
+            margin-bottom: 10px;
+          }
+          .content-div {
+              background: grey !important;
+            }
+            .content-div-row {
+              text-align: center !important;
+              border: 3px grey dashed !important;
+            }
+  
+        </style>
+  
+  
+          <div class="row header list content-div">
+            <div class="col" style="text-align: center;"> Article</div>
+            <div class="col" style="text-align: center;">Quantité prise</div>
+            <div class="col" style="text-align: center;">Quantité à rendre</div>
+            <div class="col" style="text-align: center;">Montant comptant</div>
+            <div class="col" style="text-align: center;">Montant credit</div>
+            
+
+          </div>
+  
+          <div class="row list"  ng-repeat="d in data.dechargement.details | filter:motcle">
+  
+            <div class="col content-div-row" ng-if="d.idMotif !== 'edit'"
+            ng-click="showPopUp(d.article, 1, d.codeArticle)">
+            {{d.codeArticle}}
+          </div>
+
+          <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'"
+            ng-click="showPopUp(d.article, 1, d.codeArticle)">
+            {{d.codeArticle}}
+          </div>
+            <div class="col content-div-row">{{d.quantitePrise}}</div>
+            <div class="col content-div-row">{{d.quantiteArendre}}</div>
+            <div class="col content-div-row">{{d.quantiteComptant}}</div>
+            <div class="col content-div-row">{{data.dechargement.montantCredit}}</div>
+  
+          </div>
+  
+          <div class="row header list content-div">
+            <div class="col" style="text-align: center;">Total: </div>
+            <div class="col" style="text-align: center;"></div>
+            <div class="col" style="text-align: center;"></div>
+            <div class="col" style="text-align: center;">----</div>
+            <div class="col" style="text-align: center;"></div>
+          </div>
+
+          <div class="row header list content-div">
+            <div class="col" style="text-align: center;">Total: </div>
+            <div class="col" style="text-align: center;"></div>
+            <div class="col" style="text-align: center;"></div>
+            <div class="col" style="text-align: center;"></div>
+            <div class="col" style="text-align: center;">----</div>
+          </div>
+  
+          <div class="col"  >
+            <button class="button button-clear button-assertive" style="color: white;">
+              Valider
+            </button>
+        </div>
+  
+  
+      </ion-content>
+    </div>
+    <div class="bar bar-footer footer-button">
+      <button ng-click="submit()" class="button button-block button-assertive footer-button" color="danger"
+        type="submit" name="submit"><span style="color:white">Valider</span></button>
+    </div>
+    </ion-view>
+  

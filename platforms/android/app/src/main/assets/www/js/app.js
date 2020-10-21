@@ -256,7 +256,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
       url: '/dechargement',
       views: {
         'menuContent': {
-          templateUrl: 'dechargement.html',
+          templateUrl: 'templates/dechargement.html',
           controller: 'DechargementCtrl'
         }
       }
