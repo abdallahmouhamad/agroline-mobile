@@ -36,7 +36,7 @@ MERGED from [com.android.support:support-core-utils:27.1.1] C:\Users\SOW\.gradle
 MERGED from [com.android.support:support-media-compat:27.1.1] C:\Users\SOW\.gradle\caches\transforms-1\files-1.1\support-media-compat-27.1.1.aar\ab2c066efa9b4649227acf77cbce03c1\AndroidManifest.xml:17:1-22:12
 MERGED from [com.android.support:support-compat:27.1.1] C:\Users\SOW\.gradle\caches\transforms-1\files-1.1\support-compat-27.1.1.aar\f86fdd393e7d64a6aa9cb5f845ea5c6b\AndroidManifest.xml:17:1-22:12
 MERGED from [:tbxml-android:] C:\Users\SOW\.gradle\caches\transforms-1\files-1.1\tbxml-android.aar\1b906bfc07f0afcbf98a7725b37870c8\AndroidManifest.xml:2:1-11:12
-MERGED from [:CordovaLib] C:\Users\SOW\Desktop\HTSOFT\PROJET AGROLINE\agroline mobile\agroline-mobile\platforms\android\CordovaLib\build\intermediates\manifests\full\debug\AndroidManifest.xml:20:1-27:12
+MERGED from [:CordovaLib] C:\Users\SOW\Desktop\HTSOFT\PROJET AGROLINE\agroline mobile\agroline-mobile\platforms\android\CordovaLib\build\intermediates\manifests\full\debug\AndroidManifest.xml:20:1-30:12
 MERGED from [android.arch.lifecycle:runtime:1.1.0] C:\Users\SOW\.gradle\caches\transforms-1\files-1.1\runtime-1.1.0.aar\6039981827936d1505179d5ecba02997\AndroidManifest.xml:17:1-22:12
 MERGED from [android.arch.lifecycle:livedata-core:1.1.0] C:\Users\SOW\.gradle\caches\transforms-1\files-1.1\livedata-core-1.1.0.aar\0edcdf1bd67f7e79e570049f590f9053\AndroidManifest.xml:17:1-22:12
 MERGED from [android.arch.core:runtime:1.1.0] C:\Users\SOW\.gradle\caches\transforms-1\files-1.1\runtime-1.1.0.aar\86dbde31345e54bee749eb44af0c34d5\AndroidManifest.xml:17:1-22:12
@@ -276,3 +276,11 @@ ADDED from [com.google.android.gms:play-services-base:16.0.1] C:\Users\SOW\.grad
 		ADDED from [com.google.android.gms:play-services-base:16.0.1] C:\Users\SOW\.gradle\caches\transforms-1\files-1.1\play-services-base-16.0.1.aar\cb2e93b98aeb6c896133e0cfac5d133d\AndroidManifest.xml:26:13-72
 	android:name
 		ADDED from [com.google.android.gms:play-services-base:16.0.1] C:\Users\SOW\.gradle\caches\transforms-1\files-1.1\play-services-base-16.0.1.aar\cb2e93b98aeb6c896133e0cfac5d133d\AndroidManifest.xml:24:13-79
+uses-permission#android.permission.SEND_SMS
+ADDED from [:CordovaLib] C:\Users\SOW\Desktop\HTSOFT\PROJET AGROLINE\agroline mobile\agroline-mobile\platforms\android\CordovaLib\build\intermediates\manifests\full\debug\AndroidManifest.xml:27:5-67
+	android:name
+		ADDED from [:CordovaLib] C:\Users\SOW\Desktop\HTSOFT\PROJET AGROLINE\agroline mobile\agroline-mobile\platforms\android\CordovaLib\build\intermediates\manifests\full\debug\AndroidManifest.xml:27:22-64
+uses-permission#android.permission.READ_PHONE_STATE
+ADDED from [:CordovaLib] C:\Users\SOW\Desktop\HTSOFT\PROJET AGROLINE\agroline mobile\agroline-mobile\platforms\android\CordovaLib\build\intermediates\manifests\full\debug\AndroidManifest.xml:28:5-75
+	android:name
+		ADDED from [:CordovaLib] C:\Users\SOW\Desktop\HTSOFT\PROJET AGROLINE\agroline mobile\agroline-mobile\platforms\android\CordovaLib\build\intermediates\manifests\full\debug\AndroidManifest.xml:28:22-72

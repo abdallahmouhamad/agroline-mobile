@@ -1,4 +1,4 @@
-#Wed Oct 21 17:34:24 BST 2020
+#Sat Oct 24 00:23:59 BST 2020
 base.0=C\:\\Users\\SOW\\Desktop\\HTSOFT\\PROJET AGROLINE\\agroline mobile\\agroline-mobile\\platforms\\android\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\0
 path.0=classes.dex
 renamed.0=classes.dex

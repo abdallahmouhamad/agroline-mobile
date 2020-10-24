@@ -189,9 +189,9 @@ angular.module('starter.controllers', ['pascalprecht.translate'])
     };
 
 
-    $scope.sms_function = function(){
-      SendSms.sendSMS('Bissmillah','776726045');
-}
+    $scope.sms_function = function () {
+      SendSms.sendSMS('Bissmillah', '776726045');
+    }
   })
 
   .controller('SignupCtrl', function ($scope, $http, $ionicPopup, $state, $translate, urlPhp) {
@@ -269,7 +269,7 @@ angular.module('starter.controllers', ['pascalprecht.translate'])
     ChekConnect,
     $translate,
     ProfilUser,
-    urlJava,) {
+    urlJava, ) {
     $scope.data.payschoisit = null
     $scope.pvtempon = [];
     $scope.index;
@@ -1767,8 +1767,8 @@ angular.module('starter.controllers', ['pascalprecht.translate'])
       var user = localStorage.getItem('user');
       $scope.data.user = JSON.parse(user);
 
-      $scope.sms_function = function(){
-             SendSms.sendSMS('Bissmillah','776726045');
+      $scope.sms_function = function () {
+        SendSms.sendSMS('Bissmillah', '776726045');
       }
 
 
@@ -1870,7 +1870,7 @@ angular.module('starter.controllers', ['pascalprecht.translate'])
               $scope.data.detailsPRC = response;
 
               console.log(response);
-             // console.log($scope.data.detailsPRC[0]);
+              // console.log($scope.data.detailsPRC[0]);
 
 
               //sessionStorage.setItem('codePrc', '');
@@ -1882,7 +1882,7 @@ angular.module('starter.controllers', ['pascalprecht.translate'])
     $scope.getDetailPrc();
 
     $scope.ajouter = function () {
-   //   $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+      //   $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
       $scope.data.detailsPRC.push({
         index: $scope.data.detailsPRC.length + 1,
         codeDetail: "DPRC" + $scope.data.user.code + $scope.getCodePrc(),
@@ -1893,7 +1893,7 @@ angular.module('starter.controllers', ['pascalprecht.translate'])
         idMotif: $scope.data.motifchoisit.idMotif,
         motifchoisit: $scope.data.motifchoisit
       });
-     // $ionicLoading.hide();
+      // $ionicLoading.hide();
       $scope.data.artcilechoisit = null;
       $scope.data.motifchoisit = null;
       $scope.data.quantite = 0;
@@ -1947,40 +1947,40 @@ angular.module('starter.controllers', ['pascalprecht.translate'])
     $scope, $state, $ionicLoading,
     ApiListPrc, ApiDetailPrc, ApiAjoutPrc,
     ApiListClient, ApiListMotif,
-    ApiListArticle, $ionicPopup,CodeGenere, ApiListModePaiement ) {
+    ApiListArticle, $ionicPopup, CodeGenere, ApiListModePaiement) {
 
-      $scope.data = {};
+    $scope.data = {};
 
-      $scope.initvar = function () {
-        $scope.data.listarticles = [];
-        $scope.data.prcs = [];
-        $scope.data.detailPrc = {};
-        $scope.data.codePrc = sessionStorage.getItem('codePrc');
-        $scope.data.listclients = [];
-        $scope.data.listmotifs = [];
-        $scope.data.clientchoisit = null;
-        $scope.data.artcilechoisit = null;
-        $scope.data.listmodereglements = null;
-        $scope.data.modereglementchoisit = null;
-        $scope.data.motifchoisit = null;
-        $scope.data.quantite = 0;
-        $scope.data.idMotif = 0;
-        $scope.data.idModepaiement = 0;
-        var user = localStorage.getItem('user');
-        $scope.data.user = JSON.parse(user);
+    $scope.initvar = function () {
+      $scope.data.listarticles = [];
+      $scope.data.prcs = [];
+      $scope.data.detailPrc = {};
+      $scope.data.codePrc = sessionStorage.getItem('codePrc');
+      $scope.data.listclients = [];
+      $scope.data.listmotifs = [];
+      $scope.data.clientchoisit = null;
+      $scope.data.artcilechoisit = null;
+      $scope.data.listmodereglements = null;
+      $scope.data.modereglementchoisit = null;
+      $scope.data.motifchoisit = null;
+      $scope.data.quantite = 0;
+      $scope.data.idMotif = 0;
+      $scope.data.idModepaiement = 0;
+      var user = localStorage.getItem('user');
+      $scope.data.user = JSON.parse(user);
 
-        $scope.data.detailsPRC = [];
-        $scope.isLoaded = false;
-        $scope.isCanceled = false;
+      $scope.data.detailsPRC = [];
+      $scope.isLoaded = false;
+      $scope.isCanceled = false;
 
 
-        var codeClient = { "codeCommerciale": $scope.data.user.code };
+      var codeClient = { "codeCommerciale": $scope.data.user.code };
 
-      }
+    }
 
-      $scope.initvar();
+    $scope.initvar();
 
-      ApiListArticle.getListArticle().
+    ApiListArticle.getListArticle().
       success(function (response) {
         if (response) {
           $scope.data.listarticles = response;
@@ -1999,137 +1999,137 @@ angular.module('starter.controllers', ['pascalprecht.translate'])
       })
 
 
-      ApiListModePaiement.getListModePaiement()
-    .success(function (response) {
-      if (response) {
-        $scope.data.listmodereglements = response;
-      }
-           console.log('-----------------------list mode paiement----------------------');
-          console.log(response);
-    })
+    ApiListModePaiement.getListModePaiement()
+      .success(function (response) {
+        if (response) {
+          $scope.data.listmodereglements = response;
+        }
+        console.log('-----------------------list mode paiement----------------------');
+        console.log(response);
+      })
 
-    $scope.changeCLient = function(){
+    $scope.changeCLient = function () {
       console.log('client choisi')
       console.log($scope.data.clientchoisit)
       $scope.data.idModepaiement = $scope.data.clientchoisit.idModepaiement;
       //$scope.data.idModepaiement = 2;
     }
 
-     $scope.showPopUp = function(libelle, etat, code = '') {
+    $scope.showPopUp = function (libelle, etat, code = '') {
       $ionicPopup.show({
-        title: etat == 1 ? "Code: "+ code: '',
-        template: etat == 1 ? libelle :  '<img src="http://test-test.h-tsoft.com/{{libelle}}">',
+        title: etat == 1 ? "Code: " + code : '',
+        template: etat == 1 ? libelle : '<img src="http://test-test.h-tsoft.com/{{libelle}}">',
         scope: $scope,
         buttons: [{
           text: 'Ok',
           type: 'button-assertive'
         }]
       });
-     }
+    }
 
-     $scope.deletObject = function(item){
+    $scope.deletObject = function (item) {
       let index = $scope.data.detailsPRC.indexOf(item);
 
-      if(index > -1){
+      if (index > -1) {
         $scope.data.detailsPRC.splice(index, 1);
       }
-     }
+    }
 
 
 
-      $scope.getOptClient = function (option) {
-        return option;
-      };
-      $scope.getOptMotif = function (option) {
-        return option;
-      };
+    $scope.getOptClient = function (option) {
+      return option;
+    };
+    $scope.getOptMotif = function (option) {
+      return option;
+    };
 
-      $scope.getOptArticle = function (option) {
-        return option;
-      };
-      $scope.getOptModereglement = function (option) {
-        return option;
-      };
+    $scope.getOptArticle = function (option) {
+      return option;
+    };
+    $scope.getOptModereglement = function (option) {
+      return option;
+    };
 
-      $scope.ajouter = function () {
-        //   $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
-           $scope.data.detailsPRC.push({
-             index: $scope.data.detailsPRC.length + 1,
-             codeDetail: "DPRC" + $scope.data.user.code + CodeGenere.getCodeGenere(),
-             codeArticle: $scope.data.artcilechoisit.code,
-             quantite: $scope.data.quantite,
-             isCanceled: false,
-             artcilechoisit: $scope.data.artcilechoisit,
-             idMotif: 0,
-            // motifchoisit: $scope.data.motifchoisit
-           });
-          // $ionicLoading.hide();
-           $scope.data.artcilechoisit = null;
-           $scope.data.motifchoisit = null;
-           $scope.data.quantite = 0;
-           console.log('----------------------Detail-------------------');
-           console.log($scope.data.detailsPRC);
-         }
+    $scope.ajouter = function () {
+      //   $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+      $scope.data.detailsPRC.push({
+        index: $scope.data.detailsPRC.length + 1,
+        codeDetail: "DPRC" + $scope.data.user.code + CodeGenere.getCodeGenere(),
+        codeArticle: $scope.data.artcilechoisit.code,
+        quantite: $scope.data.quantite,
+        isCanceled: false,
+        artcilechoisit: $scope.data.artcilechoisit,
+        idMotif: 0,
+        // motifchoisit: $scope.data.motifchoisit
+      });
+      // $ionicLoading.hide();
+      $scope.data.artcilechoisit = null;
+      $scope.data.motifchoisit = null;
+      $scope.data.quantite = 0;
+      console.log('----------------------Detail-------------------');
+      console.log($scope.data.detailsPRC);
+    }
 
-      $scope.submit = function () {
-        console.log('client choisi')
-        console.log($scope.data.clientchoisit)
-        if($scope.data.clientchoisit.idModepaiement == 1 || $scope.data.modereglementchoisit !==null){
-          var values = {
-            codePRC: 'PRC-' + $scope.data.user.code + "-" +CodeGenere.getCodeGenere(),
-            codeClient: $scope.data.clientchoisit.codeClient,
-            dateAjout: new Date(),
-            idModepaiement: $scope.data.idModepaiement == 2 ? $scope.data.modereglementchoisit.idModepaiement :  $scope.data.idModepaiement,
-            codeCommerciale: $scope.data.user.code,
-            isLoaded: 0,
-            isCanceled: 0,
-            idMotif: $scope.data.idMotif,
-            // detailsPRC : [{codeDetail:"DPRC"+$scope.data.user.code+$scope.getCodePrc(), codeArticle: $scope.data.artcilechoisit.code, quantite:10, isCanceled:false, idMotif:$scope.data.motifchoisit.idMotif}]
-            detailsPRC: $scope.data.detailsPRC
+    $scope.submit = function () {
+      console.log('client choisi')
+      console.log($scope.data.clientchoisit)
+      if ($scope.data.clientchoisit.idModepaiement == 1 || $scope.data.modereglementchoisit !== null) {
+        var values = {
+          codePRC: 'PRC-' + $scope.data.user.code + "-" + CodeGenere.getCodeGenere(),
+          codeClient: $scope.data.clientchoisit.codeClient,
+          dateAjout: new Date(),
+          idModepaiement: $scope.data.idModepaiement == 2 ? $scope.data.modereglementchoisit.idModepaiement : $scope.data.idModepaiement,
+          codeCommerciale: $scope.data.user.code,
+          isLoaded: 0,
+          isCanceled: 0,
+          idMotif: $scope.data.idMotif,
+          // detailsPRC : [{codeDetail:"DPRC"+$scope.data.user.code+$scope.getCodePrc(), codeArticle: $scope.data.artcilechoisit.code, quantite:10, isCanceled:false, idMotif:$scope.data.motifchoisit.idMotif}]
+          detailsPRC: $scope.data.detailsPRC
 
-          };
-          console.log('---------------------Value to submit--------------------');
-          console.log(values);
+        };
+        console.log('---------------------Value to submit--------------------');
+        console.log(values);
 
-          $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
-          ApiAjoutPrc.ajoutPrc(values)
-            .success(function (response) {
-              $ionicLoading.hide();
+        $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+        ApiAjoutPrc.ajoutPrc(values)
+          .success(function (response) {
+            $ionicLoading.hide();
 
-              if (response.reponse == 1) {
+            if (response.reponse == 1) {
 
-                $scope.initvar();
-                $ionicPopup.show({
-                  title: "Infos",
-                  template: "Insertion réussit",
-                  scope: $scope,
-                  buttons: [{
-                    text: 'Ok',
-                    type: 'button-positive'
-                  }]
-                });
+              $scope.initvar();
+              $ionicPopup.show({
+                title: "Infos",
+                template: "Insertion réussit",
+                scope: $scope,
+                buttons: [{
+                  text: 'Ok',
+                  type: 'button-positive'
+                }]
+              });
 
-              }
-            }, error => {
-              $ionicLoading.hide();
-            });
-
-        }else{
-          $ionicPopup.show({
-            title: "Infos",
-            template: "Vous devez choisir un mode de paiement",
-            scope: $scope,
-            buttons: [{
-              text: 'Ok',
-              type: 'button-positive'
-            }]
+            }
+          }, error => {
+            $ionicLoading.hide();
           });
-        }
 
-
+      } else {
+        $ionicPopup.show({
+          title: "Infos",
+          template: "Vous devez choisir un mode de paiement",
+          scope: $scope,
+          buttons: [{
+            text: 'Ok',
+            type: 'button-positive'
+          }]
+        });
       }
 
-    })
+
+    }
+
+  })
   .controller('RecapPdsPrcCtrl', function (
     $scope, $state, $ionicLoading,
     ApiListPrc, ApiDetailPrc, ApiAjoutPrc,
@@ -2143,13 +2143,13 @@ angular.module('starter.controllers', ['pascalprecht.translate'])
       $scope.data.codeCommerciale = localStorage.getItem('codeCommerciale');
       $scope.data.user = localStorage.getItem('user');
       $scope.data.recapPrc = [];
-     // var code = {codeCommerciale: $scope.data.codeCommerciale};
+      // var code = {codeCommerciale: $scope.data.codeCommerciale};
 
     }
     $scope.initRecap = function () {
 
       if ($scope.data.codeCommerciale) {
-        var code = {codeCommerciale: $scope.data.codeCommerciale};
+        var code = { codeCommerciale: $scope.data.codeCommerciale };
 
         $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
         ApiRecapPdsPrc.getRecapPdsPrc(code).
@@ -2160,7 +2160,7 @@ angular.module('starter.controllers', ['pascalprecht.translate'])
             }
             console.log('-----------------------Recap PRC----------------------');
             console.log(response);
-          },error=>{
+          }, error => {
             $ionicLoading.hide();
           });
       }
@@ -2170,7 +2170,7 @@ angular.module('starter.controllers', ['pascalprecht.translate'])
 
     $scope.demandePDS = function (recap) {
 
-    //  localStorage.setItem('recapPRC',  angular.toJson(recap));
+      //  localStorage.setItem('recapPRC',  angular.toJson(recap));
       localStorage.setItem('recapPRC', JSON.stringify(recap));
       $state.transitionTo('app.nouvel-pds', {}, {
         reload: true,
@@ -2179,21 +2179,21 @@ angular.module('starter.controllers', ['pascalprecht.translate'])
       });
     }
 
-    $scope.showPopUp = function(libelle, etat, code = '') {
+    $scope.showPopUp = function (libelle, etat, code = '') {
       $ionicPopup.show({
-        title: etat == 1 ? "Code: "+ code: '',
-        template: etat == 1 ? libelle :  '<img src="http://test-test.h-tsoft.com/{{libelle}}">',
+        title: etat == 1 ? "Code: " + code : '',
+        template: etat == 1 ? libelle : '<img src="http://test-test.h-tsoft.com/{{libelle}}">',
         scope: $scope,
         buttons: [{
           text: 'Ok',
           type: 'button-assertive'
         }]
       });
-     }
+    }
 
-     $scope.editObject = function(item) {
+    $scope.editObject = function (item) {
 
-     }
+    }
 
 
   })
@@ -2202,7 +2202,7 @@ angular.module('starter.controllers', ['pascalprecht.translate'])
     $scope, $state, $ionicLoading,
     ApiListPrc, ApiDetailPrc, ApiAjoutPrc,
     ApiListClient, ApiListMotif,
-    ApiListArticle, $ionicPopup,ApiListPds,ApiRecapPdsPrc) {
+    ApiListArticle, $ionicPopup, ApiListPds, ApiRecapPdsPrc) {
     $scope.data = {};
 
     $scope.initvar = function () {
@@ -2250,22 +2250,22 @@ angular.module('starter.controllers', ['pascalprecht.translate'])
     }
 
     $scope.goToNewPds = function (sens) {
-     if(sens == 'nouvelle'){
-      localStorage.setItem('sens', 'nouvelle');
-      localStorage.setItem('recapPRC', []);
-      $state.transitionTo('app.nouvel-pds', {}, {
+      if (sens == 'nouvelle') {
+        localStorage.setItem('sens', 'nouvelle');
+        localStorage.setItem('recapPRC', []);
+        $state.transitionTo('app.nouvel-pds', {}, {
 
-        reload: true,
-        inherit: true,
-        notify: true
-      });
-     }else if(sens == 'recap'){
-      localStorage.setItem('sens', 'recap');
+          reload: true,
+          inherit: true,
+          notify: true
+        });
+      } else if (sens == 'recap') {
+        localStorage.setItem('sens', 'recap');
 
-      $scope.data.user = JSON.parse(localStorage.getItem('user'));;
+        $scope.data.user = JSON.parse(localStorage.getItem('user'));;
         if ($scope.data.user) {
           console.log($scope.data.user)
-          var code = {codeCommerciale: $scope.data.user.code};
+          var code = { codeCommerciale: $scope.data.user.code };
 
           $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
           ApiRecapPdsPrc.getRecapPdsPrc(code).
@@ -2284,27 +2284,27 @@ angular.module('starter.controllers', ['pascalprecht.translate'])
                 inherit: true,
                 notify: true
               });
-            },error=>{
+            }, error => {
               $ionicLoading.hide();
             });
         }
 
 
-     }
+      }
 
 
     }
 
   })
 
-  
+
   .controller('dechargementsCtrl', function (
     $scope, $state, $ionicLoading,
     ApiListPrc, ApiDetailPrc, ApiAjoutPrc,
     ApiListClient, ApiListMotif,
-    ApiListArticle, $ionicPopup, ApiRecapPdsPrc,ApiListDechargement) {
-     
-console.log('dechargements');
+    ApiListArticle, $ionicPopup, ApiRecapPdsPrc, ApiListDechargement) {
+
+    console.log('dechargements');
     $scope.data = {};
 
     $scope.initvar = function () {
@@ -2316,9 +2316,9 @@ console.log('dechargements');
     }
 
     $scope.initDechargements = function () {
-        console.log($scope.data.user);
+      console.log($scope.data.user);
       if ($scope.data.user.code) {
-        var code = {codeCommerciale: $scope.data.user.code};
+        var code = { codeCommerciale: $scope.data.user.code };
 
         $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
         ApiListDechargement.getListDechargement(code).
@@ -2329,7 +2329,7 @@ console.log('dechargements');
             }
             console.log('-----------------------Dechargement----------------------');
             console.log(response);
-          },error=>{
+          }, error => {
             $ionicLoading.hide();
           });
       }
@@ -2357,7 +2357,7 @@ console.log('dechargements');
       });
     }
 
-    
+
 
 
   })
@@ -2365,7 +2365,7 @@ console.log('dechargements');
     $scope, $state, $ionicLoading,
     ApiListPrc, ApiDetailPrc, ApiAjoutPrc,
     ApiListClient, ApiListMotif,
-    ApiListArticle, $ionicPopup,ApiDetailPds) {
+    ApiListArticle, $ionicPopup, ApiDetailPds) {
     $scope.data = {};
 
     $scope.initvar = function () {
@@ -2388,8 +2388,9 @@ console.log('dechargements');
           }
           console.log('-----------------------Detail pds ---------------------');
           console.log(response);
-        }, error => { $ionicLoading.hide();
-    });
+        }, error => {
+          $ionicLoading.hide();
+        });
     }
 
     $scope.initvar();
@@ -2439,22 +2440,22 @@ console.log('dechargements');
     }
   })*/
 
-   
+
 
 
   .controller('DetailDechargementCtrl', function (
     $scope, $state, $ionicLoading,
     ApiListPrc, ApiDetailPrc, ApiAjoutPrc,
     ApiListClient, ApiListMotif,
-    ApiListArticle, $ionicPopup,ApiDetailPds) {
+    ApiListArticle, $ionicPopup, ApiDetailPds, ApiValiderDchmnt) {
     $scope.data = {};
-   
+
     $scope.initvar = function () {
       $scope.data.codePDS = localStorage.getItem('codePDS');
       var user = localStorage.getItem('user');
       $scope.data.user = JSON.parse(user);
 
-      $scope.data.detailsDechargement= [];
+      $scope.data.detailsDechargement = [];
 
       var codePDS = { "codePDS": $scope.data.codePDS };
 
@@ -2469,23 +2470,24 @@ console.log('dechargements');
           }
           console.log('-----------------------Detail dechargement ---------------------');
           console.log(response);
-        }, error => { $ionicLoading.hide();
-    });
+        }, error => {
+          $ionicLoading.hide();
+        });
     }
 
     $scope.initvar();
 
-    $scope.showPopUp = function(libelle, etat, code = '') {
+    $scope.showPopUp = function (libelle, etat, code = '') {
       $ionicPopup.show({
-        title: etat == 1 ? "Code: "+ code: '',
-        template: etat == 1 ? libelle :  '<img src="http://test-test.h-tsoft.com/{{libelle}}">',
+        title: etat == 1 ? "Code: " + code : '',
+        template: etat == 1 ? libelle : '<img src="http://test-test.h-tsoft.com/{{libelle}}">',
         scope: $scope,
         buttons: [{
           text: 'Ok',
           type: 'button-assertive'
         }]
       });
-     }
+    }
 
     $scope.goToDetailsDechargement = function (codePDS) {
 
@@ -2497,7 +2499,7 @@ console.log('dechargements');
       });
     }
 
-     $scope.goToDechargement = function (codePDS) {
+    $scope.goToDechargement = function (codePDS) {
 
       localStorage.setItem('codePDS', codePDS);
       $state.transitionTo('app.dechargement', {}, {
@@ -2508,187 +2510,187 @@ console.log('dechargements');
     }
 
   })
- 
+
 
   .controller('AddPdsCtrl', function (
     $scope, $state, $ionicLoading,
     ApiListPrc, ApiDetailPrc, ApiAjoutPrc,
     ApiListClient, ApiListMotif,
-    ApiListArticle, $ionicPopup,CodeGenere ,ApiListGrossiste,ApiAjoutPdsFromRecap,SendSms) {
-      $scope.data = {};
+    ApiListArticle, $ionicPopup, CodeGenere, ApiListGrossiste, ApiAjoutPdsFromRecap, SendSms) {
+    $scope.data = {};
 
-      $scope.initvar = function () {
-        $scope.data.pds              = {}
-        $scope.code = 'initiale'
-        var pds= JSON.parse(localStorage.getItem('pds'));
-        if(pds && pds.codeGenere !==null){
-          console.log('pds loc');
-          console.log(pds);
-          $scope.data.pds = pds
-          $scope.code = 'attente'
-          console.log('code');
-          console.log($scope.data.pds.codeGenere);
-        }
-
-        $scope.edit = false
-        $scope.data.user             = JSON.parse(localStorage.getItem('user'));
-       console.log('-------user in pds add ------')
-       console.log($scope.data.user);
-        $scope.data.recapPRC         = localStorage.getItem('recapPRC') ? JSON.parse(localStorage.getItem('recapPRC')) : [];
-        $scope.data.codeCommerciale  = $scope.data.recapPRC && $scope.data.recapPRC.length > 0 ? $scope.data.recapPRC[0].codeCommerciale : $scope.data.user.code;
-        $scope.data.codePRC          = $scope.data.recapPRC && $scope.data.recapPRC.length > 0 ? $scope.data.recapPRC[0].details[0].codePRC : null;
-
-        $scope.data.idMotif          = 0;
-        $scope.data.detailsPDS       = [];
-        $scope.data.listmotifs       = [];
-        $scope.data.grossistes       = [];
-        $scope.data.motifchoisit     = null;
-        $scope.data.grossistechoisit = null;
-        $scope.data.listarticles     = [];
-        $scope.data.artcilechoisit   = null;
-        $scope.data.codePDS          = 'PDS'+'-'+$scope.data.codeCommerciale+'-'+CodeGenere.getCodeGenere();
-        $scope.data.detail           = {}
-
-        $scope.data.quantite         = 0;
-
-        $scope.initDetailPDS();
-
+    $scope.initvar = function () {
+      $scope.data.pds = {}
+      $scope.code = 'initiale'
+      var pds = JSON.parse(localStorage.getItem('pds'));
+      if (pds && pds.codeGenere !== null) {
+        console.log('pds loc');
+        console.log(pds);
+        $scope.data.pds = pds
+        $scope.code = 'attente'
+        console.log('code');
+        console.log($scope.data.pds.codeGenere);
       }
 
-      $scope.showPopUp = function(libelle, etat, code = '') {
+      $scope.edit = false
+      $scope.data.user = JSON.parse(localStorage.getItem('user'));
+      console.log('-------user in pds add ------')
+      console.log($scope.data.user);
+      $scope.data.recapPRC = localStorage.getItem('recapPRC') ? JSON.parse(localStorage.getItem('recapPRC')) : [];
+      $scope.data.codeCommerciale = $scope.data.recapPRC && $scope.data.recapPRC.length > 0 ? $scope.data.recapPRC[0].codeCommerciale : $scope.data.user.code;
+      $scope.data.codePRC = $scope.data.recapPRC && $scope.data.recapPRC.length > 0 ? $scope.data.recapPRC[0].details[0].codePRC : null;
+
+      $scope.data.idMotif = 0;
+      $scope.data.detailsPDS = [];
+      $scope.data.listmotifs = [];
+      $scope.data.grossistes = [];
+      $scope.data.motifchoisit = null;
+      $scope.data.grossistechoisit = null;
+      $scope.data.listarticles = [];
+      $scope.data.artcilechoisit = null;
+      $scope.data.codePDS = 'PDS' + '-' + $scope.data.codeCommerciale + '-' + CodeGenere.getCodeGenere();
+      $scope.data.detail = {}
+
+      $scope.data.quantite = 0;
+
+      $scope.initDetailPDS();
+
+    }
+
+    $scope.showPopUp = function (libelle, etat, code = '') {
+      $ionicPopup.show({
+        title: etat == 1 ? "Code: " + code : '',
+        template: etat == 1 ? libelle : '<img src="http://test-test.h-tsoft.com/{{libelle}}">',
+        scope: $scope,
+        buttons: [{
+          text: 'Ok',
+          type: 'button-assertive'
+        }]
+      });
+    }
+
+    $scope.editDetail = function (item) {
+
+      $scope.data.artcilechoisit = {};
+
+      $scope.data.artcilechoisit.libelle = item.article
+      $scope.data.artcilechoisit.code = item.codeArticle
+      console.log('--------------Quantite---------------');
+      console.log(item.quantite);
+      $scope.data.quantite = +item.quantite;
+      //document.getElementById("quantite").value = item.quantite;
+
+      $scope.edit = true;
+      item.idMotif = "edit";
+
+      for (var i = 0; i < $scope.data.detailsPDS.length; i++) {
+        if ($scope.data.detailsPDS[i].idMotif === 'edit' && $scope.data.detailsPDS[i].codeArticle !== item.codeArticle) {
+          $scope.data.detailsPDS[i].idMotif = 0;
+        }
+      }
+      $scope.itemEdit = item;
+    }
+    $scope.valideEdit = function () {
+      if ($scope.data.motifchoisit && $scope.data.motifchoisit.idMotif !== '') {
+        for (var i = 0; i < $scope.data.detailsPDS.length; i++) {
+          if ($scope.data.detailsPDS[i].idMotif === 'edit' && $scope.data.detailsPDS[i].codeArticle === $scope.itemEdit.codeArticle) {
+
+            $scope.data.detailsPDS[i].idMotif = $scope.data.motifchoisit.idMotif;
+            $scope.data.detailsPDS[i].codeArticle = $scope.data.artcilechoisit.code;
+            $scope.data.detailsPDS[i].quantite = $scope.data.quantite;
+
+            $scope.edit = false;
+
+            break;
+          }
+        }
+      } else {
         $ionicPopup.show({
-          title: etat == 1 ? "Code: "+ code: '',
-          template: etat == 1 ? libelle :  '<img src="http://test-test.h-tsoft.com/{{libelle}}">',
+          title: "Erreur",
+          template: "Veuillez choisir un motif",
           scope: $scope,
           buttons: [{
             text: 'Ok',
-            type: 'button-assertive'
+            type: 'button-danger'
           }]
         });
-       }
+      }
 
-       $scope.editDetail = function (item){
+    }
+    $scope.initDetailPDS = function () {
 
-        $scope.data.artcilechoisit = {};
-
-        $scope.data.artcilechoisit.libelle = item.article
-        $scope.data.artcilechoisit.code = item.codeArticle
-        console.log('--------------Quantite---------------');
-        console.log(item.quantite);
-        $scope.data.quantite = +item.quantite;
-        //document.getElementById("quantite").value = item.quantite;
-
-        $scope.edit = true;
-        item.idMotif = "edit";
-
-        for(var i = 0; i< $scope.data.detailsPDS.length; i++){
-              if($scope.data.detailsPDS[i].idMotif === 'edit' && $scope.data.detailsPDS[i].codeArticle !==item.codeArticle ){
-                     $scope.data.detailsPDS[i].idMotif = 0;
-              }
-        }
-        $scope.itemEdit = item;
-     }
-     $scope.valideEdit = function(){
-       if($scope.data.motifchoisit && $scope.data.motifchoisit.idMotif!==''){
-         for(var i = 0; i< $scope.data.detailsPDS.length; i++){
-              if($scope.data.detailsPDS[i].idMotif === 'edit' && $scope.data.detailsPDS[i].codeArticle === $scope.itemEdit.codeArticle ){
-
-                  $scope.data.detailsPDS[i].idMotif = $scope.data.motifchoisit.idMotif;
-                  $scope.data.detailsPDS[i].codeArticle = $scope.data.artcilechoisit.code;
-                  $scope.data.detailsPDS[i].quantite = $scope.data.quantite;
-
-                  $scope.edit = false;
-
-                  break;
-              }
-        }
-       }else{
-         $ionicPopup.show({
-              title: "Erreur",
-              template: "Veuillez choisir un motif",
-              scope: $scope,
-              buttons: [{
-                text: 'Ok',
-                type: 'button-danger'
-              }]
-            });
-       }
-
-     }
-      $scope.initDetailPDS = function (){
-
-        if($scope.data.recapPRC && $scope.data.recapPRC.length > 0){
-          if($scope.data.recapPRC[0].details && $scope.data.recapPRC[0].details.length > 0){
-            $scope.data.detailsPDS =[];
-            for(var i = 0; i< $scope.data.recapPRC[0].details.length ; i++){
-              $scope.data.detail           = {
-                codeDetail     : null,
-                codePRC        : $scope.data.codePRC,
-                codePDS        : $scope.data.codePDS,
-                codeArticle    : null,
-                quantite       : 0,
-                isCanceled     : false,
-                idMotif        : null,
-                isUnloaded     : false,
-                motifchoisit   : null,
-                artcilechoisit : null,
-                index          : 0,
-                montant        : 0,
-                article        : null
-              }
-              $scope.data.detail.codeDetail     = 'DPDS'+'-'+CodeGenere.getCodeGenere();
-              $scope.data.detail.codeArticle    = $scope.data.recapPRC[0].details[i].codeArticle;
-              $scope.data.detail.quantite       = $scope.data.recapPRC[0].details[i].quantite;
-              $scope.data.detail.idMotif        = 0;
-              $scope.data.detail.motifchoisit   = null;
-              $scope.data.detail.article        = $scope.data.recapPRC[0].details[i].article;
-              $scope.data.detail.index          = $scope.data.detailsPDS.length + 1;
-
-              $scope.data.detailsPDS.push($scope.data.detail);
-
+      if ($scope.data.recapPRC && $scope.data.recapPRC.length > 0) {
+        if ($scope.data.recapPRC[0].details && $scope.data.recapPRC[0].details.length > 0) {
+          $scope.data.detailsPDS = [];
+          for (var i = 0; i < $scope.data.recapPRC[0].details.length; i++) {
+            $scope.data.detail = {
+              codeDetail: null,
+              codePRC: $scope.data.codePRC,
+              codePDS: $scope.data.codePDS,
+              codeArticle: null,
+              quantite: 0,
+              isCanceled: false,
+              idMotif: null,
+              isUnloaded: false,
+              motifchoisit: null,
+              artcilechoisit: null,
+              index: 0,
+              montant: 0,
+              article: null
             }
-          }
+            $scope.data.detail.codeDetail = 'DPDS' + '-' + CodeGenere.getCodeGenere();
+            $scope.data.detail.codeArticle = $scope.data.recapPRC[0].details[i].codeArticle;
+            $scope.data.detail.quantite = $scope.data.recapPRC[0].details[i].quantite;
+            $scope.data.detail.idMotif = 0;
+            $scope.data.detail.motifchoisit = null;
+            $scope.data.detail.article = $scope.data.recapPRC[0].details[i].article;
+            $scope.data.detail.index = $scope.data.detailsPDS.length + 1;
 
-        }else{
-          $scope.data.detail           = {
-                codeDetail     : null,
-                codePRC        : $scope.data.codePRC,
-                codePDS        : $scope.data.codePDS,
-                codeArticle    : null,
-                quantite       : 0,
-                isCanceled     : false,
-                idMotif        : null,
-                isUnloaded     : false,
-                motifchoisit   : null,
-                artcilechoisit : null,
-                index          : 0,
-                montant        : 0,
-                article        : null
-              }
+            $scope.data.detailsPDS.push($scope.data.detail);
+
+          }
         }
 
-
-
+      } else {
+        $scope.data.detail = {
+          codeDetail: null,
+          codePRC: $scope.data.codePRC,
+          codePDS: $scope.data.codePDS,
+          codeArticle: null,
+          quantite: 0,
+          isCanceled: false,
+          idMotif: null,
+          isUnloaded: false,
+          motifchoisit: null,
+          artcilechoisit: null,
+          index: 0,
+          montant: 0,
+          article: null
+        }
       }
 
-      $scope.initPDS = function () {
-        $scope.data.pds               = {
-          codePDS         : $scope.data.codePDS,
-          codeCommerciale : $scope.data.codeCommerciale,
-          codeGrossiste   : $scope.data.grossistechoisit ? $scope.data.grossistechoisit.codeGrossiste : null,
-          dateAjout       : new Date(),
-          isCanceled      : false,
-          idMotif         : $scope.data.idMotif,
-          isCurrent       : false,
-          isLoaded        : false,
-          isUnloaded      : false,
-          isChecked       : false,
-          codeGenere      : CodeGenere.getCodeGenere(),
-          detailsPDS      : $scope.data.detailsPDS
-       }
-      }
 
-      ApiListMotif.getListMotif().
+
+    }
+
+    $scope.initPDS = function () {
+      $scope.data.pds = {
+        codePDS: $scope.data.codePDS,
+        codeCommerciale: $scope.data.codeCommerciale,
+        codeGrossiste: $scope.data.grossistechoisit ? $scope.data.grossistechoisit.codeGrossiste : null,
+        dateAjout: new Date(),
+        isCanceled: false,
+        idMotif: $scope.data.idMotif,
+        isCurrent: false,
+        isLoaded: false,
+        isUnloaded: false,
+        isChecked: false,
+        codeGenere: CodeGenere.getCodeGenere(),
+        detailsPDS: $scope.data.detailsPDS
+      }
+    }
+
+    ApiListMotif.getListMotif().
       success(function (response) {
         if (response) {
           $scope.data.listmotifs = response;
@@ -2697,7 +2699,7 @@ console.log('dechargements');
         console.log(response);
       });
 
-      ApiListArticle.getListArticle().
+    ApiListArticle.getListArticle().
       success(function (response) {
         if (response) {
           $scope.data.listarticles = response;
@@ -2706,7 +2708,7 @@ console.log('dechargements');
         //  console.log(response);
       });
 
-      ApiListGrossiste.getListGrossiste().
+    ApiListGrossiste.getListGrossiste().
       success(function (response) {
         if (response) {
           $scope.data.grossistes = response;
@@ -2715,40 +2717,40 @@ console.log('dechargements');
         //  console.log(response);
       });
 
-      $scope.initvar();
+    $scope.initvar();
 
-      $scope.ajouter = function(){
-        $scope.initDetailPDS();
+    $scope.ajouter = function () {
+      $scope.initDetailPDS();
 
-        $scope.data.detail.codeDetail     = 'DPDS'+'-'+CodeGenere.getCodeGenere();
-        $scope.data.detail.codeArticle    = $scope.data.artcilechoisit.code;
-        $scope.data.detail.quantite       = $scope.data.quantite;
-        $scope.data.detail.idMotif        =  $scope.data.idMotif;
-        $scope.data.detail.article        = $scope.data.artcilechoisit.libelle
+      $scope.data.detail.codeDetail = 'DPDS' + '-' + CodeGenere.getCodeGenere();
+      $scope.data.detail.codeArticle = $scope.data.artcilechoisit.code;
+      $scope.data.detail.quantite = $scope.data.quantite;
+      $scope.data.detail.idMotif = $scope.data.idMotif;
+      $scope.data.detail.article = $scope.data.artcilechoisit.libelle
       //  $scope.data.detail.motifchoisit   = $scope.data.motifchoisit;
-        $scope.data.detail.artcilechoisit = $scope.data.artcilechoisit;
-        $scope.data.detail.index          = $scope.data.detailsPDS.length + 1;
+      $scope.data.detail.artcilechoisit = $scope.data.artcilechoisit;
+      $scope.data.detail.index = $scope.data.detailsPDS.length + 1;
 
-        $scope.data.detailsPDS.push($scope.data.detail);
+      $scope.data.detailsPDS.push($scope.data.detail);
 
-        $scope.initDetailPDS();
-        $scope.data.quantite       = 0;
-        $scope.data.artcilechoisit = null;
-        $scope.data.motifchoisit   = null;
-      }
-      $scope.getOptGrossiste = function (option) {
-        return option;
-      };
-      $scope.getOptMotif = function (option) {
-        return option;
-      };
+      $scope.initDetailPDS();
+      $scope.data.quantite = 0;
+      $scope.data.artcilechoisit = null;
+      $scope.data.motifchoisit = null;
+    }
+    $scope.getOptGrossiste = function (option) {
+      return option;
+    };
+    $scope.getOptMotif = function (option) {
+      return option;
+    };
 
-      $scope.getOptArticle = function (option) {
-        return option;
-      };
-      $scope.validerPdsAndSendCode = function(){
-        if($scope.data.grossistechoisit){
-          $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+    $scope.getOptArticle = function (option) {
+      return option;
+    };
+    $scope.validerPdsAndSendCode = function () {
+      if ($scope.data.grossistechoisit) {
+        $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
 
         $scope.initPDS();
         //$scope.data.pds.codeGenere;
@@ -2756,17 +2758,17 @@ console.log('dechargements');
         //Article, quatite, valeur et en bas valeur total et code de securite
 
         var message = '';
-        for(var i = 0; i< $scope.data.pds.detailsPDS.length; i++){
-          var index =  i+1;
+        for (var i = 0; i < $scope.data.pds.detailsPDS.length; i++) {
+          var index = i + 1;
           console.log($scope.data.pds.detailsPDS[i]);
-           message = message+ ''+ index + ')  ' + $scope.data.pds.detailsPDS[i].article+ ' '+'\n \n Quantité: '+ $scope.data.pds.detailsPDS[i].quantite+''+ '\n \n \n';
+          message = message + '' + index + ')  ' + $scope.data.pds.detailsPDS[i].article + ' ' + '\n \n Quantité: ' + $scope.data.pds.detailsPDS[i].quantite + '' + '\n \n \n';
         }
         var messageMontant = '';
-        if($scope.data.recapPRC && $scope.data.recapPRC.length > 0){
-          messageMontant = '\n Montant total:   '+$scope.data.recapPRC[0].montant + 'FCFA';
+        if ($scope.data.recapPRC && $scope.data.recapPRC.length > 0) {
+          messageMontant = '\n Montant total:   ' + $scope.data.recapPRC[0].montant + 'FCFA';
         }
 
-        var messageCode = '\n Code::    '+$scope.data.pds.codeGenere;
+        var messageCode = '\n Code::    ' + $scope.data.pds.codeGenere;
         var MessageGlobal = message + messageMontant + messageCode;
         console.log(message);
         console.log($scope.data.grossistechoisit);
@@ -2775,73 +2777,73 @@ console.log('dechargements');
 
         //test
         $scope.data.grossistechoisit.telephone = '775329312';
-        SendSms.sendSMS(MessageGlobal,$scope.data.grossistechoisit.telephone);
+        SendSms.sendSMS(MessageGlobal, $scope.data.grossistechoisit.telephone);
 
         localStorage.setItem('pds', JSON.stringify($scope.data.pds));
 
         $scope.code = 'attente';
 
         $ionicLoading.hide();
-        }else{
-          $ionicPopup.show({
-            title: "Erreur",
-            template: "Veuillez choisir un grossiste.",
-            scope: $scope,
-            buttons: [{
-              text: 'Ok',
-              type: 'button-positive'
-            }]
-});
-        }
-      }
-      $scope.submit = function() {
-        console.log('-----------------Value PDS-------------');
-        console.log($scope.data.pds);
-        console.log($scope.data.code);
-        if($scope.data.pds.codeGenere === $scope.data.code){
-          $scope.data.pds.isLoaded = 1;
-          $scope.data.pds.isCurrent = 1 ;
-          for(var i = 0 ; i< $scope.data.pds.detailsPDS.length; i++){
-            $scope.data.pds.detailsPDS[i].isLoaded = 1
-          }
-
-          $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
-          ApiAjoutPdsFromRecap.ajoutPdsFromRecap($scope.data.pds)
-            .success(function (response) {
-              $ionicLoading.hide();
-
-              if (response.reponse == 1) {
-
-                $scope.data.detailsPDS = [];
-                $scope.data.pds              = {}
-                $scope.code = 'initiale'
-                localStorage.setItem('pds',null);
-
-                $state.transitionTo('app.pds', {}, {
-                  reload: true,
-                  inherit: true,
-                  notify: true
-                });
-
-
-              }
-            }, error => {
-              $ionicLoading.hide();
-            });
-
-        }else{
+      } else {
         $ionicPopup.show({
-                  title: "Erreur de code",
-                  template: "Le code saisi ne correspond pas. Reesayer svp.",
-                  scope: $scope,
-                  buttons: [{
-                    text: 'Ok',
-                    type: 'button-positive'
-                  }]
-      });
- }
+          title: "Erreur",
+          template: "Veuillez choisir un grossiste.",
+          scope: $scope,
+          buttons: [{
+            text: 'Ok',
+            type: 'button-positive'
+          }]
+        });
+      }
+    }
+    $scope.submit = function () {
+      console.log('-----------------Value PDS-------------');
+      console.log($scope.data.pds);
+      console.log($scope.data.code);
+      if ($scope.data.pds.codeGenere === $scope.data.code) {
+        $scope.data.pds.isLoaded = 1;
+        $scope.data.pds.isCurrent = 1;
+        for (var i = 0; i < $scope.data.pds.detailsPDS.length; i++) {
+          $scope.data.pds.detailsPDS[i].isLoaded = 1
+        }
 
-   }
+        $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+        ApiAjoutPdsFromRecap.ajoutPdsFromRecap($scope.data.pds)
+          .success(function (response) {
+            $ionicLoading.hide();
+
+            if (response.reponse == 1) {
+
+              $scope.data.detailsPDS = [];
+              $scope.data.pds = {}
+              $scope.code = 'initiale'
+              localStorage.setItem('pds', null);
+
+              $state.transitionTo('app.pds', {}, {
+                reload: true,
+                inherit: true,
+                notify: true
+              });
+
+
+            }
+          }, error => {
+            $ionicLoading.hide();
+          });
+
+      } else {
+        $ionicPopup.show({
+          title: "Erreur de code",
+          template: "Le code saisi ne correspond pas. Reesayer svp.",
+          scope: $scope,
+          buttons: [{
+            text: 'Ok',
+            type: 'button-positive'
+          }]
+        });
+      }
+
+    }
 
 
 
@@ -2851,8 +2853,8 @@ console.log('dechargements');
     $scope, $state, $ionicLoading,
     ApiListPrc, ApiDetailPrc, ApiAjoutPrc,
     ApiListClient, ApiListMotif,
-    ApiListArticle, $ionicPopup, ApiRecapPdsPrc,ApiListFacturation) {
-      console.log('Facture')
+    ApiListArticle, $ionicPopup, ApiRecapPdsPrc, ApiListFacturation) {
+    console.log('Facture')
 
     $scope.data = {};
 
@@ -2865,9 +2867,9 @@ console.log('dechargements');
     }
 
     $scope.initFacturations = function () {
-        console.log($scope.data.user);
+      console.log($scope.data.user);
       if ($scope.data.user.code) {
-        var code = {codeCommerciale: $scope.data.user.code};
+        var code = { codeCommerciale: $scope.data.user.code };
 
         $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
         ApiListFacturation.getListFacturation(code).
@@ -2878,7 +2880,7 @@ console.log('dechargements');
             }
             console.log('-----------------------Facturation----------------------');
             console.log(response);
-          },error=>{
+          }, error => {
             $ionicLoading.hide();
           });
       }
@@ -2888,7 +2890,7 @@ console.log('dechargements');
 
     $scope.goToNewFact = function () {
 
-    //  localStorage.setItem('recapPRC', JSON.stringify(recap));
+      //  localStorage.setItem('recapPRC', JSON.stringify(recap));
       $state.transitionTo('app.facturation', {}, {
         reload: true,
         inherit: true,
@@ -2910,8 +2912,8 @@ console.log('dechargements');
     $scope, $state, $ionicLoading,
     ApiListPrc, ApiDetailPrc, ApiAjoutPrc,
     ApiListClient, ApiListMotif,
-    ApiListArticle, $ionicPopup, ApiRecapPdsPrc,ApiListFacturation) {
-      console.log('Facture')
+    ApiListArticle, $ionicPopup, ApiRecapPdsPrc, ApiListFacturation) {
+    console.log('Facture')
 
     $scope.data = {};
 
@@ -2933,20 +2935,20 @@ console.log('dechargements');
     $scope.initDetailsFacturations = function () {
 
 
-        var code = {codeFacture: $scope.data.codeFacture};
-        console.log(code);
-        $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
-        ApiDeatilsFacture.getDeatilsFacture(code).
-          success(function (response) {
-            $ionicLoading.hide();
-            if (response) {
-              $scope.data.detailsfactures = response;
-            }
-            console.log('-----------------------Facturation----------------------');
-            console.log(response);
-          },error=>{
-            $ionicLoading.hide();
-          });
+      var code = { codeFacture: $scope.data.codeFacture };
+      console.log(code);
+      $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+      ApiDeatilsFacture.getDeatilsFacture(code).
+        success(function (response) {
+          $ionicLoading.hide();
+          if (response) {
+            $scope.data.detailsfactures = response;
+          }
+          console.log('-----------------------Facturation----------------------');
+          console.log(response);
+        }, error => {
+          $ionicLoading.hide();
+        });
 
     }
     $scope.initvar();
@@ -2954,7 +2956,7 @@ console.log('dechargements');
 
     $scope.goToNewFact = function () {
 
-    //  localStorage.setItem('recapPRC', JSON.stringify(recap));
+      //  localStorage.setItem('recapPRC', JSON.stringify(recap));
       $state.transitionTo('app.facturation', {}, {
         reload: true,
         inherit: true,
@@ -2968,133 +2970,133 @@ console.log('dechargements');
     $scope, $state, $ionicLoading,
     ApiListPrc, ApiDetailPrc, ApiAjoutPrc,
     ApiListClient, ApiListMotif,
-    ApiListArticle, $ionicPopup,CodeGenere ,ApiListGrossiste,ApiAjoutFacturation,ApiRecapPdsPrc,ApiRecapFactPrc) {
-      $scope.data = {};
+    ApiListArticle, $ionicPopup, CodeGenere, ApiListGrossiste, ApiAjoutFacturation, ApiRecapPdsPrc, ApiRecapFactPrc) {
+    $scope.data = {};
 
-      $scope.initvar = function () {
+    $scope.initvar = function () {
 
-       // JSON.parse(localStorage.getItem('recapPRC'))
-       $scope.edit = false;
-        $scope.data.prc = JSON.parse(localStorage.getItem('prc'));
-        console.log('----------------Value PRC----------------');
-        console.log($scope.data.prc);
-        console.log($scope.data.prc);
-        $scope.data.codeCommerciale  = $scope.data.prc.codeCommerciale;
-        $scope.data.codePRC          = $scope.data.prc.codePRC;
-        $scope.data.idModepaiement   = $scope.data.prc.idModepaiement;
-        $scope.data.user             = localStorage.getItem('user');
-        $scope.data.idMotif          = 0;
-        $scope.data.listmotifs       = [];
-        $scope.data.clients          = [];
-        $scope.data.motifchoisit     = null;
-        $scope.data.clientchoisit    = null;
-        $scope.data.codeFacture      = 'FCT'+'-'+$scope.data.codeCommerciale+'-'+CodeGenere.getCodeGenere();
+      // JSON.parse(localStorage.getItem('recapPRC'))
+      $scope.edit = false;
+      $scope.data.prc = JSON.parse(localStorage.getItem('prc'));
+      console.log('----------------Value PRC----------------');
+      console.log($scope.data.prc);
+      console.log($scope.data.prc);
+      $scope.data.codeCommerciale = $scope.data.prc.codeCommerciale;
+      $scope.data.codePRC = $scope.data.prc.codePRC;
+      $scope.data.idModepaiement = $scope.data.prc.idModepaiement;
+      $scope.data.user = localStorage.getItem('user');
+      $scope.data.idMotif = 0;
+      $scope.data.listmotifs = [];
+      $scope.data.clients = [];
+      $scope.data.motifchoisit = null;
+      $scope.data.clientchoisit = null;
+      $scope.data.codeFacture = 'FCT' + '-' + $scope.data.codeCommerciale + '-' + CodeGenere.getCodeGenere();
 
-        $scope.data.detail           = {}
-        $scope.data.fact             = {}
-        $scope.data.quantite         = 0;
+      $scope.data.detail = {}
+      $scope.data.fact = {}
+      $scope.data.quantite = 0;
 
+    }
+    $scope.showPopUp = function (libelle, etat, code = '') {
+      $ionicPopup.show({
+        title: etat == 1 ? "Code: " + code : '',
+        template: etat == 1 ? libelle : '<img src="http://test-test.h-tsoft.com/{{libelle}}">',
+        scope: $scope,
+        buttons: [{
+          text: 'Ok',
+          type: 'button-assertive'
+        }]
+      });
+    }
+    $scope.editDetail = function (item) {
+      $scope.edit = true;
+      item.idMotif = "edit";
+
+      /*$scope.data.artcilechoisit = {};
+
+      $scope.data.artcilechoisit.libelle = item.article
+      $scope.data.artcilechoisit.code = item.codeArticle*/
+      console.log('--------------Quantite---------------');
+      console.log(item.quantite);
+      $scope.data.quantite = +item.quantite;
+
+      for (var i = 0; i < $scope.data.recapPrc.details.length; i++) {
+        if ($scope.data.recapPrc.details[i].idMotif === 'edit' && $scope.data.recapPrc.details[i].codeArticle !== item.codeArticle) {
+          $scope.data.recapPrc.details[i].idMotif = 0;
+        }
       }
-      $scope.showPopUp = function(libelle, etat, code = '') {
+      $scope.itemEdit = item;
+    }
+    $scope.valideEdit = function () {
+      if ($scope.data.motifchoisit && $scope.data.motifchoisit.idMotif !== '') {
+        for (var i = 0; i < $scope.data.recapPrc.details.length; i++) {
+          if ($scope.data.recapPrc.details[i].idMotif === 'edit' && $scope.data.recapPrc.details[i].codeArticle === $scope.itemEdit.codeArticle) {
+
+            $scope.data.recapPrc.details[i].idMotif = $scope.data.motifchoisit.idMotif;
+            $scope.data.recapPrc.details[i].quantite = $scope.data.quantite;
+
+            $scope.edit = false;
+
+            break;
+          }
+        }
+      } else {
         $ionicPopup.show({
-          title: etat == 1 ? "Code: "+ code: '',
-          template: etat == 1 ? libelle :  '<img src="http://test-test.h-tsoft.com/{{libelle}}">',
+          title: "Erreur",
+          template: "Veuillez choisir un motif",
           scope: $scope,
           buttons: [{
             text: 'Ok',
-            type: 'button-assertive'
+            type: 'button-danger'
           }]
         });
-       }
-       $scope.editDetail = function (item){
-        $scope.edit = true;
-        item.idMotif = "edit";
-
-        /*$scope.data.artcilechoisit = {};
-
-        $scope.data.artcilechoisit.libelle = item.article
-        $scope.data.artcilechoisit.code = item.codeArticle*/
-        console.log('--------------Quantite---------------');
-        console.log(item.quantite);
-        $scope.data.quantite = +item.quantite;
-
-        for(var i = 0; i< $scope.data.recapPrc.details.length; i++){
-              if($scope.data.recapPrc.details[i].idMotif === 'edit' && $scope.data.recapPrc.details[i].codeArticle !==item.codeArticle ){
-                     $scope.data.recapPrc.details[i].idMotif = 0;
-              }
-        }
-        $scope.itemEdit = item;
-     }
-     $scope.valideEdit = function(){
-       if($scope.data.motifchoisit && $scope.data.motifchoisit.idMotif!==''){
-         for(var i = 0; i< $scope.data.recapPrc.details.length; i++){
-              if($scope.data.recapPrc.details[i].idMotif === 'edit' && $scope.data.recapPrc.details[i].codeArticle === $scope.itemEdit.codeArticle ){
-
-                  $scope.data.recapPrc.details[i].idMotif = $scope.data.motifchoisit.idMotif;
-                  $scope.data.recapPrc.details[i].quantite = $scope.data.quantite;
-
-                  $scope.edit = false;
-
-                  break;
-              }
-        }
-       }else{
-         $ionicPopup.show({
-              title: "Erreur",
-              template: "Veuillez choisir un motif",
-              scope: $scope,
-              buttons: [{
-                text: 'Ok',
-                type: 'button-danger'
-              }]
-            });
-       }
-
-     }
-
-      $scope.initFact = function () {
-        $scope.data.fact      = {
-          codeFacture         : $scope.data.codeFacture,
-          codeCommerciale     : $scope.data.codeCommerciale,
-          codePRC             : $scope.data.codePRC,
-          dateAjout           : new Date(),
-          codeClient          : $scope.data.codeClient,
-          isCanceled          : false,
-          position            : null,
-          idModepaiement      : $scope.data.idModepaiement,
-          idMotif             : $scope.data.idMotif,
-          codePDS             : $scope.data.codePDS,
-       }
       }
 
-      $scope.initRecap = function () {
+    }
 
-        if ($scope.data.codePRC) {
-          var code = {codePRC: $scope.data.codePRC};
-
-          $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
-
-          ApiRecapFactPrc.getRecapFactPrc(code).
-            success(function (response) {
-              $ionicLoading.hide();
-              if (response) {
-                $scope.data.recapPrc = response;
-                console.log('-----------------------Recap PRC Fact----------------------');
-                console.log($scope.data.recapPrc);
-                if($scope.data.recapPrc){
-                  $scope.data.codePDS    = $scope.data.recapPrc.codePDS;
-                  $scope.data.codeClient = $scope.data.recapPrc.codeClient;
-
-                }
-              }
-
-            },error=>{
-              $ionicLoading.hide();
-            });
-        }
+    $scope.initFact = function () {
+      $scope.data.fact = {
+        codeFacture: $scope.data.codeFacture,
+        codeCommerciale: $scope.data.codeCommerciale,
+        codePRC: $scope.data.codePRC,
+        dateAjout: new Date(),
+        codeClient: $scope.data.codeClient,
+        isCanceled: false,
+        position: null,
+        idModepaiement: $scope.data.idModepaiement,
+        idMotif: $scope.data.idMotif,
+        codePDS: $scope.data.codePDS,
       }
+    }
 
-      ApiListMotif.getListMotif().
+    $scope.initRecap = function () {
+
+      if ($scope.data.codePRC) {
+        var code = { codePRC: $scope.data.codePRC };
+
+        $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+
+        ApiRecapFactPrc.getRecapFactPrc(code).
+          success(function (response) {
+            $ionicLoading.hide();
+            if (response) {
+              $scope.data.recapPrc = response;
+              console.log('-----------------------Recap PRC Fact----------------------');
+              console.log($scope.data.recapPrc);
+              if ($scope.data.recapPrc) {
+                $scope.data.codePDS = $scope.data.recapPrc.codePDS;
+                $scope.data.codeClient = $scope.data.recapPrc.codeClient;
+
+              }
+            }
+
+          }, error => {
+            $ionicLoading.hide();
+          });
+      }
+    }
+
+    ApiListMotif.getListMotif().
       success(function (response) {
         if (response) {
           $scope.data.listmotifs = response;
@@ -3103,7 +3105,7 @@ console.log('dechargements');
         console.log(response);*/
       });
 
-      ApiListClient.getListClient().
+    ApiListClient.getListClient().
       success(function (response) {
         if (response) {
           $scope.data.listclients = response;
@@ -3111,46 +3113,46 @@ console.log('dechargements');
       });
 
 
-      $scope.initvar();
-      $scope.initRecap();
+    $scope.initvar();
+    $scope.initRecap();
 
-      $scope.ajouter = function(){
-        $scope.initDetailPDS();
+    $scope.ajouter = function () {
+      $scope.initDetailPDS();
 
-        $scope.data.detail.codeDetail     = 'DPDS'+'-'+CodeGenere.getCodeGenere();
-        $scope.data.detail.codeArticle    = $scope.data.artcilechoisit.code;
-        $scope.data.detail.quantite       = $scope.data.quantite;
-        $scope.data.detail.idMotif        = $scope.data.motifchoisit.idMotif;
-        $scope.data.detail.motifchoisit   = $scope.data.motifchoisit;
-        $scope.data.detail.artcilechoisit = $scope.data.artcilechoisit;
-        $scope.data.detail.index          = $scope.data.detailsPDS.length + 1;
+      $scope.data.detail.codeDetail = 'DPDS' + '-' + CodeGenere.getCodeGenere();
+      $scope.data.detail.codeArticle = $scope.data.artcilechoisit.code;
+      $scope.data.detail.quantite = $scope.data.quantite;
+      $scope.data.detail.idMotif = $scope.data.motifchoisit.idMotif;
+      $scope.data.detail.motifchoisit = $scope.data.motifchoisit;
+      $scope.data.detail.artcilechoisit = $scope.data.artcilechoisit;
+      $scope.data.detail.index = $scope.data.detailsPDS.length + 1;
 
-        $scope.data.detailsPDS.push($scope.data.detail);
+      $scope.data.detailsPDS.push($scope.data.detail);
 
-        $scope.initDetailPDS();
-        $scope.data.quantite       = 0;
-        $scope.data.artcilechoisit = null;
-        $scope.data.motifchoisit   = null;
-      }
-      $scope.getOptClient = function (option) {
-        return option;
-      };
-      $scope.getOptMotif = function (option) {
-        return option;
-      };
-
-
-      $scope.submit = function() {
-        $scope.initFact();
+      $scope.initDetailPDS();
+      $scope.data.quantite = 0;
+      $scope.data.artcilechoisit = null;
+      $scope.data.motifchoisit = null;
+    }
+    $scope.getOptClient = function (option) {
+      return option;
+    };
+    $scope.getOptMotif = function (option) {
+      return option;
+    };
 
 
-        $scope.data.fact.idMotif    = $scope.data.motifchoisit ? $scope.data.motifchoisit.idMotif : 0;
-       // $scope.data.fact.codeClient = $scope.data.clientchoisit.codeClient;
+    $scope.submit = function () {
+      $scope.initFact();
 
-        console.log($scope.data.fact);
 
-        $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
-        ApiAjoutFacturation.ajoutFacturation($scope.data.fact)
+      $scope.data.fact.idMotif = $scope.data.motifchoisit ? $scope.data.motifchoisit.idMotif : 0;
+      // $scope.data.fact.codeClient = $scope.data.clientchoisit.codeClient;
+
+      console.log($scope.data.fact);
+
+      $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+      ApiAjoutFacturation.ajoutFacturation($scope.data.fact)
         .success(function (response) {
           $ionicLoading.hide();
 
@@ -3177,7 +3179,7 @@ console.log('dechargements');
         }, error => {
           $ionicLoading.hide();
         });
-      }
+    }
 
   })
 
@@ -3186,62 +3188,119 @@ console.log('dechargements');
     $scope, $state, $ionicLoading,
     ApiListPrc, ApiDetailPrc, ApiAjoutPrc,
     ApiListClient, ApiListMotif,
-    ApiListArticle, $ionicPopup,CodeGenere ,ApiListGrossiste,ApiRecapDchmnt,ApiAjoutFacturation,ApiRecapPdsPrc,ApiRecapFactPrc) {
-      $scope.data = {};
-      $scope.initvar = function () {
-        $scope.data.codePDS = localStorage.getItem('codePDS');
-        var user = localStorage.getItem('user');
-        $scope.data.user = JSON.parse(user);
-       
-        $scope.data.dechargement= [];
-  
-        var codePDS = { "codePDS": $scope.data.codePDS };
-  
-        $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
-        console.log('-----------------------Bouton decharger ---------------------');
-        console.log(codePDS);
-        ApiRecapDchmnt.getRecapDchmnt(codePDS).
-          success(function (response) {
-            $ionicLoading.hide();
-            if (response) {
-              $scope.data.dechargement = response;
-            }
-            console.log('-----------------------Bouton decharger ---------------------');
-            console.log(response);
-          }, error => { $ionicLoading.hide();
+    ApiListArticle, $ionicPopup, CodeGenere, ApiListGrossiste, ApiRecapDchmnt,ApiValiderDchmnt,SendSms, ApiAjoutFacturation, ApiRecapPdsPrc, ApiRecapFactPrc) {
+    $scope.data = {};
+    $scope.initvar = function () {
+      $scope.data.codePDS = localStorage.getItem('codePDS');
+      var user = localStorage.getItem('user');
+      $scope.data.user = JSON.parse(user);
+
+      $scope.data.dechargement = [];
+
+      var valider = localStorage.getItem('codePDS');
+
+      var codePDS = { "codePDS": $scope.data.codePDS };
+
+      $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+      console.log('-----------------------Bouton decharger ---------------------');
+      console.log(codePDS);
+      ApiRecapDchmnt.getRecapDchmnt(codePDS).
+        success(function (response) {
+          $ionicLoading.hide();
+          if (response) {
+            $scope.data.dechargement = response;
+          }
+          console.log('-----------------------Bouton decharger ---------------------');
+          console.log(response);
+        }, error => {
+          $ionicLoading.hide();
+        });
+    }
+
+    $scope.initvar();
+
+    $scope.goToDechargement = function (codePDS) {
+
+      localStorage.setItem('codePDS', codePDS);
+      $state.transitionTo('app.dechargement', {}, {
+        reload: true,
+        inherit: true,
+        notify: true
       });
-      }
-  
-      $scope.initvar();
+    }
 
-      $scope.goToDechargement = function (codePDS) {
-  
-        localStorage.setItem('codePDS', codePDS);
-        $state.transitionTo('app.dechargement', {}, {
-          reload: true,
-          inherit: true,
-          notify: true
-        });
-      }
-  
-      $scope.showPopUp = function(libelle, etat, code = '') {
-        $ionicPopup.show({
-          title: etat == 1 ? "Code: "+ code: '',
-          template: etat == 1 ? libelle :  '<img src="http://test-test.h-tsoft.com/{{libelle}}">',
+    $scope.showPopUp = function (libelle, etat, code = '') {
+      $ionicPopup.show({
+        title: etat == 1 ? "Code: " + code : '',
+        template: etat == 1 ? libelle : '<img src="http://test-test.h-tsoft.com/{{libelle}}">',
+        scope: $scope,
+        buttons: [{
+          text: 'Ok',
+          type: 'button-assertive'
+        }]
+      });
+    }
+
+
+
+
+    $scope.submit = function () {
+      $scope.data.codePDS = localStorage.getItem('codePDS');
+      var user = localStorage.getItem('user');
+      $scope.data.user = JSON.parse(user);
+      //var montantVerse = number; 
+      $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+
+      var jsonData = { "codePDS": $scope.data.codePDS, 'codeDechargement':"DCH" +
+      "-" +
+      $scope.data.user.code +
+      "-" +
+      CodeGenere.getCodeGenere(), 'codeCommerciale': $scope.data.user.code, 'dateAjout':new Date(), 'isCanceled': 0,
+      'idMotif':0, 'isChecked': 0, 'codeGenere': CodeGenere.getCodeGenere(), 'isPayed': 0};
+     
+   
+    console.log("bouton valider");
+    console.log(jsonData);
+    ApiValiderDchmnt.getValiderDchmnt(jsonData).then(function(resp)
+    {
+      if(resp.response == 1){
+      /*  $ionicPopup.show({
+          title: header,
+          template: content,
           scope: $scope,
-          buttons: [{
-            text: 'Ok',
-            type: 'button-assertive'
-          }]
-        });
-       }
-  
-     
-    })
+          buttons: [
+            {
+              text: 'Reussi',
+              type: 'button-positive'
+            }
+          ]
+        });*/
+        console.log("reussi");
+      }else{
+       /* $ionicPopup.show({
+          title: header,
+          template: content,
+          scope: $scope,
+          buttons: [
+            {
+              text: 'Echec',
+              type: 'button-positive'
+            }
+          ]
+        });*/
+        console.log("echec");
+      }
+    });
+    console.log(jsonData);
 
-     
 
+   
+     // SendSms.sendSMS('Bissmillah', '776294380');
+    
+   
+  }
 
+  })
   .factory('ApiListStock', function ($http, urlPhp) {
     return {
       getListStock: function () {
@@ -3354,13 +3413,13 @@ console.log('dechargements');
 
   .factory('ApiDetailPds', function ($http, urlPhp) {
     return {
-     getDetailPds: function (codePDS) {
+      getDetailPds: function (codePDS) {
         var url = urlPhp.getUrl();
         var user = localStorage.getItem('user');
         user = JSON.parse(user);
         // console.log(user);
         //  var params = {codeUtilisateur:user.code}
-      //  var code = { codePDS: codePDS };
+        //  var code = { codePDS: codePDS };
         return $http.post(url + '/pds/details.php', codePDS);
       }
     }
@@ -3462,7 +3521,19 @@ console.log('dechargements');
       }
     }
   })
-    .factory('ApiStockGrossiste', function ($http, urlPhp) {
+
+  .factory('ApiValiderDchmnt', function ($http, urlPhp) {
+    return {
+      getValiderDchmnt: function (codePDS) {
+        var url = urlPhp.getUrl();
+        var user = localStorage.getItem('user');
+        user = JSON.parse(user);
+
+        return $http.post(url + '/dechargement/ajout.php', codePDS);
+      }
+    }
+  })
+  .factory('ApiStockGrossiste', function ($http, urlPhp) {
     return {
       getStockGrossiste: function (codeArticle) {
         var url = urlPhp.getUrl();
@@ -3679,9 +3750,9 @@ console.log('dechargements');
       });
     }
 
-     $scope.sms_function = function(){
-             SendSms.sendSMS('Bissmillah','776726045');
-      }
+    $scope.sms_function = function () {
+      SendSms.sendSMS('Bissmillah', '776726045');
+    }
 
 
 
@@ -3692,30 +3763,30 @@ console.log('dechargements');
     return {
       getCodeGenere: function () {
         var rd_code = Math.floor((Math.random() * 1000) + 1);
-          var code_chaine = '';
-          if (rd_code) {
-            if ((rd_code + '').length === 1) {
-              code_chaine = '000' + (rd_code + '').length;
-            }
-            else if ((rd_code + '').length === 2) {
-              code_chaine = '00' + rd_code;
-            }
-            else if ((rd_code + '').length === 3) {
-              code_chaine = '0' + rd_code;
-            }
-            else if ((rd_code + '').length === 4) {
-              code_chaine = '' + rd_code;
-            }
+        var code_chaine = '';
+        if (rd_code) {
+          if ((rd_code + '').length === 1) {
+            code_chaine = '000' + (rd_code + '').length;
           }
+          else if ((rd_code + '').length === 2) {
+            code_chaine = '00' + rd_code;
+          }
+          else if ((rd_code + '').length === 3) {
+            code_chaine = '0' + rd_code;
+          }
+          else if ((rd_code + '').length === 4) {
+            code_chaine = '' + rd_code;
+          }
+        }
 
-          return code_chaine;
+        return code_chaine;
       }
     }
   })
 
   .factory('SendSms', function ($http, urlPhp) {
     return {
-      sendSMS: function (text,number) {
+      sendSMS: function (text, number) {
 
         //var number = document.getElementById('numberTxt').value.toString(); /* iOS: ensure number is actually a string */
         //var message = document.getElementById('messageTxt').value;
@@ -3723,15 +3794,15 @@ console.log('dechargements');
 
         //CONFIGURATION
         var options = {
-          replaceLineBreaks:true, // true to replace \n by a new line, false by default
-            android: {
-               // intent: 'INTENT'  // send SMS with the native android SMS messaging
-                intent: '' // send SMS without opening any other app, require : android.permission.SEND_SMS and android.permission.READ_PHONE_STATE
-            }
+          replaceLineBreaks: true, // true to replace \n by a new line, false by default
+          android: {
+            // intent: 'INTENT'  // send SMS with the native android SMS messaging
+            intent: '' // send SMS without opening any other app, require : android.permission.SEND_SMS and android.permission.READ_PHONE_STATE
+          }
         };
 
         var success = function () { console.log('reussi'); };
-        var error = function (e) { console.log(e);  };
+        var error = function (e) { console.log(e); };
         sms.send(number, text, options, success, error);
 
 
