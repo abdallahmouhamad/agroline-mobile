@@ -2396,49 +2396,7 @@ angular.module('starter.controllers', ['pascalprecht.translate'])
     $scope.initvar();
   })
 
-  /*.controller('DetailsLibelleCtrl', function (
-    $scope, $state, $ionicLoading,
-    ApiListPrc, ApiDetailPrc, ApiAjoutPrc,
-    ApiListClient, ApiListMotif,
-    ApiListArticle, $ionicPopup,ApiDetailPds) {
-    $scope.data = {};
-   
-    $scope.initvar = function () {
-      $scope.data.codePDS = localStorage.getItem('codePDS');
-      var user = localStorage.getItem('user');
-      $scope.data.user = JSON.parse(user);
-
-      $scope.data.detailsDechargement= [];
-
-      var codePDS = { "codePDS": $scope.data.codePDS };
-
-      $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
-      console.log('-----------------------Detail libelle ---------------------');
-      console.log(codePDS);
-      ApiDetailPds.getDetailsPds(codePDS).
-        success(function (response) {
-          $ionicLoading.hide();
-          if (response) {
-            $scope.data.detailsDechargement.details = response;
-          }
-          console.log('-----------------------Detail libelle ---------------------');
-          console.log(response);
-        }, error => { $ionicLoading.hide();
-    });
-    }
-
-    $scope.initvar();
-
-    $scope.goToDetailsDechargement = function (codePDS) {
-
-      localStorage.setItem('codePDS', codePDS);
-      $state.transitionTo('app.details-libelle', {}, {
-        reload: true,
-        inherit: true,
-        notify: true
-      });
-    }
-  })*/
+  
 
 
 
@@ -3264,7 +3222,7 @@ angular.module('starter.controllers', ['pascalprecht.translate'])
     ApiValiderDchmnt.getValiderDchmnt(jsonData).then(function(resp)
     {
       if(resp.response == 1){
-      /*  $ionicPopup.show({
+        $ionicPopup.show({
           title: header,
           template: content,
           scope: $scope,
@@ -3274,10 +3232,10 @@ angular.module('starter.controllers', ['pascalprecht.translate'])
               type: 'button-positive'
             }
           ]
-        });*/
+        });
         console.log("reussi");
       }else{
-       /* $ionicPopup.show({
+        $ionicPopup.show({
           title: header,
           template: content,
           scope: $scope,
@@ -3287,7 +3245,7 @@ angular.module('starter.controllers', ['pascalprecht.translate'])
               type: 'button-positive'
             }
           ]
-        });*/
+        });
         console.log("echec");
       }
     });
@@ -3295,7 +3253,7 @@ angular.module('starter.controllers', ['pascalprecht.translate'])
 
 
    
-     // SendSms.sendSMS('Bissmillah', '776294380');
+      SendSms.sendSMS('Bissmillah', '776294380');
     
    
   }

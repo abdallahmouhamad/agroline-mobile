@@ -272,15 +272,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
       }
     })
 
-    .state('app.details-libelle', {
-      url: '/details-libelle',
-      views: {
-        'menuContent': {
-          templateUrl: 'templates/details-libelle.html',
-          controller: 'DetailsLibelleCtrl'
-        }
-      }
-    })
+   
 
     .state('app.nouvel-pds', {
       url: '/nouvel-pds',
