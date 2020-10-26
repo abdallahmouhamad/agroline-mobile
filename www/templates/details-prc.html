@@ -13,7 +13,7 @@
             margin-left: 5px;
         }
         .footer-button {
-          margin-bottom: 10px !important;
+          margin-bottom: 10px;
           height: 50px !important;
         }
         .ml{
@@ -25,70 +25,192 @@
           margin-bottom: 10px;
         }
         .content-div {
-            background: grey !important;
-          }
-          .content-div-row {
-            text-align: center !important;
-            border: 3px grey dashed !important;
-          }
+          background: grey !important;
+        }
+        .content-div-row {
+          text-align: center !important;
+          border: 3px grey dashed !important;
+        }
+        .edit {
+           background: red !important;
+        }
+        .map {
+          height: 200px !important;
+        }
 
       </style>
-    <!--
-      <div class="list card" ng-repeat="d in data.detailPrc.details | filter:motcle">
+        <div class="card list" ng-if="edit == false">
 
-        <a class="item item-icon-left">
-          <i class="icon ion-person"></i>
-          Client : {{data.detailPrc.client}}
-        </a>
-
-        <a class="item item-icon-left">
-          <i class="icon ion-bookmark"></i>
-          Article : {{d.article}}
-        </a>
-
-        <a class="item item-icon-left">
-          <i class="icon ion-ios-cog"></i>
-          Motif : {{data.detailPrc.motif}}
-        </a>
-
-        <a class="item item-icon-left">
-          <i class="icon ion-link"></i>
-          Quantité : {{d.quantite}}
-        </a>
-
-        <a class="item item-icon-left">
-          <i class="icon ion-cash"></i>
-          Montant : {{data.detailPrc.montant}}
-        </a>
-
-        <a class="item item-icon-left">
-          <i class="icon ion-calendar"></i>
-          date : {{data.detailPrc.dateAjout}}
-        </a>
-
+          <a class="item item-icon-left" ng-if="!data.detailsPRC.clientchoisit">
+            <i class="icon ion-person"></i>
+            Client : {{data.detailsPRC.client}}
+          </a>
+          <a class="item item-icon-left" ng-if="data.detailsPRC.clientchoisit">
+            <i class="icon ion-person"></i>
+            Client : {{data.detailsPRC.clientchoisit.nom}}
+          </a>
+          <a class="item item-icon-left" ng-if="!data.detailsPRC.clientchoisit">
+            <i class="icon ion-location"></i>
+            Adresse : {{data.detailsPRC.adresse}}
+          </a>
+          <a class="item item-icon-left" ng-if="data.detailsPRC.clientchoisit">
+            <i class="icon ion-location"></i>
+            Adresse : {{data.detailsPRC.clientchoisit.adresse}}
+          </a>
+          <a class="item item-icon-left">
+            <i class="icon ion-calendar"></i>
+            Date : {{data.detailsPRC.dateAjout | date :  "dd.MM.y"}}
+          </a>
       </div>
-    -->
+
+      <div class="row" ng-if="edit == true"  style="margin-top: 10px;">
+        <div class="col" style="font-size: 130%;">Modification details PRC</div>
+      </div>
+
+      <div class="row" ng-if="edit == true">
+        
+
+        <div class="col" ng-if="action == 'edit'">
+             <button class="button button-block button-assertive"
+             cancel-button="{{ 'fichevisite_select_pv_return' | translate }}"
+             reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
+             cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
+             search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
+             ng-model="data.artcilechoisit" options="data.listarticles" option-getter="getOptArticle(option)"
+             modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
+             has-search="true">
+             Article
+             <div class="option">
+                 <div class="row">
+
+                     <div class="col" >
+                       <img src="http://test-test.h-tsoft.com/{{option.image}}" style="width:40%; height: 70%;">
+                     </div>
+
+                     <div class="col" style="font-size: 10px;">
+                       <label style="font-weight: bold;font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">Code article :</label> {{option.code}}<br/>
+                       <label style="font-weight: bold;font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">Libelle article :</label> {{option.libelle}}
+                     </div>
+
+                 </div>
+
+             
+             </div>
+
+            </button>
+
+         </div>
+
+         <div class="col" ng-if="edit == true" >
+           <button class="button button-block button-assertive"
+             cancel-button="{{ 'fichevisite_select_pv_return' | translate }}"
+             reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
+             cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
+             search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
+             ng-model="data.motifchoisit" options="data.listmotifs" option-getter="getOptMotif(option)"
+             modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
+             has-search="true">
+             Motif
+             <div class="option">
+               <h2> {{option.libelle}}</h2>
+             </div>
+           </button>
+         </div>
+      </div>
+
+      <div class="row" ng-if="initial == true || edit == true">
+
+        <div class="col">{{ data.artcilechoisit.libelle }}</div>
+  
+        <div class="col">{{ data.motifchoisit.libelle }}</div>
+  
+      </div>
+  
+      <div class="list" ng-if="edit == true">
+        <label class="item item-input">
+          <span class="input-label">Quantité</span>
+          <input type="number" id="quantite"  ng-if="action == 'edit'" ng-model="data.quantite">
+          <input type="number" readonly="true" ng-if="action == 'sup'" id="quantite" ng-model="data.quantite">
+        </label>
+      </div>
+  
+
+      <div class="row" ng-if="edit == true">
+        <div class="col" ng-if="action == 'edit'">
+          <button ng-click="valideEdit()" class="button button-block button-assertive footer-button" color="danger" type="submit"
+          name="submit"><span style="color:white">Modifier</span></button>  
+        </div>
+        <div class="col" ng-if="action == 'sup'">
+          <button ng-click="validerDelet()" class="button button-block button-assertive footer-button" color="danger" type="submit"
+          name="submit"><span style="color:white">Supprimer</span></button>  
+        </div>
+        <div class="col">
+          <button ng-click="annulerEdit()" class="button button-block button-assertive footer-button" color="danger" type="submit"
+          name="submit"><span style="color:white">Annuler</span></button>
+        </div>
+        
+      </div>
+
+      <div class="row"  style="margin-top: 10px;">
+
+         <div class="col" style="font-size: 130%;">Details PRC</div>
+ 
+      </div>
 
 
-
-        <div class="row header list content-div">
+      <div class="row header list content-div">
           <div class="col" style="text-align: center;">Article</div>
           <div class="col" style="text-align: center;">Quantité</div>
-        </div>
+          <div class="col" style="text-align: center;">Prix</div>
+          <div class="col" style="text-align: center;" ng-if="data.detailsPRC.local == true">Editer</div>
+          <div class="col" style="text-align: center;" ng-if="data.detailsPRC.local == true">Supprimer</div>
+      </div>
 
-        <div class="row list"  ng-repeat="d in data.detailsPRC.details | filter:motcle">
+      <div class="row list"  ng-repeat="d in data.detailsPRC.details | filter:motcle">
 
-          <div class="col content-div-row">{{d.article}}</div>
-          <div class="col content-div-row">{{d.quantite}}</div>
+          <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" ng-click="showPopUp(d.article, 1, d.codeArticle)">
+            {{d.codeArticle}}
+          </div>
 
-        </div>
+          <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'" ng-click="showPopUp(d.article, 1, d.codeArticle)">
+            {{d.codeArticle}}
+          </div>
 
-        <div class="row">
-          <div class="col"></div>
-          <div class="col"></div>
-        </div>
+          <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{d.quantite}}</div>
+
+          <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.quantite}}</div>
+          <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{d.prix}}</div>
+
+          <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.prix}}</div>
+
+          <div class="col content-div-row" ng-if="d.idMotif !== 'edit' && data.detailsPRC.local == true" ng-click="editDetail(d, 'edit')">
+
+            <i class="icon ion-edit" ></i>
+
+         </div>
+
+         <div class="col content-div-row edit" ng-if="d.idMotif === 'edit' && data.detailsPRC.local == true" ng-click="editDetail(d, 'edit')">
+
+            <i class="icon ion-edit"></i>
+
+         </div>
+
+         <div class="col content-div-row" ng-if="d.idMotif !== 'edit' && data.detailsPRC.local == true" ng-click="editDetail(d, 'sup')">
+
+          <i class="icon ion-trash-a" ></i>
+
+          </div>
+
+          <div class="col content-div-row edit" ng-if="d.idMotif === 'edit' && data.detailsPRC.local == true" ng-click="editDetail(d, 'sup')">
+
+              <i class="icon ion-trash-a"></i>
+
+          </div>
 
 
+      </div>
+
+    
 
     </ion-content>
 

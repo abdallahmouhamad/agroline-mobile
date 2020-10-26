@@ -208,7 +208,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
       views: {
         'menuContent': {
           templateUrl: 'templates/details-prc.html',
-          controller: 'PrcCtrl'
+          controller: 'DetailPrcCtrl'
         }
       }
     })
@@ -290,6 +290,26 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
       }
     })
 
+    .state('app.envoi', {
+      url: '/envoi',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/envoi.html',
+          controller: 'EnvoiCtrl'
+        }
+      }
+    })
+
+    .state('app.recuperation', {
+      url: '/recuperation',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/recuperation.html',
+          controller: 'RecuperationCtrl'
+        }
+      }
+    })
+
     .state('app.maps', {
       url: '/maps',
       views: {
@@ -337,6 +357,75 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
       views: {
         'menuContent': {
           templateUrl: 'templates/bienvenue.html',
+        }
+      }
+    })
+
+    .state('app.dechargements', {
+      url: '/dechargements',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/dechargements.html',
+          controller: 'dechargementsCtrl'
+        }
+      }
+    })
+
+    .state('app.dechargement', {
+      url: '/dechargement',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/dechargement.html',
+          controller: 'DechargementCtrl'
+        }
+      }
+    })
+
+    .state('app.details-dechargement', {
+      url: '/details-dechargement',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/details-dechargement.html',
+          controller: 'DetailDechargementCtrl'
+        }
+      }
+    })
+
+    .state('app.versements', {
+      url: '/versements',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/versements.html',
+          controller: 'versementsCtrl'
+        }
+      }
+    })
+
+    .state('app.versement', {
+      url: '/versement',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/versement.html',
+          controller: 'versementCtrl'
+        }
+      }
+    })
+
+    .state('app.details-versement', {
+      url: '/details-versement',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/details-versement.html',
+          controller: 'versementCtrl'
+        }
+      }
+    })
+    .state('app.nouvel-client', {
+      url: '/nouvel-client',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/nouvel-client.html',
+          controller: 'AddClientCtrl'
         }
       }
     })

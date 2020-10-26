@@ -1,0 +1,80 @@
+<ion-view view-title="Envoi de données" cache-view="false">
+    <ion-pane>
+      <div ng-app="starter">
+  
+        <ion-content>
+  
+          <style type="text/css">
+            input[readonly] {
+              background-color: transparent !important;
+              cursor: not-allowed;
+            }
+            .small_button{
+                width: 50% !important;
+                height: 50px !important;
+                margin-left: 5px;
+            }
+            .footer-button {
+              margin-bottom: 10px;
+              height: 50px !important;
+            }
+            .ml{
+              margin-left: 5px;
+            }
+            .header {
+  
+              margin-top: 5px;
+              margin-bottom: 10px;
+            }
+            .content-div {
+              background: grey !important;
+            }
+            .content-div-row {
+              text-align: center !important;
+              border: 3px grey dashed !important;
+            }
+            .edit {
+               background: red !important;
+            }
+            .map {
+              height: 200px !important;
+            }
+  
+          </style>
+
+            <div class="row">
+
+                <div class="col">
+                    <button class="button button-block button-assertive" ng-click="synchroPRC()" type="submit" name="submit">
+                        <span style="color:white">Prise de commande : {{data.prcs.length}}</span>
+                    </button>
+                </div>
+            
+            </div>
+
+            <div class="row">
+            
+
+                <div class="col">
+                    <button class="button button-block button-assertive" ng-click="synchroFact()" type="submit" name="submit">
+                        <span style="color:white">Facture</span>
+                    </button>
+                </div>
+            
+            </div>
+
+            <!--<div class="row">
+            
+                <div class="col">
+                    <button class="button button-block button-assertive" ng-click="login()" type="submit" name="submit">
+                        <span style="color:white">Prise de commande</span>
+                    </button>
+                </div>
+            
+            </div>-->
+        </ion-content>
+        </div>
+    
+    </ion-pane>
+  </ion-view>
+  

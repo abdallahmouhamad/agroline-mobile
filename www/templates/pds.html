@@ -1,84 +1,3 @@
-<!--
-<ion-view title="PDS" cache-view="false">
-  <div ng-app="starter">
-
-    <ion-content padding="true" class="has-header">
-      <style type="text/css">
-        input[readonly] {
-          background-color: transparent !important;
-          cursor: not-allowed;
-        }
-        .small_button{
-            width: 50% !important;
-            height: 50px !important;
-            margin-left: 5px;
-        }
-        .footer-button {
-          margin-bottom: 10px;
-          height: 50px !important;
-        }
-        .ml{
-          margin-left: 5px;
-        }
-        .header {
-
-          margin-top: 5px;
-          margin-bottom: 10px;
-        }
-        .content-div {
-          background: #1EAC4E !important;
-        }
-        .content-div-row {
-          text-align: center !important;
-          border: 3px grey dashed !important;
-        }
-
-      </style>
-      <div class="list" ng-repeat="pds in data.pds | filter:motcle">
-              <div class="item item-thumbnail-left">
-                      <div src="./img/pds.jpg">
-
-                      <div class="row">
-                        <div class="col">code</div>
-                        <div class="col"><p>{{ pds.codePDS }}</p></div>
-                      </div>
-
-                      <div class="row">
-                        <div class="col">Grossiste</div>
-                        <div class="col"><p>{{ pds.grossiste }}</p></div>
-                      </div>
-
-
-                      <div class="row">
-                        <div class="col">Montant</div>
-                        <div class="col"><p>{{ pds.montant }}</p></div>
-                      </div>
-
-                      <div class="row">
-                        <div class="col">Date ajout</div>
-                        <div class="col"><p>{{ pds.dateAjout }}</p></div>
-                      </div>
-
-              </div>
-
-              <div class="row content-div">
-                      <div class="col" ng-click="goToDetailPds(pds.codePDS)">
-                        <button class="button button-clear button-assertive" style="color: white;">
-                                  Details
-                        </button>
-                      </div>
-              </div>
-
-
-    </div>
-
-
-    </ion-content>
-    <button class="button button-float" ng-click="goToNewPrc()">
-      <i class="icon ion-plus"></i>
-    </button>
-  </div>
-  </ion-view>-->
 
   <ion-view title="Prise De Stock" cache-view="false">
     <div ng-app="starter">
@@ -127,7 +46,7 @@
 
         </style>
 
-        <div class="list" ng-repeat="pds in data.pds | filter:motcle">
+      <div class="list" ng-repeat="pds in data.pds | filter:motcle" ng-if="edit == false">
           <div class="item item-thumbnail-left">
 
             <img src="./img/prc.jpg">
@@ -139,11 +58,12 @@
 
             <div class="row">
               <div class="col">Grossiste</div>
-              <div class="col"><p>{{ pds.grossiste }}</p></div>
+              <div class="col" ng-if="pds.grossiste"><p>{{ pds.grossiste }}</p></div>
+              <div class="col" ng-if="pds.grossiste == null"><p>{{ pds.grossistechoisit.nom }}</p></div>
             </div>
 
 
-            <div class="row">
+            <div class="row" ng-if="pds.grossiste">
               <div class="col">Montant</div>
               <div class="col"><p>{{ pds.montant }}</p></div>
             </div>
@@ -157,35 +77,104 @@
 
           <div class="row content-div">
 
-            <div class="col"  ng-click="goToRecapPrc(prc.codeCommerciale)">
-              <!--<button class="button button-clear button-assertive" style="color: white;">
-                Recap PRC
-              </button>-->
-            </div>
-
-            <div class="col"  ng-click="goToFact(prc)">
-                <!--<button class="button button-clear button-assertive" style="color: white;">
-                  Facturation
-                </button>-->
-            </div>
-
-            <div class="col" ng-click="goToDetailPds(pds.codePDS)">
+            <div class="col"  ng-click="valider(pds)" ng-if="pds.local == true">
               <button class="button button-clear button-assertive" style="color: white;">
-                        Details
+                Valider
               </button>
             </div>
+
+            
+
+            <div class="col" ng-click="goToDetailPds(pds)">
+              <button class="button button-clear button-assertive" style="color: white;">
+                Details
+              </button>
+            </div>
+            <div class="col"  ng-click="editDetail(pds,'sup')" ng-if="pds.local == true">
+              <button class="button button-clear button-assertive" style="color: white;">
+                Annuler
+              </button>
+          </div>
 
         </div>
 
 
       </div>
 
-      </ion-content>
+      <div>
+        <div class="col" ng-if="edit == true" >
+          <button class="button button-block button-assertive"
+            cancel-button="{{ 'fichevisite_select_pv_return' | translate }}"
+            reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
+            cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
+            search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
+            ng-model="data.motifchoisit" options="data.listmotifs" option-getter="getOptMotif(option)"
+            modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
+            has-search="true">
+            Motif
+            <div class="option">
+              <h2 > {{option.libelle}}</h2>
+            </div>
+          </button>
+        </div>
+      </div>
 
-      <!--<button class="button button-float bg" ng-click="goToNewPds()">
-        <i class="icon ion-plus"></i>
-      </button>-->
-    </div>
+
+       <div class="row" ng-if="edit == true">
+
+         <div class="col">{{ data.motifchoisit.libelle }}</div>
+
+      </div>
+
+      <div class="row" ng-if="edit == true">
+   
+        <div class="col" ng-if="action == 'sup'">
+          <button ng-click="validerDelet()" class="button button-block button-assertive footer-button" color="danger" type="submit"
+          name="submit"><span style="color:white">Valider</span></button>  
+        </div>
+        <div class="col">
+          <button ng-click="annulerEdit()" class="button button-block button-assertive footer-button" color="danger" type="submit"
+          name="submit"><span style="color:white">Annuler</span></button>
+        </div>
+        
+      </div>
+
+
+      <div class="item item-thumbnail-left" ng-if="edit == true">
+
+        <img src="./img/prc.jpg">
+
+        <div class="row">
+          <div class="col">code</div>
+          <div class="col"><p>{{ itemEdit.codePDS }}</p></div>
+        </div>
+
+        <div class="row">
+          <div class="col">Grossiste</div>
+          <div class="col" ng-if="itemEdit.grossiste"><p>{{ itemEdit.grossiste }}</p></div>
+          <div class="col" ng-if="itemEdit.grossiste == null"><p>{{ itemEdit.grossistechoisit.nom }}</p></div>
+        </div>
+
+
+        <div class="row" ng-if="itemEdit.grossiste">
+          <div class="col">Montant</div>
+          <div class="col"><p>{{ itemEdit.montant }}</p></div>
+        </div>
+
+        <div class="row">
+          <div class="col">Date ajout</div>
+          <div class="col"><p>{{ itemEdit.dateAjout | date :  "dd.MM.y" }}</p></div>
+        </div>
+
+      </div>
+
+
+
+      
+
+  </ion-content>
+
+</div>
 
       <div class="row bar bar-footer ft" >
           <div class="col mt">

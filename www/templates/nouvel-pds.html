@@ -58,6 +58,7 @@
               search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
               ng-model="data.grossistechoisit" options="data.grossistes" option-getter="getOptGrossiste(option)"
               modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
+              ng-change="initRecapPRC();"
               has-search="true">
 
               <label for="" ng-if="!data.grossistechoisit">Choisir un Grossiste</label>
@@ -140,6 +141,22 @@
         </label>
       </div>
 
+      <div class="row">
+
+        <div class="col">
+  
+          <div class="list" ng-if="data.recapPRC.length == 0 ||  edit == true">
+            <label class="item item-input" style="margin-top: 7px;">
+              <span class="input-label">Prix</span>
+              <input type="number" ng-model="data.prix">
+            </label>
+          </div>
+  
+          
+        </div>
+  
+      </div>
+
       <div class="row" ng-if="data.recapPRC.length == 0 && edit == false">
         <button ng-click="ajouter()" class="button button-block button-assertive footer-button" color="danger" type="submit"
         name="submit"><span style="color:white">Ajouter detail</span></button>
@@ -161,25 +178,19 @@
               </div>
 
 
-
-              <div class="row header list">
+          <div class="list">
+            <div class="row header list">
                 <!--<div class="col" style="text-align: center;">Code detail</div>-->
                 <div class="col" style="text-align: center;">Article</div>
 
                 <div class="col" style="text-align: center;">Quantité</div>
+                <div class="col" style="text-align: center;">Prix</div>
                 <div class="col" style="text-align: center;">Action</div>
-              </div>
+            </div>
 
-              <div class="row list"  ng-repeat="d in data.detailsPDS | filter:motcle">
+            <div class="row list"  ng-repeat="d in data.detailsPDS | filter:motcle">
 
-                <!--<div class="col content-div-row" ng-click="showPopUp(d.artcilechoisit.image, 2)"><img src="http://test-test.h-tsoft.com/{{d.artcilechoisit.image}}" style="width:40%; height: 70%;"></div>-->
-                <!--<div class="col content-div-row" ng-if="d.idMotif !== 'edit'">
-                  {{d.codeDetail}}
-                </div>
-
-                <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">
-                  {{d.codeDetail}}
-                </div>-->
+               
 
                 <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" ng-click="showPopUp(d.article, 1, d.codeArticle)">
                   {{d.codeArticle}}
@@ -201,6 +212,20 @@
                     </label>
                 </div>
 
+
+                <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" >
+                  <label style="margin-top: 10px;">
+                    {{ d.prix }}
+                  </label>
+              </div>
+
+              <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">
+                  <label style="margin-top: 10px;">
+                    {{ d.prix }}
+                  </label>
+              </div>
+
+
                 <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" ng-click="editDetail(d)">
 
                     <i class="icon ion-edit"></i>
@@ -213,10 +238,26 @@
 
                 </div>
 
+            </div>
+
+          </div>
+          <div >
+            <div class="list" >
+              
+            </div>
+  
+            <div class="row" >
+              <div class="col" >
+               
               </div>
-
-
-            </p>
+  
+              <div class="col" >
+                
+              </div>
+              
+            </div>
+          </div>
+        </p>
 
 
         </div>
@@ -230,8 +271,16 @@
           </div>
 
           <div class="row" >
-            <button ng-click="submit()" class="button button-block button-assertive footer-button" color="danger" type="submit"
+            <div class="col" >
+              <button ng-click="submit()" class="button button-block button-assertive footer-button" color="danger" type="submit"
             name="submit"><span style="color:white">Valider</span></button>
+            </div>
+
+            <div class="col" >
+              <button ng-click="annulerPDSCODESMS()" class="button button-block button-assertive footer-button" color="danger" type="submit"
+            name="submit"><span style="color:white">Annuller</span></button>
+            </div>
+            
           </div>
         </div>
 
@@ -240,8 +289,18 @@
 
     </div>
     <div  class="bar bar-footer footer-button" ng-if="code == 'initiale'">
-      <button ng-click="validerPdsAndSendCode()" class="button button-block button-assertive footer-button" color="danger" type="submit"
+
+
+     <!-- <div class="col mt" ng-if="sens !== 'local'" >
+        <button  ng-click="sauvegarder()" class="button button-block button-assertive footer-button" color="danger" type="submit"
+        name="submit"><span style="color:white">Sauvgarder</span></button>
+      </div>-->
+
+      <div class="col mt">
+        <button ng-click="validerPdsAndSendCode()" class="button button-block button-assertive footer-button" color="danger" type="submit"
         name="submit"><span style="color:white">Valider les quantites</span></button>
+      </div>
+
     </div>
   </ion-pane>
 </ion-view>
