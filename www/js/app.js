@@ -416,7 +416,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
       views: {
         'menuContent': {
           templateUrl: 'templates/details-versement.html',
-          controller: 'versementCtrl'
+          controller: 'DetailsVersementCtrl'
         }
       }
     })

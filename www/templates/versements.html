@@ -1,4 +1,4 @@
-<ion-view title="PDC à Decharger" cache-view="false">
+<ion-view title="Restant vérsement" cache-view="false">
     <div ng-app="starter">
   
       <ion-content padding="true" class="has-header">
@@ -36,24 +36,38 @@
             }
  
         </style>
-        <div class="list" ng-repeat="dchgmnt in data.dechargements | filter:motcle">
+        <div class="list" ng-repeat="vers in data.pds_no_payed | filter:motcle">
           <a class="item item-thumbnail-left">
             <img src="./img/prc.jpg">
   
             <div class="row">
-              <div class="col">Code</div>
-              <div class="col"><p>{{ dchgmnt.codePDS }}</p></div>
+              <div class="col text-left">Code</div>
+              <div class="col text-right"><p>{{ vers.codePDS }}</p></div>
             </div>
+
             <div class="row">
-              <div class="col">Grossite</div>
-              <div class="col"><p>{{ dchgmnt.grossiste }}</p></div>
+              <div class="col text-left">Grossite</div>
+              <div class="col text-right"><p>{{ vers.grossiste }}</p></div>
             </div>
-           
-           
   
             <div class="row">
-              <div class="col">Date ajout</div>
-              <div class="col"><p>{{dchgmnt.dateAjout | date :  "dd.MM.y" }}</p></div>
+              <div class="col text-left">Date ajout</div>
+              <div class="col text-right"><p>{{vers.dateAjout | date :  "dd.MM.y" }}</p></div>
+            </div>
+
+            <div class="row">
+                <div class="col text-left">M.restant</div>
+                <div class="col text-right"><p>{{ vers.montantRestant }}</p></div>
+            </div>
+
+            <div class="row">
+                <div class="col text-left">M.versé</div>
+                <div class="col text-right"><p>{{ vers.montantVerse }}</p></div>
+            </div>
+
+            <div class="row">
+                <div class="col text-left">M.total versé</div>
+                <div class="col text-right"><p>{{ vers.totalVersement }}</p></div>
             </div>
   
           </a>
@@ -64,22 +78,24 @@
   
           </div>
   
-          <div class="col"  ng-click="goToDetailsDechargement(dchgmnt.codePDS)" >
+          <div class="col" >
             <button class="button button-clear button-assertive" style="color: white;">
-              Details
+              
             </button>
         </div>
   
   
-        <div class="col" ng-click="goToDechargement(dchgmnt.codePDS)">
+        <div class="col" ng-click="goToDetailVersement(vers)">
             <button class="button button-clear button-assertive" style="color: white;">
-                Decharger
+                Details
             </button>
           </div>
   
       </div>
   
       </div>
+
+     
   
       </ion-content>
     </div>

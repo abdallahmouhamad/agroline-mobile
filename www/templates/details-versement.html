@@ -1,0 +1,159 @@
+<ion-view title="Detail Versement" cache-view="false">
+    <div ng-app="starter">
+  
+      <ion-content padding="true" class="has-header">
+      
+          <style type="text/css">
+            input[readonly] {
+              background-color: transparent !important;
+              cursor: not-allowed;
+            }
+  
+            .small_button {
+              width: 50% !important;
+              height: 50px !important;
+              margin-left: 5px;
+            }
+  
+            .footer-button {
+              margin-bottom: 10px !important;
+              height: 50px !important;
+            }
+  
+            .ml {
+              margin-left: 5px;
+            }
+  
+            .header {
+  
+              margin-top: 5px;
+              margin-bottom: 10px;
+            }
+  
+            .content-div {
+              background: grey !important;
+            }
+  
+            .content-div-row {
+              text-align: center !important;
+              border: 3px grey dashed !important;
+            }
+            .div-verse{
+              margin-top: 30%;
+            }
+          </style>
+       
+          <div class="card list" ng-if="!data.verser">
+  
+              <a class="item item-icon-left">
+                <i class="icon ion-person"></i>
+                Grossiste : {{ data.details_pds_no_payed.grossiste }}
+              </a>
+  
+              <a class="item item-icon-left">
+                <i class="icon ion-android-call"></i>
+                Téléphone : {{ data.details_pds_no_payed.telephone }}
+              </a>
+              <a class="item item-icon-left">
+                <i class="icon ion-location"></i>
+                Adresse : {{ data.details_pds_no_payed.adresse }}
+              </a>
+              <a class="item item-icon-left">
+                <i class="icon ion-calendar"></i>
+                Date : {{data.details_pds_no_payed.dateAjout | date :  "dd.MM.y"}}
+              </a>
+              <div class="row header list content-div">
+          
+                <div class="col" style="text-align: center;">M:restant</div>
+                <div class="col" style="text-align: center;">M:total</div>
+                <div class="col" style="text-align: center;">M.versé</div>
+                <div class="col" style="text-align: center;">T.versement</div>
+               
+            </div>
+            <div class="row header list content-div">
+          
+              <div class="col" style="text-align: center;">{{ data.details_pds_no_payed.montantRestant }}</div>
+              <div class="col" style="text-align: center;">{{ data.details_pds_no_payed.montantTotal }}</div>
+              <div class="col" style="text-align: center;">{{ data.details_pds_no_payed.montantVerse }}</div>
+              <div class="col" style="text-align: center;">{{ data.details_pds_no_payed.totalVersement }}</div>
+             
+          </div>
+           
+              <div class="row">
+                <div class="col">Historiques versement</div>
+              </div>
+             
+            <div class="row header list content-div" ng-if="!data.verser">
+          
+                <div class="col" style="text-align: center;">codeVersement</div>
+                <div class="col" style="text-align: center;">montant</div>
+                <div class="col" style="text-align: center;">date</div>
+               
+            </div>
+    
+            <div class="row list" ng-repeat="d in data.details_pds_no_payed.details | filter:motcle" style="margin-bottom: 50px;" ng-if="!data.verser">
+                
+                 <div class="col content-div-row" >{{d.codeVersement}}</div>
+  
+                 <div class="col content-div-row">{{d.montant}}</div>
+    
+                 <div class="col content-div-row edit">{{d.dateAjout | date :  "dd.MM.y"}}</div>
+  
+            </div>
+
+            <div > 
+              <label class="item item-input">
+                <span class="input-label">Montant</span>
+                <input type="number" id="montant" ng-model="data.montant">
+              </label>
+            </div>
+
+          </div>
+    
+  
+    
+
+  
+    </div>
+  
+  
+    </div>
+  
+  
+
+    <div ng-if="data.verser">
+     
+
+      <div class="div-verse"> 
+        <label class="item item-input">
+          <span class="input-label">Code secret</span>
+          <input type="text" id="code" ng-model="data.code">
+        </label>
+      </div>
+
+      <div class="row" >
+
+        <div class="col" >
+          <button ng-click="validerVersment()" class="button button-block button-assertive footer-button" color="danger" type="submit"
+        name="submit"><span style="color:white">Valider</span></button>
+        </div>
+
+        <div class="col" >
+          <button ng-click="annulerVersement()" class="button button-block button-assertive footer-button" color="danger" type="submit"
+        name="submit"><span style="color:white">Annuller</span></button>
+        </div>
+  
+      </div>
+     
+
+    </div>
+  
+    </ion-content>
+   
+    <div  class="bar bar-footer footer-button" ng-if="!data.verser">
+      <button ng-click="submit()" class="button button-block button-assertive footer-button" color="danger" type="submit"
+        name="submit"><span style="color:white">Verser</span></button>
+    </div>
+    </div>
+    
+  </ion-view>

@@ -2105,6 +2105,7 @@ angular
       $scope.data.nom = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.nom :  null;
       $scope.data.adresse = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.adresse :  null;
       $scope.data.telephone = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.telephone :  null;
+      $scope.data.telephne_secondaire = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.telephne_secondaire :  null;
       $scope.data.email = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.email :  null;
       $scope.data.photo = null;
       $scope.data.delaiPaiement = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.delaiPaiement :  null;
@@ -2114,18 +2115,7 @@ angular
 
     };
     //Init variables of controller
-    /*
-    adresse: "KM"
-codeClient: "CLI-8-0005"
-codeGrossiste: "B20108"
-delaiPaiement: "2"
-idModepaiement: "1"
-nom: "FATIM"
-position: "37.4219983,-122.084"
-region: "LOUGA"
-telephone: "78993333"
-zone: "ZONE 1"
-    */
+
     $scope.initvar();
     ApiListRegions.getListRegions().success(function (response) {
       console.log('-----List regions');
@@ -2206,23 +2196,7 @@ zone: "ZONE 1"
     $ionicLoading.show({
       template: 'Localisation en cours...'
     });
-   /* if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(position){
-        $ionicLoading.hide();
-        console.log(position)
-        $scope.$apply(function(){
-
-          $scope.data.latitude = position.coords.latitude;
-          $scope.data.longitude = position.coords.longitude;
-          $scope.data.position = position.coords.latitude+","+position.coords.longitude
-        //  $scope.position = position;
-        },err=>{
-          $ionicLoading.hide();
-        });
-      });
-    }else{
-      $ionicLoading.hide();
-    }*/
+ 
     var options = {
       timeout: 10000,
       enableHighAccuracy: true
@@ -2231,15 +2205,11 @@ zone: "ZONE 1"
     $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
       console.log(position) ;
        $ionicLoading.hide();
-      // $scope.$apply(function(){
         $scope.data.latitude = position.coords.latitude;
         $scope.data.longitude = position.coords.longitude;
         $scope.data.position = position.coords.latitude+","+position.coords.longitude
-     //  },err=>{
-      //  $ionicLoading.hide();
-      // })
-       
-      
+   
+          
     },function(error){
       $ionicLoading.hide();
       if ($scope.connect == true) {
@@ -2364,6 +2334,7 @@ zone: "ZONE 1"
           idVille: $scope.data.villechoisit ? $scope.data.villechoisit.idVille : null,
           idMarche: $scope.data.marchechoisit ? $scope.data.marchechoisit.idMarche : null, 
           telephone: $scope.data.telephone,
+          telephne_secondaire: $scope.data.telephne_secondaire,
           email : $scope.data.email, 
           adresse : $scope.data.adresse,
           position : $scope.data.position,
@@ -2950,8 +2921,8 @@ zone: "ZONE 1"
       $scope.data.listmodereglements = null;
       $scope.data.modereglementchoisit = null;
       $scope.data.motifchoisit = null;
-      $scope.data.quantite = 0;
-      $scope.data.prix = 0.0;
+      $scope.data.quantite = null;
+      $scope.data.prix = null;
       $scope.data.montant = 0.0;
       $scope.data.idMotif = 0;
       $scope.data.idModepaiement = 0;
@@ -3053,7 +3024,10 @@ zone: "ZONE 1"
     };
 
     $scope.ajouter = function () {
+
+      if($scope.data.artcilechoisit && $scope.data.quantite && $scope.data.prix && $scope.data.quantite > 0 &&  $scope.data.prix > 0){
       //   $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+      var mt = $scope.data.prix * $scope.data.quantite;
       $scope.data.detailsPRC.push({
         index: $scope.data.detailsPRC.length + 1,
         codeDetail: "DPRC-" + $scope.data.user.code + "-"+ CodeGenere.getCodeGenere(),
@@ -3063,15 +3037,30 @@ zone: "ZONE 1"
         isCanceled: false,
         artcilechoisit: $scope.data.artcilechoisit,
         idMotif: 0,
-        // motifchoisit: $scope.data.motifchoisit
+        montant : mt
       });
-      $scope.data.montant = $scope.data.montant + $scope.data.prix * $scope.data.quantite;
+      $scope.data.montant = $scope.data.montant + mt;
       // $ionicLoading.hide();
       $scope.data.artcilechoisit = null;
       $scope.data.motifchoisit = null;
-      $scope.data.quantite = 0;
+      $scope.data.quantite = null;
+      $scope.data.prix = null;
       console.log("----------------------Detail-------------------");
       console.log($scope.data.detailsPRC);
+      }else{
+        $ionicPopup.show({
+          title: "Infos",
+          template: "Veuillez ajouter un article avec sa quantité et son prix",
+          scope: $scope,
+          buttons: [
+            {
+              text: "Ok",
+              type: "button-positive",
+            },
+          ],
+        });
+      }
+
     };
 
     $scope.submit = function (action) {
@@ -4096,7 +4085,7 @@ zone: "ZONE 1"
       console.log("-----------------------Detail pds ---------------------");
       console.log(codePDS);
       if ($scope.data.codePDS && pds.local == null) {
-        ApiDetailPds.getDetailPds(codePDS).success(
+        ApiDetailPds.getDetailsPds(codePDS).success(
           function (response) {
             $ionicLoading.hide();
             if (response) {
@@ -6561,8 +6550,8 @@ zone: "ZONE 1"
       $scope.itemEdit = null;
       
       $scope.data.code  = null;
-     // localStorage.setItem("pdstodecharge",null)
-      console.log(localStorage.getItem("pdstodecharge"));
+      localStorage.setItem("pdstodecharge",null)
+      console.log(JSON.parse(localStorage.getItem("pdstodecharge")));
    
       $scope.data.dechargement_valider = JSON.parse(localStorage.getItem("pdstodecharge"));
       $scope.data.verser  = $scope.data.dechargement_valider && $scope.data.dechargement_valider !== 'null' ? true : false;
@@ -6806,6 +6795,7 @@ zone: "ZONE 1"
       var Message = 'Code secret: '+ values.codeGenere
 
      SendSms.sendSMS(Message, $scope.data.dechargement.telephone);
+     
 
       localStorage.setItem("pdstodechargecode",values.codeGenere);
       console.log('-----code generer-------');
@@ -6828,66 +6818,7 @@ zone: "ZONE 1"
           ]
         });
       }
-/*      $scope.data.codePDS = localStorage.getItem('codePDS');
-      var user = localStorage.getItem('user');
-      $scope.data.user = JSON.parse(user);
-      $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
-
-        
-
-
-      var jsonData = {
-         codePDS: $scope.data.codePDS, 
-         codeDechargement:"DCH-" + $scope.data.user.code +"-" +CodeGenere.getCodeGenere(), 
-         codeCommerciale: $scope.data.user.code, 
-         dateAjout:new Date(),
-         isCanceled: 0,
-         idMotif:0,
-         isChecked: 0,
-         codeGenere: CodeGenere.getCodeGenere(), 
-         isPayed: 0
-        };
-     
-   
-    console.log("bouton valider");
-    console.log(jsonData);
-    ApiValiderDchmnt.getValiderDchmnt(jsonData).then(function(resp)
-    {
-      if(resp.response == 1){
-        $ionicPopup.show({
-          title: header,
-          template: content,
-          scope: $scope,
-          buttons: [
-            {
-              text: 'Reussi',
-              type: 'button-positive'
-            }
-          ]
-        });
-        console.log("reussi");
-      }else{
-        $ionicPopup.show({
-          title: header,
-          template: content,
-          scope: $scope,
-          buttons: [
-            {
-              text: 'Echec',
-              type: 'button-positive'
-            }
-          ]
-        });
-        console.log("echec");
-      }
-    });
-    console.log(jsonData);*/
-
-
-   
-     // SendSms.sendSMS('Bissmillah', '776294380');
-    
-   
+  
   }
 
   })
@@ -7045,6 +6976,7 @@ zone: "ZONE 1"
         success(function(response){
           $ionicLoading.hide();
           console.log(response);
+          $scope.data.pds_no_payed = response;
         }, err=>{
           $ionicLoading.hide();
         }) 
@@ -7053,6 +6985,248 @@ zone: "ZONE 1"
     }
     $scope.initvar();
     $scope.initPdsNoPayed();
+
+    $scope.goToDetailVersement = function (vers) {
+
+      localStorage.setItem('codePdsVersement', vers.codePDS);
+      $state.transitionTo('app.details-versement', {}, {
+        reload: true,
+        inherit: true,
+        notify: true
+      });
+    }
+  })
+  .controller('DetailsVersementCtrl', function (
+    $scope, $state, $ionicLoading,
+    ApiListPrc, ApiDetailPrc, ApiAjoutPrc,
+    ApiListClient, ApiListMotif,
+    ApiListArticle, $ionicPopup, ApiRecapPdsPrc, ApiListDechargement,ApiPdsNoPayed,ApiDetailPdsNoPayed,ApiAjoutVersement,CodeGenere,ApiAjoutVersement,SendSms) {
+
+    console.log('versement');
+    $scope.data = {};
+
+    $scope.initvar = function () {
+
+      $scope.data.codeCommerciale = localStorage.getItem('codeCommerciale');
+      $scope.data.user = JSON.parse(localStorage.getItem('user'));
+      $scope.data.codePds = localStorage.getItem('codePdsVersement');
+      $scope.data.versement = JSON.parse(localStorage.getItem('versetopds'));
+      $scope.data.details_pds_no_payed = [];
+      $scope.data.code = null;
+      $scope.data.verser = $scope.data.versement ? true : false;
+      console.log('Versement local code');
+      console.log($scope.data.versement)
+      $scope.data.montant = 0;
+
+    }
+
+    $scope.initDetailPdsNoPayed = function(){
+      if($scope.data.codePds){
+        $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+        ApiDetailPdsNoPayed.getDetailPdsNoPayed($scope.data.codePds).
+        success(function(response){
+          $ionicLoading.hide();
+          console.log(response);
+          $scope.data.details_pds_no_payed = response;
+        }, err=>{
+          $ionicLoading.hide();
+        }) 
+      }
+      
+    }
+ 
+    $scope.initvar();
+    $scope.initDetailPdsNoPayed();
+
+    $scope.goToDetailVersement = function (vers) {
+
+      localStorage.setItem('versement', vers);
+      $state.transitionTo('app.details-versement', {}, {
+        reload: true,
+        inherit: true,
+        notify: true
+      });
+    }
+
+
+    $scope.annulerVersement = function(){
+      $scope.data.verser = false;
+      localStorage.setItem("versetopds", null);
+      localStorage.setItem("versetopdscode",null);
+
+    }
+    $scope.validerVersment = function(){
+      console.log("Code generer");
+      console.log($scope.data.versement[0].codeGenere);
+      if($scope.data.code && $scope.data.code === $scope.data.versement[0].codeGenere){
+        $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+   
+        $scope.data.versement[0].isChecked = 1
+        
+        console.log($scope.data.versement);
+        localStorage.setItem("versetopds", null);
+        localStorage.setItem("versetopdscode",null);
+        $ionicLoading.hide();
+
+        $ionicPopup.show({
+          title: 'Info',
+          template: 'Reussi',
+          scope: $scope,
+          buttons: [
+            
+            {
+              text: 'Ok',
+              type: 'button-energized',
+              onTap: function (e) {
+                return true;
+              }
+            }]
+        })
+          .then(function (result) {
+
+              $state.transitionTo('app.versements', {}, {
+                reload: true,
+                inherit: true,
+                notify: true
+              });
+            }
+          );
+        /*ApiAjoutVersement.ajoutVersement($scope.data.versement).then(function(resp)
+        {
+          console.log(resp);
+          $ionicLoading.hide();
+          localStorage.setItem("versetopds", null);
+          localStorage.setItem("versetopdscode",null);
+          if(resp.reponse == 1){
+            $ionicPopup.show({
+              title: 'Info',
+              template: 'Reussi',
+              scope: $scope,
+              buttons: [
+                
+                {
+                  text: 'Ok',
+                  type: 'button-energized',
+                  onTap: function (e) {
+                    return true;
+                  }
+                }]
+            })
+              .then(function (result) {
+
+                  $state.transitionTo('app.versements', {}, {
+                    reload: true,
+                    inherit: true,
+                    notify: true
+                  });
+                }
+              )
+       
+          }else{
+            $ionicLoading.hide();
+            $ionicPopup.show({
+              title: 'Erreur',
+              template: 'Erreur d\'insertion',
+              scope: $scope,
+              buttons: [
+                
+                {
+                  text: 'Ok',
+                  type: 'button-energized',
+                  onTap: function (e) {
+                    return true;
+                  }
+                }]
+            })
+              .then(function (result) {
+
+                  $state.transitionTo('app.dechargements', {}, {
+                    reload: true,
+                    inherit: true,
+                    notify: true
+                  });
+                }
+              )
+            console.log("echec");
+          }
+        }, err=>{
+          $ionicLoading.hide();
+        });*/
+
+        
+       }else{
+        $ionicPopup.show({
+          title: 'Erreur  ',
+          template: 'Le code ne correspond pas.',
+          scope: $scope,
+          buttons: [
+            {
+              text: 'OK',
+              type: 'button-positive'
+            }
+          ]
+        });
+       }
+  }
+
+    
+
+
+    $scope.submit = function () {
+
+    if($scope.data.montant > 0){
+      $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+        var values = {
+          codeVersement:"VRS-" + $scope.data.user.code +"-" +CodeGenere.getCodeGenere(), 
+          codeGrossiste : $scope.data.details_pds_no_payed.codeGrossiste,
+          codePDS:$scope.data.details_pds_no_payed.codePDS, 
+          codeCommerciale:$scope.data.user.code, 
+          dateAjout: new Date(),
+          isCanceled: 0, 
+          idMotif : 0,
+          isChecked: 0, 
+          codeGenere : CodeGenere.getCodeGenere(),  
+          montant : $scope.data.montant,
+      
+      }
+      var tab_value = [];
+      tab_value.push(values);
+      
+
+      console.log('---Verse fiit')
+      console.log($scope.data.details_pds_no_payed)
+      console.log('---Tab fiit')
+      console.log(tab_value)
+
+      localStorage.setItem("versetopds", JSON.stringify(tab_value));
+
+      var Message = 'Code secret: '+ values.codeGenere
+
+     SendSms.sendSMS(Message, $scope.data.details_pds_no_payed.telephone);
+
+    localStorage.setItem("versetopdscode",values.codeGenere);
+      $scope.data.verser  = true;
+      $scope.data.versement = tab_value;
+      console.log(Message);
+    // $scope.data.dechargement_valider = values;
+      $ionicLoading.hide();
+
+      }else{
+        $ionicLoading.hide();
+        $ionicPopup.show({
+          title: 'Erreur  ',
+          template: 'Veuillez renseigner le montant',
+          scope: $scope,
+          buttons: [
+            {
+              text: 'OK',
+              type: 'button-positive'
+            }
+          ]
+        });
+      }
+  
+  }
   })
   .factory('ApiPdsNoPayed', function ($http, urlPhp) {
     return {
@@ -7060,13 +7234,38 @@ zone: "ZONE 1"
         var url = urlPhp.getUrl();
         var user = localStorage.getItem('user');
         user = JSON.parse(user);
-        // console.log(user);
-          var params = {codeCommerciale:code}
+         console.log(user);
+          var params = {codeCommerciale:user.code}
+          console.log(params);
         return $http.post(url + '/versement/listePDS.php', params);
       }
     }
   })
-  
+  .factory('ApiDetailPdsNoPayed', function ($http, urlPhp) {
+    return {
+      getDetailPdsNoPayed: function (code) {
+        var url = urlPhp.getUrl();
+        var user = localStorage.getItem('user');
+        user = JSON.parse(user);
+         console.log(user);
+          var params = {codePDS: code}
+          console.log(params);
+        return $http.post(url + '/versement/detailsPDS.php', params);
+      }
+    }
+  })
+  .factory('ApiAjoutVersement', function ($http, urlPhp) {
+    return {
+      ajoutVersement: function (values) {
+        var url = urlPhp.getUrl();
+        var user = localStorage.getItem('user');
+        user = JSON.parse(user);
+         console.log(user);
+        
+        return $http.post(url + '/versement/ajout.php', values);
+      }
+    }
+  })
   .factory('ApiRecapDchmnt', function ($http, urlPhp) {
     return {
       getRecapDchmnt: function (code) {

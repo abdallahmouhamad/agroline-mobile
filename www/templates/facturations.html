@@ -1,4 +1,4 @@
-<ion-view title="Factures" cache-view="false">
+<ion-view title="Factures" cache-view="false" >
   <div ng-app="starter">
 
     <ion-content padding="true" class="has-header">
@@ -32,7 +32,7 @@
           border: 3px grey dashed !important;
         }
         .bg {
-            background-color: #e42112 !important;
+            background-color: orange !important;
           }
 
       </style>
@@ -73,20 +73,23 @@
        
       <div class="row content-div">
 
-        <div class="col"  >
-
-        </div>
-
-        <div class="col"  >
-         
-        </div>
-
-
+       
         <div class="col" ng-click="goToDetailFact(fact.codeFacture)">
           <button class="button button-clear button-assertive" style="color: white;">
             Details
           </button>
         </div>
+        <div class="col"  >
+
+        </div>
+        <div class="col text-right" ng-if="fact.montantRestant > 0" >
+          <button class="button button-clear button-assertive" style="color: #e30000">
+            <span class="badge badge-danger" style="background-color: #e30000 !important; color: #e30000;">0</span>
+          </button>
+        </div>
+
+
+        
 
       </div>
 

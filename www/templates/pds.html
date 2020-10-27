@@ -1,8 +1,8 @@
 
-  <ion-view title="Prise De Stock" cache-view="false">
+  <ion-view title="Récupération marchandises" cache-view="false">
     <div ng-app="starter">
 
-      <ion-content padding="true" class="has-header">
+      <ion-content  padding="true" class="has-header ion-content">
         <style type="text/css">
           input[readonly] {
             background-color: transparent !important;
@@ -34,7 +34,7 @@
           }
 
           .bg {
-            background-color: #e42112 !important;
+            background-color: orange !important;
           }
           .ft{
 
@@ -43,10 +43,19 @@
           .mt {
             margin-bottom: 5px !important;
           }
+          .ion-content{
+              overflow: scroll;
+          }
+          .div-data{
+            margin-bottom: 100px !important;
+          }
 
         </style>
 
-      <div class="list" ng-repeat="pds in data.pds | filter:motcle" ng-if="edit == false">
+
+
+      <div class="div-data">
+        <div class="list" ng-repeat="pds in data.pds | filter:motcle" ng-if="edit == false" >
           <div class="item item-thumbnail-left">
 
             <img src="./img/prc.jpg">
@@ -99,6 +108,8 @@
         </div>
 
 
+
+      </div>
       </div>
 
       <div>
@@ -140,7 +151,7 @@
       </div>
 
 
-      <div class="item item-thumbnail-left" ng-if="edit == true">
+      <div class="item item-thumbnail-left" ng-if="edit == true" style="margin-bottom: 30% !important;">
 
         <img src="./img/prc.jpg">
 
@@ -169,7 +180,7 @@
       </div>
 
 
-
+     
       
 
   </ion-content>
