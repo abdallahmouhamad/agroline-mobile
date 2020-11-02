@@ -155,7 +155,7 @@
       <div class="col">
           <div class="list" >
               <label class="item item-input">
-                <input type="text" id="telephne_secondaire" ng-model="data.telephne_secondaire" placeholder="Deuxième numéro">
+                <input type="text" id="telephone2" ng-model="data.telephone2" placeholder="Deuxième numéro">
               </label>
             </div>
       </div>
@@ -163,26 +163,6 @@
 
   </div>
 
-  <div class="row">
-      
-    <div class="col">
-        <div class="list" >
-            <label class="item item-input">
-              <input type="text" id="email" ng-model="data.email" placeholder="Email client">
-            </label>
-          </div>
-    </div>
-
-
-    <div class="col">
-      <div class="list" >
-          <label class="item item-input">
-            <input type="text" id="delaiPaiement" ng-model="data.delaiPaiement" placeholder="Delai de paiement">
-          </label>
-        </div>
-  </div>
-
-</div>
 
   <div class="row" >
   
@@ -223,6 +203,19 @@
      </div>
   </div>
 
+  <div class="row" ng-if="data.modepaiementchoisit.libelle == 'CREDIT' || data.modepaiementchoisit.libelle == 'credit'">
+
+
+    <div class="col">
+      <div class="list" >
+          <label class="item item-input">
+            <input type="text" id="delaiPaiement" ng-model="data.delaiPaiement" placeholder="Delai de paiement">
+          </label>
+        </div>
+  </div>
+
+</div>
+
   <div class="row">
     
     <div class="col text-left" style="padding: 10px;">
@@ -234,6 +227,7 @@
       <button ng-click="addImage()" class="button button-block button-assertive" color="danger" type="submit"
         name="submit"><span style="color:white"> {{ 'label_prendephoto' | translate }}</span></button>
     </div>
+
 
   </div>
 
@@ -261,6 +255,17 @@
       </ion-scroll>
     </div>
   </div>
+
+
+  <!--<div class="row" ng-if="data.client.codeClient">
+    <div class="col text-center">
+      <ion-scroll *ng-if="data.photo">
+        <img src="http://test-test.h-tsoft.com/{{data.photo}}">
+      </ion-scroll>
+    </div>
+  </div>-->
+
+  
 
 
 

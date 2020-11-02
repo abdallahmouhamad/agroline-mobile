@@ -65,7 +65,7 @@
             modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
             has-search="true">
             <label for="" ng-if="!data.clientchoisit">Choisir un client</label>
-            <label for="" ng-if="data.clientchoisit">{{data.clientchoisit.nom}}</label>
+            <label for="" ng-if="data.clientchoisit">CLIENT:{{data.clientchoisit.nom}}</label>
             <div class="option">
               <h2> {{option.nom}}</h2>
             </div>
@@ -84,9 +84,9 @@
           modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
           has-search="true">
           <label for="" ng-if="!data.modereglementchoisit && !data.clientchoisit">Mode de reglement</label>
-          <label for="" ng-if="data.modereglementchoisit">{{data.modereglementchoisit.libelle}}</label>
-          <label for="" ng-if="data.modereglementchoisit == null && data.clientchoisit!==null && data.clientchoisit.idModepaiement == 1">COMPTANT</label>
-          <label for="" ng-if="data.modereglementchoisit == null && data.clientchoisit!==null && data.clientchoisit.idModepaiement == 2">CREDIT</label>
+          <label for="" ng-if="data.modereglementchoisit">REGLEMENT:{{data.modereglementchoisit.libelle}}</label>
+          <label for="" ng-if="data.modereglementchoisit == null && data.clientchoisit!==null && data.clientchoisit.idModepaiement == 1">REGLEMENT:COMPTANT</label>
+          <label for="" ng-if="data.modereglementchoisit == null && data.clientchoisit!==null && data.clientchoisit.idModepaiement == 2">REGLEMENT:CREDIT</label>
           <div class="option">
             <h2> {{option.libelle}}</h2>
           </div>
@@ -109,7 +109,7 @@
           has-search="true">
 
           <label for="" ng-if="!data.grossistechoisit">Choisir un Grossiste</label>
-          <label for="" ng-if="data.grossistechoisit">{{data.grossistechoisit.nom}}</label>
+          <label for="" ng-if="data.grossistechoisit">GROSSISTE:{{data.grossistechoisit.nom}}</label>
           <div class="option">
             <h2> {{option.nom}}</h2>
           </div>
@@ -126,6 +126,22 @@
         <div class="col" style="font-size: 130%;margin-top: 5px;" ng-if="data.grossistechoisit">{{data.grossistechoisit.nom}}</div>  
 
       </div>
+
+      <div class="row">
+
+        <div class="col">
+
+          <div class="list">
+            <label class="item item-input" style="margin-top: 7px;">
+              <span class="input-label">Delai de paiement</span>
+              <input type="number" ng-model="data.delaipaiement" placeholder="0">
+            </label>
+          </div>
+
+        </div>
+
+      </div>
+
 
 
       <div class="row title" style="margin-top: 10px;">
@@ -168,21 +184,21 @@
 
         </button>
         </div>
-
-        <div class="col">
-
-          <div class="list">
-            <label class="item item-input" style="margin-top: 7px;">
-              <span class="input-label">Quantité</span>
-              <input type="number" ng-model="data.quantite" placeholder="0">
-            </label>
-          </div>
-
-          
-        </div>
      </div>
 
      <div class="row">
+
+      <div class="col">
+
+        <div class="list">
+          <label class="item item-input" style="margin-top: 7px;">
+            <span class="input-label">Quantité</span>
+            <input type="number" ng-model="data.quantite" placeholder="0">
+          </label>
+        </div>
+
+        
+      </div>
 
       <div class="col">
 
@@ -195,6 +211,8 @@
 
         
       </div>
+
+
 
     </div>
 
@@ -210,43 +228,6 @@
       <button ng-click="ajouter()" class="button button-block button-assertive footer-button" color="danger" type="submit"
       name="submit"><span style="color:white">Ajouter detail</span></button>
     </div>
-
-
-      <!--<div class="row ml">
-        <div class="col">
-          Details de la prise de commande :
-        </div>
-      </div>-->
-
-        <!--<div class="list">
-
-          <a class="item item-icon-left">
-            <i class="icon ion-person"></i>
-            Client : {{data.clientchoisit.nom}}
-          </a>
-          <div class="list card" ng-repeat="d in data.detailsPRC | filter:motcle">
-          <a class="item item-icon-left">
-            <i class="icon ion-ios-cog"></i>
-            Motif : {{d.motifchoisit.libelle}}
-          </a>
-
-          <a class="item item-icon-left">
-            <i class="icon ion-bookmark"></i>
-            Article : {{d.artcilechoisit.libelle}}
-          </a>
-
-          <a class="item item-icon-left" ng-if="d.artcilechoisit.libelle!=null">
-            Quantité
-            <label class="item item-input">
-              <input type="number" placeholder="Quantité" ng-model="d.quantite">
-            </label>
-          </a>
-          </div>
-
-        </div>-->
-
-
-       <!-- <div ng-repeat="d in data.detailsPRC | filter:motcle">-->
 
 <p>
   <div class="row header list">

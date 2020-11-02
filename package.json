@@ -5,15 +5,19 @@
   "devDependencies": {
     "@ionic/v1-toolkit": "^1.0.15",
     "angular-translate": "^2.18.1",
-    "cordova-android": "^7.1.0",
+    "cordova-android": "^9.0.0",
     "cordova-plugin-geolocation": "^4.0.2",
     "cordova-sms-plugin": "git+https://github.com/cordova-sms/cordova-sms-plugin.git",
     "gulp": "github:gulpjs/gulp#v4.0.0-alpha.3",
     "gulp-clean-css": "^3.7.0",
     "gulp-rename": "^1.2.0",
-    "gulp-sass": "3.1.0"
+    "gulp-sass": "3.1.0",
+    "jetifier": "^1.6.6"
   },
   "dependencies": {
+    "@capacitor/android": "2.4.2",
+    "@capacitor/cli": "^2.4.2",
+    "@capacitor/core": "^2.4.2",
     "@google/maps": "^0.5.5",
     "@ionic-native/android-permissions": "^5.0.0",
     "@ionic-native/camera": "^5.5.1",
@@ -23,11 +27,9 @@
     "cordova": "^10.0.0",
     "cordova-ios": "4.5.5",
     "cordova-plugin-android-permissions": "^1.0.0",
-    "cordova-plugin-camera": "4.0.3",
     "cordova-plugin-device": "^2.0.2",
-    "cordova-plugin-googlemaps": "^2.6.2",
+    "cordova-plugin-googlemaps": "^2.7.1",
     "cordova-plugin-ionic-keyboard": "^2.1.3",
-    "cordova-plugin-ionic-webview": "^2.4.1",
     "cordova-plugin-network-information": "^2.0.1",
     "cordova-plugin-splashscreen": "^5.0.2",
     "cordova-plugin-statusbar": "^2.4.2",
@@ -46,22 +48,11 @@
       "cordova-plugin-device": {},
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-ionic-keyboard": {},
-      "phonegap-plugin-barcodescanner": {
-        "ANDROID_SUPPORT_V4_VERSION": "27.+"
-      },
-      "cordova-plugin-ionic-webview": {
-        "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
-      },
       "cordova-plugin-android-permissions": {},
-      "cordova-plugin-googlemaps": {
-        "API_KEY_FOR_ANDROID": "AIzaSyCgKNgEs1JprZyLWE0pmFK-TiAD66NqkEk",
-        "PLAY_SERVICES_VERSION": "15.0.1",
-        "ANDROID_SUPPORT_V4_VERSION": "27.+"
-      },
       "cordova-plugin-network-information": {},
-      "cordova-plugin-camera": {},
       "cordova-plugin-geolocation": {},
-      "cordova-sms-plugin": {}
+      "cordova-sms-plugin": {},
+      "cordova-plugin-googlemaps": {}
     },
     "platforms": [
       "android"

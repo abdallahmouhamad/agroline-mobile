@@ -376,7 +376,7 @@
                 <div class="item item-text-wrap">
                   <p style="text-align: center"><img src="./img/marchandise.png" style="width:50%; height: 3%;"></p>
                  <!-- <p style="text-align: center;color: #e30000;font-size: large;">2</p>--> 
-                  <span class="badge badge-danger" style="background-color: #e30000 !important;color: white;">{{data.prcs.length}}</span>
+                  <span ng-if="data.prcs && data.prcs.length > 0" class="badge badge-danger" style="background-color: #e30000 !important;color: white;">{{data.prcs.length}}</span>
                 </div>
                 <p style="color: white;text-align: center;margin-top: 10px;">
                   <a href="#/app/pds" style="color: white;text-decoration:none;">Récupération marchandises</a>
@@ -390,7 +390,7 @@
               <div class="card cardHome" style="background-color: #28a54c; color: white">
                 <div class="item item-text-wrap">
                   <p style="text-align: center"><img src="./img/prc.jpg" style="width:50%; height: 130%;margin-bottom: 2%"></p>
-                  <span class="badge badge-danger" style="background-color: #e30000 !important;color: white;">{{data.prcs.length}}</span>
+                  <span ng-if="data.factures && data.factures.length > 0" class="badge badge-danger" style="background-color: #e30000 !important;color: white;">{{data.factures.length}}</span>
                 </div>
                 <p style="color: white;text-align: center;margin-top: 10px">
                   <a href="#/app/facturations" style="color: white;text-decoration:none;">&nbsp;Facture</a>
