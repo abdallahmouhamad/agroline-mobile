@@ -307,7 +307,7 @@ angular
     };
 
     $scope.sms_function = function () {
-      SendSms.sendSMS("Bissmillah", "776726045");
+      SendSms.sendSMS("Bissmillah", "776294380");
     };
   })
 
@@ -2521,6 +2521,7 @@ angular
       $scope.data.motifchoisit = null;
       $scope.data.quantite = 0;
       $scope.data.idMotif = 0;
+     
       var user = localStorage.getItem("user");
       $scope.data.user = JSON.parse(user);
 
@@ -2545,6 +2546,7 @@ angular
       var codeClient = { codeCommerciale: $scope.data.user.code };
       // console.log('-----------------------list prc----------------------');
       // console.log($scope.data.user);
+
       $ionicLoading.show({
         content: "Loading",
         animation: "fade-in",
@@ -2797,6 +2799,7 @@ angular
     };
 
     $scope.getDetailPrc = function () {
+
       if ($scope.data.codePrc !== null && $scope.data.codePrc !== "") {
         ApiDetailPrc.getDetailPrc($scope.data.codePrc).success(function (
           response
@@ -3225,6 +3228,7 @@ angular
       $scope.data.artcilechoisit = null;
       $scope.data.motifchoisit = null;
       $scope.data.quantite = 0;
+      $scope.data.montantDtails = 0;
       $scope.data.idMotif = 0;
       var user = localStorage.getItem("user");
       $scope.data.user = JSON.parse(user);
@@ -3595,9 +3599,21 @@ angular
     };
 
     $scope.getDetailPrc = function () {
+      $scope.data.montantDtails= 0;
+  
       console.log('--------code Prc-------');
       console.log($scope.data.prc)
       console.log($scope.data.prc.codePRC)
+
+      console.log($scope.data.detailsPRC);
+      console.log("montant", $scope.data.prc.montant);
+     
+
+
+
+     /* $scope.data.montantDtails = $scope.data.montantDtails + ($scope.data.detailsPRC.details.quantite * $scope.data.detailsPRC.details.prix);
+      console.log($scope.data.montantDtails )*/
+
       if ($scope.data.prc && !$scope.data.prc.local) {
 
         ApiDetailPrc.getDetailPrc($scope.data.prc.codePRC).success(function (
@@ -3608,8 +3624,7 @@ angular
 
             $scope.data.detailsPRC = response;
 
-            console.log(response);
-
+           
           }
         });
 
@@ -6548,6 +6563,7 @@ angular
       $scope.idMotif = 0;
       $scope.edit = false;
       $scope.itemEdit = null;
+      $scope.myDate = Date;
       
       $scope.data.code  = null;
       localStorage.setItem("pdstodecharge",null)
@@ -6567,6 +6583,9 @@ angular
           $ionicLoading.hide();
           if (response) {
             $scope.data.dechargement = response;
+            $scope.myDate= $scope.data.dechargement.dateAjout;
+            console.log( $scope.myDate);
+
             if($scope.data.dechargement && $scope.data.dechargement.details && $scope.data.dechargement.details.length > 0){
               for(var i = 0 ; i< $scope.data.dechargement.details.length; i++){
                 $scope.data.montantCreditTotal = $scope.data.montantCreditTotal + (+$scope.data.dechargement.details[i].montantCredit);
@@ -7941,7 +7960,7 @@ angular
     };
 
     $scope.sms_function = function () {
-      SendSms.sendSMS("Bissmillah", "776726045");
+      SendSms.sendSMS("Bissmillah", "776294380");
     };
   })
   .factory("CodeGenere", function ($http, urlPhp) {

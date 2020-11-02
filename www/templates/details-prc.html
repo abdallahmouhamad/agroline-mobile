@@ -162,6 +162,8 @@
           <div class="col" style="text-align: center;">Article</div>
           <div class="col" style="text-align: center;">Quantité</div>
           <div class="col" style="text-align: center;">Prix</div>
+          <div class="col" style="text-align: center;">Montant</div>
+   
           <div class="col" style="text-align: center;" ng-if="data.detailsPRC.local == true">Editer</div>
           <div class="col" style="text-align: center;" ng-if="data.detailsPRC.local == true">Supprimer</div>
       </div>
@@ -179,9 +181,18 @@
           <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{d.quantite}}</div>
 
           <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.quantite}}</div>
-          <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{d.prix}}</div>
 
+
+          <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{d.prix}}</div>
           <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.prix}}</div>
+        
+
+          <div class="col content-div-row">{{data.prc.montant}}</div>
+          
+
+        
+          
+         
 
           <div class="col content-div-row" ng-if="d.idMotif !== 'edit' && data.detailsPRC.local == true" ng-click="editDetail(d, 'edit')">
 
