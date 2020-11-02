@@ -1,0 +1,32 @@
+{
+  "appId": "com.htsoft.agroline",
+  "appName": "AGROLINE",
+  "bundledWebRuntime": false,
+  "npmClient": "yarn",
+  "webDir": "www",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  },
+  "cordova": {
+    "preferences": {
+      "ScrollEnabled": "false",
+      "android-targetSdkVersion": "29",
+      "BackupWebStorage": "none",
+      "SplashMaintainAspectRatio": "true",
+      "FadeSplashScreenDuration": "300",
+      "SplashShowOnlyFirstTime": "false",
+      "SplashScreen": "screen",
+      "SplashScreenDelay": "3000",
+      "webviewbounce": "false",
+      "UIWebViewBounce": "false",
+      "GradlePluginKotlinEnabled": "true",
+      "GradlePluginKotlinCodeStyle": "official",
+      "GradlePluginKotlinVersion": "1.3.50",
+      "AndroidXEnabled": "true",
+      "CordovaWebViewEngine": "CDVWKWebViewEngine",
+      "GOOGLE_MAPS_ANDROID_API_KEY": "AIzaSyBqrBIcbvCDXbvL382KN5jCY8yjh_6zyU8"
+    }
+  }
+}

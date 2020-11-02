@@ -2004,7 +2004,8 @@ angular
     $scope,
     $state,
     $ionicLoading,
-    ApiListClient
+    ApiListClient,
+    ApiDertailsClient
   ) {
     $scope.data = {};
 
@@ -2035,18 +2036,45 @@ angular
       }
     );
     $scope.goToNewClient = function (item = null, sens) {
-      localStorage.setItem('clientEdit', JSON.stringify(item))
       localStorage.setItem('sens', sens)
-      $state.transitionTo(
-        "app.nouvel-client",
-        {},
-        {
-          reload: true,
-          inherit: true,
-          notify: true,
-        }
-      );
+      
+      if(sens == 'edit'){
+        $ionicLoading.show({
+          template: 'En cours...'
+        });
+        var codeClient = {codeClient: item.codeClient}
+        ApiDertailsClient.getDertailsClient(codeClient)
+        .success(resp=>{
+          $ionicLoading.hide()
+          console.log(resp);
+          localStorage.setItem('clientEdit', JSON.stringify(resp))
+          $state.transitionTo(
+            "app.nouvel-client",
+            {},
+            {
+              reload: true,
+              inherit: true,
+              notify: true,
+            }
+          );
+        },err=>{
+          $ionicLoading.hide()
+        })
+      }else{
+        localStorage.setItem('clientEdit', null)
+        $state.transitionTo(
+          "app.nouvel-client",
+          {},
+          {
+            reload: true,
+            inherit: true,
+            notify: true,
+          }
+        );
+      }
+      /**/
     };
+
 
     $scope.position = function(item){
       console.log(item);
@@ -2105,9 +2133,9 @@ angular
       $scope.data.nom = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.nom :  null;
       $scope.data.adresse = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.adresse :  null;
       $scope.data.telephone = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.telephone :  null;
-      $scope.data.telephne_secondaire = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.telephne_secondaire :  null;
+      $scope.data.telephone2 = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.telephone2 :  null;
       $scope.data.email = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.email :  null;
-      $scope.data.photo = null;
+      $scope.data.photo = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.photo :  null;
       $scope.data.delaiPaiement = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.delaiPaiement :  null;
       $scope.data.latitude = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.position.split(',')[0] : 0.0;
       $scope.data.longitude = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.position.split(',')[1] : 0.0;
@@ -2324,8 +2352,16 @@ angular
     }
 
     $scope.submit = function(){
-      if($scope.data.nom && $scope.data.telephone){
+      if($scope.data.nom && $scope.data.telephone &&
+         $scope.data.regionchoisit && $scope.data.zonechoisit 
+         && $scope.data.marchechoisit && $scope.data.telephone
+         && $scope.data.marchechoisit && $scope.data.telephone2
+         && $scope.data.adresse && $scope.data.position
+         && $scope.data.photo && $scope.data.grossistechoisit
+         && $scope.data.modepaiementchoisit
+         ){
         var codeClient = $scope.data.client ? $scope.data.client.codeClient : "CLI-"+ $scope.data.user.code + "-"+CodeGenere.getCodeGenere();
+        
         var values = {
           codeClient: codeClient,
           nom : $scope.data.nom,
@@ -2334,8 +2370,8 @@ angular
           idVille: $scope.data.villechoisit ? $scope.data.villechoisit.idVille : null,
           idMarche: $scope.data.marchechoisit ? $scope.data.marchechoisit.idMarche : null, 
           telephone: $scope.data.telephone,
-          telephne_secondaire: $scope.data.telephne_secondaire,
-          email : $scope.data.email, 
+          telephone2: $scope.data.telephone2,
+          email : $scope.data.email ?  $scope.data.email : $scope.data.nom+ "@gmail.com", 
           adresse : $scope.data.adresse,
           position : $scope.data.position,
           photo : $scope.data.photo,
@@ -2353,7 +2389,7 @@ angular
         ApiAjoutClient.ajoutClient(values, etat).success(function(response){
           $ionicLoading.hide();
           console.log(response)
-          if(response.reponse){
+          if(response.reponse === 1){
             $ionicPopup.show({
               title: "Infos",
               template: "Reussi",
@@ -2379,7 +2415,36 @@ angular
                   }
                 );
               
-            })
+            });
+          }else{
+
+            $ionicPopup.show({
+              title: "Alert",
+              template: ""+response.reponse,
+              scope: $scope,
+              buttons: [
+                {
+                  text: 'OK',
+                  type: 'button-energized',
+                  onTap: function (e) {
+                    return true;
+                  }
+                }
+              ]
+            }).then(function(result){
+          
+                $state.transitionTo(
+                  "app.clients",
+                  {},
+                  {
+                    reload: true,
+                    inherit: true,
+                    notify: true,
+                  }
+                );
+              
+            });
+
           }
         },err=>{
           $ionicPopup.show({
@@ -2401,8 +2466,8 @@ angular
         })
       }else{
         $ionicPopup.show({
-          title: "Infos",
-          template: "Veuillez renseigner le nom et le téléphone du client",
+          title: "Alert",
+          template: "Veuillez renseigner tous les champs du formulaire.",
           scope: $scope,
           buttons: [
             {
@@ -2926,6 +2991,7 @@ angular
       $scope.data.motifchoisit = null;
       $scope.data.quantite = null;
       $scope.data.prix = null;
+      $scope.data.delaipaiement = null;
       $scope.data.montant = 0.0;
       $scope.data.idMotif = 0;
       $scope.data.idModepaiement = 0;
@@ -2972,6 +3038,7 @@ angular
       console.log("client choisi");
       console.log($scope.data.clientchoisit);
       $scope.data.idModepaiement = $scope.data.clientchoisit.idModepaiement;
+      $scope.data.modereglementchoisit.idModepaiement = $scope.data.clientchoisit.idModepaiement;
       //$scope.data.idModepaiement = 2;
     };
 
@@ -3072,7 +3139,7 @@ angular
       console.log($scope.data.clientchoisit);
       if (
         $scope.data.clientchoisit.idModepaiement == 1 ||
-        $scope.data.modereglementchoisit !== null
+        $scope.data.modereglementchoisit !== null || $scope.data.idModepaiement !== 0
       ) {
         var values = {
           codePRC:
@@ -3089,6 +3156,7 @@ angular
           isCanceled: 0,
           idMotif: $scope.data.idMotif,
           detailsPRC: $scope.data.detailsPRC,
+          delaiPaiement: $scope.data.delaipaiement
         };
         console.log("---------------------Value to submit--------------------");
         console.log(values);
@@ -3122,6 +3190,9 @@ angular
                     {
                       text: "Ok",
                       type: "button-positive",
+                      onTap: function (e) {
+                        return true;
+                      }
                     },
                   ],
                 }).then(function (result){
@@ -7760,6 +7831,17 @@ angular
         user = JSON.parse(user);
 
         return $http.post(url + '/dechargement/ajout.php', codePDS);
+      }
+    }
+  })
+  .factory('ApiDertailsClient', function ($http, urlPhp) {
+    return {
+      getDertailsClient: function (codeClient) {
+        var url = urlPhp.getUrl();
+        var user = localStorage.getItem('user');
+        user = JSON.parse(user);
+
+        return $http.post(url + '/client/details.php', codeClient);
       }
     }
   })

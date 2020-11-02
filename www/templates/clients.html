@@ -39,8 +39,9 @@
 
 
       <div class="list" ng-repeat="cli in data.clients | filter:motcle">
-        <a class="item item-thumbnail-left" href="#">
-          <img src="./img/client.png">
+        <a class="item item-thumbnail-left">
+          <img ng-if="!cli.photo" src="./img/client.png">
+          <img ng-if="cli.photo" src="http://test-test.h-tsoft.com/{{cli.photo}}">
           <div class="row">
             <div class="col">Nom</div>
             <div class="col"><p>{{ cli.nom }}</p></div>
@@ -56,6 +57,10 @@
           <div class="row">
             <div class="col">Telephone</div>
             <div class="col"><p>{{ cli.telephone }}</p></div>
+          </div>
+          <div class="row">
+            <div class="col">Telephone</div>
+            <div class="col"><p>{{ cli.telephone2 }}</p></div>
           </div>
           <div class="row">
             <div class="col">Région</div>
