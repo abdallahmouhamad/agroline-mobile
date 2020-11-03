@@ -1,128 +1,195 @@
 <ion-view title="Detail PDS" cache-view="false">
   <div ng-app="starter">
 
-    - padding="true" class="has-header">
-    <style type="text/css">
-      input[readonly] {
-        background-color: transparent !important;
-        cursor: not-allowed;
-      }
+    <ion-content padding="true" class="has-header">
+      <ion-grid>
+        <style type="text/css">
+          input[readonly] {
+            background-color: transparent !important;
+            cursor: not-allowed;
+          }
 
-      .small_button {
-        width: 50% !important;
-        height: 50px !important;
-        margin-left: 5px;
-      }
+          .small_button {
+            width: 50% !important;
+            height: 50px !important;
+            margin-left: 5px;
+          }
 
-      .footer-button {
-        margin-bottom: 10px;
-        height: 50px !important;
-      }
+          .footer-button {
+            margin-bottom: 10px;
+            height: 50px !important;
+          }
 
-      .ml {
-        margin-left: 5px;
-      }
+          .ml {
+            margin-left: 5px;
+          }
 
-      .header {
+          .header {
 
-        margin-top: 5px;
-        margin-bottom: 10px;
-      }
+            margin-top: 5px;
+            margin-bottom: 10px;
+          }
 
-      .content-div {
-        background: grey !important;
-      }
+          .content-div {
+            background: grey !important;
+          }
 
-      .content-div-row {
-        text-align: center !important;
-        border: 3px grey dashed !important;
-      }
+          .content-div-row {
+            text-align: center !important;
+            border: 3px grey dashed !important;
+          }
 
-      .edit {
-        background: red !important;
-      }
+          .edit {
+            background: red !important;
+          }
 
-      .map {
-        height: 200px !important;
-      }
+          .map {
+            height: 200px !important;
+          }
 
-      .rendu {
-        background: #28a54c !important;
-        color: white;
-      }
-    </style>
+          .rendu {
+            background: #28a54c !important;
+            color: white;
+          }
+        </style>
 
+        <br>
+        <div class="card list">
 
-    <div class="row header list content-div" ng-if="!data.verser">
-      <div class="col" style="text-align: center;"> Article</div>
-      <div class="col" style="text-align: center;">Qt.prise</div>
-      <div class="col" style="text-align: center;">Qt a rendre</div>
-      <div class="col" style="text-align: center;">Qt Rendue</div>
-      <div class="col" style="text-align: center;">M.comptant</div>
-      <div class="col" style="text-align: center;">M.credit</div>
-      <div class="col" style="text-align: center;">Action</div>
+          <a class="item item-icon-left">
+            <i class="icon ion-qr-scanner"></i>
 
+            Code : {{data.dechargement.codePDS}}
+          </a>
 
-    </div>
+          <a class="item item-icon-left">
 
-    <div class="row list" ng-repeat="d in data.dechargement.details | filter:motcle" ng-if="!data.verser">
+            <i class="icon ion-person"></i>
+            Grossiste : {{data.dechargement.grossiste}}
+          </a>
 
-      <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" ng-click="showPopUp(d.article, 1, d.codeArticle)">
-        {{d.codeArticle}}
-      </div>
+          <a class="item item-icon-left">
+            <i class="icon ion-android-call"></i>
+            Téléphone : {{data.dechargement.telephone}}
+          </a>
 
-      <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'"
-        ng-click="showPopUp(d.article, 1, d.codeArticle)">
-        {{d.codeArticle}}
-      </div>
-      <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.quantitePrise}}</div>
-      <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{d.quantitePrise}}</div>
-
-      <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.quantiteArendre}}</div>
-      <div class="col content-div-row " ng-if="d.idMotif !== 'edit'">{{d.quantiteArendre}}</div>
-
-      <div class="col content-div-row rendu">{{d.quantiteRendue}}</div>
-
-      <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.montantComptant}}</div>
-      <div class="col content-div-row " ng-if="d.idMotif !== 'edit'">{{d.montantComptant}}</div>
-
-      <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.montantCredit}}</div>
-      <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{d.montantCredit}}</div>
-
-      <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" ng-click="editDetail(d, 'edit')">
-
-        <i class="icon ion-edit"></i>
-
-      </div>
-
-      <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'" ng-click="editDetail(d, 'edit')">
-
-        <i class="icon ion-edit"></i>
-
-      </div>
-
-    </div>
-    <div class="row header list content-div" ng-if="!data.verser">
-      <div class="col" style="text-align: center;">Total</div>
-      <div class="col" style="text-align: center;"></div>
-      <div class="col" style="text-align: center;"></div>
-      <div class="col" style="text-align: center;"></div>
-      <div class="col" style="text-align: center;">{{data.montantComptantTotal}}</div>
-      <div class="col" style="text-align: center;">{{data.montantCreditTotal}}</div>
-      <div class="col" style="text-align: center;"></div>
-    </div>
-
-    <label class="item item-input" ng-if="!data.verser">
-      <span class="input-label">Montant verser</span>
-      <input type="number" ng-model="data.montantVerse" placeholder="0">
-    </label>
-
-    <br>
-    <br>
-    <br>
+          <a class="item item-icon-left">
+            <i class="icon ion-location"></i>
+            Adresse : {{data.dechargement.adresse}}
+          </a>
 
 
-    <ion-card>
+
+          <a class="item item-icon-left">
+            <i class="icon ion-cash"></i>
+            Montant total : {{data.dechargement.montantTotal}}
+          </a>
+
+          <a class="item item-icon-left">
+            <i class="icon ion-cash"></i>
+            Montant ventes : {{data.dechargement.montantVentes}}
+          </a>
+
+          <a class="item item-icon-left">
+            <i class="icon ion-cash"></i>
+            Montant comptant : {{data.dechargement.montantComptant}}
+          </a>
+
+          <a class="item item-icon-left">
+            <i class="icon ion-cash"></i>
+            Montant credit : {{data.dechargement.montantCredit}}
+          </a>
+
+          <a class="item item-icon-left">
+            <i class="icon ion-cash"></i>
+            Montant Vente : {{data.dechargement.montantVentes}}
+          </a>
+
+          <a class="item item-icon-left">
+            <i class="icon ion-calendar"></i>
+            Date : {{data.dechargement.dateAjout | date :  "dd.MM.y"}}
+          </a>
+
+        </div>
+
+        <br>
+
+        <div class="row header list content-div" ng-if="!data.verser">
+          <div class="col" style="text-align: center;"> Article</div>
+          <div class="col" style="text-align: center;">Qt.prise</div>
+          <div class="col" style="text-align: center;">Qt a rendre</div>
+          <div class="col" style="text-align: center;">Qt Rendue</div>
+          <div class="col" style="text-align: center;">M.comptant</div>
+          <div class="col" style="text-align: center;">M.credit</div>
+          <div class="col" style="text-align: center;">Action</div>
+
+
+        </div>
+
+        <div class="row list" ng-repeat="d in data.dechargement.details | filter:motcle" ng-if="!data.verser">
+
+          <div class="col content-div-row" ng-if="d.idMotif !== 'edit'"
+            ng-click="showPopUp(d.article, 1, d.codeArticle)">
+            {{d.codeArticle}}
+          </div>
+
+          <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'"
+            ng-click="showPopUp(d.article, 1, d.codeArticle)">
+            {{d.codeArticle}}
+          </div>
+          <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.quantitePrise}}</div>
+          <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{d.quantitePrise}}</div>
+
+          <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.quantiteArendre}}</div>
+          <div class="col content-div-row " ng-if="d.idMotif !== 'edit'">{{d.quantiteArendre}}</div>
+
+          <div class="col content-div-row rendu">{{d.quantiteRendue}}</div>
+
+          <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.montantComptant}}</div>
+          <div class="col content-div-row " ng-if="d.idMotif !== 'edit'">{{d.montantComptant}}</div>
+
+          <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.montantCredit}}</div>
+          <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{d.montantCredit}}</div>
+
+          <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" ng-click="editDetail(d, 'edit')">
+
+            <i class="icon ion-edit"></i>
+
+          </div>
+
+          <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'" ng-click="editDetail(d, 'edit')">
+
+            <i class="icon ion-edit"></i>
+
+          </div>
+
+        </div>
+        <div class="row header list content-div" ng-if="!data.verser">
+          <div class="col" style="text-align: center;">Total</div>
+          <div class="col" style="text-align: center;"></div>
+          <div class="col" style="text-align: center;"></div>
+          <div class="col" style="text-align: center;"></div>
+          <div class="col" style="text-align: center;">{{data.montantComptantTotal}}</div>
+          <div class="col" style="text-align: center;">{{data.montantCreditTotal}}</div>
+          <div class="col" style="text-align: center;"></div>
+        </div>
+
+        <br>
+
+
+
+
+        <label class="item item-input" ng-if="!data.verser">
+          <span class="input-label">Montant verser</span>
+          <input type="number" ng-model="data.montantVerse" placeholder="0">
+        </label>
+
+        <br>
+        <br>
+        <br>
+
+
+        <!-- <ion-card>
       <ion-card-header>
         <ion-card-subtitle>
           <p style="color: white;text-align: center;margin-top: 10px; background-color: #28a54c; text-align: center;  padding: 10px;
@@ -140,26 +207,26 @@
 
       <ion-card-content>
         <div class="col content-div-row">
-         
-            <label>
-              <div class="col" style="background-color: #28a54c;">Montant total: </div>
-              <div class="col content-div-row">
-                <p>{{data.montantCreditTotal}}</p>
-              </div>
-            </label>
-        
-            <label>
-              <div class="col" style="background-color: #28a54c;">Date:          </div>
-              <div class="col content-div-row">
-                <p>{{data.dechargement.dateAjout | date :  "dd.MM.y" }}</p>
-              </div>
-            </label>
-        
-           
-         
+
+          <label>
+            <div class="col" style="background-color: #28a54c;">Montant total: </div>
+            <div class="col content-div-row">
+              <p>{{data.montantCreditTotal}}</p>
+            </div>
+          </label>
+
+          <label>
+            <div class="col" style="background-color: #28a54c;">Date: </div>
+            <div class="col content-div-row">
+              <p>{{data.dechargement.dateAjout | date :  "dd.MM.y" }}</p>
+            </div>
+          </label>
+
+
+
         </div>
       </ion-card-content>
-    </ion-card>
+    </ion-card>-->
 
 
 
@@ -170,36 +237,36 @@
 
 
 
-    <div class="col" ng-if="!data.verser">
-      <button class="button button-clear button-assertive" style="color: white;">
-        Valider
-      </button>
-    </div>
-
-
-    <div ng-if="data.verser">
-      <div class="list">
-        <label class="item item-input">
-          <span class="input-label">Code secret</span>
-          <input type="text" id="code" ng-model="data.code">
-        </label>
-      </div>
-
-      <div class="row">
-        <div class="col">
-          <button ng-click="validerVersment()" class="button button-block button-assertive footer-button" color="danger"
-            type="submit" name="submit"><span style="color:white">Valider</span></button>
+        <div class="col" ng-if="!data.verser">
+          <button class="button button-clear button-assertive" style="color: white;">
+            Valider
+          </button>
         </div>
 
-        <div class="col">
-          <button ng-click="annulerVersement()" class="button button-block button-assertive footer-button"
-            color="danger" type="submit" name="submit"><span style="color:white">Annuller</span></button>
+
+        <div ng-if="data.verser">
+          <div class="list">
+            <label class="item item-input">
+              <span class="input-label">Code secret</span>
+              <input type="text" id="code" ng-model="data.code">
+            </label>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <button ng-click="validerVersment()" class="button button-block button-assertive footer-button"
+                color="danger" type="submit" name="submit"><span style="color:white">Valider</span></button>
+            </div>
+
+            <div class="col">
+              <button ng-click="annulerVersement()" class="button button-block button-assertive footer-button"
+                color="danger" type="submit" name="submit"><span style="color:white">Annuler</span></button>
+            </div>
+
+          </div>
         </div>
 
-      </div>
-    </div>
-
-
+      </ion-grid>
     </ion-content>
   </div>
   <div class="bar bar-footer footer-button" ng-if="!data.verser">

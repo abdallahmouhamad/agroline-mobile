@@ -6635,6 +6635,8 @@ angular
       $scope.edit = false;
       $scope.itemEdit = null;
       $scope.myDate = Date;
+      $scope.listeJson = [];
+     
       
       $scope.data.code  = null;
       localStorage.setItem("pdstodecharge",null)
@@ -6645,16 +6647,19 @@ angular
       var valider = localStorage.getItem('codePDS');
 
       var codePDS = { "codePDS": $scope.data.codePDS };
+    
 
       $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
       console.log('-----------------------Bouton decharger ---------------------');
       console.log(codePDS);
+     
       ApiRecapDchmnt.getRecapDchmnt(codePDS).
         success(function (response) {
           $ionicLoading.hide();
           if (response) {
             $scope.data.dechargement = response;
             $scope.myDate= $scope.data.dechargement.dateAjout;
+
             console.log( $scope.myDate);
 
             if($scope.data.dechargement && $scope.data.dechargement.details && $scope.data.dechargement.details.length > 0){
@@ -6664,8 +6669,11 @@ angular
               }
             }
           }
+         
           console.log('-----------------------Bouton decharger ---------------------');
           console.log(response);
+       
+
         }, error => {
           $ionicLoading.hide();
         });
@@ -6761,11 +6769,16 @@ angular
    
         $scope.data.dechargement_valider.isUnload = 1
         $scope.data.dechargement_valider.isPayed = 1;
-        $scope.data.dechargement_valider.details[0].codeDetail = "DDCH-" +CodeGenere.getCodeGenere()
+      $scope.data.dechargement_valider.details[0].codeDetail = "DDCH-" +CodeGenere.getCodeGenere()
         
         console.log($scope.data.dechargement_valider);
-        ApiValiderDchmnt.getValiderDchmnt($scope.data.dechargement_valider).then(function(resp)
+      
+        $scope.listeJson = $scope.data.dechargement_valider;
+        console.log("test console 1",$scope.listeJson );
+        
+        ApiValiderDchmnt.getValiderDchmnt($scope.listeJson).then(function(resp)
         {
+          console.log("test console 2");
           console.log(resp);
           $ionicLoading.hide();
           localStorage.setItem("pdstodecharge", null);
