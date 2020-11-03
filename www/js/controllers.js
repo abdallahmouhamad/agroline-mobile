@@ -6657,6 +6657,8 @@ angular
       $scope.edit = false;
       $scope.itemEdit = null;
       $scope.myDate = Date;
+      $scope.listeJson = [];
+     
       
       $scope.data.code  = null;
       localStorage.setItem("pdstodecharge",null)
@@ -6667,16 +6669,19 @@ angular
       var valider = localStorage.getItem('codePDS');
 
       var codePDS = { "codePDS": $scope.data.codePDS };
+    
 
       $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
       console.log('-----------------------Bouton decharger ---------------------');
       console.log(codePDS);
+     
       ApiRecapDchmnt.getRecapDchmnt(codePDS).
         success(function (response) {
           $ionicLoading.hide();
           if (response) {
             $scope.data.dechargement = response;
             $scope.myDate= $scope.data.dechargement.dateAjout;
+
             console.log( $scope.myDate);
 
             if($scope.data.dechargement && $scope.data.dechargement.details && $scope.data.dechargement.details.length > 0){
@@ -6686,8 +6691,11 @@ angular
               }
             }
           }
+         
           console.log('-----------------------Bouton decharger ---------------------');
           console.log(response);
+       
+
         }, error => {
           $ionicLoading.hide();
         });
@@ -6783,16 +6791,21 @@ angular
    
         $scope.data.dechargement_valider.isUnload = 1
         $scope.data.dechargement_valider.isPayed = 1;
-        $scope.data.dechargement_valider.details[0].codeDetail = "DDCH-" +CodeGenere.getCodeGenere()
+      $scope.data.dechargement_valider.details[0].codeDetail = "DDCH-" +CodeGenere.getCodeGenere()
         
         console.log($scope.data.dechargement_valider);
-        ApiValiderDchmnt.getValiderDchmnt($scope.data.dechargement_valider).then(function(resp)
+      
+        $scope.listeJson = $scope.data.dechargement_valider;
+        console.log($scope.listeJson );
+        $ionicLoading.hide();
+     ApiValiderDchmnt.getValiderDchmnt($scope.listeJson).then(function(resp)
         {
+          console.log("test console 2");
           console.log(resp);
           $ionicLoading.hide();
           localStorage.setItem("pdstodecharge", null);
           localStorage.setItem("pdstodechargecode",null);
-          if(resp.reponse == 1){
+          if(resp.data.reponse == 1){
             $ionicPopup.show({
               title: 'Info',
               template: 'Reussi',
@@ -6905,6 +6918,7 @@ angular
       localStorage.setItem("pdstodecharge", JSON.stringify(values));
 
       var Message = 'Code secret: '+ values.codeGenere
+      console.log(Message);
 
      SendSms.sendSMS(Message, $scope.data.dechargement.telephone);
      
@@ -7178,9 +7192,9 @@ angular
         console.log($scope.data.versement);
         localStorage.setItem("versetopds", null);
         localStorage.setItem("versetopdscode",null);
-        $ionicLoading.hide();
+      
 
-        $ionicPopup.show({
+        /*$ionicPopup.show({
           title: 'Info',
           template: 'Reussi',
           scope: $scope,
@@ -7202,14 +7216,17 @@ angular
                 notify: true
               });
             }
-          );
-        /*ApiAjoutVersement.ajoutVersement($scope.data.versement).then(function(resp)
+          );*/
+          console.log('-Versemnt');
+          console.log($scope.data.versement);
+          
+        ApiAjoutVersement.ajoutVersement($scope.data.versement[0]).then(function(resp)
         {
           console.log(resp);
           $ionicLoading.hide();
           localStorage.setItem("versetopds", null);
           localStorage.setItem("versetopdscode",null);
-          if(resp.reponse == 1){
+          if(resp.data.reponse == 1){
             $ionicPopup.show({
               title: 'Info',
               template: 'Reussi',
@@ -7263,7 +7280,7 @@ angular
           }
         }, err=>{
           $ionicLoading.hide();
-        });*/
+        });
 
         
        }else{
@@ -7282,7 +7299,7 @@ angular
   }
 
     
-
+  console.log(localStorage.getItem("versetopdscode"));
 
     $scope.submit = function () {
 
@@ -7314,7 +7331,7 @@ angular
 
       var Message = 'Code secret: '+ values.codeGenere
 
-     SendSms.sendSMS(Message, $scope.data.details_pds_no_payed.telephone);
+   //  SendSms.sendSMS(Message, $scope.data.details_pds_no_payed.telephone);
 
     localStorage.setItem("versetopdscode",values.codeGenere);
       $scope.data.verser  = true;
