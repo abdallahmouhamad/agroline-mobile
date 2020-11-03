@@ -4846,8 +4846,8 @@ angular
         CodeGenere.getCodeGenere();
       $scope.data.detail = {};
 
-      $scope.data.quantite = 0;
-      $scope.data.prix = 0;
+      $scope.data.quantite = null;
+      $scope.data.prix = null;
 
       $scope.initDetailPDS();
 
@@ -5233,7 +5233,8 @@ angular
         console.log($scope.data.grossistechoisit);
 
         //test
-        $scope.data.grossistechoisit.telephone = "775329312";
+        //$scope.data.grossistechoisit.telephone = "775329312";
+
         SendSms.sendSMS(MessageGlobal, $scope.data.grossistechoisit.telephone);
 
         localStorage.setItem("pds", JSON.stringify($scope.data.pds));
@@ -6067,7 +6068,7 @@ angular
     $cordovaGeolocation,
     ApiListArticle,
     checkQuantite,
-
+    ApiCodePDS
 
   ) {
     $scope.data = {};
@@ -6105,10 +6106,23 @@ angular
 
       $scope.data.detail = {};
       $scope.data.fact = {};
-      $scope.data.quantite = 0;
-      $scope.data.prix = 0;
+      $scope.data.quantite = null;
+      $scope.data.prix = null;
+      $scope.data.delaipaiement = null;
+      $scope.data.codePDS = null;
       // $scope.initDetailFCT();
     };
+
+    $scope.getcodepds=function(){
+      ApiCodePDS.getCodePDS()
+      .then(value=>{
+        console.log('-----COde PDS-----------');
+        console.log(value);
+        $scope.data.codePDS = value.data.codePDS;
+        console.log($scope.data.codePDS);
+      })
+    }
+    $scope.getcodepds();
 
     $scope.showPopUp = function (libelle, etat, code = "") {
 
@@ -6435,7 +6449,6 @@ angular
           idMotif: $scope.data.fact.idMotif,
           codePRC: $scope.data.fact.codePRC,
           codePDS: $scope.data.fact.codePDS
-
         }
 
         console.log('par PRC');
@@ -6443,6 +6456,9 @@ angular
         $scope.data.fact = valueFactPRC;
 
       } else if ($scope.initial == true) {
+        console.log('---------Code PDS------------');
+        console.log($scope.data.codePDS);
+        
 
         var details = [];
         if ($scope.data.fact.details && $scope.data.fact.details.length > 0) {
@@ -6485,6 +6501,8 @@ angular
           console.log('Initiale');
 
           $scope.data.fact = valueFactPRC;
+          $scope.data.fact  = $scope.data.codePDS
+          
 
         } else {
           $scope.Erreur('Erreur. Ih faut ajouter au moins un details');
@@ -6493,12 +6511,14 @@ angular
       }
 
       console.log('Erreur :' + errorInput);
+      console.log('initial :' + $scope.initial);
+      
 
 
       if (errorInput == '') {
 
         errorInput = ($scope.data.fact.details == null || $scope.data.fact.details.length == 0) && $scope.initial == true ? 'Impossible d\'inserer une facture sans artcile.' : '';
-
+        errorInput = $scope.data.delaipaiement == null ? 'Veuillez mettre un delai de paiement' : ''
         if (errorInput == '') {
           $ionicLoading.show({
             content: "Loading",
@@ -6508,13 +6528,15 @@ angular
             showDelay: 0,
             duration: 10000,
           });
+         
         //  $scope.data.fact.position = "14.9038943,-17.39839"
         //  $scope.data.fact.dateAjout ="2020-10-20 08:13:5";
-
+        $scope.data.fact.delaipaiement = $scope.data.delaipaiement;
           console.log($scope.data.fact);
-          ApiAjoutFacturation.ajoutFacturation($scope.data.fact, $scope.initial).success(
+      ApiAjoutFacturation.ajoutFacturation($scope.data.fact, $scope.initial).success(
             function (response) {
               $ionicLoading.hide();
+              console.log(response);
 
               if (response.reponse == 1) {
                 $scope.data.motifchoisit = null;
@@ -7745,9 +7767,6 @@ angular
     };
   })
 
-
-
-
   .factory("ApiListMarches", function ($http, urlPhp) {
     return {
       getListMarches: function () {
@@ -7842,6 +7861,20 @@ angular
         user = JSON.parse(user);
 
         return $http.post(url + '/client/details.php', codeClient);
+      }
+    }
+  })
+  .factory('ApiCodePDS', function ($http, urlPhp) {
+    return {
+      getCodePDS: function () {
+        var url = urlPhp.getUrl();
+        var user = localStorage.getItem('user');
+        console.log('-------------User-------');
+        console.log(user);
+        user = JSON.parse(user);
+      var  codeUser = {codeUtilisateur : user.code}
+
+        return $http.post(url + '/utilisateur/codePDS.php', codeUser);
       }
     }
   })
