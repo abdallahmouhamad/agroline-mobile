@@ -5,7 +5,6 @@
   "devDependencies": {
     "@ionic/v1-toolkit": "1.0.22",
     "angular-translate": "^2.18.1",
-    "cordova-android": "^7.1.0",
     "cordova-plugin-geolocation": "^4.0.2",
     "cordova-plugin-ionic-webview": "^5.0.0",
     "cordova-sms-plugin": "git+https://github.com/cordova-sms/cordova-sms-plugin.git",

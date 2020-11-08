@@ -5568,6 +5568,7 @@ angular
     ApiListClient,
     ApiListMotif,
     ApiListArticle,
+    ApiSupprimerEncaissement,
     $ionicPopup,
     ApiRecapPdsPrc,
     ApiListFacturation,
@@ -6050,8 +6051,69 @@ angular
         ],
       });
     }
+    var ligneDetailToDelete = {
+      codeFacture: $scope.data.codeEncaissement,
+      isCanceled: 1,
+      idMotif: $scope.data.idMotif
+    }
 
-  })
+    console.log(ligneDetailToDelete)
+    $scope.SupprimerEncaissement = function () {
+    
+        $ionicPopup.show({
+          title: "Infos",
+          template: "Voulez-vous vraiment suprimer cet encaissement?",
+          scope: $scope,
+          buttons: [
+            {
+              text: 'OUI',
+              type: 'button-energized',
+              onTap: function (e) {
+                return true;
+              }
+            },
+            {
+              text: 'NON',
+              type: 'button-assertive',
+              onTap: function (e) {
+                return false;
+              }
+            },
+          ]
+        })
+
+            ApiSupprimerEncaissement.SupprimerEncaissement(ligneDetailToDelete)
+              .success(
+                function (response) {
+
+                  $ionicLoading.hide();
+                 
+                  console.log(response)
+                  console.log("delete encaissement")
+
+                 
+
+                }, (error) => {
+                  $ionicLoading.hide();
+                  $scope.Erreur(error);
+                }
+              )
+
+
+         
+          
+           
+                  
+      
+
+            }
+
+          })
+  
+
+  
+
+  
 
   .controller("FacturationCtrl", function (
     $scope,
@@ -7754,6 +7816,18 @@ angular
         user = JSON.parse(user);
 
         return $http.post(url + "/facture/encaissement.php", values);
+      },
+    };
+  })
+
+  .factory("ApiSupprimerEncaissement", function ($http, urlPhp) {
+    return {
+      SupprimerEncaissement: function (values) {
+        var url = urlPhp.getUrl();
+        var user = localStorage.getItem("user");
+        user = JSON.parse(user);
+
+        return $http.post(url + "/facture/SupprimerEncaissement.php", values);
       },
     };
   })
