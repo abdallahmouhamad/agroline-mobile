@@ -290,6 +290,16 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
       }
     })
 
+    .state('app.details-encaissement', {
+      url: '/details-encaissement',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/details-encaissement.html',
+          controller: 'DetailsEncaissementCtrl'
+        }
+      }
+    })
+
     .state('app.envoi', {
       url: '/envoi',
       views: {
