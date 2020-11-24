@@ -3066,7 +3066,11 @@ html {
  */
 body {
   margin: 0;
-  line-height: 1; }
+  line-height: 1;
+  background: #EF3B36;  /* fallback for old browsers */
+ 
+  
+}
 
 /**
  * Remove default outlines.
