@@ -101,10 +101,10 @@
   
             </div>
 
-            <div > 
+            <div ng-if="data.details_pds_no_payed.montantRestant > 0"> 
               <label class="item item-input">
                 <span class="input-label">Montant</span>
-                <input type="number" id="montant" ng-model="data.montant">
+                <input type="number" id="montant" ng-model="data.montant" placeholder="0">
               </label>
             </div>
 
@@ -150,7 +150,7 @@
   
     </ion-content>
    
-    <div  class="bar bar-footer footer-button" ng-if="!data.verser">
+    <div  class="bar bar-footer footer-button" ng-if="!data.verser && data.details_pds_no_payed.montantRestant > 0">
       <button ng-click="submit()" class="button button-block button-assertive footer-button" color="danger" type="submit"
         name="submit"><span style="color:white">Verser</span></button>
     </div>

@@ -1,13 +1,16 @@
 {
   "name": "AGROLINE",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "An Ionic project",
   "devDependencies": {
     "@ionic/v1-toolkit": "1.0.22",
     "angular-translate": "^2.18.1",
-    "cordova-android": "^7.1.1",
+    "cordova-android": "^7.1.0",
+    "cordova-plugin-camera": "^4.1.0",
     "cordova-plugin-geolocation": "^4.0.2",
+    "cordova-plugin-inappbrowser": "^4.1.0",
     "cordova-plugin-ionic-webview": "^5.0.0",
+    "cordova-plugin-printer": "git+https://github.com/katzer/cordova-plugin-printer.git",
     "cordova-sms-plugin": "git+https://github.com/cordova-sms/cordova-sms-plugin.git",
     "gulp": "github:gulpjs/gulp#v4.0.0-alpha.3",
     "gulp-clean-css": "^3.7.0",
@@ -56,7 +59,14 @@
       "cordova-plugin-googlemaps": {},
       "cordova-plugin-ionic-webview": {
         "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
-      }
+      },
+      "cordova-plugin-camera": {
+        "ANDROID_SUPPORT_V4_VERSION": "27.+"
+      },
+      "cordova-plugin-printer": {
+        "ANDROID_SUPPORT_V4_VERSION": "27.+"
+      },
+      "cordova-plugin-inappbrowser": {}
     },
     "platforms": [
       "android"
