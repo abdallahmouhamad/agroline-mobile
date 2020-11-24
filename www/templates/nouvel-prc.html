@@ -1,6 +1,6 @@
 <ion-view view-title="Nouvelle PRC" cache-view="false">
   <ion-pane>
-    <div ng-app="starter">
+    <div ng-app="starter" class="main">
 
       <ion-content class="padding" delegate-handle="mainScroll">
 
@@ -8,6 +8,9 @@
           input[readonly] {
             background-color: transparent !important;
             cursor: not-allowed;
+          }
+          .main{
+            height: 1000px !important;
           }
           .small_button{
               width: 50% !important;
@@ -38,14 +41,13 @@
           .div-header {
             margin-bottom: 20px !important;
           }
-
-          ion-scroll p {
-          width: 5000px !important;
-          height: 100px !important;
-          white-space: nowrap  !important;
-          padding: 10px !important;
-          line-height: 100px !important;
-          }
+        ion-scroll p {
+                  width: 5000px !important;
+                  height: 100px !important;
+                  white-space: nowrap  !important;
+                  padding: 10px !important;
+                  line-height: 100px !important;
+              }
 
           .title{
             color: #28a54c;
@@ -231,9 +233,7 @@
 
 <p>
   <div class="row header list">
-    <div class="col" style="text-align: center;">Image</div>
     <div class="col" style="text-align: center;">Article</div>
-
     <div class="col" style="text-align: center;">Quantité</div>
     <div class="col" style="text-align: center;">Prix</div>
     <div class="col" style="text-align: center;">Montant</div>
@@ -242,7 +242,6 @@
 
   <div class="row list"  ng-repeat="d in data.detailsPRC | filter:motcle">
 
-    <div class="col content-div-row" ng-click="showPopUp(d.artcilechoisit.image, 2)"><img src="http://test-test.h-tsoft.com/{{d.artcilechoisit.image}}" style="width:40%; height: 70%;"></div>
     <div class="col content-div-row" ng-click="showPopUp(d.artcilechoisit.libelle, 1, d.artcilechoisit.code)">
       {{d.artcilechoisit.code}}
     </div>
@@ -265,44 +264,59 @@
       </label>
     </div>
 
-    
-
-
     <div class="col content-div-row" ng-click="deletObject(d)">
-
 
         <i class="icon ion-close"></i>
 
     </div>
+  </div>
+
+    <div >
+      <div class="list" >
+        
+      </div>
+
+      <div class="row" >
+        <div class="col" >
+         
+        </div>
+
+        <div class="col" >
+          
+        </div>
+        
+      </div>
+    </div>
+
+    <div class="row div-header">
+      <div class="col"></div>
+      <div class="col"></div>
+      <div class="col"></div>
+  </div>
+
+  <div class="col mt">
+    <button ng-click="submit('val')" class="button button-block button-assertive footer-button" color="danger" type="submit"
+    name="submit"><span style="color:white">Valider PRC</span></button>
+  </div>
 </p>
 
+</div>
 
-        </div>
-
-        <div class="row div-header">
-            <div class="col"></div>
-            <div class="col"></div>
-            <div class="col"></div>
-        </div>
      
+</ion-content>
 
-      </ion-content>
 
-
-    </div>
-    <div  class="bar bar-footer footer-button">
+</div>
+    <!--<div  class="bar bar-footer footer-button">
 
     
-        <!--<div class="col mt"  >
-          <button  ng-click="sauvegarder('sauv')" class="button button-block button-assertive footer-button" color="danger" type="submit"
-          name="submit"><span style="color:white">Sauvgarder PRC</span></button>
-        </div>-->
+       
   
         <div class="col mt">
           <button ng-click="submit('val')" class="button button-block button-assertive footer-button" color="danger" type="submit"
           name="submit"><span style="color:white">Valider PRC</span></button>
         </div>
 
-    </div>
+    </div>-->
   </ion-pane>
 </ion-view>
