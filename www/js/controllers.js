@@ -3434,20 +3434,41 @@ $scope.goToPds = function()
             codeDetail: "DPRC-" + $scope.data.user.code + "-"+ CodeGenere.getCodeGenere(),
             codeArticle: $scope.data.artcilechoisit.code,
             quantite: $scope.data.quantite,
-            prix: $scope.data.prix,
+           prix: $scope.data.prix,
+           
             isCanceled: false,
             artcilechoisit: $scope.data.artcilechoisit,
             idMotif: 0,
             montant : mt
           });
           $scope.data.montant = $scope.data.montant + mt;
+         
           // $ionicLoading.hide();
           $scope.data.artcilechoisit = null;
           $scope.data.motifchoisit = null;
           $scope.data.quantite = null;
           $scope.data.prix = null;
           console.log("----------------------Detail-------------------");
+          $scope.numStr = function (a, b) { 
+            a = '' + a;
+            b = b || ' ';
+            var c = '',
+                d = 0;
+            while (a.match(/^0[0-9]/)) {
+              a = a.substr(1);
+            }
+            for (var i = a.length-1; i >= 0; i--) {
+              c = (d != 0 && d % 3 == 0) ? a[i] + b + c : a[i] + c;
+              d++;
+            }
+            return c;
+          }
           console.log($scope.data.detailsPRC);
+        
+          console.log($scope.data.prc.montant);
+          console.log($scope.data.prc.prix);
+          console.log(  $scope.numStr( $scope.data.prc.prix, '.')) ;
+          console.log(  $scope.numStr( $scope.data.prc.montant, '.')) ;
           }else{
             $ionicPopup.show({
               title: "Infos",
@@ -3691,6 +3712,8 @@ $scope.goToPds = function()
       }
       
     };
+
+   
   })
 
   .controller("DetailPrcCtrl", function (
@@ -7381,6 +7404,7 @@ $scope.goToPds = function()
                     {
                       corps = corps+
                              '<td>'+ $scope.data.detailsFACT[i].codeArticle+'</td>'+
+                             '<td>'+ $scope.data.detailsFACT[i].libelle+'</td>'+
                              '<td>'+ $scope.data.detailsFACT[i].quantite+'</td>'+
                              '<td>'+ $scope.data.detailsFACT[i].prix+'</td>';
                     }
