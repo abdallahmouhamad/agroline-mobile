@@ -1,0 +1,83 @@
+<ion-view view-title="Details Encaissement" cache-view="false">
+    <ion-pane>
+        <div ng-app="starter">
+
+            <ion-content>
+
+                <style type="text/css">
+                    input[readonly] {
+                        background-color: transparent !important;
+                        cursor: not-allowed;
+                    }
+
+                    .small_button {
+                        width: 50% !important;
+                        height: 50px !important;
+                        margin-left: 5px;
+                    }
+
+                    .footer-button {
+                        margin-bottom: 10px;
+                        height: 50px !important;
+                    }
+
+                    .ml {
+                        margin-left: 5px;
+                    }
+
+                    .header {
+
+                        margin-top: 5px;
+                        margin-bottom: 10px;
+                    }
+
+                    .content-div {
+                        background: grey !important;
+                    }
+
+                    .content-div-row {
+                        text-align: center !important;
+                        border: 3px grey dashed !important;
+                    }
+
+                    .edit {
+                        background: red !important;
+                    }
+
+                    .map {
+                        height: 200px !important;
+                    }
+                </style>
+
+
+                <div class="card list">
+
+
+                    <a class="item item-icon-left">
+                        <i class="icon ion-person"></i>
+                        Client : {{data.detailsEncaissement.montantEncaisse}}
+                    </a>
+
+                    <a class="item item-icon-left">
+                        <i class="icon ion-android-call"></i>
+                        Téléphone : {{data.detailsfactures.telephone}}
+                    </a>
+
+
+                </div>
+
+
+                <div class="bar bar-footer footer-button">
+
+                
+                        <div class="col mt" >
+                            <button ng-click="SupprimerEncaissement()" class="button button-block button-assertive footer-button"
+                              color="danger" type="submit" name="submit"><span style="color:white">Supprimer</span></button>
+                          </div>
+                   
+
+
+                </div>
+
+    </ion-pane>
+</ion-view>

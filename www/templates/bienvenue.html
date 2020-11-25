@@ -224,9 +224,7 @@
           <!-- <br>-->
           <ion-slide-box show-pager="true" does-continue="true">
             <ion-slide >
-              <br>
-              <br>
-             
+              
               <div class="row">
                 <div class="col" >
                 
@@ -243,7 +241,7 @@
               
                 </div>
 
-                <div class="col">
+                <div class="col" ng-click="goToClient()">
                   <div class="card">
                     <div class="item item-text-wrap" style="background-color: #e30000; color: white">
                       <p style="color: white"><i class="ion-person"></i>
@@ -336,18 +334,18 @@
 
           <div class="row">
 
-            <div class="col">
+            <div class="col" ng-click="goToClient()">
               <div class="card cardHome" style="background-color: #28a54c; color: white">
                 <div class="item item-text-wrap">
                   <p style="text-align: center"><img src="./img/client.png" style="width:50%; height: 10%;"></p>
                 </div>
                 <p style="color: white;text-align: center;margin-top: 10px">
-                  <a href="#/app/clients" style="color: white;text-decoration:none;">Client</a>
+                  <a style="color: white;text-decoration:none;">Client</a>
                 </p>
               </div>
             </div>
 
-            <div class="col" >
+            <div class="col"  ng-click="goToPrc()">
             <div class="bgsize">
               <div class="card cardHome" style="background-color: #28a54c; color: white;">
                 <div class="item item-text-wrap" >
@@ -357,7 +355,7 @@
                     </div>
                 </div>
                 <p style="color: white;text-align: center;margin-top: 10px">
-                  <a href="#/app/prcs" style="color: white;text-decoration:none;">&nbsp;Prise de Commande</a>
+                  <a style="color: white;text-decoration:none;">&nbsp;Prise de Commande</a>
                 </p>
 
               </div>
@@ -367,11 +365,9 @@
           
 
           </div>
-
-
           <div class="row">
 
-            <div class="col">
+            <div class="col"  ng-click="goToPds()">
               
               <div class="card cardHome" style="background-color: #28a54c; color: white">
                
@@ -381,36 +377,30 @@
                   <span ng-if="data.prcs && data.prcs.length > 0" class="badge badge-danger" style="background-color: #e30000 !important;color: white;">{{data.prcs.length}}</span>
                 </div>
                 <p style="color: white;text-align: center;margin-top: 10px;">
-                  <a href="#/app/pds" style="color: white;text-decoration:none;">Récupération marchandises</a>
+                  <a style="color: white;text-decoration:none;">Récup. marchandises</a>
                 </p>
               
             </div>
             </div>
 
 
-            <div class="col">
+            <div class="col"  ng-click="goToFacture()">
               <div class="card cardHome" style="background-color: #28a54c; color: white">
                 <div class="item item-text-wrap">
                   <p style="text-align: center"><img src="./img/prc.jpg" style="width:50%; height: 130%;margin-bottom: 2%"></p>
                   <span ng-if="data.factures && data.factures.length > 0" class="badge badge-danger" style="background-color: #e30000 !important;color: white;">{{data.factures.length}}</span>
                 </div>
                 <p style="color: white;text-align: center;margin-top: 10px">
-                  <a href="#/app/facturations" style="color: white;text-decoration:none;">&nbsp;Factures</a>
+                  <a style="color: white;text-decoration:none;">&nbsp;Factures</a>
                 </p>
               </div>
             </div>
-
-      
           
           </div>
 
-
-
-
-
          <div class="row">
 
-          <div class="col">
+          <div class="col" ng-click="goToDechargement()">
             <div class="card cardHome" style="background-color: #28a54c; color: white">
               <div class="item item-text-wrap">
                 <p style="text-align: center"><img src="./img/dechargement.png" style="width:40%; height: 5%;"></p>
@@ -421,7 +411,7 @@
             </div>
           </div>
 
-          <div class="col">
+          <div class="col" ng-click="goToVersement()">
             <div class="card cardHome" style="background-color: #28a54c; color: white">
               <div class="item item-text-wrap">
                 <p style="text-align: center"><img src="./img/versement.png" style="width:50%; height: 10%;"></p>
@@ -432,9 +422,33 @@
             </div>
           </div>
 
-            
-
           </div>
+
+          <div class="row">
+
+            <div class="col" ng-click="goToInventaire()">
+              <div class="card cardHome" style="background-color: #28a54c; color: white">
+                <div class="item item-text-wrap">
+                  <p style="text-align: center"><img src="./img/inventaire.jpg" style="width:100%;"></p>
+                </div>
+                <p style="color: white;text-align: center">
+                  <a href="#/app/inventaires" style="color: white;text-decoration:none;">&nbsp;Inventaire</a>
+                </p>
+              </div>
+            </div>
+  
+            <div class="col" >
+              <div class="card cardHome" style="background-color: white; color: white">
+                <!--<div class="item item-text-wrap">
+                  <p style="text-align: center"><img src="./img/destockage.jpg" style="width:84%;"></p>
+                </div>
+                <p style="color: white;text-align: center">
+                  <a  style="color: white;text-decoration:none;">Destockage</a>
+                </p>-->
+              </div>
+            </div>
+  
+            </div>
 
          
 

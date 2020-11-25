@@ -1,0 +1,84 @@
+<ion-view view-title="Chiffre d'affaire client" cache-view="false">
+    <ion-pane>
+      <div ng-app="starter">
+  
+        <ion-content>
+  
+          <style type="text/css">
+            input[readonly] {
+              background-color: transparent !important;
+              cursor: not-allowed;
+            }
+            .small_button{
+                width: 50% !important;
+                height: 50px !important;
+                margin-left: 5px;
+            }
+            .footer-button {
+              margin-bottom: 10px;
+              height: 50px !important;
+            }
+            .ml{
+              margin-left: 5px;
+            }
+            .header {
+  
+              margin-top: 5px;
+              margin-bottom: 10px;
+            }
+            .content-div {
+              background: grey !important;
+            }
+            .content-div-row {
+              text-align: center !important;
+              border: 3px grey dashed !important;
+            }
+            .edit {
+               background: red !important;
+            }
+            .map {
+              height: 200px !important;
+            }
+  
+          </style>
+  <div class="row">
+      <div class="col">
+        <label class="item item-input ">
+            <input type="text" id="datefilter" style="color:#28a54c;font-weight: bold;" class=" checkbox-assertive" name="datefilter"
+            placeholder="Date debut" onfocus="(this.type='date')" ng-model="data.datedebut" ng-change="filterDateCa()">
+          </label>
+      </div>
+
+      <div class="col">
+        <label class="item item-input ">
+
+            <input type="text" id="datefilter" style="color:#28a54c;font-weight: bold;" class=" checkbox-assertive" name="datefilter"
+            placeholder="Date fin" onfocus="(this.type='date')" ng-model="data.datefin" ng-change="filterDateCa()">
+  
+          </label>
+      </div>
+  </div>
+
+  <div class="row" ng-if="data.ca">
+    <div class="col">
+      <label>Chiffre d'affaire</label>
+     <label class="item item-input ">
+         <input type="text" id="ca" style="color:#28a54c;font-weight: bold;" class=" checkbox-assertive" name="ca" ng-model="data.ca">
+    </label>
+    </div>
+</div>
+
+
+
+</div>
+
+
+  
+ </ion-content>
+  
+  
+      </div>
+      
+    </ion-pane>
+  </ion-view>
+  

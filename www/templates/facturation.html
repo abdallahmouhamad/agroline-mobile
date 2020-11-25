@@ -39,8 +39,21 @@
           .map {
             height: 200px !important;
           }
+          table {
+            width: 300px;
+            color: white;
+        }
+        table, th, td {
+            border: solid 1px white;
+            border-collapse: collapse;
+            padding: 2px 3px;
+            text-align: center;
+            color: white;
+            margin-left: 10px;
+        }
 
         </style>
+
 
       <div class="col" ng-if="initial == true">
         <button class="button button-block button-assertive"
@@ -155,23 +168,20 @@
       name="submit"><span style="color:white">Ajouter detail</span></button>
     </div>
 
-    <div class="row" ng-if="edit == true">
-      <button ng-click="valideEdit()" class="button button-block button-assertive footer-button" color="danger" type="submit"
-      name="submit"><span style="color:white">Modifier</span></button>
+    <div class="row">
+      <div class="col" ng-if="edit == true">
+        <button ng-click="valideEdit()" class="button button-block button-assertive footer-button" color="danger" type="submit"
+        name="submit"><span style="color:white">Modifier</span></button>
+      </div>
+      <div class="col" ng-if="edit == true">
+        <button ng-click="annulerEdit()" class="button button-block button-assertive footer-button" color="danger" type="submit"
+        name="submit"><span style="color:white">Annuler</span></button>
+      </div>
+      <div class="col" ng-if="edit == true">
+        <button ng-click="valideEdit('sup')" class="button button-block button-assertive footer-button" color="danger" type="submit"
+        name="submit"><span style="color:white">Supprimer</span></button>
+      </div>
     </div>
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-
-  
 
 
     <div class="card list" >
@@ -182,6 +192,8 @@
          <div class="col" style="font-size: 130%;">Details</div>
  
        </div>
+
+       
 
       <div class="row header list content-div">
       <div class="col" style="text-align: center;">Image</div>
@@ -224,7 +236,39 @@
                </div>
 
       </div>
+      <div class="row">
 
+        <div class="col">
+
+          <div class="list">
+            <label class="item item-input" style="margin-top: 7px;">
+              <span class="input-label">Delai de paiement</span>
+              <input type="number" ng-model="data.delaipaiement" placeholder="0">
+            </label>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div id="tab">
+      
+        <table style="width: 700px"> 
+            <tr>
+                <th>Code</th>
+                
+                <th>Quantité</th>
+                <th>Prix</th>
+            </tr>
+            <tr ng-repeat="d in data.detailsFACT | filter:motcle" style="text-align: center;">
+                <td> {{d.codeArticle}}</td>
+                
+                <td>{{d.quantite}}</td>
+                <td>{{d.prix}}</td>
+            </tr>
+            
+        </table>
+    </div>
 
 
     </div>

@@ -290,6 +290,16 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
       }
     })
 
+    .state('app.details-encaissement', {
+      url: '/details-encaissement',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/details-encaissement.html',
+          controller: 'DetailsEncaissementCtrl'
+        }
+      }
+    })
+
     .state('app.envoi', {
       url: '/envoi',
       views: {
@@ -429,7 +439,43 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
         }
       }
     })
+    .state('app.caclient', {
+      url: '/caclient',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/caclient.html',
+          controller: 'CaClientCtrl'
+        }
+      }
+    })
 
+    .state('app.inventaires', {
+      url: '/inventaires',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/inventaires.html',
+          controller: 'InventaireCtrl'
+        }
+      }
+    })
+    .state('app.details-inventaire', {
+      url: '/details-inventaire',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/details-inventaire.html',
+          controller: 'DetailsInventaireCtrl'
+        }
+      }
+    })
+    .state('app.nouvel-inventaire', {
+      url: '/nouvel-inventaire',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/nouvel-inventaire.html',
+          controller: 'AddInventaireCtrl'
+        }
+      }
+    })
     .state('app.login1', {
       url: '/login1',
       views: {

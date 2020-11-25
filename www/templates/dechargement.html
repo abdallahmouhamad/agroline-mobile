@@ -54,7 +54,7 @@
         </style>
 
         <br>
-        <div class="card list">
+        <div class="card list" ng-if="!data.verser">
 
           <a class="item item-icon-left">
             <i class="icon ion-qr-scanner"></i>
@@ -98,11 +98,6 @@
           <a class="item item-icon-left">
             <i class="icon ion-cash"></i>
             Montant credit : {{data.dechargement.montantCredit}}
-          </a>
-
-          <a class="item item-icon-left">
-            <i class="icon ion-cash"></i>
-            Montant Vente : {{data.dechargement.montantVentes}}
           </a>
 
           <a class="item item-icon-left">
@@ -175,9 +170,6 @@
         </div>
 
         <br>
-
-
-
 
         <label class="item item-input" ng-if="!data.verser">
           <span class="input-label">Montant verser</span>
