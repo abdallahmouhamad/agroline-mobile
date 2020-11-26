@@ -21,6 +21,7 @@ angular
     urlJava,
     ApiListStock,
     ApiListArticle,
+
     ApiListRegions,
     ApiListVilles,
     ApiListMarches,
@@ -3460,7 +3461,7 @@ angular
           if ($scope.data.artcilechoisit && $scope.data.quantite && $scope.data.prix && $scope.data.quantite > 0 && $scope.data.prix > 0) {
 
             for (var j = 0; j < $scope.data.detailsPRC.details.length; j++) {
-              
+
               console.log($scope.data.detailsPRC.details[j].prix);
               console.log($scope.data.detailsPRC.details[j].montant);
               console.log($scope.numStr($scope.data.detailsPRC.details[j].prix, '.'));
@@ -3614,7 +3615,7 @@ angular
                             }
                           );
                         });
-                      } else if (response.reponse == -200) {
+                      } else if (response.reponse == -41) {
                         $ionicPopup.show({
                           title: "Infos",
                           template: "Impossible d'ajouter un prc sans details",
@@ -5735,7 +5736,7 @@ angular
         grossistechoisit: $scope.data.grossistechoisit
           ? $scope.data.grossistechoisit
           : null,
-        dateAjout: new Date(),
+        dateAjout: formatNewDate.formatNewDate(),
         isCanceled: false,
         idMotif: $scope.data.idMotif,
         isCurrent: false,
@@ -5938,6 +5939,9 @@ angular
       return option;
     };
     $scope.validerPdsAndSendCode = function () {
+     // if(values.iscanceled == false) {
+       // values.iscancelde = 0
+
       if ($scope.data.grossistechoisit) {
         $scope.initPDS();
         if ($scope.data.pds.detailsPDS && $scope.data.pds.detailsPDS.length > 0) {
@@ -6039,7 +6043,10 @@ angular
           ],
         });
       }
+   // }else{
+   //   values.iscanceled = 1}
     };
+
     $scope.sauvegarder = function () {
       $ionicLoading.show({
         content: "Loading",
@@ -6120,7 +6127,7 @@ angular
             codePDS: $scope.data.pds.codePDS,
             codeCommerciale: $scope.data.codeCommerciale,
             codeGrossiste: $scope.data.pds.codeGrossiste,
-            dateAjout: $scope.data.pds.dateAjout,
+            dateAjout: formatNewDate.formatNewDate(),
             //dateAjout:"2020-10-20 08:13:50",
             isCanceled: $scope.data.pds.isCanceled,
             idMotif: $scope.data.pds.idMotif,
@@ -6165,7 +6172,7 @@ angular
             codeGenere: $scope.data.pds.codeGenere,
             detailsPDS: []
           }
-
+          console.log(values);
 
           for (var i = 0; i < $scope.data.pds.detailsPDS.length; i++) {
             var detail = {
@@ -6181,7 +6188,7 @@ angular
             }
             values.detailsPDS.push(detail);
           }
-
+ console.log(values);
           $scope.data.pds = values;
 
         }
@@ -6189,6 +6196,9 @@ angular
         console.log($scope.data.pds);
         //  $scope.data.pds.dateAjout = '2020-10-20 08:13:50';
         if ($scope.data.pds.detailsPDS && $scope.data.pds.detailsPDS.length > 0) {
+          if( $scope.data.pds.iscanceled == false) {
+         $scope.data.pds.iscanceled = 0
+
           ApiAjoutPdsFromRecap.ajoutPdsFromRecap($scope.data.pds, $scope.initial).success(
             function (response) {
               $ionicLoading.hide();
@@ -6259,6 +6269,9 @@ angular
               },
             ],
           });
+
+           }else{
+            $scope.data.pds.iscanceled = 1}
         }
 
       } else {
@@ -6934,6 +6947,7 @@ angular
       $scope.data.fact = {};
       $scope.data.quantite = null;
       $scope.data.prix = null;
+      $scope.data.libelle = null;
       $scope.data.delaipaiement = null;
       $scope.data.codePDS = null;
       $scope.data.montantTotal = 0;
@@ -7078,6 +7092,7 @@ angular
 
                           $scope.data.detailsFACT.splice(i, 1);
                           $scope.data.quantite = null;
+                          $scope.data.libelle = null;
                           $scope.data.prix = null;
                           $scope.data.artcilechoisit = null;
                           $scope.data.motifchoisit = null;
@@ -7394,9 +7409,9 @@ angular
       var details = '<table style="width: 100px">' +
         '<tr>' +
         '<th>Code</th>' +
-        '<th>Libelle</th>' +
+        '<th>Designation</th>' +
         '<th>Quantité</th>' +
-        '<th>Prix</th>' + 
+        '<th>Prix</th>' +
         '</tr>';
       var corps = '';
       for (var i = 0; i < $scope.data.detailsFACT.length; i++) {
@@ -7405,7 +7420,7 @@ angular
           '<td>' + $scope.data.detailsFACT[i].article + '</td>' +
           '<td>' + $scope.data.detailsFACT[i].quantite + '</td>' +
           '<td>' + $scope.data.detailsFACT[i].prix + '</td>';
-        
+
       }
 
 
@@ -7425,7 +7440,7 @@ angular
 
       var style = "<style>";
       style = style + "table {width: 100%;font: 17px Calibri;}";
-      style = style + "table, th, td {border: solid 1px #DDD; border-collapse: collapse;";
+      style = style + "table {width: 100%;font: 17px Calibri;}";
       style = style + "table, th, td {border: solid 1px #DDD; border-collapse: collapse;";
       style = style + "padding: 2px 3px;text-align: center;}";
       style = style + "</style>";
@@ -7535,7 +7550,7 @@ angular
 
             detail.codeDetail = $scope.data.fact.details[i].codeDetail;
             detail.codeArticle = $scope.data.fact.details[i].codeArticle;
-            detail.libelle = $scope.data.fact.details[i].libelle;
+            detail.libelle = $scope.data.fact.details[i].article;
             detail.quantite = $scope.data.fact.details[i].quantite;
             detail.prix = $scope.data.fact.details[i].prix;
             detail.isCanceled = $scope.data.fact.details[i].isCanceled;
@@ -7603,8 +7618,8 @@ angular
             for (var i = 0; i < $scope.data.fact.details.length; i++) {
               details = details +
                 $scope.data.fact.details[i].codeArticle + ":             " +
-                $scope.data.fact.details[i].libelle + ":             " +"\n"
-                $scope.data.fact.details[i].quantite + "\n"
+                $scope.data.fact.details[i].article + ":             " + "\n"
+              $scope.data.fact.details[i].quantite + "\n"
             }
 
 
