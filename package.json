@@ -54,7 +54,9 @@
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-android-permissions": {},
       "cordova-plugin-network-information": {},
-      "cordova-plugin-geolocation": {},
+      "cordova-plugin-geolocation": {
+        "GPS_REQUIRED": "true"
+      },
       "cordova-sms-plugin": {},
       "cordova-plugin-googlemaps": {},
       "cordova-plugin-ionic-webview": {
