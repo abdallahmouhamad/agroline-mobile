@@ -2705,6 +2705,54 @@ angular
         $ionicLoading.hide();
         console.log('----------CLient object----------');
         console.log(values);
+        console.log("cient");
+        console.log("mode", values.idModepaiement);
+
+        if (values.idModepaiement == "1" || values.idModepaiement == "2") {
+          values.idModepaiement = parseInt(values.idModepaiement);
+        } else {
+          console.log("else", values.idModepaiement)
+        }
+
+        for (var i = 0; i < $scope.data.listregions.length; i++) {
+         
+          if (values.idRegion != " ") {
+            values.idRegion = parseInt($scope.data.listregions[i].idRegion);
+           
+          } else {
+            console.log( values.idRegion)
+          }
+        }
+
+        if (values.telephone2 != " ") {
+          values.telephone2 = parseInt($scope.data.telephone2);
+        } else {
+          console.log( values.telephone2)
+        }
+
+        for (var i = 0; i < $scope.data.listzones.length; i++) {
+          if (values.idZone != " ") {
+            values.idZone = parseInt($scope.data.listzones[i].idZone);
+          } else {
+            console.log( values.idZone)
+          }
+        }
+
+        for (var i = 0; i < $scope.data.listvilles.length; i++) {
+          if (values.idVille != " ") {
+            values.idVille = parseInt($scope.data.listvilles[i].idVille);
+          } else {
+            console.log( values.idVille)
+          }
+        }
+
+        for (var i = 0; i < $scope.data.listmarches.length; i++) {
+          if (values.idMarche != " ") {
+            values.idMarche = parseInt($scope.data.listmarches[i].idMarche);
+          } else {
+            console.log( values.idMarche)
+          }
+        }
 
         ApiAjoutClient.ajoutClient(values, etat).success(function (response) {
           $ionicLoading.hide();
@@ -5939,8 +5987,7 @@ angular
       return option;
     };
     $scope.validerPdsAndSendCode = function () {
-     // if(values.iscanceled == false) {
-       // values.iscancelde = 0
+
 
       if ($scope.data.grossistechoisit) {
         $scope.initPDS();
@@ -5990,12 +6037,15 @@ angular
 
           var messageCode = "\n Code::    " + $scope.data.pds.codeGenere;
           var MessageGlobal = message + messageMontant + messageCode;
-
+          console.log(messageCode);
           try {
-            console.log(messageCode)
+            console.log(messageCode);
+
             SendSms.sendSMS(MessageGlobal, $scope.data.grossistechoisit.telephone);
 
             localStorage.setItem("pds", JSON.stringify($scope.data.pds));
+
+
 
             $scope.code = "attente";
 
@@ -6043,8 +6093,7 @@ angular
           ],
         });
       }
-   // }else{
-   //   values.iscanceled = 1}
+
     };
 
     $scope.sauvegarder = function () {
@@ -6105,6 +6154,8 @@ angular
 
       console.log($scope.data.pds);
       if ($scope.data.pds.codeGenere === $scope.data.code) {
+        console.log("code :", $scope.data.pds.codeGenere);
+        console.log("compare :", $scope.data.code);
         $scope.data.pds.isLoaded = 1;
         $scope.data.pds.isCurrent = 1;
         for (var i = 0; i < $scope.data.pds.detailsPDS.length; i++) {
@@ -6188,16 +6239,31 @@ angular
             }
             values.detailsPDS.push(detail);
           }
- console.log(values);
+
+          console.log("values", values);
           $scope.data.pds = values;
+
+
 
         }
 
-        console.log($scope.data.pds);
+
+        console.log("data pds", $scope.data.pds);
+
         //  $scope.data.pds.dateAjout = '2020-10-20 08:13:50';
         if ($scope.data.pds.detailsPDS && $scope.data.pds.detailsPDS.length > 0) {
-          if( $scope.data.pds.iscanceled == false) {
-         $scope.data.pds.iscanceled = 0
+          $scope.data.pds.dateAjout = formatNewDate.formatNewDate();
+          $scope.data.pds.isCanceled = $scope.data.pds.isCanceled ? 1 : 0;
+          $scope.data.pds.isChecked = $scope.data.pds.isChecked ? 1 : 0;
+          $scope.data.pds.isUnloaded = $scope.data.pds.isUnloaded ? 1 : 0;
+
+          for (var i = 0; i < $scope.data.pds.detailsPDS.length; i++) {
+            $scope.data.pds.detailsPDS[i].isCanceled = $scope.data.pds.detailsPDS[i].isCanceled ? 1 : 0;
+            $scope.data.pds.detailsPDS[i].isUnloaded = $scope.data.pds.detailsPDS[i].isUnloaded ? 1 : 0;
+
+          }
+
+
 
           ApiAjoutPdsFromRecap.ajoutPdsFromRecap($scope.data.pds, $scope.initial).success(
             function (response) {
@@ -6257,6 +6323,9 @@ angular
           ).error(errorCallback => {
             $ionicLoading.hide();
           });
+
+
+
         } else if (response.reponse == -200) {
           $ionicPopup.show({
             title: "Infos",
@@ -6270,9 +6339,10 @@ angular
             ],
           });
 
-           }else{
-            $scope.data.pds.iscanceled = 1}
+
         }
+
+
 
       } else {
         $ionicPopup.show({
