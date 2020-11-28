@@ -6856,6 +6856,35 @@ $scope.goToPds = function()
       });
     }
 
+  })
+
+  .controller("FacturationCtrl", function (
+    $scope,
+    $state,
+    $ionicLoading,
+    ApiListClient,
+    ApiListMotif,
+    $ionicPopup,
+    CodeGenere,
+    ApiAjoutFacturation,
+    ApiRecapFactPrc,
+    $state,
+    $cordovaGeolocation,
+    ApiListArticle,
+    checkQuantite,
+    ApiCodePDS,
+    formatNewDate,
+    ApiListStock,
+    $filter,ApiDeletDetailFact
+
+  ) {
+    $scope.data = {};
+
+    $scope.initvar = function () {
+      // JSON.parse(localStorage.getItem('recapPRC'))
+      $scope.edit = false;
+
+      $scope.data.prc = localStorage.getItem("prc") ? JSON.parse(localStorage.getItem("prc")) : null;
       $scope.initial = $scope.data.prc ? false : true;
       console.log('----initial---------');
       console.log($scope.initial)
