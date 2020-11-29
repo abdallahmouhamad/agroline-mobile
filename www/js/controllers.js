@@ -2715,26 +2715,21 @@ angular
         }
 
         for (var i = 0; i < $scope.data.listregions.length; i++) {
-         
+
           if (values.idRegion != " ") {
             values.idRegion = parseInt($scope.data.listregions[i].idRegion);
-           
+
           } else {
-            console.log( values.idRegion)
+            console.log(values.idRegion)
           }
         }
 
-        if (values.telephone2 != " ") {
-          values.telephone2 = parseInt($scope.data.telephone2);
-        } else {
-          console.log( values.telephone2)
-        }
 
         for (var i = 0; i < $scope.data.listzones.length; i++) {
           if (values.idZone != " ") {
             values.idZone = parseInt($scope.data.listzones[i].idZone);
           } else {
-            console.log( values.idZone)
+            console.log(values.idZone)
           }
         }
 
@@ -2742,7 +2737,7 @@ angular
           if (values.idVille != " ") {
             values.idVille = parseInt($scope.data.listvilles[i].idVille);
           } else {
-            console.log( values.idVille)
+            console.log(values.idVille)
           }
         }
 
@@ -2750,7 +2745,7 @@ angular
           if (values.idMarche != " ") {
             values.idMarche = parseInt($scope.data.listmarches[i].idMarche);
           } else {
-            console.log( values.idMarche)
+            console.log(values.idMarche)
           }
         }
 
@@ -3337,6 +3332,7 @@ angular
     ApiListArticle,
     $ionicPopup,
     CodeGenere,
+    formatNewDate,
     ApiListModePaiement,
     ApiListGrossiste,
     $filter
@@ -3354,8 +3350,9 @@ angular
       $scope.data.clientchoisit = null;
       $scope.data.artcilechoisit = null;
       $scope.data.grossistechoisit = null;
+      $scope.data.dateAjout = formatNewDate.formatNewDate(),
 
-      $scope.data.listmodereglements = null;
+        $scope.data.listmodereglements = null;
       $scope.data.modereglementchoisit = null;
       $scope.data.motifchoisit = null;
       $scope.data.quantite = null;
@@ -3572,7 +3569,7 @@ angular
                   "PRC-" + $scope.data.user.code + "-" + CodeGenere.getCodeGenere(),
                 codeClient: $scope.data.clientchoisit.codeClient,
                 codeGrossiste: $scope.data.grossistechoisit.codeGrossiste,
-                dateAjout: new Date(),
+                dateAjout: formatNewDate.formatNewDate(),
                 idModepaiement:
                   $scope.data.idModepaiement == 2
                     ? $scope.data.modereglementchoisit.idModepaiement
@@ -3635,7 +3632,68 @@ angular
                 $ionicLoading.hide();
 
               } else {
+
                 if (values.detailsPRC && values.detailsPRC.length > 0) {
+
+                  values.dateAjout = formatNewDate.formatNewDate();
+
+                  console.log("idModepaiement", values.idModepaiement);
+
+                  if (values.idModepaiement == "1" || values.idModepaiement == "2") {
+                    values.idModepaiement = parseInt(values.idModepaiement);
+                  } else {
+                    console.log("idModepaiement", values.idModepaiement)
+                  }
+
+                  for (var i = 0; i < values.detailsPRC.length; i++) {
+                    values.detailsPRC[i].isCanceled = values.detailsPRC[i].isCanceled ? 1 : 0;
+
+                   /* if (values.detailsPRC[i].codeArticle != " ") {
+                      values.detailsPRC[i].codeArticle = parseInt(values.detailsPRC[i].codeArticle);
+                      console.log("codeArticle", values.detailsPRC[i].codeArticle)
+                    } else {
+                      console.log("codeArticle", values.detailsPRC[i].codeArticle)
+                    }
+
+                   if (values.detailsPRC[i].codeDetail != " ") {
+                      values.detailsPRC[i].codeDetail = parseInt(values.detailsPRC[i].codeDetail);
+                      console.log("codeDetail", values.detailsPRC[i].codeDetail)
+                    } else {
+                      console.log("codeDetail", values.detailsPRC[i].codeDetail)
+                    }
+
+                     if (values.detailsPRC[i].prix != " ") {
+                      values.detailsPRC[i].prix = parseInt(values.detailsPRC[i].prix);
+                      console.log("prix", values.detailsPRC[i].prix)
+                    } else {
+                      console.log("prix", values.detailsPRC[i].prix)
+                    }
+
+                    if (values.detailsPRC[i].quantite != " ") {
+                      values.detailsPRC[i].quantite = parseInt(values.detailsPRC[i].quantite);
+                      console.log("quantite", values.detailsPRC[i].quantite)
+                    } else {
+                      console.log("quantite", values.detailsPRC[i].quantite)
+                    }
+                    */
+                  
+                        if (values.detailsPRC[i].artcilechoisit.idArticle != " ") {
+                          values.detailsPRC[i].artcilechoisit.idArticle = parseInt(values.detailsPRC[i].artcilechoisit.idArticle);
+                          console.log("idArticle", values.detailsPRC[i].artcilechoisit.idArticle)
+                        } else {
+                          console.log("idArticle", values.detailsPRC[i].artcilechoisit.idArticle)
+                        }
+
+                        if (values.detailsPRC[i].artcilechoisit.prix != " ") {
+                          values.detailsPRC[i].artcilechoisit.prix = parseInt(values.detailsPRC[i].artcilechoisit.prix);
+                          console.log("prix", values.detailsPRC[i].artcilechoisit.prix)
+                        } else {
+                          console.log("prix", values.detailsPRC[i].artcilechoisit.prix)
+                        }
+                     
+
+                  }
+
                   ApiAjoutPrc.ajoutPrc(values).success(
                     function (response) {
                       $ionicLoading.hide();
@@ -6252,14 +6310,30 @@ angular
 
         //  $scope.data.pds.dateAjout = '2020-10-20 08:13:50';
         if ($scope.data.pds.detailsPDS && $scope.data.pds.detailsPDS.length > 0) {
-          $scope.data.pds.dateAjout = formatNewDate.formatNewDate();
+
           $scope.data.pds.isCanceled = $scope.data.pds.isCanceled ? 1 : 0;
           $scope.data.pds.isChecked = $scope.data.pds.isChecked ? 1 : 0;
           $scope.data.pds.isUnloaded = $scope.data.pds.isUnloaded ? 1 : 0;
+          if ($scope.data.pds.dateAjout != " ") {
+            $scope.data.pds.dateAjout = formatNewDate.formatNewDate();
+          }
 
           for (var i = 0; i < $scope.data.pds.detailsPDS.length; i++) {
             $scope.data.pds.detailsPDS[i].isCanceled = $scope.data.pds.detailsPDS[i].isCanceled ? 1 : 0;
             $scope.data.pds.detailsPDS[i].isUnloaded = $scope.data.pds.detailsPDS[i].isUnloaded ? 1 : 0;
+
+            if ($scope.data.pds.detailsPDS[i].quantite != " ") {
+              $scope.data.pds.detailsPDS[i].quantite = parseInt($scope.data.pds.detailsPDS[i].quantite);
+            } else {
+              console.log($scope.data.pds.detailsPDS[i].quantite)
+            }
+
+            if ($scope.data.pds.detailsPDS[i].prix != " ") {
+              $scope.data.pds.detailsPDS[i].prix = parseInt($scope.data.pds.detailsPDS[i].prix);
+            } else {
+              console.log($scope.data.pds.detailsPDS[i].prix)
+            }
+
 
           }
 
@@ -7694,6 +7768,36 @@ angular
 
 
             //  $scope.createPDF();
+            $scope.data.fact.dateAjout = formatNewDate.formatNewDate();
+            $scope.data.fact.isCanceled = $scope.data.fact.isCanceled ? 1 : 0;
+            $scope.data.fact.idMotif = $scope.data.fact.idMotif ? 1 : 0;
+
+            if ($scope.data.fact.idModepaiement == "1" || $scope.data.fact.idModepaiement == "2") {
+              $scope.data.fact.idModepaiement = parseInt($scope.data.fact.idModepaiement);
+            } else {
+              console.log("affiche", $scope.data.fact.idModepaiement)
+            }
+
+            if ($scope.data.fact.delaiPaiement != " ") {
+              $scope.data.fact.delaiPaiement = parseInt($scope.data.fact.delaiPaiement);
+            } else {
+              console.log("affiche", $scope.data.fact.delaiPaiement)
+            }
+
+
+            for (var i = 0; i < $scope.data.fact.details.length; i++) {
+              $scope.data.fact.details[i].isCanceled = $scope.data.fact.details[i].isCanceled ? 1 : 0;
+              $scope.data.fact.details[i].idMotif = $scope.data.fact.details[i].idMotif ? 1 : 0;
+
+              if ($scope.data.fact.details[i].prix != " ") {
+                $scope.data.fact.details[i].prix = parseInt($scope.data.fact.details[i].prix);
+              }
+
+              if ($scope.data.fact.details[i].quantite != " ") {
+                $scope.data.fact.details[i].quantite = parseInt($scope.data.fact.details[i].quantite);
+              }
+
+            }
 
             ApiAjoutFacturation.ajoutFacturation($scope.data.fact, $scope.initial).success(
               function (response) {
@@ -7847,7 +7951,7 @@ angular
     ApiListArticle, $ionicPopup,
     CodeGenere, ApiListGrossiste,
     ApiRecapDchmnt, ApiValiderDchmnt,
-    SendSms, ApiAjoutFacturation, ApiRecapPdsPrc, ApiRecapFactPrc) {
+    SendSms, ApiAjoutFacturation, ApiRecapPdsPrc, formatNewDate, ApiRecapFactPrc) {
     $scope.data = {};
     $scope.initvar = function () {
       $scope.data.codePDS = localStorage.getItem('codePDS');
@@ -8004,7 +8108,26 @@ angular
 
         $scope.listeJson = $scope.data.dechargement_valider;
         console.log($scope.listeJson);
+        $scope.listeJson.dateAjout = formatNewDate.formatNewDate();
+        for(var i = 0; i < $scope.listeJson.details.length; i++){
 
+      
+        if ( $scope.listeJson.details[i].quantiteCredit != " ") {
+          $scope.listeJson.details[i].quantiteCredit=parseInt($scope.listeJson.details[i].quantiteCredit);
+        }
+
+        if ( $scope.listeJson.details[i].quantitePrise != " ") {
+          $scope.listeJson.details[i].quantitePrise =parseInt($scope.listeJson.details[i].quantitePrise);
+        }
+
+        if ( $scope.listeJson.details[i].quantiteRendue != " ") {
+          $scope.listeJson.details[i].quantiteRendue =parseInt($scope.listeJson.details[i].quantiteRendue);
+        }
+
+        if ( $scope.listeJson.details[i].quantiteComptant != " ") {
+          $scope.listeJson.details[i].quantiteComptant =parseInt($scope.listeJson.details[i].quantiteComptant);
+        }
+      }
         ApiValiderDchmnt.getValiderDchmnt($scope.listeJson).then(function (resp) {
           console.log("test console 2");
           console.log(resp);
@@ -8140,7 +8263,7 @@ angular
             codeDechargement: "DCH-" + $scope.data.user.code + "-" + CodeGenere.getCodeGenere(),
             codePDS: $scope.data.codePDS,
             codeCommerciale: $scope.data.user.code,
-            dateAjout: new Date(),
+            dateAjout: $scope.data.dateAjout,
             isCanceled: 0,
             idMotif: $scope.idMotif,
             isChecked: 0,
@@ -8595,7 +8718,7 @@ angular
           codeGrossiste: $scope.data.details_pds_no_payed.codeGrossiste,
           codePDS: $scope.data.details_pds_no_payed.codePDS,
           codeCommerciale: $scope.data.user.code,
-          dateAjout: new Date(),
+          dateAjout: $scope.data.dateAjout,
           isCanceled: 0,
           idMotif: 0,
           isChecked: 0,
