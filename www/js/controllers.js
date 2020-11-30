@@ -5376,6 +5376,7 @@ angular
 
       $scope.data.idMotif = 0;
       $scope.data.detailsPDS = [];
+      $scope.data.detailsPDSRECAP = [];
       $scope.data.listmotifs = [];
       $scope.data.grossistes = [];
       $scope.data.motifchoisit = null;
@@ -5389,6 +5390,7 @@ angular
         "-" +
         CodeGenere.getCodeGenere();
       $scope.data.detail = {};
+      $scope.data.detailRECAP = {};
 
       $scope.data.quantite = null;
       $scope.data.prix = null;
@@ -5662,6 +5664,38 @@ angular
             $scope.data.recapPrc[j].details &&
             $scope.data.recapPrc[j].details.length > 0
           ) {
+
+            for (var k = 0; k < $scope.data.recapPrc[j].recap.length; k++) {
+              console.log('Je rentre ici i');
+              $scope.data.detailRECAP = {
+                codeDetail: null,
+                codePRC: null,
+                codePDS: $scope.data.codePDS,
+                codeArticle: null,
+                quantite: 0,
+                prix: 0.0,
+                isCanceled: false,
+                idMotif: null,
+                isUnloaded: false,
+                motifchoisit: null,
+                artcilechoisit: null,
+                index: 0,
+                montant: 0,
+                article: null,
+              };
+             
+              $scope.data.detailRECAP.codeArticle = $scope.data.recapPrc[j].recap[k].codeArticle;
+              $scope.data.detailRECAP.quantite    = $scope.data.recapPrc[j].recap[k].quantite;
+              $scope.data.detailRECAP.prix        = $scope.data.recapPrc[j].recap[k].prix;
+              $scope.data.detailRECAP.idMotif     = 0;
+              $scope.data.detailRECAP.motifchoisit= null;
+              $scope.data.detailRECAP.article     = $scope.data.recapPrc[j].recap[k].article;
+              $scope.data.detail.index            = j;
+
+              $scope.data.detailsPDSRECAP.push($scope.data.detailRECAP);
+            }
+
+
             for (var i = 0; i < $scope.data.recapPrc[j].details.length; i++) {
               console.log('Je rentre ici i');
               $scope.data.detail = {
