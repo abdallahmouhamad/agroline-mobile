@@ -7305,6 +7305,47 @@ angular
           duration: 10000,
         });
 
+   /*
+            $scope.data.recapPrc.isCanceled = $scope.data.recapPrc.isCanceled ? 1 : 0;
+            $scope.data.recapPrc.idMotif = $scope.data.recapPrc.idMotif ? 1 : 0;
+
+            if ($scope.data.recapPrc.idModepaiement == "1" || $scope.data.recapPrc.idModepaiement == "2") {
+              $scope.data.recapPrc.idModepaiement = parseInt($scope.data.recapPrc.idModepaiement);
+            } else {
+              console.log("affiche", $scope.data.recapPrc.idModepaiement)
+            }
+
+            if ($scope.data.recapPrc.delaiPaiement != " ") {
+              $scope.data.recapPrc.delaiPaiement = parseInt($scope.data.recapPrc.delaiPaiement);
+            } else {
+              console.log("affiche", $scope.data.recapPrc.delaiPaiement)
+            }
+
+            if ($scope.data.recapPrc.montant != " ") {
+              $scope.data.recapPrc.montant = parseInt($scope.data.recapPrc.montant);
+            } else {
+              console.log("affiche", $scope.data.recapPrc.montant)
+            }
+
+
+            for (var i = 0; i < $scope.data.details.length; i++) {
+              $scope.data.details[i].isCanceled = $scope.data.details[i].isCanceled ? 1 : 0;
+              $scope.data.details[i].idMotif = $scope.data.details[i].idMotif ? 1 : 0;
+
+              if ($scope.data.details[i].prix != " ") {
+                $scope.data.details[i].prix = parseInt($scope.data.details[i].prix);
+              }
+
+              if ($scope.data.details[i].quantite != " ") {
+                $scope.data.details[i].quantite = parseInt($scope.data.details[i].quantite);
+              }
+
+              if ($scope.data.details[i].idDetailsPRC != " ") {
+                $scope.data.details[i].idDetailsPRC = parseInt($scope.data.details[i].idDetailsPRC);
+              }
+            }*/
+
+
         ApiRecapFactPrc.getRecapFactPrc(code).success(
           function (response) {
             $ionicLoading.hide();
@@ -7320,6 +7361,43 @@ angular
 
                 if ($scope.data.recapPrc.details) {
                   console.log('------push detail to detailsFACT-------2');
+                  $scope.data.recapPrc.isCanceled = $scope.data.recapPrc.isCanceled ? 1 : 0;
+                  $scope.data.recapPrc.idMotif = $scope.data.recapPrc.idMotif ? 1 : 0;
+      
+                  if ($scope.data.recapPrc.idModepaiement == "1" || $scope.data.recapPrc.idModepaiement == "2") {
+                    $scope.data.recapPrc.idModepaiement = parseInt($scope.data.recapPrc.idModepaiement);
+                  } else {
+                    console.log("affiche", $scope.data.recapPrc.idModepaiement)
+                  }
+      
+                  if ($scope.data.recapPrc.delaiPaiement != " ") {
+                    $scope.data.recapPrc.delaiPaiement = parseInt($scope.data.recapPrc.delaiPaiement);
+                  } else {
+                    console.log("affiche", $scope.data.recapPrc.delaiPaiement)
+                  }
+      
+                  if ($scope.data.recapPrc.montant != " ") {
+                    $scope.data.recapPrc.montant = parseInt($scope.data.recapPrc.montant);
+                  } else {
+                    console.log("affiche", $scope.data.recapPrc.montant)
+                  }
+                  
+            for (var i = 0; i < $scope.data.recapPrc.details.length; i++) {
+              $scope.data.recapPrc.details[i].isCanceled = $scope.data.recapPrc.details[i].isCanceled ? 1 : 0;
+              $scope.data.recapPrc.details[i].idMotif = $scope.data.recapPrc.details[i].idMotif ? 1 : 0;
+
+              if ($scope.data.recapPrc.details[i].prix != " ") {
+                $scope.data.recapPrc.details[i].prix = parseInt($scope.data.recapPrc.details[i].prix);
+              }
+
+              if ($scope.data.recapPrc.details[i].quantite != " ") {
+                $scope.data.recapPrc.details[i].quantite = parseInt($scope.data.recapPrc.details[i].quantite);
+              }
+
+              if ($scope.data.recapPrc.details[i].idDetailsPRC != " ") {
+                $scope.data.recapPrc.details[i].idDetailsPRC = parseInt($scope.data.recapPrc.details[i].idDetailsPRC);
+              }
+            }
                   $scope.data.detailsFACT = [];
                   console.log($scope.data.recapPrc);
                   console.log($scope.data.recapPrc.details);
@@ -7754,9 +7832,10 @@ angular
           //  $scope.data.fact.position = "14.9038943,-17.39839"
           $scope.data.fact.dateAjout = formatNewDate.formatNewDate();
           $scope.data.fact.delaiPaiement = "" + $scope.data.delaipaiement;
-          console.log($scope.data.fact)
-
-
+         
+          //console.log($scope.data.fact)
+        if($scope.data.fact.details ){
+          console.log($scope.data.fact.details);
           if ($scope.data.fact.codePDS && $scope.data.fact.codePDS !== 0) {
             var details = "";
             for (var i = 0; i < $scope.data.fact.details.length; i++) {
@@ -7798,7 +7877,7 @@ angular
               }
 
             }
-
+            console.log($scope.data.fact)
             ApiAjoutFacturation.ajoutFacturation($scope.data.fact, $scope.initial).success(
               function (response) {
                 $ionicLoading.hide();
@@ -7881,7 +7960,7 @@ angular
               ],
             });
           }
-
+        }
 
 
 
@@ -8982,6 +9061,7 @@ angular
     ApiListGrossiste,
     ApiAjoutPdsFromRecap,
     CodeGenere,
+    formatNewDate,
     SendSms,
     $filter,
     ApiAddInventaire) {
@@ -9241,7 +9321,14 @@ angular
         showDelay: 0,
         duration: 10000,
       });
+      $scope.data.inventaire.dateAjout = formatNewDate.formatNewDate();
+      $scope.data.inventaire.isCanceled = $scope.data.inventaire.isCanceled ? 1 : 0;
 
+      for (var i = 0; i < $scope.data.inventaire.details.length; i++) {
+        $scope.data.inventaire.details[i].isCanceled = $scope.data.inventaire.details[i].isCanceled ? 1 : 0;
+       
+
+      }
       ApiAddInventaire.AddInventaire($scope.data.inventaire).success(
         function (response) {
           $ionicLoading.hide();
