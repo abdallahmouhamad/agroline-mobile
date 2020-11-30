@@ -5683,9 +5683,9 @@ angular
               var object = {
                 codePDS: $scope.data.codePDS,
                 codeDetail: $scope.itemEdit.codeDetail,
-                isCanceled: "1",
+                isCanceled: 1,
                 idMotif: $scope.data.motifchoisit.idMotif,
-                isUnloaded: "0"
+                isUnloaded: 0
               }
 
               $ionicLoading.show({
@@ -6461,8 +6461,8 @@ angular
     $scope.initFacturations = function () {
       console.log($scope.data.user);
       if ($scope.data.user.code) {
-        var code = { codeCommerciale: $scope.data.user.code };
-
+        var code = { codeCommerciale: $scope.data.user.code  };
+        console.log(code);
         $ionicLoading.show({
           content: "Loading",
           animation: "fade-in",
@@ -7279,14 +7279,18 @@ angular
         codeFacture: $scope.data.codeFacture,
         codeCommerciale: $scope.data.codeCommerciale,
         codePRC: $scope.data.codePRC,
-        dateAjout: new Date(),
+        dateAjout: formatNewDate.formatNewDate(),
         codeClient: $scope.data.codeClient,
-        isCanceled: false,
+        isCanceled:  $scope.data.isCanceled ? 1 : 0,
         position: null,
         idModepaiement: $scope.data.idModepaiement,
         idMotif: $scope.data.idMotif,
         codePDS: $scope.data.codePDS,
-        details: $scope.data.detailsFACT
+        details: $scope.data.detailsFACT,
+       // detailsIsCanceled: $scope.data.detailsFACT[0].isCanceled,
+       // detailsIsUnloaded: $scope.data.detailsFACT[0].isUnloaded,
+        
+        
       };
     };
 
@@ -7431,6 +7435,8 @@ angular
                     $scope.data.detail.article =
                       $scope.data.recapPrc.details[i].article;
                     $scope.data.detail.index = $scope.data.recapPrc.details.length + 1;
+                    $scope.data.detail.isCanceled = $scope.data.detail.isCanceled ? 1 : 0;
+                    $scope.data.detail.isUnloaded = $scope.data.detail.isUnloaded ? 1 : 0;
 
                     $scope.data.detailsFACT.push($scope.data.detail);
                   }
@@ -7741,17 +7747,20 @@ angular
           codeClient: $scope.data.fact.codeClient,
           dateAjout: $scope.data.fact.dateAjout,
           codeCommerciale: $scope.data.fact.codeCommerciale,
-          position: $scope.data.fact.position,
-          idModepaiement: "" + $scope.data.fact.idModepaiement,
-          isCanceled: $scope.data.fact.isCanceled == false ? "0" : "1",
+          position: $scope.data.fact.position,       
+          delaiPaiement =+  $scope.data.fact.delaiPaiement,
+          idModepaiement: $scope.data.fact.idModepaiement = +$scope.data.fact.idModepaiement,
+          isCanceled: $scope.data.fact.isCanceled == false ? 0 : 1,
           idMotif: $scope.data.fact.idMotif,
           codePRC: $scope.data.fact.codePRC,
           codePDS: $scope.data.fact.codePDS
+          
         }
-
+       
         console.log('par PRC');
 
         $scope.data.fact = valueFactPRC;
+        console.log( $scope.data.fact);
 
       } else if ($scope.initial == true) {
         console.log('---------Code PDS------------');
@@ -7848,9 +7857,28 @@ angular
 
             //  $scope.createPDF();
             $scope.data.fact.dateAjout = formatNewDate.formatNewDate();
-            $scope.data.fact.isCanceled = $scope.data.fact.isCanceled ? 1 : 0;
-            $scope.data.fact.idMotif = $scope.data.fact.idMotif ? 1 : 0;
+           // $scope.data.fact.isCanceled = $scope.data.fact.isCanceled ? 1 : 0;
+           // $scope.data.fact.idMotif = $scope.data.fact.idMotif ? 1 : 0;
 
+
+
+            for (var i = 0; i < $scope.data.fact.details.length; i++) {
+            
+
+             $scope.data.fact.details[i].isCanceled = 0;
+
+             $scope.data.fact.details[i].idMotif = 0;
+
+              if ($scope.data.fact.details[i].prix != " ") {
+                $scope.data.fact.details[i].prix = parseInt($scope.data.fact.details[i].prix);
+              }
+
+              if ($scope.data.fact.details[i].quantite != " ") {
+                $scope.data.fact.details[i].quantite = parseInt($scope.data.fact.details[i].quantite);
+              }
+
+            }
+            
             if ($scope.data.fact.idModepaiement == "1" || $scope.data.fact.idModepaiement == "2") {
               $scope.data.fact.idModepaiement = parseInt($scope.data.fact.idModepaiement);
             } else {
@@ -7862,22 +7890,12 @@ angular
             } else {
               console.log("affiche", $scope.data.fact.delaiPaiement)
             }
-
-
-            for (var i = 0; i < $scope.data.fact.details.length; i++) {
-              $scope.data.fact.details[i].isCanceled = $scope.data.fact.details[i].isCanceled ? 1 : 0;
-              $scope.data.fact.details[i].idMotif = $scope.data.fact.details[i].idMotif ? 1 : 0;
-
-              if ($scope.data.fact.details[i].prix != " ") {
-                $scope.data.fact.details[i].prix = parseInt($scope.data.fact.details[i].prix);
-              }
-
-              if ($scope.data.fact.details[i].quantite != " ") {
-                $scope.data.fact.details[i].quantite = parseInt($scope.data.fact.details[i].quantite);
-              }
-
-            }
+            $scope.data.fact.idMotif =  0;
+            $scope.data.fact.isCanceled =  0;
+            
             console.log($scope.data.fact)
+            console.log($scope.initial)
+            console.log($scope.data.fact.dateAjout)
             ApiAjoutFacturation.ajoutFacturation($scope.data.fact, $scope.initial).success(
               function (response) {
                 $ionicLoading.hide();
@@ -10042,16 +10060,23 @@ angular
     //$scope.data.profile = sessionStorage.getItem("")
     return {
       formatNewDate: function () {
+        var hours = parseInt(d.getHours());
+        if(hours < 10){
+          hours = "0"+ ""+hours;
+        }
+        var minute = parseInt(d.getMinutes());
+        if(minute < 10){
+          minute = "0"+ ""+minute;
+        }
         var dformat = [
           d.getFullYear(),
           d.getMonth() + 1,
           d.getDate()
         ].join('-') + ' ' +
-          [d.getHours(),
-          d.getMinutes(),
+          [hours,
+          minute,
           d.getSeconds()].join(':');
-        console.log('------------Date---------------')
-        console.log(dformat)
+        
         return dformat;
       },
     };
