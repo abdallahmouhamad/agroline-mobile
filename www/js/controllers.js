@@ -5500,6 +5500,7 @@ angular
 
       $scope.data.idMotif = 0;
       $scope.data.detailsPDS = [];
+      $scope.data.detailsPDSRECAP = [];
       $scope.data.listmotifs = [];
       $scope.data.grossistes = [];
       $scope.data.motifchoisit = null;
@@ -5513,6 +5514,7 @@ angular
         "-" +
         CodeGenere.getCodeGenere();
       $scope.data.detail = {};
+      $scope.data.detailrecap = {};
 
       $scope.data.quantite = null;
       $scope.data.prix = null;
@@ -5782,10 +5784,46 @@ angular
         $scope.data.detailsPDS = [];
         for (var j = 0; j < $scope.data.recapPrc.length; j++) {
           console.log('Je rentre ici j');
+     
           if (
             $scope.data.recapPrc[j].details &&
             $scope.data.recapPrc[j].details.length > 0
           ) {
+
+            for (var k = 0; k < $scope.data.recapPrc[j].recap.length; k++) {
+              console.log('Je rentre ici i');
+              console.log($scope.data.recapPrc[j]);
+              $scope.data.detailrecap = {
+                codeDetail: null,
+                codePRC: null,
+                codePDS: $scope.data.codePDS,
+                codeArticle: null,
+                quantite: 0,
+                prix: 0.0,
+                isCanceled: false,
+                idMotif: null,
+                isUnloaded: false,
+                motifchoisit: null,
+                artcilechoisit: null,
+                index: 0,
+                montant: 0,
+                article: null,
+              };
+              $scope.data.detailrecap.codePRC      = $scope.data.recapPrc[j].recap[k].codePRC
+              $scope.data.detailrecap.codeDetail   = "RPDS" + "-" + CodeGenere.getCodeGenere();
+              $scope.data.detailrecap.codeArticle  = $scope.data.recapPrc[j].recap[k].codeArticle;
+              $scope.data.detailrecap.quantite     = $scope.data.recapPrc[j].recap[k].quantite;
+              $scope.data.detailrecap.prix         = null;
+              $scope.data.detailrecap.idMotif      = 0;
+              $scope.data.detailrecap.motifchoisit = null;
+              $scope.data.detailrecap.article      = $scope.data.recapPrc[j].recap[k].article;
+              $scope.data.detailrecap.index        = j;
+
+      
+
+              $scope.data.detailsPDSRECAP.push($scope.data.detailrecap);
+            }
+
             for (var i = 0; i < $scope.data.recapPrc[j].details.length; i++) {
               console.log('Je rentre ici i');
               $scope.data.detail = {
@@ -6301,13 +6339,18 @@ angular
           console.log(values);
 
           for (var i = 0; i < $scope.data.pds.detailsPDS.length; i++) {
+            var article = $filter('filter')($scope.data.detailsPDSRECAP, {codeArticle: $scope.data.pds.detailsPDS[i].codeArticle});
+            var prix = $scope.data.pds.detailsPDS[i].prix;
+            if(article && article.length > 0){
+              prix = article[0].prix;
+            }
             var detail = {
               codeDetail: $scope.data.pds.detailsPDS[i].codeDetail,
               codePRC: $scope.data.pds.detailsPDS[i].codePRC,
               codePDS: $scope.data.pds.detailsPDS[i].codePDS,
               codeArticle: $scope.data.pds.detailsPDS[i].codeArticle,
               quantite: $scope.data.pds.detailsPDS[i].quantite,
-              prix: $scope.data.pds.detailsPDS[i].prix,
+              prix: prix && prix > 0  ? prix : $scope.data.pds.detailsPDS[i].prix,
               isCanceled: $scope.data.pds.detailsPDS[i].isCanceled,
               idMotif: $scope.data.pds.detailsPDS[i].idMotif,
               isUnloaded: $scope.data.pds.detailsPDS[i].isUnloaded
@@ -6315,9 +6358,8 @@ angular
             values.detailsPDS.push(detail);
           }
 
-          console.log("values", values);
+          console.log("values not initiale", values);
           $scope.data.pds = values;
-
 
 
         }
@@ -9656,6 +9698,7 @@ angular
         user = JSON.parse(user);
         // console.log(user);
         //  var params = {codeUtilisateur:user.code}
+        //codeCommerciale.
         return $http.post(url + "/facture/liste.php", codeCommerciale);
       },
     };
@@ -10063,14 +10106,30 @@ angular
         if(hours < 10){
           hours = "0"+ ""+hours;
         }
+        var minute = parseInt(d.getMinutes());
+        if(minute < 10){
+          minute = "0"+ ""+minute;
+        }
+        var mounth = parseInt(d.getMonth()) + 1
+        if(mounth < 10){
+          mounth = "0"+ ""+mounth;
+        }
+        var day = parseInt(d.getDate())
+        if(day < 10){
+          day = "0"+ ""+day;
+        }
+        var second = parseInt(d.getSeconds())
+        if(second < 10){
+          second = "0"+ ""+second;
+        }
         var dformat = [
           d.getFullYear(),
-          d.getMonth() + 1,
-          d.getDate()
+          mounth,
+          day
         ].join('-') + ' ' +
           [hours,
-          d.getMinutes(),
-          d.getSeconds()].join(':');
+          minute,
+          second].join(':');
         
         return dformat;
       },

@@ -189,8 +189,12 @@
 
               </div>
 
+              <div class="row" style="margin-top: 10px;" ng-if="data.detailsPDSRECAP && data.detailsPDSRECAP.length > 0">
 
-          <div class="list">
+                <div class="col" style="font-size: 130%;">Récapitulatif PRC</div>
+      
+              </div>
+          <div class="list" ng-if="data.detailsPDSRECAP && data.detailsPDSRECAP.length > 0">
             <div class="row header list">
                 <!--<div class="col" style="text-align: center;">Code detail</div>-->
                 <div class="col" style="text-align: center;">Article</div>
@@ -201,7 +205,7 @@
                 <div class="col" style="text-align: center;">Action</div>
             </div>
 
-            <div class="row list"  ng-repeat="d in data.detailsPDS | filter:motcle">
+            <div class="row list"  ng-repeat="d in data.detailsPDSRECAP | filter:motcle">
 
                
 
@@ -228,13 +232,15 @@
 
                 <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" >
                   <label style="margin-top: 10px;">
-                    {{ d.prix }}
+                   
+                    <input type="number" id="quantite" ng-model="d.prix" placeholder="0">
+
                   </label>
               </div>
 
               <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">
                   <label style="margin-top: 10px;">
-                    {{ d.prix }}
+                    <input class="ion-text-center" type="number" id="quantite" ng-model="d.prix" placeholder="0">
                   </label>
               </div>
 
@@ -266,6 +272,12 @@
             </div>
 
          
+          </div>
+
+          <div class="row" style="margin-top: 10px;">
+
+            <div class="col" style="font-size: 130%;">Details PRC</div>
+  
           </div>
 
           <div class="list">
