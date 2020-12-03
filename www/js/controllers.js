@@ -54,9 +54,21 @@ angular
           $ionicLoading.hide();
           if (response) {
             $scope.data.listStock = response;
+            for (var i = 0; i < $scope.data.listStock.length; i++) {
+
+              if ($scope.data.listStock.quantite != " ") {
+                $scope.data.listStock.quantite = parseInt($scope.data.listStock[i].quantite);
+    
+              } else {
+                console.log($scope.data.listStock.quantite);
+              }
+            }
+    
+            
             localStorage.setItem("stocks", JSON.stringify($scope.data.listStock));
             console.log(JSON.parse(localStorage.getItem("stocks")))
           }
+         
           console.log(response);
         },
         (error) => {
@@ -2077,8 +2089,17 @@ angular
         $ionicLoading.hide();
         if (response) {
           $scope.data.listStock = response;
+
+          for (var i = 0; i < $scope.data.listStock.length; i++) {
+            if ($scope.data.listStock.quantite != " ") {
+              $scope.data.listStock.quantite = parseInt($scope.data.listStock[i].quantite);
+            } else {
+              console.log($scope.data.listStock.quantite);
+            }
+          }
           localStorage.setItem("stocks", JSON.stringify($scope.data.listStock));
           console.log(JSON.parse(localStorage.getItem("stocks")))
+         
         }
         console.log(response);
       },
@@ -2137,18 +2158,6 @@ angular
     }
     $scope.initvar();
 
-    /*   $scope.goToNewClient = function () {
-   
-         $state.transitionTo(
-           "app.nouvel-client",
-           {},
-           {
-             reload: true,
-             inherit: true,
-             notify: true,
-           }
-         );
-       };*/
     $scope.goToNewClient = function (item = null, sens) {
       localStorage.setItem('sens', sens)
 
@@ -2713,6 +2722,9 @@ angular
         } else {
           console.log("else", values.idModepaiement)
         }
+
+        values.telephone = "" +values.telephone;
+        values.telephone2 = ""+ values.telephone2;
 
         for (var i = 0; i < $scope.data.listregions.length; i++) {
 
@@ -3694,13 +3706,8 @@ angular
 
                   }
 
-                  console.log('--------------Prc---------');
-                  console.log(values);
-                  values.dateAjout = formatNewDate.formatNewDate();
                   ApiAjoutPrc.ajoutPrc(values).success(
                     function (response) {
-                      console.log('----------Reponse--------')
-                      console.log(response)
                       $ionicLoading.hide();
 
                       if (response.reponse == 1) {
@@ -3730,18 +3737,6 @@ angular
                         $ionicPopup.show({
                           title: "Infos",
                           template: "Impossible d'ajouter un prc sans details",
-                          scope: $scope,
-                          buttons: [
-                            {
-                              text: "Ok",
-                              type: "button-positive",
-                            },
-                          ],
-                        });
-                      }else if(response.reponse == -40){
-                        $ionicPopup.show({
-                          title: "Infos",
-                          template: ""+response.reponse,
                           scope: $scope,
                           buttons: [
                             {
@@ -4823,7 +4818,7 @@ angular
       }).then(function (result) {
 
         if (result) {
-          var value = { codePDS: $scope.data.codePDS, isCanceled: true, idMotif: $scope.data.motifchoisit.idMotif }
+          var value = { codePDS: $scope.data.codePDS, isCanceled: 1, idMotif: +$scope.data.motifchoisit.idMotif }
           console.log(value)
           $ionicLoading.show({
             content: "Loading",
@@ -5366,13 +5361,26 @@ angular
         showDelay: 0,
         duration: 10000,
       });
+      
+   
+   
       ApiListStock.getListStock().success(
         function (response) {
           $ionicLoading.hide();
           if (response) {
-            $scope.data.listStock = response;
+            for (var i = 0; i < response.length; i++) {
+
+              if (response.quantite != " ") {
+                response.quantite = parseInt(response[i].quantite);
+    
+              } else {
+                console.log(response.quantite);
+              }
+            }
             localStorage.setItem("stocks", JSON.stringify($scope.data.listStock));
+            
             console.log(JSON.parse(localStorage.getItem("stocks")))
+           
           }
           console.log(response);
         },
@@ -5550,6 +5558,8 @@ angular
       ApiListStock.getListStock().success(
         function (response) {
           console.log('---------------Synchro stock------------------')
+          response.quantite = parseInt(response.quantite);
+          console.log(response.quantite)
           console.log(response)
 
           if (response) {
@@ -5702,9 +5712,9 @@ angular
               var object = {
                 codePDS: $scope.data.codePDS,
                 codeDetail: $scope.itemEdit.codeDetail,
-                isCanceled: "1",
-                idMotif: $scope.data.motifchoisit.idMotif,
-                isUnloaded: "0"
+                isCanceled: 1,
+                idMotif: +$scope.data.motifchoisit.idMotif,
+                isUnloaded: 0
               }
 
               $ionicLoading.show({
@@ -6154,7 +6164,7 @@ angular
           try {
             console.log(messageCode);
 
-           SendSms.sendSMS(MessageGlobal, $scope.data.grossistechoisit.telephone);
+            SendSms.sendSMS(MessageGlobal, $scope.data.grossistechoisit.telephone);
 
             localStorage.setItem("pds", JSON.stringify($scope.data.pds));
 
@@ -6493,6 +6503,7 @@ angular
     };
   })
 
+
   .controller("FacturationsCtrl", function (
     $scope,
     $state,
@@ -6520,8 +6531,8 @@ angular
     $scope.initFacturations = function () {
       console.log($scope.data.user);
       if ($scope.data.user.code) {
-        var code = { codeCommerciale: $scope.data.user.code };
-
+        var code = { codeCommerciale: $scope.data.user.code  };
+        console.log(code);
         $ionicLoading.show({
           content: "Loading",
           animation: "fade-in",
@@ -6589,6 +6600,7 @@ angular
     $ionicPopup,
     ApiRecapPdsPrc,
     ApiListFacturation,
+    formatNewDate,
     ApiDeatilsFacture,
     checkQuantite, ApiModificationDetailFact, ApiDeletDetailFact, CodeGenere, ApiEncaissement
 
@@ -6643,8 +6655,8 @@ angular
               CodeGenere.getCodeGenere(),
             codeFacture: $scope.data.detailsfactures.codeFacture,
             codeCommerciale: $scope.data.codeCommerciale,
-            montant: $scope.data.montant,
-            dateAjout: new Date(),
+            montant: +$scope.data.montant,
+            dateAjout: formatNewDate.formatNewDate(),
             isCanceled: 0,
             idMotif: 0
 
@@ -7338,14 +7350,18 @@ angular
         codeFacture: $scope.data.codeFacture,
         codeCommerciale: $scope.data.codeCommerciale,
         codePRC: $scope.data.codePRC,
-        dateAjout: new Date(),
+        dateAjout: formatNewDate.formatNewDate(),
         codeClient: $scope.data.codeClient,
-        isCanceled: false,
+        isCanceled:  $scope.data.isCanceled ? 1 : 0,
         position: null,
         idModepaiement: $scope.data.idModepaiement,
         idMotif: $scope.data.idMotif,
         codePDS: $scope.data.codePDS,
-        details: $scope.data.detailsFACT
+        details: $scope.data.detailsFACT,
+       // detailsIsCanceled: $scope.data.detailsFACT[0].isCanceled,
+       // detailsIsUnloaded: $scope.data.detailsFACT[0].isUnloaded,
+        
+        
       };
     };
 
@@ -7490,6 +7506,8 @@ angular
                     $scope.data.detail.article =
                       $scope.data.recapPrc.details[i].article;
                     $scope.data.detail.index = $scope.data.recapPrc.details.length + 1;
+                    $scope.data.detail.isCanceled = $scope.data.detail.isCanceled ? 1 : 0;
+                    $scope.data.detail.isUnloaded = $scope.data.detail.isUnloaded ? 1 : 0;
 
                     $scope.data.detailsFACT.push($scope.data.detail);
                   }
@@ -7597,7 +7615,7 @@ angular
               $scope.data.detail.motifchoisit = null;
               $scope.data.detail.artcilechoisit = $scope.data.artcilechoisit;
               $scope.data.detail.index = $scope.data.detailsFACT.length + 1;
-              $scope.data.montantTotal = $scope.data.montantTotal + ($scope.data.detail.prix * $scope.data.quantite)
+              $scope.data.montantTotal = $scope.data.montantTotal + ($scope.data.detail.prix * $scope.data.quantite);
               $scope.data.detailsFACT.push($scope.data.detail);
 
               $scope.initDetailFCT();
@@ -7662,9 +7680,11 @@ angular
     var d = new Date();
 
     $scope.testPrint = function () {
+
       var image = '<div style="text-align: center">' +
         '<img src="./img/agroline.png">' +
         '</div>';
+
       var enteteComm = '' +
         '<div class="row">' +
         '<div class="col">' +
@@ -7673,12 +7693,15 @@ angular
         ' </div>'
       '</div>';
       
+      var nomclient = $scope.data.clientchoisit ? $scope.data.clientchoisit.nom : $scope.data.recapPrc.client;
+
       var enteteCli = '<div class="row">' +
-        '<div class="col">' +
-        ' Client: ' +
-        $scope.data.clientchoisit.nom +
-        ' </div>'
-      '</div>';
+      '<div class="col">' +
+      ' Client: ' +
+      nomclient+
+      ' </div>'
+    '</div>';
+
       var telUser = '<div class="row">' +
         '<div class="col">' +
         ' Tel commercial: ' +
@@ -7702,13 +7725,14 @@ angular
           '<td>' + $scope.data.detailsFACT[i].article + '</td>' +
           '<td>' + $scope.data.detailsFACT[i].quantite + '</td>' +
           '<td>' + $scope.data.detailsFACT[i].prix + '</td>';
+          $scope.data.montantTotal = $scope.data.montantTotal + ($scope.data.detailsFACT[i].prix *$scope.data.detailsFACT[i].quantite);
 
       }
-
-
+            var MontantTotal = $scope.data.montantTotal;
+     
       details = details + '<tr style="text-align: center">' + corps + '</tr></table>';
       var sTable = document.getElementById('tab').innerHTML;
-      var footer = '<h3 style="margin-top:50px;">Montant total:<label style="margin-left:20px">' + $scope.data.montantTotal + ' CFA  </label></h3>';
+      var footer = '<h3 style="margin-top:50px;">Montant total:<label style="margin-left:20px">' +MontantTotal + ' CFA  </label></h3>';
       var titleDetail = '<h2>Details Facture</h2>';
       var t = image +
         enteteComm + telUser + enteteCli + titleDetail + sTable + footer;
@@ -7779,44 +7803,47 @@ angular
     $scope.submit = function () {
       var errorInput = '';
       $scope.initFact();
+      
+     
+     
 
       $scope.data.fact.idMotif = $scope.data.motifchoisit
         ? $scope.data.motifchoisit.idMotif
         : 0;
 
       $scope.data.fact.position = $scope.position ? $scope.position : '0.0, 0.0';
-      console.log('Position-----------------.>' + $scope.data.fact.position)
+
       errorInput = !$scope.data.fact.position ? 'Veillez activez votre position svp.' : errorInput
+
       $scope.data.fact.codeClient = $scope.data.clientchoisit ? $scope.data.clientchoisit.codeClient : $scope.data.recapPrc.codeClient;
+
       $scope.data.fact.idModepaiement = $scope.data.clientchoisit ? $scope.data.clientchoisit.idModepaiement : $scope.data.recapPrc.idModepaiement;
 
       errorInput = $scope.data.fact.codeClient == null && $scope.initial == true ? 'Veuillez choisir un client' : errorInput;
 
-      console.log($scope.data.fact);
       var valueFactPRC = {};
 
       if ($scope.initial == false) {
         valueFactPRC = {
-          codeFacture: $scope.data.fact.codeFacture,
-          codeClient: $scope.data.fact.codeClient,
-          dateAjout: $scope.data.fact.dateAjout,
-          codeCommerciale: $scope.data.fact.codeCommerciale,
-          position: $scope.data.fact.position,
-          idModepaiement: "" + $scope.data.fact.idModepaiement,
-          isCanceled: $scope.data.fact.isCanceled == false ? "0" : "1",
-          idMotif: $scope.data.fact.idMotif,
-          codePRC: $scope.data.fact.codePRC,
-          codePDS: $scope.data.fact.codePDS
+          codeFacture:       $scope.data.fact.codeFacture,
+          codeClient:        $scope.data.fact.codeClient,
+          codeCommerciale:   $scope.data.fact.codeCommerciale,
+          position:          $scope.data.fact.position,      
+          delaiPaiement:     +$scope.data.fact.delaiPaiement,
+          idModepaiement:    +$scope.data.fact.idModepaiement,
+          isCanceled:        0,
+          idMotif:           +$scope.data.fact.idMotif,
+          codePRC:           $scope.data.fact.codePRC,
+          codePDS:           $scope.data.fact.codePDS
         }
-
-        console.log('par PRC');
+       
+        console.log('Objet facture par PRC');
 
         $scope.data.fact = valueFactPRC;
-
+         console.log($scope.data.fact);
+         console.log($scope.data.fact.delaiPaiement);
       } else if ($scope.initial == true) {
-        console.log('---------Code PDS------------');
-        console.log($scope.data.codePDS);
-
+     
 
         var details = [];
         if ($scope.data.fact.details && $scope.data.fact.details.length > 0) {
@@ -7830,13 +7857,13 @@ angular
               idMotif: null
             }
 
-            detail.codeDetail = $scope.data.fact.details[i].codeDetail;
-            detail.codeArticle = $scope.data.fact.details[i].codeArticle;
-            detail.libelle = $scope.data.fact.details[i].article;
-            detail.quantite = $scope.data.fact.details[i].quantite;
-            detail.prix = $scope.data.fact.details[i].prix;
-            detail.isCanceled = $scope.data.fact.details[i].isCanceled;
-            detail.idMotif = $scope.data.fact.details[i].idMotif;
+            detail.codeDetail     = $scope.data.fact.details[i].codeDetail;
+            detail.codeArticle    = $scope.data.fact.details[i].codeArticle;
+            detail.libelle        = $scope.data.fact.details[i].article;
+            detail.quantite       = +$scope.data.fact.details[i].quantite;
+            detail.prix           = +$scope.data.fact.details[i].prix;
+            detail.isCanceled     = 0;
+            detail.idMotif        = +$scope.data.fact.details[i].idMotif;
 
             details.push(detail);
 
@@ -7847,16 +7874,15 @@ angular
         if (details && details.length > 0) {
 
           valueFactPRC = {
-            codeFacture: $scope.data.fact.codeFacture,
-            codeClient: $scope.data.fact.codeClient,
-            dateAjout: $scope.data.fact.dateAjout,
-            codeCommerciale: $scope.data.fact.codeCommerciale,
-            position: $scope.data.fact.position,
-            idModepaiement: "" + $scope.data.fact.idModepaiement,
-            isCanceled: $scope.data.fact.isCanceled == false ? "0" : "1",
-            idMotif: "" + $scope.data.fact.idMotif,
+            codeFacture        : $scope.data.fact.codeFacture,
+            codeClient         : $scope.data.fact.codeClient,
+            codeCommerciale    : $scope.data.fact.codeCommerciale,
+            position           : $scope.data.fact.position,
+            idModepaiement     : + $scope.data.fact.idModepaiement,
+            isCanceled         : 0,
+            idMotif            : + $scope.data.fact.idMotif,
             //codePDS : $scope.data.fact.codePDS,
-            details: details
+            details            : details
           }
           console.log('Initiale');
 
@@ -7887,57 +7913,18 @@ angular
             maxWidth: 200,
             showDelay: 0,
             duration: 10000,
-          });
-
-          //  $scope.data.fact.position = "14.9038943,-17.39839"
-          $scope.data.fact.dateAjout = formatNewDate.formatNewDate();
-          $scope.data.fact.delaiPaiement = "" + $scope.data.delaipaiement;
+          });  
          
-          //console.log($scope.data.fact)
-        if($scope.data.fact.details ){
-          console.log($scope.data.fact.details);
+   
+       // if($scope.data.fact.details ){
+       
           if ($scope.data.fact.codePDS && $scope.data.fact.codePDS !== 0) {
-            var details = "";
-            for (var i = 0; i < $scope.data.fact.details.length; i++) {
-              details = details +
-                $scope.data.fact.details[i].codeArticle + ":             " +
-                $scope.data.fact.details[i].article + ":             " + "\n"
-              $scope.data.fact.details[i].quantite + "\n"
-            }
-
-
-            //  $scope.createPDF();
+           
+         
             $scope.data.fact.dateAjout = formatNewDate.formatNewDate();
-            $scope.data.fact.isCanceled = $scope.data.fact.isCanceled ? 1 : 0;
-            $scope.data.fact.idMotif = $scope.data.fact.idMotif ? 1 : 0;
-
-            if ($scope.data.fact.idModepaiement == "1" || $scope.data.fact.idModepaiement == "2") {
-              $scope.data.fact.idModepaiement = parseInt($scope.data.fact.idModepaiement);
-            } else {
-              console.log("affiche", $scope.data.fact.idModepaiement)
-            }
-
-            if ($scope.data.fact.delaiPaiement != " ") {
-              $scope.data.fact.delaiPaiement = parseInt($scope.data.fact.delaiPaiement);
-            } else {
-              console.log("affiche", $scope.data.fact.delaiPaiement)
-            }
-
-
-            for (var i = 0; i < $scope.data.fact.details.length; i++) {
-              $scope.data.fact.details[i].isCanceled = $scope.data.fact.details[i].isCanceled ? 1 : 0;
-              $scope.data.fact.details[i].idMotif = $scope.data.fact.details[i].idMotif ? 1 : 0;
-
-              if ($scope.data.fact.details[i].prix != " ") {
-                $scope.data.fact.details[i].prix = parseInt($scope.data.fact.details[i].prix);
-              }
-
-              if ($scope.data.fact.details[i].quantite != " ") {
-                $scope.data.fact.details[i].quantite = parseInt($scope.data.fact.details[i].quantite);
-              }
-
-            }
-            console.log($scope.data.fact)
+            $scope.data.fact.delaiPaiement = + $scope.data.delaipaiement; 
+            console.log("Objet facture finale");  
+            console.log($scope.data.fact);
             ApiAjoutFacturation.ajoutFacturation($scope.data.fact, $scope.initial).success(
               function (response) {
                 $ionicLoading.hide();
@@ -7961,6 +7948,7 @@ angular
                   }).then(function (result) {
                     if (result) {
                       $scope.testPrint();
+                    
                       $scope.data.motifchoisit = null;
                       $scope.data.clientchoisit = null;
                       localStorage.setItem('prc', null);
@@ -8020,7 +8008,7 @@ angular
               ],
             });
           }
-        }
+      //  }
 
 
 
@@ -8101,6 +8089,8 @@ angular
       $scope.data.montantCreditTotal = 0;
       $scope.data.montantComptantTotal = 0;
       $scope.data.montantVerse = 0;
+      $scope.data.quantiteRendue = 0;
+      
       $scope.idMotif = 0;
       $scope.edit = false;
       $scope.itemEdit = null;
@@ -8136,6 +8126,7 @@ angular
               for (var i = 0; i < $scope.data.dechargement.details.length; i++) {
                 $scope.data.montantCreditTotal = $scope.data.montantCreditTotal + (+$scope.data.dechargement.details[i].montantCredit);
                 $scope.data.montantComptantTotal = $scope.data.montantComptantTotal + (+$scope.data.dechargement.details[i].montantComptant);
+                $scope.data.dechargement.quantiteRendue = 0;
               }
             }
           }
@@ -8260,7 +8251,7 @@ angular
         }
 
         if ( $scope.listeJson.details[i].quantiteRendue != " ") {
-          $scope.listeJson.details[i].quantiteRendue =parseInt($scope.listeJson.details[i].quantiteRendue);
+          $scope.listeJson.details[i].quantiteRendue = $scope.data.dechargement.quantiteRendue = 0;
         }
 
         if ( $scope.listeJson.details[i].quantiteComptant != " ") {
@@ -9699,7 +9690,6 @@ angular
         user = JSON.parse(user);
         // console.log(user);
         //  var params = {codeUtilisateur:user.code}
-        //codeCommerciale.
         return $http.post(url + "/facture/liste.php", codeCommerciale);
       },
     };
