@@ -5643,8 +5643,7 @@ angular
 
     $scope.editDetail = function (item) {
       $scope.data.artcilechoisit = {};
-
-      $scope.data.artcilechoisit.libelle = item.article;
+     // $scope.data.artcilechoisit.libelle = item.article;
       $scope.data.artcilechoisit.code = item.codeArticle;
       console.log("--------------Quantite---------------");
       console.log(item.quantite);
