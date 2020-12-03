@@ -5447,7 +5447,8 @@ angular
     ApiRecapPdsPrc,
     formatNewDate,
     ApiListStock,
-    ApiDeletDetailPDS
+    ApiDeletDetailPDS,
+    ApiDeletPDS
   ) {
     $scope.data = {};
 
@@ -5924,65 +5925,14 @@ angular
               localStorage.setItem('pdslocal', JSON.stringify(pds))
             }
           }
-          $state.transitionTo(
-            "app.pds",
-            {},
-            {
-              reload: true,
-              inherit: true,
-              notify: true,
-            }
-          );
-          /* $ionicPopup.show({
-             title: 'Alert ',
-             template: 'Etes-vous sûr de vouloire proceder à l\'annulation.',
-             scope: $scope,
-             buttons: [
-               {
-                 text: 'OUI',
-                 type: 'button-energized',
-                 onTap: function (e) {
-                   return true;
-                 }
-               },
-               {
-                 text: 'NON',
-                 type: 'button-assertive',
-                 onTap: function (e) {
-                   return false;
-                 }
-               },
-             ]
-           }).then(function (result) {
-             if(result){
-               console.log('sup')
-               localStorage.setItem("pds",null);
-           var pds = JSON.parse(localStorage.getItem('pdslocal'));
-     
-                   if(pds && pds.length > 0){
-     
-                     var  searchPds  = $filter('filter')(pds, { codePDS: $scope.data.pds.codePDS });
-                     if(searchPds && searchPds.length  === 1){
-                           var pdsLocal = searchPds[0]; 
-                           pds.splice(pdsLocal, 1);
-       
-                           localStorage.setItem('pdslocal',JSON.stringify(pds))
-                     }
-                   }
-           $state.transitionTo(
-             "app.pds",
-             {},
-             {
-               reload: true,
-               inherit: true,
-               notify: true,
-             }
-           );
-             }else{
-               console.log('non sup')
-           //    $scope.data.annulation = false;
-             }
-           })*/
+          //codePDS(string), isCanceled(int), idMotif(int)
+          var value = {
+            codePDS     : $scope.data.pds.codePDS,
+            isCanceled  : 1,
+            idMotif     : +$scope.data.motifchoisit.idMotif
+
+          }
+          $scope.validerDelet(value);
 
         } else {
           $ionicPopup.show({
@@ -6000,6 +5950,32 @@ angular
 
 
       }
+
+    }
+
+    $scope.validerDelet = function(value)
+    {
+      ApiDeletPDS.deletPDS(value)
+              .success(
+                function (response) {
+                  console.log('----------Annulatioon pds-------------');
+                  console.log(response);
+                  $ionicLoading.hide();
+                  $state.transitionTo(
+                    "app.pds",
+                    {},
+                    {
+                      reload: true,
+                      inherit: true,
+                      notify: true,
+                    }
+                  );
+            
+                }, (error) => {
+                  $ionicLoading.hide();
+                  $scope.Erreur(error);
+                }
+              )
 
     }
 
