@@ -95,8 +95,13 @@
 
 
         </div>
-        <div class="row" ng-if="edit == true" style="margin-top: 10px;" ng-if="data.encaisser==false">
+
+        <div class="row" style="margin-top: 10px;" ng-if="edit == true && detailEncaisse == false " >
           <div class="col" style="font-size: 130%;">Modification details Facture</div>
+        </div>
+
+        <div class="row" style="margin-top: 10px;" ng-if="edit == true && detailEncaisse == true" >
+          <div class="col" style="font-size: 130%;">Suppression encaissement</div>
         </div>
 
         <div class="row" ng-if="edit == true && data.encaisser==false">
@@ -137,7 +142,7 @@
 
           </div>
 
-          <div class="col" ng-if="edit == true">
+          <div class="col" ng-if="edit == true && detailEncaisse == false">
             <button class="button button-block button-assertive"
               cancel-button="{{ 'fichevisite_select_pv_return' | translate }}"
               reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
@@ -156,13 +161,13 @@
 
         <div class="row" ng-if="initial == true || edit == true">
 
-          <div class="col">{{ data.artcilechoisit.libelle }}</div>
+          <div class="col" ng-if="detailEncaisse == false">{{ data.artcilechoisit.libelle }}</div>
 
           <div class="col">{{ data.motifchoisit.libelle }}</div>
 
         </div>
 
-        <div class="list" ng-if="edit == true">
+        <div class="list" ng-if="edit == true && detailEncaisse == false">
           <label class="item item-input">
             <span class="input-label">Quantité</span>
             <input type="number" id="quantite" ng-if="action == 'edit'" ng-model="data.quantite">
@@ -171,17 +176,17 @@
         </div>
 
 
-        <div class="row" ng-if="edit == true">
+        <div class="row" ng-if="edit == true && detailEncaisse == false">
           <div class="col" ng-if="action == 'edit'">
             <button ng-click="valideEdit()" class="button button-block button-assertive footer-button" color="danger"
               type="submit" name="submit"><span style="color:white">Modifier</span></button>
           </div>
           <div class="col" ng-if="action == 'sup'">
-            <button ng-click="validerDelet()" class="button button-block button-assertive footer-button" color="danger"
+            <button ng-click="validerDelet('details')" class="button button-block button-assertive footer-button" color="danger"
               type="submit" name="submit"><span style="color:white">Supprimer</span></button>
           </div>
           <div class="col">
-            <button ng-click="annulerEdit()" class="button button-block button-assertive footer-button" color="danger"
+            <button ng-click="annulerEdit('details')" class="button button-block button-assertive footer-button" color="danger"
               type="submit" name="submit"><span style="color:white">Annuler</span></button>
           </div>
 
@@ -189,12 +194,13 @@
 
 
 
-        <div class="list" ng-if="data.encaisser==false">
-          <div class="row" style="margin-top: 10px;">
+        <div class="list" ng-if="data.encaisser==false && detailEncaisse == false ">
+
+          <div class="row" style="margin-top: 10px;" ng-if="detailEncaisse == false">
             <div class="col" style="font-size: 130%;">Details Facture</div>
           </div>
 
-          <div class="row header list content-div">
+          <div class="row header list content-div" ng-if="detailEncaisse == false">
             <div class="col" style="text-align: center;">Article</div>
             <div class="col" style="text-align: center;">Quantité</div>
             <div class="col" style="text-align: center;">Editer</div>
@@ -244,14 +250,125 @@
             </div>
 
           </div>
+
+
+
         </div>
 
-        <div ng-if="data.encaisser">
-          <div class="list">
-            <label class="item item-input">
-              <span class="input-label">Montant</span>
-              <input type="number" id="code" ng-model="data.montant">
-            </label>
+
+        <div class="col" ng-if="edit == true && detailEncaisse == true">
+          <button class="button button-block button-assertive"
+            cancel-button="{{ 'fichevisite_select_pv_return' | translate }}"
+            reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
+            cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
+            search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
+            ng-model="data.motifchoisit" options="data.listmotifs" option-getter="getOptMotif(option)"
+            modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
+            has-search="true">
+            Motif
+            <div class="option">
+              <h2> {{option.libelle}}</h2>
+            </div>
+          </button>
+        </div>
+
+        <div class="row" ng-if="edit == true && detailEncaisse == true">
+          <div class="col" ng-if="action == 'sup'">
+            <button ng-click="validerDelet('detailEncaisse')" class="button button-block button-assertive footer-button" color="danger"
+              type="submit" name="submit"><span style="color:white">Supprimer</span></button>
+          </div>
+          <div class="col">
+            <button ng-click="annulerEdit('detailEncaisse')" class="button button-block button-assertive footer-button" color="danger"
+              type="submit" name="submit"><span style="color:white">Annuler</span></button>
+          </div>
+
+        </div>
+
+
+        <div class="list" ng-if="data.encaisser==false ">
+
+          <div class="row" style="margin-top: 10px;" ng-if="data.detailsfactures.detailsEncaissement.length > 0">
+            <div class="col" style="font-size: 130%;">Details Encaissement</div>
+          </div>
+
+  
+
+          <div class="row header list content-div" ng-if="data.detailsfactures.detailsEncaissement.length > 0">
+            <div class="col" style="text-align: center;">Code commerciale</div>
+            <div class="col" style="text-align: center;">Code encaissement</div>
+            <div class="col" style="text-align: center;">date</div>
+            <div class="col" style="text-align: center;">montant</div>
+            <div class="col" style="text-align: center;">Supprimer</div>
+          </div>
+
+
+
+          <div class="row list" ng-repeat="d in data.detailsfactures.detailsEncaissement | filter:motcle"
+            style="margin-bottom: 50px;">
+
+            <div class="col content-div-row" ng-if="d.idMotif !== 'edit'"
+              >
+              {{d.codeCommerciale}}
+            </div>
+
+            <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'"
+              >
+              {{d.codeCommerciale}}
+            </div>
+
+            <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{d.codeEncaissement}}</div>
+
+            <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.codeEncaissement}}</div>
+
+            <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{d.dateAjout}}</div>
+
+            <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.dateAjout}}</div>
+
+            <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{d.montant}}</div>
+
+            <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.montant}}</div>
+
+
+
+            <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" ng-click="editDetail(d, 'sup',true)">
+
+              <i class="icon ion-trash-a"></i>
+
+            </div>
+
+            <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'" ng-click="editDetail(d, 'sup', true)">
+
+              <i class="icon ion-trash-a"></i>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        
+
+
+
+
+
+        </div>
+
+        <div ng-if="data.encaisser" style="margin-top: 40px !important;">
+          <div class="row" >
+
+        
+            <div class="col">
+              <div class="list">
+
+                <label class="item item-input" style="margin-top: 7px;">
+                  <span class="input-label">Montant</span>
+                  <input type="number" ng-model="data.montant" placeholder="0">
+                </label>
+              </div>
+                
+            </div>
+       
           </div>
 
           <div class="row">
@@ -273,7 +390,7 @@
 
 
     </div>
-    <!--ng-if="data.detailsfactures.idModepaiement == 2"-->
+
     <div class="bar bar-footer footer-button">
 
       <div class="col mt" ng-if="data.detailsfactures.montantRestant > 0  && !data.encaisser">
@@ -281,10 +398,7 @@
           type="submit" name="submit"><span style="color:white">Encaisser</span></button>
       </div>
       
-      <div class="col mt" >
-        <button ng-click="SupprimerEncaissement()" class="button button-block button-assertive footer-button"
-          color="danger" type="submit" name="submit"><span style="color:white">Supprimer</span></button>
-      </div>
+     
 
 
     </div>

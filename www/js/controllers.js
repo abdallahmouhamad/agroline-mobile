@@ -6599,7 +6599,7 @@ angular
     ApiListFacturation,
     formatNewDate,
     ApiDeatilsFacture,
-    checkQuantite, ApiModificationDetailFact, ApiDeletDetailFact, CodeGenere, ApiEncaissement
+    checkQuantite, ApiModificationDetailFact, ApiDeletDetailFact, CodeGenere, ApiEncaissement,ApiSuppressionEncaissement
 
   ) {
     console.log("Facture");
@@ -6612,6 +6612,7 @@ angular
       $scope.data.montant = 0;
 
       $scope.edit = false;
+      $scope.detailEncaisse = false;
 
       $scope.data.user = JSON.parse(localStorage.getItem("user"));
       console.log("----------------Value PRC----------------");
@@ -6792,17 +6793,19 @@ angular
     });
 
 
-    $scope.editDetail = function (item, action) {
-      $scope.edit = true;
+    $scope.editDetail = function (item, action, detailEncaisse = false) {
+      $scope.edit = true; 
+      $scope.detailEncaisse = detailEncaisse;
       $scope.action = action;
       item.idMotif = "edit";
 
-      $scope.data.artcilechoisit = {};
-      console.log("--------------Artcile---------------");
-      console.log(item.article);
+      if(!detailEncaisse)
+      {
+        $scope.data.artcilechoisit = {};
+ 
       $scope.data.artcilechoisit.libelle = item.article
       $scope.data.artcilechoisit.code = item.codeArticle
-      console.log("--------------Quantite---------------");
+     
       console.log(item.quantite);
       $scope.data.quantite = +item.quantite;
 
@@ -6814,6 +6817,22 @@ angular
           $scope.data.detailsfactures.details[i].idMotif = 0;
         }
       }
+
+      }else
+      {
+      
+
+      for (var i = 0; i < $scope.data.detailsfactures.detailsEncaissement.length; i++) {
+        if (
+          $scope.data.detailsfactures.detailsEncaissement[i].idMotif === "edit" &&
+          $scope.data.detailsfactures.detailsEncaissement[i].codeEncaissement !== item.codeEncaissement
+        ) {
+          $scope.data.detailsfactures.detailsEncaissement[i].idMotif = 0;
+        }
+      }
+      }
+
+      
       $scope.itemEdit = item;
     };
 
@@ -6902,21 +6921,36 @@ angular
       }
     };
 
-    $scope.annulerEdit = function () {
+    $scope.annulerEdit = function (type) {
       $scope.edit = false;
-      for (var i = 0; i < $scope.data.detailsfactures.details.length; i++) {
-        if (
-          $scope.data.detailsfactures.details[i].idMotif === "edit" &&
-          $scope.data.detailsfactures.details[i].codeArticle ===
-          $scope.itemEdit.codeArticle
-        ) {
-          $scope.data.detailsfactures.details[i].idMotif = 0;
-          break;
+      $scope.detailEncaisse = false;
+      if(type == 'details'){
+        for (var i = 0; i < $scope.data.detailsfactures.details.length; i++) {
+          if (
+            $scope.data.detailsfactures.details[i].idMotif === "edit" &&
+            $scope.data.detailsfactures.details[i].codeArticle ===
+            $scope.itemEdit.codeArticle
+          ) {
+            $scope.data.detailsfactures.details[i].idMotif = 0;
+            break;
+          }
+        }
+      }
+      else if(type == 'detailEncaisse'){
+        for (var i = 0; i < $scope.data.detailsfactures.detailsEncaissement.length; i++) {
+          if (
+            $scope.data.detailsfactures.detailsEncaissement[i].idMotif === "edit" &&
+            $scope.data.detailsfactures.detailsEncaissement[i].codeEncaissement ===
+            $scope.itemEdit.codeEncaissement
+          ) {
+            $scope.data.detailsfactures.detailsEncaissement[i].idMotif = 0;
+            break;
+          }
         }
       }
     }
 
-    $scope.validerDelet = function () {
+    $scope.validerDelet = function (type) {
       if ($scope.data.motifchoisit && $scope.data.motifchoisit.idMotif !== "") {
         $ionicPopup.show({
           title: "Infos",
@@ -6942,68 +6976,158 @@ angular
           if (result) {
             console.log('OUI');
 
-            var ligneDetailTosend = {
-              codeFacture: $scope.data.detailsfactures.codeFacture,
-              codeDetail: $scope.itemEdit.codeDetail,
-              isCanceled: 1,
-              idMotif: $scope.data.motifchoisit.idMotif
-            }
-            console.log('-----------Object to delet----------');
-            console.log(ligneDetailTosend);
-            $ionicLoading.show({
-              content: "Loading",
-              animation: "fade-in",
-              showBackdrop: true,
-              maxWidth: 200,
-              showDelay: 0,
-              duration: 10000,
-            });
-
-            $scope.edit = false;
-            $scope.data.motifchoisit = null;
-            for (var i = 0; i < $scope.data.detailsfactures.details.length; i++) {
-              if (
-                $scope.data.detailsfactures.details[i].idMotif === "edit" &&
-                $scope.data.detailsfactures.details[i].codeArticle ===
-                $scope.itemEdit.codeArticle
-              ) {
-
-                $scope.data.detailsfactures.details.splice(i, 1);
-                $scope.edit = false;
-                $scope.data.motifchoisit = null;
-
-                break;
+            if(type == 'details'){
+              var ligneDetailTosend = {
+                codeFacture: $scope.data.detailsfactures.codeFacture,
+                codeDetail: $scope.itemEdit.codeDetail,
+                isCanceled: 1,
+                idMotif: +$scope.data.motifchoisit.idMotif
               }
-            }
-
-            ApiDeletDetailFact.deletDetailFact(ligneDetailTosend)
-              .success(
-                function (response) {
-
-                  $ionicLoading.hide();
-                  console.log('-------Modification edit------')
-                  console.log(response)
-                  if (response.reponse == 1) {
-
-
-                    $ionicPopup.show({
-                      title: "Information",
-                      template: 'réussi',
-                      scope: $scope,
-                      buttons: [
-                        {
-                          text: "Ok",
-                          type: "button-assertive",
-                        },
-                      ],
-                    });
+              console.log('-----------Object to delet----------');
+              console.log(ligneDetailTosend);
+              $ionicLoading.show({
+                content: "Loading",
+                animation: "fade-in",
+                showBackdrop: true,
+                maxWidth: 200,
+                showDelay: 0,
+                duration: 10000,
+              });
+  
+              
+              
+  
+              ApiDeletDetailFact.deletDetailFact(ligneDetailTosend)
+                .success(
+                  function (response) {
+  
+                    $ionicLoading.hide();
+                    console.log('-------Modification edit------')
+                    console.log(response)
+                    if (response.reponse == 1) {
+  
+                      for (var i = 0; i < $scope.data.detailsfactures.details.length; i++) {
+                        if (
+                          $scope.data.detailsfactures.details[i].idMotif === "edit" &&
+                          $scope.data.detailsfactures.details[i].codeArticle ===
+                          $scope.itemEdit.codeArticle
+                        ) {
+          
+                          $scope.data.detailsfactures.details.splice(i, 1);
+                          $scope.edit = false;
+                          $scope.data.motifchoisit = null;
+          
+                          break;
+                        }
+                      }
+                      $ionicPopup.show({
+                        title: "Information",
+                        template: 'réussi',
+                        scope: $scope,
+                        buttons: [
+                          {
+                            text: "Ok",
+                            type: "button-assertive",
+                          },
+                        ],
+                      });
+                    }else
+                    {
+                      $ionicPopup.show({
+                        title: "Erreur",
+                        template: ''+response.reponse,
+                        scope: $scope,
+                        buttons: [
+                          {
+                            text: "Ok",
+                            type: "button-assertive",
+                          },
+                        ],
+                      });
+                    }
+  
+                  }, (error) => {
+                    $ionicLoading.hide();
+                    $scope.Erreur(error);
                   }
+                )
 
-                }, (error) => {
-                  $ionicLoading.hide();
-                  $scope.Erreur(error);
-                }
-              )
+            }else if(type == 'detailEncaisse')
+
+            {
+              var ligneDetailTosend = {
+                codeEncaissement: $scope.itemEdit.codeEncaissement,
+                isCanceled: 1,
+                idMotif: +$scope.data.motifchoisit.idMotif
+              }
+              console.log('-----------Object to delet encaissement----------');
+              console.log(ligneDetailTosend);
+              $ionicLoading.show({
+                content: "Loading",
+                animation: "fade-in",
+                showBackdrop: true,
+                maxWidth: 200,
+                showDelay: 0,
+                duration: 10000,
+              });
+  
+  
+              ApiSuppressionEncaissement.suppressionEncaissement(ligneDetailTosend)
+                .success(
+                  function (response) {
+  
+                    $ionicLoading.hide();
+                    console.log('-------Modification edit------')
+                    console.log(response)
+                    if (response.reponse == 1) {
+                      for (var i = 0; i < $scope.data.detailsfactures.detailsEncaissement.length; i++) {
+                        if (
+                          $scope.data.detailsfactures.detailsEncaissement[i].idMotif === "edit" &&
+                          $scope.data.detailsfactures.detailsEncaissement[i].codeEncaissement ===
+                          $scope.itemEdit.codeEncaissement
+                        ) {
+          
+                          $scope.data.detailsfactures.detailsEncaissement.splice(i, 1);
+                          $scope.edit = false;
+                          $scope.detailEncaisse = false;
+                          $scope.data.motifchoisit = null;
+          
+                          break;
+                        }
+                      }
+  
+                      $ionicPopup.show({
+                        title: "Information",
+                        template: 'réussi',
+                        scope: $scope,
+                        buttons: [
+                          {
+                            text: "Ok",
+                            type: "button-assertive",
+                          },
+                        ],
+                      });
+                    }else{
+                      $ionicPopup.show({
+                        title: "Erreur",
+                        template: ''+response.reponse,
+                        scope: $scope,
+                        buttons: [
+                          {
+                            text: "Ok",
+                            type: "button-assertive",
+                          },
+                        ],
+                      });
+                    }
+  
+                  }, (error) => {
+                    $ionicLoading.hide();
+                    $scope.Erreur(error);
+                  }
+                )
+            }
+        
 
 
           } else {
@@ -8660,12 +8784,13 @@ angular
     $scope, $state, $ionicLoading,
     ApiListPrc, ApiDetailPrc, ApiAjoutPrc,
     ApiListClient, ApiListMotif,
-    ApiListArticle, $ionicPopup, ApiRecapPdsPrc, ApiListDechargement, ApiPdsNoPayed, ApiDetailPdsNoPayed, ApiAjoutVersement, CodeGenere, ApiAjoutVersement, SendSms) {
+    ApiListArticle, $ionicPopup,
+     ApiRecapPdsPrc, ApiListDechargement, ApiPdsNoPayed, ApiDetailPdsNoPayed, ApiAjoutVersement, CodeGenere, ApiAjoutVersement, SendSms,formatNewDate) {
 
     console.log('versement');
     $scope.data = {};
 
-    $scope.initvar = function () {
+    $scope.initvar = function () {  
 
       $scope.data.codeCommerciale = localStorage.getItem('codeCommerciale');
       $scope.data.user = JSON.parse(localStorage.getItem('user'));
@@ -8845,7 +8970,7 @@ angular
           codeGrossiste: $scope.data.details_pds_no_payed.codeGrossiste,
           codePDS: $scope.data.details_pds_no_payed.codePDS,
           codeCommerciale: $scope.data.user.code,
-          dateAjout: $scope.data.dateAjout,
+          dateAjout: formatNewDate.formatNewDate(),
           isCanceled: 0,
           idMotif: 0,
           isChecked: 0,
@@ -9865,6 +9990,20 @@ angular
       },
     };
   })
+
+  .factory("ApiSuppressionEncaissement", function ($http, urlPhp) {
+    return {
+      suppressionEncaissement: function (values) {
+        var url = urlPhp.getUrl();
+        var user = localStorage.getItem("user");
+        user = JSON.parse(user);
+
+        return $http.post(url + "/facture/supprimerEncaissement.php", values);
+      },
+    };
+  })
+
+  
 
   .factory("ApiListMarches", function ($http, urlPhp) {
     return {

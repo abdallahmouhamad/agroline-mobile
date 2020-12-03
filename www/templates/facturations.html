@@ -82,23 +82,18 @@
       
        
 
-        <div class="col" ng-if="fact.montantRestant == 0" >
+        <div class="col" >
 
-          <button ng-click="goToEncaissementFact()" class="button button-clear button-assertive" style="color: white;">
-           Encaissements  
+        <button  class="button button-clear button-assertive" style="color: white;">
+       
          </button>
        </div>
 
        <div class="col" ng-if="fact.montantRestant > 0" >
-
-        <button ng-click="goToEncaissementFact()" class="button button-clear button-assertive" style="color: white;">
-       
-        <span class="badge badge-danger" style="background-color: #e30000 !important; color: #e30000;">0</span>
-       </button>
-     </div>
-
-
-        
+          <button ng-click="goToEncaissementFact()" class="button button-clear button-assertive" style="color: white;">
+            <span class="badge badge-danger" style="background-color: #e30000 !important; color: #e30000;">0</span>
+          </button>
+       </div>
 
       </div>
 
