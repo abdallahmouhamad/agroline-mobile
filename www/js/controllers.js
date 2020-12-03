@@ -5769,10 +5769,12 @@ angular
       }
     };
     $scope.initDetailPDS = function () {
+      
       console.log('Je rentre ici fct');
       if ($scope.data.recapPrc && $scope.data.recapPrc.length > 0) {
         console.log('Je rentre ici recapPrc');
 
+        $scope.data.detailsPDSRECAP = [];
         $scope.data.detailsPDS = [];
         for (var j = 0; j < $scope.data.recapPrc.length; j++) {
           console.log('Je rentre ici j');
@@ -6096,93 +6098,130 @@ angular
 
       if ($scope.data.grossistechoisit) {
         $scope.initPDS();
-        if ($scope.data.pds.detailsPDS && $scope.data.pds.detailsPDS.length > 0) {
-          $ionicLoading.show({
-            content: "Loading",
-            animation: "fade-in",
-            showBackdrop: true,
-            maxWidth: 200,
-            showDelay: 0,
-            duration: 10000,
-          });
+        var err = null;
+        if($scope.data.pds.initial == false){
 
-          //$scope.data.pds.codeGenere;
-
-          //Article, quatite, valeur et en bas valeur total et code de securite
-
-          var message = "";
-          var mnt = 0.0;
-          for (var i = 0; i < $scope.data.pds.detailsPDS.length; i++) {
-            var index = i + 1;
-            console.log($scope.data.pds.detailsPDS[i]);
-            message =
-              message +
-              "" +
-              index +
-              ")  " +
-              $scope.data.pds.detailsPDS[i].article +
-              " " +
-              "\n Quantité: " +
-              $scope.data.pds.detailsPDS[i].quantite +
-              "" +
-              "\n Prix: " +
-              $scope.data.pds.detailsPDS[i].prix +
-              "" +
-              "\n \n";
-            mnt = mnt + ($scope.data.pds.detailsPDS[i].prix * $scope.data.pds.detailsPDS[i].quantite);
+          if($scope.data.detailsPDSRECAP && $scope.data.detailsPDSRECAP.length > 0){
+            for(var i = 0; i< $scope.data.detailsPDSRECAP.length; i++){
+              console.log($scope.data.detailsPDSRECAP[i].prix);
+                  if(!$scope.data.detailsPDSRECAP[i].prix || $scope.data.detailsPDSRECAP[i].prix <= 0)
+                  {
+                    err =  i;
+                    break;
+                  }
+            }
           }
-          var messageMontant = "";
-          if ($scope.data.recapPRC && $scope.data.recapPRC.length > 0) {
-            messageMontant =
-              "\n Montant total:   " + $scope.data.recapPRC[0].montant + "FCFA";
-          } else {
-            messageMontant =
-              "\n Montant total:   " + mnt + "FCFA";
-          }
-
-          var messageCode = "\n Code::    " + $scope.data.pds.codeGenere;
-          var MessageGlobal = message + messageMontant + messageCode;
-          console.log(messageCode);
-          try {
+        }
+        console.log('------_Error---------')
+        console.log(err)
+        if(err == null)
+        {
+          if ($scope.data.pds.detailsPDS && $scope.data.pds.detailsPDS.length > 0) {
+            $ionicLoading.show({
+              content: "Loading",
+              animation: "fade-in",
+              showBackdrop: true,
+              maxWidth: 200,
+              showDelay: 0,
+              duration: 10000,
+            });
+  
+            //$scope.data.pds.codeGenere;
+  
+            //Article, quatite, valeur et en bas valeur total et code de securite
+  
+            var message = "";
+            var mnt = 0.0;
+            for (var i = 0; i < $scope.data.pds.detailsPDS.length; i++) {
+              var index = i + 1;
+              console.log($scope.data.pds.detailsPDS[i]);
+              message =
+                message +
+                "" +
+                index +
+                ")  " +
+                $scope.data.pds.detailsPDS[i].article +
+                " " +
+                "\n Quantité: " +
+                $scope.data.pds.detailsPDS[i].quantite +
+                "" +
+                "\n Prix: " +
+                $scope.data.pds.detailsPDS[i].prix +
+                "" +
+                "\n \n";
+              mnt = mnt + ($scope.data.pds.detailsPDS[i].prix * $scope.data.pds.detailsPDS[i].quantite);
+            }
+            var messageMontant = "";
+            if ($scope.data.recapPRC && $scope.data.recapPRC.length > 0) {
+              messageMontant =
+                "\n Montant total:   " + $scope.data.recapPRC[0].montant + "FCFA";
+            } else {
+              messageMontant =
+                "\n Montant total:   " + mnt + "FCFA";
+            }
+  
+            var messageCode = "\n Code::    " + $scope.data.pds.codeGenere;
+            var MessageGlobal = message + messageMontant + messageCode;
             console.log(messageCode);
-
-            SendSms.sendSMS(MessageGlobal, $scope.data.grossistechoisit.telephone);
-
-            localStorage.setItem("pds", JSON.stringify($scope.data.pds));
-
-
-
-            $scope.code = "attente";
-
-            $ionicLoading.hide();
-          } catch (err) {
-            $ionicLoading.hide();
+            
+            console.log($scope.data.pds);
+            console.log($scope.data.detailsPDSRECAP);
+            
+            try {
+              console.log(messageCode);
+  
+              SendSms.sendSMS(MessageGlobal, $scope.data.grossistechoisit.telephone);
+  
+              localStorage.setItem("pds", JSON.stringify($scope.data.pds));
+  
+  
+  
+              $scope.code = "attente";
+  
+              $ionicLoading.hide();
+            } catch (err) {
+              $ionicLoading.hide();
+              $ionicPopup.show({
+                title: 'Alert ',
+                template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
+                scope: $scope,
+                buttons: [
+                  {
+                    text: 'OK',
+                    type: 'button-positive'
+                  }
+                ]
+              });
+            }
+  
+          } else {
             $ionicPopup.show({
-              title: 'Alert ',
-              template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
+              title: "Erreur",
+              template: "Impossible d'ajouter une recup marchandise sans details.",
               scope: $scope,
               buttons: [
                 {
-                  text: 'OK',
-                  type: 'button-positive'
-                }
-              ]
+                  text: "Ok",
+                  type: "button-positive",
+                },
+              ],
             });
           }
-
-        } else {
+        }else
+        {
           $ionicPopup.show({
-            title: "Erreur",
-            template: "Impossible d'ajouter une recup marchandise sans details.",
+            title: 'Alert ',
+            template: 'L\'article au niveau du tableau récapitulatif prc a la ligne '+(err+1)+' n\'a pas de prix',
             scope: $scope,
             buttons: [
               {
-                text: "Ok",
-                type: "button-positive",
-              },
-            ],
+                text: 'OK',
+                type: 'button-positive'
+              }
+            ]
           });
         }
+
 
 
       } else {
@@ -6218,6 +6257,7 @@ angular
         pdslocal = [];
       }
       pdslocal.push($scope.data.pds);
+     
       localStorage.setItem('pdslocal', JSON.stringify(pdslocal));
 
       $ionicLoading.hide();
