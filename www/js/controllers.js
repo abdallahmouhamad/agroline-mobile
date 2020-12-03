@@ -3416,11 +3416,18 @@ angular
       console.log("client choisi");
       console.log($scope.data.clientchoisit);
       $scope.data.idModepaiement = $scope.data.clientchoisit.idModepaiement;
-      if ($scope.data.modereglementchoisit) {
+      $scope.data.grossistechoisit = {}
+      $scope.data.grossistechoisit.codeGrossiste = $scope.data.clientchoisit.codeGrossiste;
+      $scope.data.grossistechoisit.nom = $scope.data.clientchoisit.grossiste;
+
+      $scope.data.modereglementchoisit = {};
+      $scope.data.modereglementchoisit.idModepaiement = $scope.data.clientchoisit.idModepaiement;
+      $scope.data.modereglementchoisit.libelle = $scope.data.clientchoisit.idModepaiement == "1" ? "COMPTANT" : "CREDIT";
+
+      /*if ($scope.data.modereglementchoisit) {
         $scope.data.modereglementchoisit.idModepaiement = $scope.data.clientchoisit.idModepaiement;
 
-      }
-      //$scope.data.idModepaiement = 2;
+      }*/
     };
 
     $scope.showPopUp = function (libelle, etat, code = "") {
@@ -3566,16 +3573,26 @@ angular
           $scope.data.modereglementchoisit !== null || $scope.data.idModepaiement !== 0
         ) {
 
-          if ($scope.data.idModepaiement == 2) {
-            if ($scope.data.modereglementchoisit == null) {
-              $scope.data.modereglementchoisit = {};
-              $scope.data.modereglementchoisit.idModepaiement = $scope.data.clientchoisit.idModepaiement
+          if ($scope.data.grossistechoisit && $scope.data.grossistechoisit.codeGrossiste) {
+
+
+            if($scope.data.modereglementchoisit.libelle == "COMPTANT")
+            {
+              $scope.data.delaipaiement = $scope.data.delaipaiement ? $scope.data.delaipaiement : 0;
             }
-          }
 
-          if ($scope.data.grossistechoisit) {
+            console.log('delai paiement', $scope.data.delaipaiement)
+            console.log('mode paiement', $scope.data.idModepaiement)
+            console.log($scope.data.modereglementchoisit)
+            console.log($scope.data.grossistechoisit)
 
-            if ($scope.data.delaipaiement) {
+            var error =null;
+           error = (!$scope.data.delaipaiement || $scope.data.delaipaiement == 0) && $scope.data.modereglementchoisit.libelle == "CREDIT" ? "Veuillez rensseigner le delai de paiement"
+                   :error;
+          
+
+            if (!error) {
+
               var values = {
                 codePRC:
                   "PRC-" + $scope.data.user.code + "-" + CodeGenere.getCodeGenere(),
@@ -3593,6 +3610,7 @@ angular
                 detailsPRC: $scope.data.detailsPRC,
                 delaiPaiement: $scope.data.delaipaiement
               };
+
               console.log("---------------------Value to submit--------------------");
               console.log(values);
 
@@ -3649,7 +3667,6 @@ angular
 
                   values.dateAjout = formatNewDate.formatNewDate();
 
-                  console.log("idModepaiement", values.idModepaiement);
 
                   if (values.idModepaiement == "1" || values.idModepaiement == "2") {
                     values.idModepaiement = parseInt(values.idModepaiement);
@@ -3660,35 +3677,6 @@ angular
                   for (var i = 0; i < values.detailsPRC.length; i++) {
                     values.detailsPRC[i].isCanceled = values.detailsPRC[i].isCanceled ? 1 : 0;
 
-                   /* if (values.detailsPRC[i].codeArticle != " ") {
-                      values.detailsPRC[i].codeArticle = parseInt(values.detailsPRC[i].codeArticle);
-                      console.log("codeArticle", values.detailsPRC[i].codeArticle)
-                    } else {
-                      console.log("codeArticle", values.detailsPRC[i].codeArticle)
-                    }
-
-                   if (values.detailsPRC[i].codeDetail != " ") {
-                      values.detailsPRC[i].codeDetail = parseInt(values.detailsPRC[i].codeDetail);
-                      console.log("codeDetail", values.detailsPRC[i].codeDetail)
-                    } else {
-                      console.log("codeDetail", values.detailsPRC[i].codeDetail)
-                    }
-
-                     if (values.detailsPRC[i].prix != " ") {
-                      values.detailsPRC[i].prix = parseInt(values.detailsPRC[i].prix);
-                      console.log("prix", values.detailsPRC[i].prix)
-                    } else {
-                      console.log("prix", values.detailsPRC[i].prix)
-                    }
-
-                    if (values.detailsPRC[i].quantite != " ") {
-                      values.detailsPRC[i].quantite = parseInt(values.detailsPRC[i].quantite);
-                      console.log("quantite", values.detailsPRC[i].quantite)
-                    } else {
-                      console.log("quantite", values.detailsPRC[i].quantite)
-                    }
-                    */
-                  
                         if (values.detailsPRC[i].artcilechoisit.idArticle != " ") {
                           values.detailsPRC[i].artcilechoisit.idArticle = parseInt(values.detailsPRC[i].artcilechoisit.idArticle);
                           console.log("idArticle", values.detailsPRC[i].artcilechoisit.idArticle)
@@ -3705,7 +3693,7 @@ angular
                      
 
                   }
-
+                 
                   ApiAjoutPrc.ajoutPrc(values).success(
                     function (response) {
                       $ionicLoading.hide();
@@ -3866,6 +3854,7 @@ angular
       $scope.data.artcilechoisit = null;
       $scope.data.motifchoisit = null;
       $scope.data.quantite = 0;
+      $scope.data.prix = 0;
       $scope.data.montantDtails = 0;
       $scope.data.idMotif = 0;
       var user = localStorage.getItem("user");
@@ -3930,6 +3919,7 @@ angular
       console.log("--------------Quantite---------------");
       console.log(item.quantite);
       $scope.data.quantite = +item.quantite;
+      $scope.data.prix = +item.prix;
 
       for (var i = 0; i < $scope.data.detailsPRC.details.length; i++) {
         if (
@@ -3955,13 +3945,16 @@ angular
 
             if (errorMessage == 1) {
 
+           //   codePRC(string), codeDetail(string), codeArticle(string), prix(int), quantite(int), isCanceled(int), idMotif(int)
+
               var ligneDetailTosend = {
-                codePRC: $scope.data.detailsPRC.codePRC,
-                codeDetail: $scope.itemEdit.codeDetail,
-                codeArticle: $scope.data.artcilechoisit.code,
-                quantite: $scope.data.quantite,
-                isCanceled: 1,
-                idMotif: $scope.data.motifchoisit.idMotif
+                codePRC      :$scope.data.detailsPRC.codePRC,
+                codeDetail   :$scope.itemEdit.codeDetail,
+                codeArticle  :$scope.data.artcilechoisit.code,
+                quantite     :+$scope.data.quantite,
+                isCanceled   :1,
+                idMotif      :+$scope.data.motifchoisit.idMotif,
+                prix         :+$scope.data.prix
               }
               console.log('-----Objet to modif');
               console.log(ligneDetailTosend);
@@ -4004,6 +3997,7 @@ angular
                       $scope.data.detailsPRC.details[i].idMotif =
                         $scope.data.motifchoisit.idMotif;
                       $scope.data.detailsPRC.details[i].quantite = $scope.data.quantite;
+                      $scope.data.detailsPRC.details[i].prix = $scope.data.prix;
                       $scope.data.detailsPRC.details[i].codeArticle = $scope.data.artcilechoisit.code;
                       $scope.data.detailsPRC.details[i].article = $scope.data.artcilechoisit.libelle;
 
@@ -4084,13 +4078,15 @@ angular
           if (result) {
             console.log('OUI');
 
+           // codePRC(string), codeDetail(string), isCanceled(int), idMotif(int)
+
             var ligneDetailTosend = {
-              codePRC: $scope.data.detailsPRC.codePRC,
-              codeDetail: $scope.itemEdit.codeDetail,
-              codeArticle: $scope.data.artcilechoisit.code,
-              quantite: $scope.data.quantite,
-              isCanceled: 1,
-              idMotif: $scope.data.motifchoisit.idMotif
+              codePRC     :$scope.data.detailsPRC.codePRC,
+              codeDetail  :$scope.itemEdit.codeDetail,
+             // codeArticle :$scope.data.artcilechoisit.code,
+             // quantite    :+$scope.data.quantite,
+              isCanceled  :1,
+              idMotif     :+$scope.data.motifchoisit.idMotif
             }
             console.log('-----------Object to delet----------');
             console.log(ligneDetailTosend);
@@ -4239,18 +4235,7 @@ angular
     $scope.getDetailPrc = function () {
       $scope.data.montantDtails = 0;
 
-      console.log('--------code Prc-------');
-      console.log($scope.data.prc)
-      console.log($scope.data.prc.codePRC)
 
-      console.log($scope.data.detailsPRC);
-      console.log("montant", $scope.data.prc.montant);
-
-
-
-
-      /* $scope.data.montantDtails = $scope.data.montantDtails + ($scope.data.detailsPRC.details.quantite * $scope.data.detailsPRC.details.prix);
-       console.log($scope.data.montantDtails )*/
 
       if ($scope.data.prc && !$scope.data.prc.local) {
 
@@ -4261,6 +4246,7 @@ angular
             console.log("---------------------Detail prc--------------");
 
             $scope.data.detailsPRC = response;
+            console.log($scope.data.detailsPRC)
 
 
           }
@@ -4271,11 +4257,7 @@ angular
 
         $scope.data.detailsPRC = $scope.data.prc;
         $scope.data.detailsPRC.details = $scope.data.prc.detailsPRC;
-        console.log("---------------------Detail prc--------------");
-        console.log($scope.data.detailsPRC);
-
-
-
+     
       }
     };
 
@@ -10089,10 +10071,11 @@ angular
   })
 
   .factory("formatNewDate", function () {
-    var d = new Date();
+    
     //$scope.data.profile = sessionStorage.getItem("")
     return {
       formatNewDate: function () {
+        var d = new Date();
         var hours = parseInt(d.getHours());
         if(hours < 10){
           hours = "0"+ ""+hours;
@@ -10121,6 +10104,9 @@ angular
           [hours,
           minute,
           second].join(':');
+
+          console.log('---------Date depuis le service---------')
+          console.log(dformat)
         
         return dformat;
       },

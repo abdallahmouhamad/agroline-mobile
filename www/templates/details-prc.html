@@ -126,12 +126,24 @@
   
       </div>
   
-      <div class="list" ng-if="edit == true">
-        <label class="item item-input">
-          <span class="input-label">Quantité</span>
-          <input type="number" id="quantite"  ng-if="action == 'edit'" ng-model="data.quantite">
-          <input type="number" readonly="true" ng-if="action == 'sup'" id="quantite" ng-model="data.quantite">
-        </label>
+      <div class="row" ng-if="edit == true">
+
+        <div class="col list" >
+          <label class="item item-input">
+            <span class="input-label">Quantité</span>
+            <input type="number" id="quantite"  ng-if="action == 'edit'" ng-model="data.quantite">
+            <input type="number" readonly="true" ng-if="action == 'sup'" id="quantite" ng-model="data.quantite">
+          </label>
+        </div>
+  
+        <div class="col list" >
+          <label class="item item-input">
+            <span class="input-label">Prix</span>
+            <input type="number" id="prix"  ng-if="action == 'edit'" ng-model="data.prix">
+            <input type="number" readonly="true" ng-if="action == 'sup'" id="quantite" ng-model="data.prix">
+          </label>
+        </div>
+
       </div>
   
 
@@ -164,8 +176,8 @@
           <div class="col" style="text-align: center;">Prix</div>
           <div class="col" style="text-align: center;">Montant</div>
    
-          <div class="col" style="text-align: center;" ng-if="data.detailsPRC.local == true">Editer</div>
-          <div class="col" style="text-align: center;" ng-if="data.detailsPRC.local == true">Supprimer</div>
+          <div class="col" style="text-align: center;" ng-if="data.detailsPRC.codePDS == '0'">Editer</div>
+          <div class="col" style="text-align: center;" ng-if="data.detailsPRC.codePDS == '0'">Supprimer</div>
       </div>
 
       <div class="row list"  ng-repeat="d in data.detailsPRC.details | filter:motcle">
@@ -187,32 +199,31 @@
           <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.prix}}</div>
         
 
-          <div class="col content-div-row">{{d.quantite * d.prix}}</div>
-          
-
+          <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{d.quantite * d.prix}}</div>
+          <div class="col content-div-row" ng-if="d.idMotif === 'edit'">{{d.quantite * d.prix}}</div>
         
           
          
 
-          <div class="col content-div-row" ng-if="d.idMotif !== 'edit' && data.detailsPRC.local == true" ng-click="editDetail(d, 'edit')">
+          <div class="col content-div-row" ng-if="d.idMotif !== 'edit' && data.detailsPRC.codePDS == '0'" ng-click="editDetail(d, 'edit')">
 
             <i class="icon ion-edit" ></i>
 
          </div>
 
-         <div class="col content-div-row edit" ng-if="d.idMotif === 'edit' && data.detailsPRC.local == true" ng-click="editDetail(d, 'edit')">
+         <div class="col content-div-row edit" ng-if="d.idMotif === 'edit' && data.detailsPRC.codePDS == '0'" ng-click="editDetail(d, 'edit')">
 
             <i class="icon ion-edit"></i>
 
          </div>
 
-         <div class="col content-div-row" ng-if="d.idMotif !== 'edit' && data.detailsPRC.local == true" ng-click="editDetail(d, 'sup')">
+         <div class="col content-div-row" ng-if="d.idMotif !== 'edit' && data.detailsPRC.codePDS == '0'" ng-click="editDetail(d, 'sup')">
 
           <i class="icon ion-trash-a" ></i>
 
           </div>
 
-          <div class="col content-div-row edit" ng-if="d.idMotif === 'edit' && data.detailsPRC.local == true" ng-click="editDetail(d, 'sup')">
+          <div class="col content-div-row edit" ng-if="d.idMotif === 'edit' && data.detailsPRC.codePDS == '0'" ng-click="editDetail(d, 'sup')">
 
               <i class="icon ion-trash-a"></i>
 
