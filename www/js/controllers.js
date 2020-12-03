@@ -6154,7 +6154,7 @@ angular
           try {
             console.log(messageCode);
 
-            SendSms.sendSMS(MessageGlobal, $scope.data.grossistechoisit.telephone);
+           SendSms.sendSMS(MessageGlobal, $scope.data.grossistechoisit.telephone);
 
             localStorage.setItem("pds", JSON.stringify($scope.data.pds));
 
@@ -7672,6 +7672,7 @@ angular
         $scope.data.user.prenom + ' ' + $scope.data.user.nom +
         ' </div>'
       '</div>';
+      
       var enteteCli = '<div class="row">' +
         '<div class="col">' +
         ' Client: ' +
