@@ -54,9 +54,21 @@ angular
           $ionicLoading.hide();
           if (response) {
             $scope.data.listStock = response;
+            for (var i = 0; i < $scope.data.listStock.length; i++) {
+
+              if ($scope.data.listStock.quantite != " ") {
+                $scope.data.listStock.quantite = parseInt($scope.data.listStock[i].quantite);
+    
+              } else {
+                console.log($scope.data.listStock.quantite);
+              }
+            }
+    
+            
             localStorage.setItem("stocks", JSON.stringify($scope.data.listStock));
             console.log(JSON.parse(localStorage.getItem("stocks")))
           }
+         
           console.log(response);
         },
         (error) => {
@@ -2077,9 +2089,17 @@ angular
         $ionicLoading.hide();
         if (response) {
           $scope.data.listStock = response;
-         
+
+          for (var i = 0; i < $scope.data.listStock.length; i++) {
+            if ($scope.data.listStock.quantite != " ") {
+              $scope.data.listStock.quantite = parseInt($scope.data.listStock[i].quantite);
+            } else {
+              console.log($scope.data.listStock.quantite);
+            }
+          }
           localStorage.setItem("stocks", JSON.stringify($scope.data.listStock));
           console.log(JSON.parse(localStorage.getItem("stocks")))
+         
         }
         console.log(response);
       },
@@ -2138,18 +2158,6 @@ angular
     }
     $scope.initvar();
 
-    /*   $scope.goToNewClient = function () {
-   
-         $state.transitionTo(
-           "app.nouvel-client",
-           {},
-           {
-             reload: true,
-             inherit: true,
-             notify: true,
-           }
-         );
-       };*/
     $scope.goToNewClient = function (item = null, sens) {
       localStorage.setItem('sens', sens)
 
@@ -2714,6 +2722,9 @@ angular
         } else {
           console.log("else", values.idModepaiement)
         }
+
+        values.telephone = "" +values.telephone;
+        values.telephone2 = ""+ values.telephone2;
 
         for (var i = 0; i < $scope.data.listregions.length; i++) {
 
@@ -5351,21 +5362,25 @@ angular
         duration: 10000,
       });
       
-     /* if ($scope.data.listStock.quantite != " ") {
-        $scope.data.listStock.quantite = parseInt($scope.data.listStock.quantite);
-        console.log("quantite", $scope.data.listStock.quantite)
-      } else {
-        console.log("quantite",$scope.data.listStock.quantite)
-      }*/
+   
    
       ApiListStock.getListStock().success(
         function (response) {
           $ionicLoading.hide();
           if (response) {
-            $scope.data.listStock = response;
-            console.log("quantite",$scope.data.listStock.quantite);
+            for (var i = 0; i < response.length; i++) {
+
+              if (response.quantite != " ") {
+                response.quantite = parseInt(response[i].quantite);
+    
+              } else {
+                console.log(response.quantite);
+              }
+            }
             localStorage.setItem("stocks", JSON.stringify($scope.data.listStock));
+            
             console.log(JSON.parse(localStorage.getItem("stocks")))
+           
           }
           console.log(response);
         },
@@ -7600,7 +7615,7 @@ angular
               $scope.data.detail.motifchoisit = null;
               $scope.data.detail.artcilechoisit = $scope.data.artcilechoisit;
               $scope.data.detail.index = $scope.data.detailsFACT.length + 1;
-              $scope.data.montantTotal = $scope.data.montantTotal + ($scope.data.detail.prix * $scope.data.quantite)
+              $scope.data.montantTotal = $scope.data.montantTotal + ($scope.data.detail.prix * $scope.data.quantite);
               $scope.data.detailsFACT.push($scope.data.detail);
 
               $scope.initDetailFCT();
@@ -7665,9 +7680,11 @@ angular
     var d = new Date();
 
     $scope.testPrint = function () {
+
       var image = '<div style="text-align: center">' +
         '<img src="./img/agroline.png">' +
         '</div>';
+
       var enteteComm = '' +
         '<div class="row">' +
         '<div class="col">' +
@@ -7675,12 +7692,16 @@ angular
         $scope.data.user.prenom + ' ' + $scope.data.user.nom +
         ' </div>'
       '</div>';
+      
+      var nomclient = $scope.data.clientchoisit ? $scope.data.clientchoisit.nom : $scope.data.recapPrc.client;
+
       var enteteCli = '<div class="row">' +
-        '<div class="col">' +
-        ' Client: ' +
-        $scope.data.clientchoisit.nom +
-        ' </div>'
-      '</div>';
+      '<div class="col">' +
+      ' Client: ' +
+      nomclient+
+      ' </div>'
+    '</div>';
+
       var telUser = '<div class="row">' +
         '<div class="col">' +
         ' Tel commercial: ' +
@@ -7704,13 +7725,14 @@ angular
           '<td>' + $scope.data.detailsFACT[i].article + '</td>' +
           '<td>' + $scope.data.detailsFACT[i].quantite + '</td>' +
           '<td>' + $scope.data.detailsFACT[i].prix + '</td>';
+          $scope.data.montantTotal = $scope.data.montantTotal + ($scope.data.detailsFACT[i].prix *$scope.data.detailsFACT[i].quantite);
 
       }
-
-
+            var MontantTotal = $scope.data.montantTotal;
+     
       details = details + '<tr style="text-align: center">' + corps + '</tr></table>';
       var sTable = document.getElementById('tab').innerHTML;
-      var footer = '<h3 style="margin-top:50px;">Montant total:<label style="margin-left:20px">' + $scope.data.montantTotal + ' CFA  </label></h3>';
+      var footer = '<h3 style="margin-top:50px;">Montant total:<label style="margin-left:20px">' +MontantTotal + ' CFA  </label></h3>';
       var titleDetail = '<h2>Details Facture</h2>';
       var t = image +
         enteteComm + telUser + enteteCli + titleDetail + sTable + footer;
@@ -7926,6 +7948,7 @@ angular
                   }).then(function (result) {
                     if (result) {
                       $scope.testPrint();
+                    
                       $scope.data.motifchoisit = null;
                       $scope.data.clientchoisit = null;
                       localStorage.setItem('prc', null);
