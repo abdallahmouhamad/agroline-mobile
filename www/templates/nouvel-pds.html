@@ -320,11 +320,9 @@
 
             </div>-->
 
-            <div class="row" style="margin-top: 10px;" ng-if="data.detailsPDSRECAP && data.detailsPDSRECAP.length > 0">
-              <div class="col" style="font-size: 130%;">Récapitulatif PRC</div>
-            </div>
+            
 
-            <div ng-if="d.idMotif === 'edit' || edit == true " ng-click="editDetail()">
+          <!--  <div ng-if="d.idMotif === 'edit' || edit == true " ng-click="editDetail()">
               <div>
 
                 <div class="row" style="margin-top: 10px;">
@@ -447,8 +445,10 @@
                 </a>
 
               </div>
+            </div>-->
+            <div class="row" style="margin-top: 10px;" ng-if="data.detailsPDSRECAP && data.detailsPDSRECAP.length > 0">
+              <div class="col" style="font-size: 130%;">Récapitulatif PRC</div>
             </div>
-
 
             <div class="list" ng-if="data.detailsPDSRECAP && data.detailsPDSRECAP.length > 0">
               <div class="row header list">
@@ -606,7 +606,7 @@
                   </label>
                 </div>
 
-                <div  ng-if="sens === 'nouvelle'">
+                <div ng-if="sens === 'nouvelle'">
                   <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" ng-click="editDetail(d)">
 
                     <i class="icon ion-edit"></i>
