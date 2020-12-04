@@ -3416,11 +3416,18 @@ angular
       console.log("client choisi");
       console.log($scope.data.clientchoisit);
       $scope.data.idModepaiement = $scope.data.clientchoisit.idModepaiement;
-      if ($scope.data.modereglementchoisit) {
+      $scope.data.grossistechoisit = {}
+      $scope.data.grossistechoisit.codeGrossiste = $scope.data.clientchoisit.codeGrossiste;
+      $scope.data.grossistechoisit.nom = $scope.data.clientchoisit.grossiste;
+
+      $scope.data.modereglementchoisit = {};
+      $scope.data.modereglementchoisit.idModepaiement = $scope.data.clientchoisit.idModepaiement;
+      $scope.data.modereglementchoisit.libelle = $scope.data.clientchoisit.idModepaiement == "1" ? "COMPTANT" : "CREDIT";
+
+      /*if ($scope.data.modereglementchoisit) {
         $scope.data.modereglementchoisit.idModepaiement = $scope.data.clientchoisit.idModepaiement;
 
-      }
-      //$scope.data.idModepaiement = 2;
+      }*/
     };
 
     $scope.showPopUp = function (libelle, etat, code = "") {
@@ -3566,16 +3573,26 @@ angular
           $scope.data.modereglementchoisit !== null || $scope.data.idModepaiement !== 0
         ) {
 
-          if ($scope.data.idModepaiement == 2) {
-            if ($scope.data.modereglementchoisit == null) {
-              $scope.data.modereglementchoisit = {};
-              $scope.data.modereglementchoisit.idModepaiement = $scope.data.clientchoisit.idModepaiement
+          if ($scope.data.grossistechoisit && $scope.data.grossistechoisit.codeGrossiste) {
+
+
+            if($scope.data.modereglementchoisit.libelle == "COMPTANT")
+            {
+              $scope.data.delaipaiement = $scope.data.delaipaiement ? $scope.data.delaipaiement : 0;
             }
-          }
 
-          if ($scope.data.grossistechoisit) {
+            console.log('delai paiement', $scope.data.delaipaiement)
+            console.log('mode paiement', $scope.data.idModepaiement)
+            console.log($scope.data.modereglementchoisit)
+            console.log($scope.data.grossistechoisit)
 
-            if ($scope.data.delaipaiement) {
+            var error =null;
+           error = (!$scope.data.delaipaiement || $scope.data.delaipaiement == 0) && $scope.data.modereglementchoisit.libelle == "CREDIT" ? "Veuillez rensseigner le delai de paiement"
+                   :error;
+          
+
+            if (!error) {
+
               var values = {
                 codePRC:
                   "PRC-" + $scope.data.user.code + "-" + CodeGenere.getCodeGenere(),
@@ -3593,6 +3610,7 @@ angular
                 detailsPRC: $scope.data.detailsPRC,
                 delaiPaiement: $scope.data.delaipaiement
               };
+
               console.log("---------------------Value to submit--------------------");
               console.log(values);
 
@@ -3649,7 +3667,6 @@ angular
 
                   values.dateAjout = formatNewDate.formatNewDate();
 
-                  console.log("idModepaiement", values.idModepaiement);
 
                   if (values.idModepaiement == "1" || values.idModepaiement == "2") {
                     values.idModepaiement = parseInt(values.idModepaiement);
@@ -3660,35 +3677,6 @@ angular
                   for (var i = 0; i < values.detailsPRC.length; i++) {
                     values.detailsPRC[i].isCanceled = values.detailsPRC[i].isCanceled ? 1 : 0;
 
-                   /* if (values.detailsPRC[i].codeArticle != " ") {
-                      values.detailsPRC[i].codeArticle = parseInt(values.detailsPRC[i].codeArticle);
-                      console.log("codeArticle", values.detailsPRC[i].codeArticle)
-                    } else {
-                      console.log("codeArticle", values.detailsPRC[i].codeArticle)
-                    }
-
-                   if (values.detailsPRC[i].codeDetail != " ") {
-                      values.detailsPRC[i].codeDetail = parseInt(values.detailsPRC[i].codeDetail);
-                      console.log("codeDetail", values.detailsPRC[i].codeDetail)
-                    } else {
-                      console.log("codeDetail", values.detailsPRC[i].codeDetail)
-                    }
-
-                     if (values.detailsPRC[i].prix != " ") {
-                      values.detailsPRC[i].prix = parseInt(values.detailsPRC[i].prix);
-                      console.log("prix", values.detailsPRC[i].prix)
-                    } else {
-                      console.log("prix", values.detailsPRC[i].prix)
-                    }
-
-                    if (values.detailsPRC[i].quantite != " ") {
-                      values.detailsPRC[i].quantite = parseInt(values.detailsPRC[i].quantite);
-                      console.log("quantite", values.detailsPRC[i].quantite)
-                    } else {
-                      console.log("quantite", values.detailsPRC[i].quantite)
-                    }
-                    */
-                  
                         if (values.detailsPRC[i].artcilechoisit.idArticle != " ") {
                           values.detailsPRC[i].artcilechoisit.idArticle = parseInt(values.detailsPRC[i].artcilechoisit.idArticle);
                           console.log("idArticle", values.detailsPRC[i].artcilechoisit.idArticle)
@@ -3705,7 +3693,7 @@ angular
                      
 
                   }
-
+                 
                   ApiAjoutPrc.ajoutPrc(values).success(
                     function (response) {
                       $ionicLoading.hide();
@@ -3866,6 +3854,7 @@ angular
       $scope.data.artcilechoisit = null;
       $scope.data.motifchoisit = null;
       $scope.data.quantite = 0;
+      $scope.data.prix = 0;
       $scope.data.montantDtails = 0;
       $scope.data.idMotif = 0;
       var user = localStorage.getItem("user");
@@ -3930,6 +3919,7 @@ angular
       console.log("--------------Quantite---------------");
       console.log(item.quantite);
       $scope.data.quantite = +item.quantite;
+      $scope.data.prix = +item.prix;
 
       for (var i = 0; i < $scope.data.detailsPRC.details.length; i++) {
         if (
@@ -3955,13 +3945,16 @@ angular
 
             if (errorMessage == 1) {
 
+           //   codePRC(string), codeDetail(string), codeArticle(string), prix(int), quantite(int), isCanceled(int), idMotif(int)
+
               var ligneDetailTosend = {
-                codePRC: $scope.data.detailsPRC.codePRC,
-                codeDetail: $scope.itemEdit.codeDetail,
-                codeArticle: $scope.data.artcilechoisit.code,
-                quantite: $scope.data.quantite,
-                isCanceled: 1,
-                idMotif: $scope.data.motifchoisit.idMotif
+                codePRC      :$scope.data.detailsPRC.codePRC,
+                codeDetail   :$scope.itemEdit.codeDetail,
+                codeArticle  :$scope.data.artcilechoisit.code,
+                quantite     :+$scope.data.quantite,
+                isCanceled   :1,
+                idMotif      :+$scope.data.motifchoisit.idMotif,
+                prix         :+$scope.data.prix
               }
               console.log('-----Objet to modif');
               console.log(ligneDetailTosend);
@@ -4004,6 +3997,7 @@ angular
                       $scope.data.detailsPRC.details[i].idMotif =
                         $scope.data.motifchoisit.idMotif;
                       $scope.data.detailsPRC.details[i].quantite = $scope.data.quantite;
+                      $scope.data.detailsPRC.details[i].prix = $scope.data.prix;
                       $scope.data.detailsPRC.details[i].codeArticle = $scope.data.artcilechoisit.code;
                       $scope.data.detailsPRC.details[i].article = $scope.data.artcilechoisit.libelle;
 
@@ -4084,13 +4078,15 @@ angular
           if (result) {
             console.log('OUI');
 
+           // codePRC(string), codeDetail(string), isCanceled(int), idMotif(int)
+
             var ligneDetailTosend = {
-              codePRC: $scope.data.detailsPRC.codePRC,
-              codeDetail: $scope.itemEdit.codeDetail,
-              codeArticle: $scope.data.artcilechoisit.code,
-              quantite: $scope.data.quantite,
-              isCanceled: 1,
-              idMotif: $scope.data.motifchoisit.idMotif
+              codePRC     :$scope.data.detailsPRC.codePRC,
+              codeDetail  :$scope.itemEdit.codeDetail,
+             // codeArticle :$scope.data.artcilechoisit.code,
+             // quantite    :+$scope.data.quantite,
+              isCanceled  :1,
+              idMotif     :+$scope.data.motifchoisit.idMotif
             }
             console.log('-----------Object to delet----------');
             console.log(ligneDetailTosend);
@@ -4239,18 +4235,7 @@ angular
     $scope.getDetailPrc = function () {
       $scope.data.montantDtails = 0;
 
-      console.log('--------code Prc-------');
-      console.log($scope.data.prc)
-      console.log($scope.data.prc.codePRC)
 
-      console.log($scope.data.detailsPRC);
-      console.log("montant", $scope.data.prc.montant);
-
-
-
-
-      /* $scope.data.montantDtails = $scope.data.montantDtails + ($scope.data.detailsPRC.details.quantite * $scope.data.detailsPRC.details.prix);
-       console.log($scope.data.montantDtails )*/
 
       if ($scope.data.prc && !$scope.data.prc.local) {
 
@@ -4261,6 +4246,7 @@ angular
             console.log("---------------------Detail prc--------------");
 
             $scope.data.detailsPRC = response;
+            console.log($scope.data.detailsPRC)
 
 
           }
@@ -4271,11 +4257,7 @@ angular
 
         $scope.data.detailsPRC = $scope.data.prc;
         $scope.data.detailsPRC.details = $scope.data.prc.detailsPRC;
-        console.log("---------------------Detail prc--------------");
-        console.log($scope.data.detailsPRC);
-
-
-
+     
       }
     };
 
@@ -5465,7 +5447,8 @@ angular
     ApiRecapPdsPrc,
     formatNewDate,
     ApiListStock,
-    ApiDeletDetailPDS
+    ApiDeletDetailPDS,
+    ApiDeletPDS
   ) {
     $scope.data = {};
 
@@ -5661,8 +5644,7 @@ angular
 
     $scope.editDetail = function (item) {
       $scope.data.artcilechoisit = {};
-
-      $scope.data.artcilechoisit.libelle = item.article;
+     // $scope.data.artcilechoisit.libelle = item.article;
       $scope.data.artcilechoisit.code = item.codeArticle;
       console.log("--------------Quantite---------------");
       console.log(item.quantite);
@@ -5787,10 +5769,12 @@ angular
       }
     };
     $scope.initDetailPDS = function () {
+      
       console.log('Je rentre ici fct');
       if ($scope.data.recapPrc && $scope.data.recapPrc.length > 0) {
         console.log('Je rentre ici recapPrc');
 
+        $scope.data.detailsPDSRECAP = [];
         $scope.data.detailsPDS = [];
         for (var j = 0; j < $scope.data.recapPrc.length; j++) {
           console.log('Je rentre ici j');
@@ -5940,65 +5924,14 @@ angular
               localStorage.setItem('pdslocal', JSON.stringify(pds))
             }
           }
-          $state.transitionTo(
-            "app.pds",
-            {},
-            {
-              reload: true,
-              inherit: true,
-              notify: true,
-            }
-          );
-          /* $ionicPopup.show({
-             title: 'Alert ',
-             template: 'Etes-vous sûr de vouloire proceder à l\'annulation.',
-             scope: $scope,
-             buttons: [
-               {
-                 text: 'OUI',
-                 type: 'button-energized',
-                 onTap: function (e) {
-                   return true;
-                 }
-               },
-               {
-                 text: 'NON',
-                 type: 'button-assertive',
-                 onTap: function (e) {
-                   return false;
-                 }
-               },
-             ]
-           }).then(function (result) {
-             if(result){
-               console.log('sup')
-               localStorage.setItem("pds",null);
-           var pds = JSON.parse(localStorage.getItem('pdslocal'));
-     
-                   if(pds && pds.length > 0){
-     
-                     var  searchPds  = $filter('filter')(pds, { codePDS: $scope.data.pds.codePDS });
-                     if(searchPds && searchPds.length  === 1){
-                           var pdsLocal = searchPds[0]; 
-                           pds.splice(pdsLocal, 1);
-       
-                           localStorage.setItem('pdslocal',JSON.stringify(pds))
-                     }
-                   }
-           $state.transitionTo(
-             "app.pds",
-             {},
-             {
-               reload: true,
-               inherit: true,
-               notify: true,
-             }
-           );
-             }else{
-               console.log('non sup')
-           //    $scope.data.annulation = false;
-             }
-           })*/
+          //codePDS(string), isCanceled(int), idMotif(int)
+          var value = {
+            codePDS     : $scope.data.pds.codePDS,
+            isCanceled  : 1,
+            idMotif     : +$scope.data.motifchoisit.idMotif
+
+          }
+          $scope.validerDelet(value);
 
         } else {
           $ionicPopup.show({
@@ -6016,6 +5949,32 @@ angular
 
 
       }
+
+    }
+
+    $scope.validerDelet = function(value)
+    {
+      ApiDeletPDS.deletPDS(value)
+              .success(
+                function (response) {
+                  console.log('----------Annulatioon pds-------------');
+                  console.log(response);
+                  $ionicLoading.hide();
+                  $state.transitionTo(
+                    "app.pds",
+                    {},
+                    {
+                      reload: true,
+                      inherit: true,
+                      notify: true,
+                    }
+                  );
+            
+                }, (error) => {
+                  $ionicLoading.hide();
+                  $scope.Erreur(error);
+                }
+              )
 
     }
 
@@ -6114,93 +6073,130 @@ angular
 
       if ($scope.data.grossistechoisit) {
         $scope.initPDS();
-        if ($scope.data.pds.detailsPDS && $scope.data.pds.detailsPDS.length > 0) {
-          $ionicLoading.show({
-            content: "Loading",
-            animation: "fade-in",
-            showBackdrop: true,
-            maxWidth: 200,
-            showDelay: 0,
-            duration: 10000,
-          });
+        var err = null;
+        if($scope.data.pds.initial == false){
 
-          //$scope.data.pds.codeGenere;
-
-          //Article, quatite, valeur et en bas valeur total et code de securite
-
-          var message = "";
-          var mnt = 0.0;
-          for (var i = 0; i < $scope.data.pds.detailsPDS.length; i++) {
-            var index = i + 1;
-            console.log($scope.data.pds.detailsPDS[i]);
-            message =
-              message +
-              "" +
-              index +
-              ")  " +
-              $scope.data.pds.detailsPDS[i].article +
-              " " +
-              "\n Quantité: " +
-              $scope.data.pds.detailsPDS[i].quantite +
-              "" +
-              "\n Prix: " +
-              $scope.data.pds.detailsPDS[i].prix +
-              "" +
-              "\n \n";
-            mnt = mnt + ($scope.data.pds.detailsPDS[i].prix * $scope.data.pds.detailsPDS[i].quantite);
+          if($scope.data.detailsPDSRECAP && $scope.data.detailsPDSRECAP.length > 0){
+            for(var i = 0; i< $scope.data.detailsPDSRECAP.length; i++){
+              console.log($scope.data.detailsPDSRECAP[i].prix);
+                  if(!$scope.data.detailsPDSRECAP[i].prix || $scope.data.detailsPDSRECAP[i].prix <= 0)
+                  {
+                    err =  i;
+                    break;
+                  }
+            }
           }
-          var messageMontant = "";
-          if ($scope.data.recapPRC && $scope.data.recapPRC.length > 0) {
-            messageMontant =
-              "\n Montant total:   " + $scope.data.recapPRC[0].montant + "FCFA";
-          } else {
-            messageMontant =
-              "\n Montant total:   " + mnt + "FCFA";
-          }
-
-          var messageCode = "\n Code::    " + $scope.data.pds.codeGenere;
-          var MessageGlobal = message + messageMontant + messageCode;
-          console.log(messageCode);
-          try {
+        }
+        console.log('------_Error---------')
+        console.log(err)
+        if(err == null)
+        {
+          if ($scope.data.pds.detailsPDS && $scope.data.pds.detailsPDS.length > 0) {
+            $ionicLoading.show({
+              content: "Loading",
+              animation: "fade-in",
+              showBackdrop: true,
+              maxWidth: 200,
+              showDelay: 0,
+              duration: 10000,
+            });
+  
+            //$scope.data.pds.codeGenere;
+  
+            //Article, quatite, valeur et en bas valeur total et code de securite
+  
+            var message = "";
+            var mnt = 0.0;
+            for (var i = 0; i < $scope.data.pds.detailsPDS.length; i++) {
+              var index = i + 1;
+              console.log($scope.data.pds.detailsPDS[i]);
+              message =
+                message +
+                "" +
+                index +
+                ")  " +
+                $scope.data.pds.detailsPDS[i].article +
+                " " +
+                "\n Quantité: " +
+                $scope.data.pds.detailsPDS[i].quantite +
+                "" +
+                "\n Prix: " +
+                $scope.data.pds.detailsPDS[i].prix +
+                "" +
+                "\n \n";
+              mnt = mnt + ($scope.data.pds.detailsPDS[i].prix * $scope.data.pds.detailsPDS[i].quantite);
+            }
+            var messageMontant = "";
+            if ($scope.data.recapPRC && $scope.data.recapPRC.length > 0) {
+              messageMontant =
+                "\n Montant total:   " + $scope.data.recapPRC[0].montant + "FCFA";
+            } else {
+              messageMontant =
+                "\n Montant total:   " + mnt + "FCFA";
+            }
+  
+            var messageCode = "\n Code::    " + $scope.data.pds.codeGenere;
+            var MessageGlobal = message + messageMontant + messageCode;
             console.log(messageCode);
-
-            SendSms.sendSMS(MessageGlobal, $scope.data.grossistechoisit.telephone);
-
-            localStorage.setItem("pds", JSON.stringify($scope.data.pds));
-
-
-
-            $scope.code = "attente";
-
-            $ionicLoading.hide();
-          } catch (err) {
-            $ionicLoading.hide();
+            
+            console.log($scope.data.pds);
+            console.log($scope.data.detailsPDSRECAP);
+            
+            try {
+              console.log(messageCode);
+  
+              SendSms.sendSMS(MessageGlobal, $scope.data.grossistechoisit.telephone);
+  
+              localStorage.setItem("pds", JSON.stringify($scope.data.pds));
+  
+  
+  
+              $scope.code = "attente";
+  
+              $ionicLoading.hide();
+            } catch (err) {
+              $ionicLoading.hide();
+              $ionicPopup.show({
+                title: 'Alert ',
+                template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
+                scope: $scope,
+                buttons: [
+                  {
+                    text: 'OK',
+                    type: 'button-positive'
+                  }
+                ]
+              });
+            }
+  
+          } else {
             $ionicPopup.show({
-              title: 'Alert ',
-              template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
+              title: "Erreur",
+              template: "Impossible d'ajouter une recup marchandise sans details.",
               scope: $scope,
               buttons: [
                 {
-                  text: 'OK',
-                  type: 'button-positive'
-                }
-              ]
+                  text: "Ok",
+                  type: "button-positive",
+                },
+              ],
             });
           }
-
-        } else {
+        }else
+        {
           $ionicPopup.show({
-            title: "Erreur",
-            template: "Impossible d'ajouter une recup marchandise sans details.",
+            title: 'Alert ',
+            template: 'L\'article au niveau du tableau récapitulatif prc a la ligne '+(err+1)+' n\'a pas de prix',
             scope: $scope,
             buttons: [
               {
-                text: "Ok",
-                type: "button-positive",
-              },
-            ],
+                text: 'OK',
+                type: 'button-positive'
+              }
+            ]
           });
         }
+
 
 
       } else {
@@ -6236,6 +6232,7 @@ angular
         pdslocal = [];
       }
       pdslocal.push($scope.data.pds);
+     
       localStorage.setItem('pdslocal', JSON.stringify(pdslocal));
 
       $ionicLoading.hide();
@@ -6602,7 +6599,7 @@ angular
     ApiListFacturation,
     formatNewDate,
     ApiDeatilsFacture,
-    checkQuantite, ApiModificationDetailFact, ApiDeletDetailFact, CodeGenere, ApiEncaissement
+    checkQuantite, ApiModificationDetailFact, ApiDeletDetailFact, CodeGenere, ApiEncaissement,ApiSuppressionEncaissement
 
   ) {
     console.log("Facture");
@@ -6615,6 +6612,7 @@ angular
       $scope.data.montant = 0;
 
       $scope.edit = false;
+      $scope.detailEncaisse = false;
 
       $scope.data.user = JSON.parse(localStorage.getItem("user"));
       console.log("----------------Value PRC----------------");
@@ -6795,17 +6793,19 @@ angular
     });
 
 
-    $scope.editDetail = function (item, action) {
-      $scope.edit = true;
+    $scope.editDetail = function (item, action, detailEncaisse = false) {
+      $scope.edit = true; 
+      $scope.detailEncaisse = detailEncaisse;
       $scope.action = action;
       item.idMotif = "edit";
 
-      $scope.data.artcilechoisit = {};
-      console.log("--------------Artcile---------------");
-      console.log(item.article);
+      if(!detailEncaisse)
+      {
+        $scope.data.artcilechoisit = {};
+ 
       $scope.data.artcilechoisit.libelle = item.article
       $scope.data.artcilechoisit.code = item.codeArticle
-      console.log("--------------Quantite---------------");
+     
       console.log(item.quantite);
       $scope.data.quantite = +item.quantite;
 
@@ -6817,6 +6817,22 @@ angular
           $scope.data.detailsfactures.details[i].idMotif = 0;
         }
       }
+
+      }else
+      {
+      
+
+      for (var i = 0; i < $scope.data.detailsfactures.detailsEncaissement.length; i++) {
+        if (
+          $scope.data.detailsfactures.detailsEncaissement[i].idMotif === "edit" &&
+          $scope.data.detailsfactures.detailsEncaissement[i].codeEncaissement !== item.codeEncaissement
+        ) {
+          $scope.data.detailsfactures.detailsEncaissement[i].idMotif = 0;
+        }
+      }
+      }
+
+      
       $scope.itemEdit = item;
     };
 
@@ -6905,21 +6921,36 @@ angular
       }
     };
 
-    $scope.annulerEdit = function () {
+    $scope.annulerEdit = function (type) {
       $scope.edit = false;
-      for (var i = 0; i < $scope.data.detailsfactures.details.length; i++) {
-        if (
-          $scope.data.detailsfactures.details[i].idMotif === "edit" &&
-          $scope.data.detailsfactures.details[i].codeArticle ===
-          $scope.itemEdit.codeArticle
-        ) {
-          $scope.data.detailsfactures.details[i].idMotif = 0;
-          break;
+      $scope.detailEncaisse = false;
+      if(type == 'details'){
+        for (var i = 0; i < $scope.data.detailsfactures.details.length; i++) {
+          if (
+            $scope.data.detailsfactures.details[i].idMotif === "edit" &&
+            $scope.data.detailsfactures.details[i].codeArticle ===
+            $scope.itemEdit.codeArticle
+          ) {
+            $scope.data.detailsfactures.details[i].idMotif = 0;
+            break;
+          }
+        }
+      }
+      else if(type == 'detailEncaisse'){
+        for (var i = 0; i < $scope.data.detailsfactures.detailsEncaissement.length; i++) {
+          if (
+            $scope.data.detailsfactures.detailsEncaissement[i].idMotif === "edit" &&
+            $scope.data.detailsfactures.detailsEncaissement[i].codeEncaissement ===
+            $scope.itemEdit.codeEncaissement
+          ) {
+            $scope.data.detailsfactures.detailsEncaissement[i].idMotif = 0;
+            break;
+          }
         }
       }
     }
 
-    $scope.validerDelet = function () {
+    $scope.validerDelet = function (type) {
       if ($scope.data.motifchoisit && $scope.data.motifchoisit.idMotif !== "") {
         $ionicPopup.show({
           title: "Infos",
@@ -6945,68 +6976,158 @@ angular
           if (result) {
             console.log('OUI');
 
-            var ligneDetailTosend = {
-              codeFacture: $scope.data.detailsfactures.codeFacture,
-              codeDetail: $scope.itemEdit.codeDetail,
-              isCanceled: 1,
-              idMotif: $scope.data.motifchoisit.idMotif
-            }
-            console.log('-----------Object to delet----------');
-            console.log(ligneDetailTosend);
-            $ionicLoading.show({
-              content: "Loading",
-              animation: "fade-in",
-              showBackdrop: true,
-              maxWidth: 200,
-              showDelay: 0,
-              duration: 10000,
-            });
-
-            $scope.edit = false;
-            $scope.data.motifchoisit = null;
-            for (var i = 0; i < $scope.data.detailsfactures.details.length; i++) {
-              if (
-                $scope.data.detailsfactures.details[i].idMotif === "edit" &&
-                $scope.data.detailsfactures.details[i].codeArticle ===
-                $scope.itemEdit.codeArticle
-              ) {
-
-                $scope.data.detailsfactures.details.splice(i, 1);
-                $scope.edit = false;
-                $scope.data.motifchoisit = null;
-
-                break;
+            if(type == 'details'){
+              var ligneDetailTosend = {
+                codeFacture: $scope.data.detailsfactures.codeFacture,
+                codeDetail: $scope.itemEdit.codeDetail,
+                isCanceled: 1,
+                idMotif: +$scope.data.motifchoisit.idMotif
               }
-            }
-
-            ApiDeletDetailFact.deletDetailFact(ligneDetailTosend)
-              .success(
-                function (response) {
-
-                  $ionicLoading.hide();
-                  console.log('-------Modification edit------')
-                  console.log(response)
-                  if (response.reponse == 1) {
-
-
-                    $ionicPopup.show({
-                      title: "Information",
-                      template: 'réussi',
-                      scope: $scope,
-                      buttons: [
-                        {
-                          text: "Ok",
-                          type: "button-assertive",
-                        },
-                      ],
-                    });
+              console.log('-----------Object to delet----------');
+              console.log(ligneDetailTosend);
+              $ionicLoading.show({
+                content: "Loading",
+                animation: "fade-in",
+                showBackdrop: true,
+                maxWidth: 200,
+                showDelay: 0,
+                duration: 10000,
+              });
+  
+              
+              
+  
+              ApiDeletDetailFact.deletDetailFact(ligneDetailTosend)
+                .success(
+                  function (response) {
+  
+                    $ionicLoading.hide();
+                    console.log('-------Modification edit------')
+                    console.log(response)
+                    if (response.reponse == 1) {
+  
+                      for (var i = 0; i < $scope.data.detailsfactures.details.length; i++) {
+                        if (
+                          $scope.data.detailsfactures.details[i].idMotif === "edit" &&
+                          $scope.data.detailsfactures.details[i].codeArticle ===
+                          $scope.itemEdit.codeArticle
+                        ) {
+          
+                          $scope.data.detailsfactures.details.splice(i, 1);
+                          $scope.edit = false;
+                          $scope.data.motifchoisit = null;
+          
+                          break;
+                        }
+                      }
+                      $ionicPopup.show({
+                        title: "Information",
+                        template: 'réussi',
+                        scope: $scope,
+                        buttons: [
+                          {
+                            text: "Ok",
+                            type: "button-assertive",
+                          },
+                        ],
+                      });
+                    }else
+                    {
+                      $ionicPopup.show({
+                        title: "Erreur",
+                        template: ''+response.reponse,
+                        scope: $scope,
+                        buttons: [
+                          {
+                            text: "Ok",
+                            type: "button-assertive",
+                          },
+                        ],
+                      });
+                    }
+  
+                  }, (error) => {
+                    $ionicLoading.hide();
+                    $scope.Erreur(error);
                   }
+                )
 
-                }, (error) => {
-                  $ionicLoading.hide();
-                  $scope.Erreur(error);
-                }
-              )
+            }else if(type == 'detailEncaisse')
+
+            {
+              var ligneDetailTosend = {
+                codeEncaissement: $scope.itemEdit.codeEncaissement,
+                isCanceled: 1,
+                idMotif: +$scope.data.motifchoisit.idMotif
+              }
+              console.log('-----------Object to delet encaissement----------');
+              console.log(ligneDetailTosend);
+              $ionicLoading.show({
+                content: "Loading",
+                animation: "fade-in",
+                showBackdrop: true,
+                maxWidth: 200,
+                showDelay: 0,
+                duration: 10000,
+              });
+  
+  
+              ApiSuppressionEncaissement.suppressionEncaissement(ligneDetailTosend)
+                .success(
+                  function (response) {
+  
+                    $ionicLoading.hide();
+                    console.log('-------Modification edit------')
+                    console.log(response)
+                    if (response.reponse == 1) {
+                      for (var i = 0; i < $scope.data.detailsfactures.detailsEncaissement.length; i++) {
+                        if (
+                          $scope.data.detailsfactures.detailsEncaissement[i].idMotif === "edit" &&
+                          $scope.data.detailsfactures.detailsEncaissement[i].codeEncaissement ===
+                          $scope.itemEdit.codeEncaissement
+                        ) {
+          
+                          $scope.data.detailsfactures.detailsEncaissement.splice(i, 1);
+                          $scope.edit = false;
+                          $scope.detailEncaisse = false;
+                          $scope.data.motifchoisit = null;
+          
+                          break;
+                        }
+                      }
+  
+                      $ionicPopup.show({
+                        title: "Information",
+                        template: 'réussi',
+                        scope: $scope,
+                        buttons: [
+                          {
+                            text: "Ok",
+                            type: "button-assertive",
+                          },
+                        ],
+                      });
+                    }else{
+                      $ionicPopup.show({
+                        title: "Erreur",
+                        template: ''+response.reponse,
+                        scope: $scope,
+                        buttons: [
+                          {
+                            text: "Ok",
+                            type: "button-assertive",
+                          },
+                        ],
+                      });
+                    }
+  
+                  }, (error) => {
+                    $ionicLoading.hide();
+                    $scope.Erreur(error);
+                  }
+                )
+            }
+        
 
 
           } else {
@@ -7615,7 +7736,8 @@ angular
               $scope.data.detail.motifchoisit = null;
               $scope.data.detail.artcilechoisit = $scope.data.artcilechoisit;
               $scope.data.detail.index = $scope.data.detailsFACT.length + 1;
-              $scope.data.montantTotal = $scope.data.montantTotal + ($scope.data.detail.prix * $scope.data.quantite);
+              $scope.data.montantTotal = 0;
+              // $scope.data.montantTotal + ($scope.data.detail.prix * $scope.data.quantite);
               $scope.data.detailsFACT.push($scope.data.detail);
 
               $scope.initDetailFCT();
@@ -7708,25 +7830,25 @@ angular
         $scope.data.user.telephone +
         ' </div>'
       '</div>';
-      // '<th>Designation</th>'+
-      //'<td>'+ $scope.data.detailsFACT[i].article+'</td>'+
 
       var details = '<table style="width: 100px">' +
         '<tr>' +
         '<th>Code</th>' +
-        '<th>Designation</th>' +
+        '<th>Designation</th>'+
         '<th>Quantité</th>' +
         '<th>Prix</th>' +
         '</tr>';
       var corps = '';
+ 
+      
       for (var i = 0; i < $scope.data.detailsFACT.length; i++) {
         corps = corps +
           '<td>' + $scope.data.detailsFACT[i].codeArticle + '</td>' +
-          '<td>' + $scope.data.detailsFACT[i].article + '</td>' +
+          '<td>' + $scope.data.detailsFACT[i].article + '</td>' ;        
           '<td>' + $scope.data.detailsFACT[i].quantite + '</td>' +
           '<td>' + $scope.data.detailsFACT[i].prix + '</td>';
-          $scope.data.montantTotal = $scope.data.montantTotal + ($scope.data.detailsFACT[i].prix *$scope.data.detailsFACT[i].quantite);
-
+          $scope.data.montantTotal = $scope.data.montantTotal + ($scope.data.detailsFACT[i].prix * $scope.data.detailsFACT[i].quantite);
+          console.log($scope.data.detailsFACT[i].article);
       }
             var MontantTotal = $scope.data.montantTotal;
      
@@ -7735,7 +7857,7 @@ angular
       var footer = '<h3 style="margin-top:50px;">Montant total:<label style="margin-left:20px">' +MontantTotal + ' CFA  </label></h3>';
       var titleDetail = '<h2>Details Facture</h2>';
       var t = image +
-        enteteComm + telUser + enteteCli + titleDetail + sTable + footer;
+        enteteComm + telUser + enteteCli + titleDetail  + sTable + footer;
       cordova.plugins.printer.print(
         t
       );
@@ -8663,12 +8785,13 @@ angular
     $scope, $state, $ionicLoading,
     ApiListPrc, ApiDetailPrc, ApiAjoutPrc,
     ApiListClient, ApiListMotif,
-    ApiListArticle, $ionicPopup, ApiRecapPdsPrc, ApiListDechargement, ApiPdsNoPayed, ApiDetailPdsNoPayed, ApiAjoutVersement, CodeGenere, ApiAjoutVersement, SendSms) {
+    ApiListArticle, $ionicPopup,
+     ApiRecapPdsPrc, ApiListDechargement, ApiPdsNoPayed, ApiDetailPdsNoPayed, ApiAjoutVersement, CodeGenere, ApiAjoutVersement, SendSms,formatNewDate) {
 
     console.log('versement');
     $scope.data = {};
 
-    $scope.initvar = function () {
+    $scope.initvar = function () {  
 
       $scope.data.codeCommerciale = localStorage.getItem('codeCommerciale');
       $scope.data.user = JSON.parse(localStorage.getItem('user'));
@@ -8848,7 +8971,7 @@ angular
           codeGrossiste: $scope.data.details_pds_no_payed.codeGrossiste,
           codePDS: $scope.data.details_pds_no_payed.codePDS,
           codeCommerciale: $scope.data.user.code,
-          dateAjout: $scope.data.dateAjout,
+          dateAjout: formatNewDate.formatNewDate(),
           isCanceled: 0,
           idMotif: 0,
           isChecked: 0,
@@ -9869,6 +9992,20 @@ angular
     };
   })
 
+  .factory("ApiSuppressionEncaissement", function ($http, urlPhp) {
+    return {
+      suppressionEncaissement: function (values) {
+        var url = urlPhp.getUrl();
+        var user = localStorage.getItem("user");
+        user = JSON.parse(user);
+
+        return $http.post(url + "/facture/supprimerEncaissement.php", values);
+      },
+    };
+  })
+
+  
+
   .factory("ApiListMarches", function ($http, urlPhp) {
     return {
       getListMarches: function () {
@@ -10089,10 +10226,11 @@ angular
   })
 
   .factory("formatNewDate", function () {
-    var d = new Date();
+    
     //$scope.data.profile = sessionStorage.getItem("")
     return {
       formatNewDate: function () {
+        var d = new Date();
         var hours = parseInt(d.getHours());
         if(hours < 10){
           hours = "0"+ ""+hours;
@@ -10121,6 +10259,9 @@ angular
           [hours,
           minute,
           second].join(':');
+
+          console.log('---------Date depuis le service---------')
+          console.log(dformat)
         
         return dformat;
       },
