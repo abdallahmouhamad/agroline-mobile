@@ -605,19 +605,18 @@
                   </label>
                 </div>
 
-                <p  ng-if="sens === 'nouvelle'">
-                  <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" ng-click="editDetail(d)">
-                    <label style="margin-top: 10px;">
+                
+                
+                  <div style="margin-top: 0px;" class="col content-div-row" ng-if=" sens === 'nouvelle' && d.idMotif !== 'edit' " ng-click="editDetail(d)">
+                   
                     <i class="icon ion-edit"></i>
-                  </label>
                   </div>
-
-                  <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'" ng-click="editDetail(d)">
-                    <label style="margin-top: 10px;">
+                  <div style="margin-top: 10px;" class="col content-div-row edit" ng-if="sens === 'nouvelle' &&  d.idMotif === 'edit'" ng-click="editDetail(d)">
+                  
                     <i class="icon ion-edit"></i>
-                  </label>
-                  </div>
-                </p>
+                </div>
+             
+             
 
               </div>
 
