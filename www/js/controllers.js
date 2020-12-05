@@ -7736,7 +7736,8 @@ angular
               $scope.data.detail.motifchoisit = null;
               $scope.data.detail.artcilechoisit = $scope.data.artcilechoisit;
               $scope.data.detail.index = $scope.data.detailsFACT.length + 1;
-              $scope.data.montantTotal = $scope.data.montantTotal + ($scope.data.detail.prix * $scope.data.quantite);
+              $scope.data.montantTotal = 0;
+              $scope.data.montantTotal + ($scope.data.detail.prix * $scope.data.quantite);
               $scope.data.detailsFACT.push($scope.data.detail);
 
               $scope.initDetailFCT();

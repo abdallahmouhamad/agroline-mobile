@@ -149,13 +149,20 @@
                 <div class="col">{{ data.motifchoisit.libelle }}</div>
 
               </div>
+              <div class="row">
+
+                <div class="col">
 
               <div class="list" ng-if="data.recapPRC.length == 0 ||  edit == true">
-                <label class="item item-input">
+                <label class="item item-input" style="margin-top: 7px;">
                   <span class="input-label">Quantité</span>
                   <input type="number" id="quantite" ng-model="data.quantite" placeholder="0">
                 </label>
               </div>
+              
+            </div>
+
+          </div>
 
               <div class="row">
 
@@ -606,19 +613,19 @@
                   </label>
                 </div>
 
-                <div ng-if="sens === 'nouvelle'">
-                  <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" ng-click="editDetail(d)">
+             
+                  <div class="col content-div-row" ng-if="d.idMotif !== 'edit' && sens === 'nouvelle'" ng-click="editDetail(d)">
 
                     <i class="icon ion-edit"></i>
 
                   </div>
 
-                  <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'" ng-click="editDetail(d)">
+                  <div class="col content-div-row edit" ng-if="d.idMotif === 'edit' && sens === 'nouvelle'" ng-click="editDetail(d)">
 
                     <i class="icon ion-edit"></i>
 
                   </div>
-                </div>
+               
 
               </div>
 
