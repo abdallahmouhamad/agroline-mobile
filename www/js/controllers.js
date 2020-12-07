@@ -2897,6 +2897,7 @@ setInterval(function () {
 
         values.telephone = "" +values.telephone;
         values.telephone2 = ""+ values.telephone2;
+        values.delaiPaiement = + values.delaiPaiement;
 
         for (var i = 0; i < $scope.data.listregions.length; i++) {
 
@@ -6608,7 +6609,7 @@ setInterval(function () {
             }
             var detail = {
               codeDetail: $scope.data.pds.detailsPDS[i].codeDetail,
-              codePRC: $scope.data.pds.detailsPDS[i].codePRC,
+             // codePRC: $scope.data.pds.detailsPDS[i].codePRC,
               codePDS: $scope.data.pds.detailsPDS[i].codePDS,
               codeArticle: $scope.data.pds.detailsPDS[i].codeArticle,
               quantite: $scope.data.pds.detailsPDS[i].quantite,
@@ -6627,6 +6628,7 @@ setInterval(function () {
         }
 
 
+       // console.log("codePRC:",  $scope.data.pds.detailsPDS[i].codePRC);
         console.log("data pds", $scope.data.pds);
 
         //  $scope.data.pds.dateAjout = '2020-10-20 08:13:50';
@@ -6642,6 +6644,7 @@ setInterval(function () {
           for (var i = 0; i < $scope.data.pds.detailsPDS.length; i++) {
             $scope.data.pds.detailsPDS[i].isCanceled = $scope.data.pds.detailsPDS[i].isCanceled ? 1 : 0;
             $scope.data.pds.detailsPDS[i].isUnloaded = $scope.data.pds.detailsPDS[i].isUnloaded ? 1 : 0;
+          
 
             if ($scope.data.pds.detailsPDS[i].quantite != " ") {
               $scope.data.pds.detailsPDS[i].quantite = parseInt($scope.data.pds.detailsPDS[i].quantite);
@@ -6654,8 +6657,15 @@ setInterval(function () {
             } else {
               console.log($scope.data.pds.detailsPDS[i].prix)
             }
+            if ($scope.data.pds.detailsPDS[i].idMotif != " ") {
+              $scope.data.pds.detailsPDS[i].idMotif = +delet;
+            } else {
+              console.log($scope.data.pds.detailsPDS[i].idMotif)
+            }
 
-
+           
+             
+           
           }
 
 
@@ -6665,9 +6675,10 @@ setInterval(function () {
             $scope.data.pds.isLoaded   = 0
             $scope.data.pds.isCurrent  = 0
             $scope.data.pds.isCanceled = 1
-            $scope.data.pds.idMotif    = delet
+            $scope.data.pds.idMotif    = +delet
           }
           console.log('----------PDS---------');
+          
           console.log($scope.data.pds);
           ApiAjoutPdsFromRecap.ajoutPdsFromRecap($scope.data.pds, $scope.initial).success(
             function (response) {
