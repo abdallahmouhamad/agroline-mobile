@@ -82,22 +82,22 @@
 
           <a class="item item-icon-left">
             <i class="icon ion-cash"></i>
-            Montant total : {{data.dechargement.montantTotal}}
+            Montant total : {{number(data.dechargement.montantTotal)}}
           </a>
 
           <a class="item item-icon-left">
             <i class="icon ion-cash"></i>
-            Montant ventes : {{data.dechargement.montantVentes}}
+            Montant ventes : {{number(data.dechargement.montantVentes)}}
           </a>
 
           <a class="item item-icon-left">
             <i class="icon ion-cash"></i>
-            Montant comptant : {{data.dechargement.montantComptant}}
+            Montant comptant : {{number(data.dechargement.montantComptant)}}
           </a>
 
           <a class="item item-icon-left">
             <i class="icon ion-cash"></i>
-            Montant credit : {{data.dechargement.montantCredit}}
+            Montant credit : {{number(data.dechargement.montantCredit)}}
           </a>
 
           <a class="item item-icon-left">
@@ -140,11 +140,11 @@
 
           <div class="col content-div-row rendu" placeholder="0">{{d.quantiteRendue}}</div>
 
-          <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.montantComptant}}</div>
-          <div class="col content-div-row " ng-if="d.idMotif !== 'edit'">{{d.montantComptant}}</div>
+          <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{number(d.montantComptant)}}</div>
+          <div class="col content-div-row " ng-if="d.idMotif !== 'edit'">{{number(d.montantComptant)}}</div>
 
-          <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.montantCredit}}</div>
-          <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{d.montantCredit}}</div>
+          <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{number(d.montantCredit)}}</div>
+          <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{number(d.montantCredit)}}</div>
 
           <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" ng-click="editDetail(d, 'edit')">
 
@@ -164,8 +164,8 @@
           <div class="col" style="text-align: center;"></div>
           <div class="col" style="text-align: center;"></div>
           <div class="col" style="text-align: center;"></div>
-          <div class="col" style="text-align: center;">{{data.montantComptantTotal}}</div>
-          <div class="col" style="text-align: center;">{{data.montantCreditTotal}}</div>
+          <div class="col" style="text-align: center;">{{number(data.montantComptantTotal)}}</div>
+          <div class="col" style="text-align: center;">{{number(data.montantCreditTotal)}}</div>
           <div class="col" style="text-align: center;"></div>
         </div>
 

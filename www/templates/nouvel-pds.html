@@ -80,11 +80,11 @@
 
             <div ng-if="sens === 'nouvelle'">
 
-              <div class="row" style="margin-top: 10px;">
+              <!--<div class="row" style="margin-top: 10px;">
 
                 <div class="col" style="font-size: 130%;">Details du PDS</div>
 
-              </div>
+              </div>-->
 
               <div class="row" ng-if="data.recapPRC.length == 0 ||  edit == true">
 
@@ -514,13 +514,13 @@
 
                 <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">
                   <label style="margin-top: 10px;">
-                    {{ d.prix * d.quantite }}
+                    {{ number(d.prix * d.quantite) }}
                   </label>
                 </div>
 
                 <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">
                   <label style="margin-top: 10px;">
-                    {{ d.prix * d.quantite}}
+                    {{ number(d.prix * d.quantite)}}
                   </label>
                 </div>
 
@@ -544,9 +544,9 @@
 
             </div>
 
-            <div class="row" style="margin-top: 10px;">
+            <div class="row" style="margin-top: 10px;" ng-if="data.detailsPDS.length > 0">
 
-              <div class="col" style="font-size: 130%;">Details PRC</div>
+              <div class="col" style="font-size: 130%;">Details PDS</div>
 
             </div>
 
@@ -578,7 +578,7 @@
 
                 <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">
                   <label style="margin-top: 10px;">
-                    {{ d.quantite }}
+                    {{d.quantite }}
                   </label>
                 </div>
 
@@ -591,25 +591,25 @@
 
                 <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">
                   <label style="margin-top: 10px;">
-                    {{ d.prix }}
+                    {{ number(d.prix) }}
                   </label>
                 </div>
 
                 <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">
                   <label style="margin-top: 10px;">
-                    {{ d.prix }}
+                    {{ number(d.prix) }}
                   </label>
                 </div>
 
                 <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">
                   <label style="margin-top: 10px;">
-                    {{ d.prix * d.quantite }}
+                    {{ number(d.prix * d.quantite) }}
                   </label>
                 </div>
 
                 <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">
                   <label style="margin-top: 10px;">
-                    {{ d.prix * d.quantite}}
+                    {{ number(d.prix * d.quantite)}}
                   </label>
                 </div>
 

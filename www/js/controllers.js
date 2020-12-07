@@ -21,13 +21,16 @@ angular
     urlJava,
     ApiListStock,
     ApiListArticle,
-
+    $cordovaGeolocation,
     ApiListRegions,
     ApiListVilles,
     ApiListMarches,
     ApiListZones,
     ApiListPrc,
-    $cordovaPrinter
+    $cordovaPrinter,
+    ApiTracking,
+    formatNewDate,
+    SeparateurMillier
   ) {
     $scope.menu = true;
     $scope.scroll = false;
@@ -36,8 +39,176 @@ angular
     var user = localStorage.getItem("user");
     $scope.data.user = JSON.parse(user);
     $scope.data.prcs = [];
+    $scope.jsonPositionsLog = [];
+
+    $scope.number = function()
+      {
+        console.log(SeparateurMillier.separateurMillier('170000000'));
+      }
+   
 
     // cordova.plugins.printer.print("Hello\nWorld!");
+
+
+    /*$scope.checkAvailability =function (){
+      cordova.plugins.diagnostic.isGpsLocationAvailable(function(available){
+          console.log("GPS location is " + (available ? "available" : "not available"));
+          if(!available){
+             checkAuthorization();
+          }else{
+              console.log("GPS location is ready to use");
+          }
+      }, function(error){
+          console.error("The following error occurred: "+error);
+      });
+  }
+  
+  $scope.checkAuthorization =function (){
+      cordova.plugins.diagnostic.isLocationAuthorized(function(authorized){
+          console.log("Location is " + (authorized ? "authorized" : "unauthorized"));
+          if(authorized){
+              checkDeviceSetting();
+          }else{
+              cordova.plugins.diagnostic.requestLocationAuthorization(function(status){
+                  switch(status){
+                      case cordova.plugins.diagnostic.permissionStatus.GRANTED:
+                          console.log("Permission granted");
+                          checkDeviceSetting();
+                          break;
+                      case cordova.plugins.diagnostic.permissionStatus.DENIED:
+                          console.log("Permission denied");
+                          // User denied permission
+                          break;
+                      case cordova.plugins.diagnostic.permissionStatus.DENIED_ALWAYS:
+                          console.log("Permission permanently denied");
+                          // User denied permission permanently
+                          break;
+                  }
+              }, function(error){
+                  console.error(error);
+              });
+          }
+      }, function(error){
+          console.error("The following error occurred: "+error);
+      });
+  }
+  
+  $scope.checkDeviceSetting = function(){
+      cordova.plugins.diagnostic.isGpsLocationEnabled(function(enabled){
+          console.log("GPS location setting is " + (enabled ? "enabled" : "disabled"));
+          if(!enabled){
+              cordova.plugins.locationAccuracy.request(function (success){
+                  console.log("Successfully requested high accuracy location mode: "+success.message);
+              }, function onRequestFailure(error){
+                  console.error("Accuracy request failed: error code="+error.code+"; error message="+error.message);
+                  if(error.code !== cordova.plugins.locationAccuracy.ERROR_USER_DISAGREED){
+                      if(confirm("Failed to automatically set Location Mode to 'High Accuracy'. Would you like to switch to the Location Settings page and do this manually?")){
+                          cordova.plugins.diagnostic.switchToLocationSettings();
+                      }
+                  }
+              }, cordova.plugins.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY);
+          }
+      }, function(error){
+          console.error("The following error occurred: "+error);
+      });
+  }
+  $scope.checkAvailability();*/
+
+  $scope.checkLocation = function()
+  {
+    console.log('-------Position est lance------');
+    var options = {
+      timeout: 10000,
+      enableHighAccuracy: true,
+    };
+    $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
+     console.log('Position accorde');
+
+     $scope.initGetLocationListener();
+    }, err=>{
+      console.log('Erreur de position', err);
+      $ionicPopup.show({
+        title: "Informations",
+        template: "Veuillez activer la position de votre téléphone pour continuer",
+        scope: $scope,
+        buttons: [
+          {
+            text: 'D\'accord',
+            type: 'button-energized',
+            onTap: function (e) {
+              return true;
+            }
+          },
+        ]
+      }).then(function (result) {
+        if (result) {
+          ionic.Platform.exitApp();
+        }
+      });
+    }).catch(function(error){
+      console.log('Erreur de position', error);
+    });
+  }
+
+  $scope.checkLocation();
+  $scope.initGetLocationListener = function () {
+  
+    intervalGetPosition = navigator.geolocation.watchPosition(
+      function (position) {
+        console.log('----------Location----');
+        console.log(position);
+        $scope.jsonPositionsLog.push({
+          latitude             : position.coords.latitude,
+          longitude            : position.coords.longitude,
+          dateEnregistrement   : formatNewDate.formatNewDate()
+        });
+       // $scope.addTrack($scope.jsonPositionsLog[0]);
+        $scope.$apply();
+      },
+      function (error) {
+        
+      },
+      {
+        timeout: 3000,
+      }
+    );
+  };
+  var transactionTime = 0; //Initial time of timer
+  var timeStamp = Math.floor(Date.now() / 1000);
+  var deltaDelay = 1;
+
+setInterval(function () {
+    if (transactionTime != 0 && (Math.floor(Date.now() / 1000) - timeStamp) > deltaDelay) {
+            transactionTime += (Math.floor(Date.now() / 1000) - timeStamp);
+        }
+        timeStamp = Math.floor(Date.now() / 1000);
+        if ($scope.data.user) {  
+          $scope.addTrack();
+        }
+        console.log('Timer is load+++++',timeStamp)
+
+    }, 10000);
+  $scope.addTrack = function()
+  {
+    console.log('----Tracking envoye -------')
+    var temponsPositions = $scope.jsonPositionsLog;
+    $scope.jsonPositionsLog = [];
+    for(var i=0;i<temponsPositions.length; i++){
+      ApiTracking.addTrack(temponsPositions[i])
+      .success(
+        function (response) {
+        console.log(response);
+      })
+    }
+    
+  }
+
+  /*Number.prototype.toCurrencyString=function(){
+    return this.toFixed(2).replace(/(\d)(?=(\d{3})+\b)/g,'$1 ');
+   }
+   n=12345678;
+   console.log(n.toCurrencyString());*/
+  
 
 
     $scope.synchroStock = function () {
@@ -212,6 +383,7 @@ angular
       console.log("non autoriser");
       $scope.scroll = false;
     } else {
+
       $scope.scroll = true;
       // $scope.menu = true;
       console.log("autoriser");
@@ -3002,6 +3174,7 @@ angular
             console.log('------PRC LOCAL');
             console.log($scope.data.prcs)
             $scope.data.prcs = $scope.data.prcs.concat(response);
+            
             console.log('------PRC EN LIGN');
             console.log(response)
           }
@@ -3012,6 +3185,18 @@ angular
         }
       );
     };
+    
+
+     $scope.number = function(mnt)
+     {
+      Number.prototype.toCurrencyString=function(){
+        return this.toFixed(2).replace(/(\d)(?=(\d{3})+\b)/g,'$1 ');
+       }
+       n=+mnt;
+       console.log(n.toCurrencyString());
+       return n.toCurrencyString();
+     }
+   
 
     $scope.Erreur = function (message) {
       $ionicPopup.show({
@@ -3386,6 +3571,15 @@ angular
 
     $scope.initvar();
 
+    $scope.number = function(mnt)
+    {
+     Number.prototype.toCurrencyString=function(){
+       return this.toFixed(2).replace(/(\d)(?=(\d{3})+\b)/g,'$1 ');
+      }
+      n=+mnt;
+      console.log(n.toCurrencyString());
+      return n.toCurrencyString();
+    }
     ApiListArticle.getListArticle().success(function (response) {
       if (response) {
         $scope.data.listarticles = response;
@@ -3874,6 +4068,15 @@ angular
 
 
     };
+    $scope.number = function(mnt)
+    {
+     Number.prototype.toCurrencyString=function(){
+       return this.toFixed(2).replace(/(\d)(?=(\d{3})+\b)/g,'$1 ');
+      }
+      n=+mnt;
+      console.log(n.toCurrencyString());
+      return n.toCurrencyString();
+    }
 
     $scope.showPopUp = function (libelle, etat, code = "") {
       $ionicPopup.show({
@@ -3940,10 +4143,11 @@ angular
             $scope.data.detailsPRC.details[i].codeArticle ===
             $scope.itemEdit.codeArticle
           ) {
+            var index = i;
 
-            var errorMessage = checkQuantite.checkQuantite($scope.data.artcilechoisit.code, $scope.data.quantite);
+           // var errorMessage = checkQuantite.checkQuantite($scope.data.artcilechoisit.code, $scope.data.quantite);
 
-            if (errorMessage == 1) {
+         
 
            //   codePRC(string), codeDetail(string), codeArticle(string), prix(int), quantite(int), isCanceled(int), idMotif(int)
 
@@ -3976,7 +4180,7 @@ angular
                     console.log(response)
                     if (response.reponse == 1) {
 
-                      var prclocal = JSON.parse(localStorage.getItem('prclocal'));
+                      /*var prclocal = JSON.parse(localStorage.getItem('prclocal'));
 
                       if (prclocal && prclocal.length > 0) {
                         var prcToModif = $filter('filter')(prclocal, { codePRC: $scope.data.detailsPRC.codePRC });
@@ -3992,14 +4196,14 @@ angular
                           localStorage.setItem('prclocal', JSON.stringify(prclocal));
                         }
 
-                      }
-
-                      $scope.data.detailsPRC.details[i].idMotif =
+                      }*/
+                      console.log(index)
+                      $scope.data.detailsPRC.details[index].idMotif =
                         $scope.data.motifchoisit.idMotif;
-                      $scope.data.detailsPRC.details[i].quantite = $scope.data.quantite;
-                      $scope.data.detailsPRC.details[i].prix = $scope.data.prix;
-                      $scope.data.detailsPRC.details[i].codeArticle = $scope.data.artcilechoisit.code;
-                      $scope.data.detailsPRC.details[i].article = $scope.data.artcilechoisit.libelle;
+                      $scope.data.detailsPRC.details[index].quantite = $scope.data.quantite;
+                      $scope.data.detailsPRC.details[index].prix = $scope.data.prix;
+                      $scope.data.detailsPRC.details[index].codeArticle = $scope.data.artcilechoisit.code;
+                      $scope.data.detailsPRC.details[index].article = $scope.data.artcilechoisit.libelle;
 
                       $scope.edit = false;
                       $scope.data.motifchoisit = null;
@@ -4007,6 +4211,18 @@ angular
                       $ionicPopup.show({
                         title: "Information",
                         template: 'réussi',
+                        scope: $scope,
+                        buttons: [
+                          {
+                            text: "Ok",
+                            type: "button-assertive",
+                          },
+                        ],
+                      });
+                    }else{
+                      $ionicPopup.show({
+                        title: "Information",
+                        template: ''+response.reponse,
                         scope: $scope,
                         buttons: [
                           {
@@ -4024,11 +4240,7 @@ angular
                 )
 
 
-            } else {
-              $scope.Erreur(errorMessage);
-            }
-
-            break;
+      
           }
         }
       } else {
@@ -4415,7 +4627,15 @@ angular
       // $scope.data.codePrc = localStorage.getItem("codeArticle");
 
       var codeClient = { codeCommerciale: $scope.data.user.code };
-
+      $scope.number = function(mnt)
+      {
+       Number.prototype.toCurrencyString=function(){
+         return this.toFixed(2).replace(/(\d)(?=(\d{3})+\b)/g,'$1 ');
+        }
+        n=+mnt;
+        console.log(n.toCurrencyString());
+        return n.toCurrencyString();
+      }
       $ionicLoading.show({
         content: "Loading",
         animation: "fade-in",
@@ -4775,6 +4995,16 @@ angular
         $scope.data.detailsPDS.details = pds.detailsPDS
       }
     };
+
+    $scope.number = function(mnt)
+      {
+       Number.prototype.toCurrencyString=function(){
+         return this.toFixed(2).replace(/(\d)(?=(\d{3})+\b)/g,'$1 ');
+        }
+        n=+mnt;
+        console.log(n.toCurrencyString());
+        return n.toCurrencyString();
+      }
 
     $scope.validerDeletPds = function () {
       $ionicPopup.show({
@@ -5448,7 +5678,8 @@ angular
     formatNewDate,
     ApiListStock,
     ApiDeletDetailPDS,
-    ApiDeletPDS
+    ApiDeletPDS,
+    SeparateurMillier
   ) {
     $scope.data = {};
 
@@ -5536,6 +5767,10 @@ angular
 
       }
     };
+    $scope.number = function(mnt)
+    {
+      return SeparateurMillier.separateurMillier(mnt);
+    }
     $scope.synchroStock = function () {
 
       ApiListStock.getListStock().success(
@@ -5644,7 +5879,7 @@ angular
 
     $scope.editDetail = function (item) {
       $scope.data.artcilechoisit = {};
-     // $scope.data.artcilechoisit.libelle = item.article;
+      $scope.data.artcilechoisit.libelle = item.article;
       $scope.data.artcilechoisit.code = item.codeArticle;
       console.log("--------------Quantite---------------");
       console.log(item.quantite);
@@ -5911,8 +6146,8 @@ angular
         $scope.data.annulation = true;
       } else {
         if ($scope.data.motifchoisit) {
-          localStorage.setItem("pds", null);
-          var pds = JSON.parse(localStorage.getItem('pdslocal'));
+          
+         /* var pds = JSON.parse(localStorage.getItem('pdslocal'));
 
           if (pds && pds.length > 0) {
 
@@ -5923,8 +6158,7 @@ angular
 
               localStorage.setItem('pdslocal', JSON.stringify(pds))
             }
-          }
-          //codePDS(string), isCanceled(int), idMotif(int)
+          }*/
           var value = {
             codePDS     : $scope.data.pds.codePDS,
             isCanceled  : 1,
@@ -5954,7 +6188,9 @@ angular
 
     $scope.validerDelet = function(value)
     {
-      ApiDeletPDS.deletPDS(value)
+      $scope.submit(value.idMotif);
+
+      /*ApiDeletPDS.deletPDS(value)
               .success(
                 function (response) {
                   console.log('----------Annulatioon pds-------------');
@@ -5974,7 +6210,7 @@ angular
                   $ionicLoading.hide();
                   $scope.Erreur(error);
                 }
-              )
+              )*/
 
     }
 
@@ -6074,6 +6310,8 @@ angular
       if ($scope.data.grossistechoisit) {
         $scope.initPDS();
         var err = null;
+        var message = "";
+            var mnt = 0.0;
         if($scope.data.pds.initial == false){
 
           if($scope.data.detailsPDSRECAP && $scope.data.detailsPDSRECAP.length > 0){
@@ -6083,6 +6321,24 @@ angular
                   {
                     err =  i;
                     break;
+                  }else{
+                    var index = i + 1;
+                    console.log($scope.data.detailsPDSRECAP[i]);
+                    message =
+                      message +
+                      "" +
+                      index +
+                      ")  " +
+                      $scope.data.detailsPDSRECAP[i].article +
+                      " " +
+                      "\n Quantité: " +
+                      $scope.data.detailsPDSRECAP[i].quantite +
+                      "" +
+                      "\n Prix: " +
+                      $scope.number($scope.data.detailsPDSRECAP[i].prix) +
+                      "" +
+                      "\n \n";
+                    mnt = mnt + ($scope.data.detailsPDSRECAP[i].prix * $scope.data.detailsPDSRECAP[i].quantite);
                   }
             }
           }
@@ -6100,44 +6356,43 @@ angular
               showDelay: 0,
               duration: 10000,
             });
-  
-            //$scope.data.pds.codeGenere;
-  
-            //Article, quatite, valeur et en bas valeur total et code de securite
-  
-            var message = "";
-            var mnt = 0.0;
-            for (var i = 0; i < $scope.data.pds.detailsPDS.length; i++) {
-              var index = i + 1;
-              console.log($scope.data.pds.detailsPDS[i]);
-              message =
-                message +
-                "" +
-                index +
-                ")  " +
-                $scope.data.pds.detailsPDS[i].article +
-                " " +
-                "\n Quantité: " +
-                $scope.data.pds.detailsPDS[i].quantite +
-                "" +
-                "\n Prix: " +
-                $scope.data.pds.detailsPDS[i].prix +
-                "" +
-                "\n \n";
-              mnt = mnt + ($scope.data.pds.detailsPDS[i].prix * $scope.data.pds.detailsPDS[i].quantite);
+            if($scope.data.pds.initial == true)
+            {
+              for (var i = 0; i < $scope.data.pds.detailsPDS.length; i++) {
+                var index = i + 1;
+                console.log($scope.data.pds.detailsPDS[i]);
+                message =
+                  message +
+                  "" +
+                  index +
+                  ")  " +
+                  $scope.data.pds.detailsPDS[i].article +
+                  " " +
+                  "\n Quantité: " +
+                  $scope.data.pds.detailsPDS[i].quantite +
+                  "" +
+                  "\n Prix: " +
+                  $scope.number($scope.data.pds.detailsPDS[i].prix) +
+                  "" +
+                  "\n \n";
+                mnt = mnt + ($scope.data.pds.detailsPDS[i].prix * $scope.data.pds.detailsPDS[i].quantite);
+              }
+
             }
-            var messageMontant = "";
-            if ($scope.data.recapPRC && $scope.data.recapPRC.length > 0) {
+  
+            var messageMontant = "\n Montant total:   " + $scope.number(mnt) + "FCFA";;
+            /*if ($scope.data.recapPRC && $scope.data.recapPRC.length > 0) {
               messageMontant =
                 "\n Montant total:   " + $scope.data.recapPRC[0].montant + "FCFA";
             } else {
               messageMontant =
                 "\n Montant total:   " + mnt + "FCFA";
-            }
+            }*/
   
             var messageCode = "\n Code::    " + $scope.data.pds.codeGenere;
             var MessageGlobal = message + messageMontant + messageCode;
             console.log(messageCode);
+            console.log(MessageGlobal);
             
             console.log($scope.data.pds);
             console.log($scope.data.detailsPDSRECAP);
@@ -6145,7 +6400,7 @@ angular
             try {
               console.log(messageCode);
   
-              SendSms.sendSMS(MessageGlobal, $scope.data.grossistechoisit.telephone);
+             SendSms.sendSMS(MessageGlobal, $scope.data.grossistechoisit.telephone);
   
               localStorage.setItem("pds", JSON.stringify($scope.data.pds));
   
@@ -6267,13 +6522,13 @@ angular
       });
 
     }
-
-    $scope.submit = function () {
+    //localStorage.setItem("pds", null);
+    $scope.submit = function (delet = null) {
 
       console.log("-----------------Value PDS-------------");
 
       console.log($scope.data.pds);
-      if ($scope.data.pds.codeGenere === $scope.data.code) {
+      if ($scope.data.pds.codeGenere === $scope.data.code || delet !== null) {
         console.log("code :", $scope.data.pds.codeGenere);
         console.log("compare :", $scope.data.code);
         $scope.data.pds.isLoaded = 1;
@@ -6404,7 +6659,16 @@ angular
           }
 
 
-
+          if(delet)
+          {
+            $scope.data.pds.isLoaded   = 0
+            $scope.data.pds.isLoaded   = 0
+            $scope.data.pds.isCurrent  = 0
+            $scope.data.pds.isCanceled = 1
+            $scope.data.pds.idMotif    = delet
+          }
+          console.log('----------PDS---------');
+          console.log($scope.data.pds);
           ApiAjoutPdsFromRecap.ajoutPdsFromRecap($scope.data.pds, $scope.initial).success(
             function (response) {
               $ionicLoading.hide();
@@ -6513,7 +6777,8 @@ angular
     ApiListArticle,
     $ionicPopup,
     ApiRecapPdsPrc,
-    ApiListFacturation
+    ApiListFacturation,
+    SeparateurMillier
   ) {
     console.log("Facture");
 
@@ -6524,6 +6789,10 @@ angular
       $scope.data.user = JSON.parse(localStorage.getItem("user"));
       $scope.data.facturations = [];
     };
+    $scope.number = function(mnt)
+      {
+        return SeparateurMillier.separateurMillier(mnt);
+      }
 
     $scope.initFacturations = function () {
       console.log($scope.data.user);
@@ -6599,7 +6868,7 @@ angular
     ApiListFacturation,
     formatNewDate,
     ApiDeatilsFacture,
-    checkQuantite, ApiModificationDetailFact, ApiDeletDetailFact, CodeGenere, ApiEncaissement,ApiSuppressionEncaissement
+    checkQuantite, ApiModificationDetailFact, ApiDeletDetailFact, CodeGenere, ApiEncaissement,ApiSuppressionEncaissement,SeparateurMillier
 
   ) {
     console.log("Facture");
@@ -6634,6 +6903,10 @@ angular
     $scope.encaisser = function () {
       $scope.data.encaisser = true;
     }
+    $scope.number = function(mnt)
+      {
+        return SeparateurMillier.separateurMillier(mnt);
+      }
 
     $scope.submit = function () {
       var err = null;
@@ -6845,7 +7118,7 @@ angular
             $scope.itemEdit.codeArticle
           ) {
 
-            var errorMessage = checkQuantite.checkQuantite($scope.data.artcilechoisit.code, $scope.data.quantite);
+            var errorMessage = $scope.data.detailsfactures.hasPRC !== 1 ? checkQuantite.checkQuantite($scope.data.artcilechoisit.code, $scope.data.quantite) : 1;
 
             if (errorMessage == 1) {
 
@@ -6854,9 +7127,9 @@ angular
                 codeFacture: $scope.data.detailsfactures.codeFacture,
                 codeDetail: $scope.itemEdit.codeDetail,
                 codeArticle: $scope.data.artcilechoisit.code,
-                quantite: $scope.data.quantite,
+                quantite: +$scope.data.quantite,
                 isCanceled: 1,
-                idMotif: $scope.data.motifchoisit.idMotif
+                idMotif: +$scope.data.motifchoisit.idMotif
               }
               console.log('-----Objet to modif');
               console.log(ligneDetailTosend);
@@ -6898,6 +7171,11 @@ angular
                           },
                         ],
                       });
+                    }else{
+                      $scope.data.detailsfactures.details[i].idMotif = 0;
+                      $scope.edit = false;
+                      $scope.data.motifchoisit = null;
+                      $scope.Erreur(response.reponse);
                     }
 
                   }, (error) => {
@@ -7243,7 +7521,7 @@ angular
     ApiCodePDS,
     formatNewDate,
     ApiListStock,
-    $filter, ApiDeletDetailFact
+    $filter, ApiDeletDetailFact,SeparateurMillier
 
   ) {
     $scope.data = {};
@@ -7284,7 +7562,7 @@ angular
       $scope.data.quantite = null;
       $scope.data.prix = null;
       $scope.data.libelle = null;
-      $scope.data.delaipaiement = null;
+      $scope.data.delaipaiement = $scope.data.prc ? +$scope.data.prc.delaiPaiement : null;
       $scope.data.codePDS = null;
       $scope.data.montantTotal = 0;
       // $scope.initDetailFCT();
@@ -7300,6 +7578,10 @@ angular
         })
     }
     $scope.getcodepds();
+    $scope.number = function(mnt)
+      {
+        return SeparateurMillier.separateurMillier(mnt);
+      }
 
     $scope.showPopUp = function (libelle, etat, code = "") {
 
@@ -7373,7 +7655,7 @@ angular
 
 
             if (type == null) {
-              var errorMessage = checkQuantite.checkQuantite($scope.data.artcilechoisit.code, $scope.data.quantite);
+              var errorMessage = $scope.initial ? checkQuantite.checkQuantite($scope.data.artcilechoisit.code, $scope.data.quantite) : 1;
 
               if (errorMessage == 1) {
                 $scope.data.detailsFACT[i].idMotif =
@@ -7846,7 +8128,7 @@ angular
           '<td>' + $scope.data.detailsFACT[i].codeArticle + '</td>' +
           '<td>' + $scope.data.detailsFACT[i].article + '</td>' +
           '<td>' + $scope.data.detailsFACT[i].quantite + '</td>' +
-          '<td>' + $scope.data.detailsFACT[i].prix + '</td>';
+          '<td>' + $scope.number($scope.data.detailsFACT[i].prix) + '</td>';
           $scope.data.montantTotal = $scope.data.montantTotal + ($scope.data.detailsFACT[i].prix *$scope.data.detailsFACT[i].quantite);
 
       }
@@ -7854,7 +8136,7 @@ angular
      
       details = details + '<tr style="text-align: center">' + corps + '</tr></table>';
       var sTable = document.getElementById('tab').innerHTML;
-      var footer = '<h3 style="margin-top:50px;">Montant total:<label style="margin-left:20px">' +MontantTotal + ' CFA  </label></h3>';
+      var footer = '<h3 style="margin-top:50px;">Montant total:<label style="margin-left:20px">' + $scope.number(MontantTotal) + ' CFA  </label></h3>';
       var titleDetail = '<h2>Details Facture</h2>';
       var t = image +
         enteteComm + telUser + enteteCli + titleDetail + sTable + footer;
@@ -7937,12 +8219,16 @@ angular
 
       errorInput = !$scope.data.fact.position ? 'Veillez activez votre position svp.' : errorInput
 
-      $scope.data.fact.codeClient = $scope.data.clientchoisit ? $scope.data.clientchoisit.codeClient : $scope.data.recapPrc.codeClient;
-
+        
+      if($scope.data.clientchoisit){
+        $scope.data.fact.codeClient = $scope.data.clientchoisit.codeClient;
+      }else if($scope.data.recapPrc){
+        $scope.data.fact.codeClient = $scope.data.recapPrc.codeClient;
+      }
       $scope.data.fact.idModepaiement = $scope.data.clientchoisit ? $scope.data.clientchoisit.idModepaiement : $scope.data.recapPrc.idModepaiement;
 
       errorInput = $scope.data.fact.codeClient == null && $scope.initial == true ? 'Veuillez choisir un client' : errorInput;
-
+      console.log('Error input------>',errorInput);
       var valueFactPRC = {};
 
       if ($scope.initial == false) {
@@ -8200,7 +8486,7 @@ angular
     ApiListArticle, $ionicPopup,
     CodeGenere, ApiListGrossiste,
     ApiRecapDchmnt, ApiValiderDchmnt,
-    SendSms, ApiAjoutFacturation, ApiRecapPdsPrc, formatNewDate, ApiRecapFactPrc) {
+    SendSms, ApiAjoutFacturation, ApiRecapPdsPrc, formatNewDate, ApiRecapFactPrc,SeparateurMillier) {
     $scope.data = {};
     $scope.initvar = function () {
       $scope.data.codePDS = localStorage.getItem('codePDS');
@@ -8265,6 +8551,11 @@ angular
     }
 
     $scope.initvar();
+
+    $scope.number = function(mnt)
+      {
+        return SeparateurMillier.separateurMillier(mnt);
+      }
 
     $scope.editDetail = function (item, action) {
       if ($scope.edit) {
@@ -8524,6 +8815,8 @@ angular
             montantVerse: $scope.data.montantVerse,
             details: []
           }
+          var message ='';
+         
           for (var i = 0; i < $scope.data.dechargement.details.length; i++) {
             var detail = {
               codeDetail: $scope.data.dechargement.details[i].codeDetail ? $scope.data.dechargement.details[i].codeDetail : "DDCH-" + CodeGenere.getCodeGenere(),
@@ -8534,21 +8827,75 @@ angular
               quantiteRendue: $scope.data.dechargement.details[i].quantiteRendue
             }
             values.details.push(detail);
+            /*article: "CARTON SAUCE TOMATE PREMIUM LINGUERE 40 SACHETS x 70 GR"
+            codeArticle: "STPL07"
+            codeBarre: null
+            famille: "STP"
+            image: "images/articles/st70g.jpg"
+            montantComptant: ".00"
+            montantCredit: "800.00"
+            quantiteArendre: "8"
+            quantiteComptant: "0"
+            quantiteCredit: "2"
+            quantitePrise: "10"*/
+              var index = i + 1;
+              console.log($scope.data.dechargement.details[i]);
+              
+              message =
+                message +
+                "" +
+                index +
+                ")  " +
+                $scope.data.dechargement.details[i].article +
+                " " +
+                "\n Quantité Prise: " +
+                $scope.data.dechargement.details[i].quantitePrise +
+                "" +
+                "\n Quantité à rendre: " +
+                $scope.data.dechargement.details[i].quantiteArendre +
+                "" +
+                "\n Quantité crédit: " +
+                $scope.data.dechargement.details[i].quantiteCredit +
+                "" +
+                "\n Quantité rendue: " +
+                $scope.data.dechargement.details[i].quantiteRendue +
+                "" +
+                "\n Quantité comptant: " +
+                $scope.number($scope.data.dechargement.details[i].quantiteComptant) +
+                "" +
+                "\n Montant comptant: " +
+                $scope.number($scope.data.dechargement.details[i].montantComptant) +
+                "" +
+                "\n Montant credit: " +
+                $scope.number($scope.data.dechargement.details[i].montantCredit) +
+                "" +
+                "\n \n";
+
+            //    mntCredit = mntCredit + (+$scope.data.dechargement.details[i].montantCredit * +$scope.data.dechargement.details[i].quantiteCredit);
+              //  mntComptant = mntCredit + (+$scope.data.dechargement.details[i].montantComptant * +$scope.data.dechargement.details[i].quantiteComptant);
 
           }
 
 
           try {
+            var messageMontantCredit = "\n Montant crédit:   " + $scope.number($scope.data.dechargement.montantCredit) + "FCFA";
+            var messageMontantComptant = "\n Montant comptant:   " + $scope.number($scope.data.dechargement.montantComptant) + "FCFA";
+            var messageMontantVerse = "\n Montant versé:   " + $scope.number($scope.data.montantVerse) + "FCFA";
+            var montantTotal = "\n Montant total:   " + $scope.number($scope.data.dechargement.montantTotal) + "FCFA";
+        
+            
+            var messageCode = '\nCode secret: ' + values.codeGenere
 
-            var Message = 'Code secret: ' + values.codeGenere
+            var MessageGlobal = message + messageMontantCredit + messageMontantComptant +messageMontantVerse + montantTotal + messageCode;
 
-            SendSms.sendSMS(Message, $scope.data.dechargement.telephone);
-            console.log(Message);
+            console.log(MessageGlobal);
+            //console.log($scope.data.dechargement.details)
+            SendSms.sendSMS(MessageGlobal, $scope.data.dechargement.telephone);
+            
             localStorage.setItem("pdstodecharge", JSON.stringify(values));
 
             localStorage.setItem("pdstodechargecode", values.codeGenere);
-            console.log('-----code generer-------');
-            console.log(values.codeGenere);
+            
             $scope.data.verser = true;
             $scope.data.dechargement_valider = values;
             $ionicLoading.hide();
@@ -8679,7 +9026,7 @@ angular
     $scope, $state, $ionicLoading,
     ApiListPrc, ApiDetailPrc, ApiAjoutPrc,
     ApiListClient, ApiListMotif,
-    ApiListArticle, $ionicPopup, ApiRecapPdsPrc, ApiListDechargement) {
+    ApiListArticle, $ionicPopup, ApiRecapPdsPrc, ApiListDechargement,SeparateurMillier) {
 
     console.log('dechargements');
     $scope.data = {};
@@ -8691,6 +9038,10 @@ angular
       $scope.data.dechargements = [];
 
     }
+    $scope.number = function(mnt)
+      {
+        return SeparateurMillier.separateurMillier(mnt);
+      }
 
     $scope.initDechargements = function () {
       console.log($scope.data.user);
@@ -8742,7 +9093,7 @@ angular
     $scope, $state, $ionicLoading,
     ApiListPrc, ApiDetailPrc, ApiAjoutPrc,
     ApiListClient, ApiListMotif,
-    ApiListArticle, $ionicPopup, ApiRecapPdsPrc, ApiListDechargement, ApiPdsNoPayed) {
+    ApiListArticle, $ionicPopup, ApiRecapPdsPrc, ApiListDechargement, ApiPdsNoPayed,SeparateurMillier) {
 
     console.log('versement');
     $scope.data = {};
@@ -8770,6 +9121,10 @@ angular
     }
     $scope.initvar();
     $scope.initPdsNoPayed();
+    $scope.number = function(mnt)
+      {
+        return SeparateurMillier.separateurMillier(mnt);
+      }
 
     $scope.goToDetailVersement = function (vers) {
 
@@ -8786,7 +9141,7 @@ angular
     ApiListPrc, ApiDetailPrc, ApiAjoutPrc,
     ApiListClient, ApiListMotif,
     ApiListArticle, $ionicPopup,
-     ApiRecapPdsPrc, ApiListDechargement, ApiPdsNoPayed, ApiDetailPdsNoPayed, ApiAjoutVersement, CodeGenere, ApiAjoutVersement, SendSms,formatNewDate) {
+     ApiRecapPdsPrc, ApiListDechargement, ApiPdsNoPayed, ApiDetailPdsNoPayed, ApiAjoutVersement, CodeGenere, ApiAjoutVersement, SendSms,formatNewDate,SeparateurMillier) {
 
     console.log('versement');
     $scope.data = {};
@@ -8807,6 +9162,10 @@ angular
       $scope.data.montant = null;
 
     }
+    $scope.number = function(mnt)
+      {
+        return SeparateurMillier.separateurMillier(mnt);
+      }
 
     $scope.initDetailPdsNoPayed = function () {
       if ($scope.data.codePds) {
@@ -8981,8 +9340,25 @@ angular
         }
         var tab_value = [];
         tab_value.push(values);
+        var messageMontant = '';
 
-        var Message = 'Code secret: ' + values.codeGenere
+        messageMontant = messageMontant +
+                    
+                      "\n Montant Total: " +
+                      $scope.number($scope.data.details_pds_no_payed.montantRestant) +
+                      "" +
+                      "\n Montant Ventes: " +
+                      $scope.number($scope.data.details_pds_no_payed.montantVentes) +
+                      "" +
+                      "\n Montants des verssements: " +
+                      $scope.number($scope.data.details_pds_no_payed.montantVerse) +
+                      "" + 
+                      "\n Montant Versé: " +
+                      $scope.number($scope.data.montant) +
+                      "" + 
+                      "\n \n";
+   
+        var Message = messageMontant + 'Code secret: ' + values.codeGenere
         try {
           SendSms.sendSMS(Message, $scope.data.details_pds_no_payed.telephone);
           localStorage.setItem("versetopds", JSON.stringify(tab_value));
@@ -8990,7 +9366,7 @@ angular
           localStorage.setItem("versetopdscode", values.codeGenere);
           $scope.data.verser = true;
           $scope.data.versement = tab_value;
-          console.log(Message);
+          //console.log(messageMontant);
           $ionicLoading.hide();
         }
         catch (err) {
@@ -10180,11 +10556,37 @@ angular
         console.log(user);
         user = JSON.parse(user);
 
-        return $http.post(url + ' /inventaire/annuler.php', values);
+        return $http.post(url + '/inventaire/annuler.php', values);
       }
     }
   })
+  .factory('ApiTracking', function ($http, urlPhp) {
+    return {
+      addTrack: function (values) {
+        var url = urlPhp.getUrl();
+        var user = localStorage.getItem('user');
+        console.log('-------------User-------');
+        console.log(user);
+        user = JSON.parse(user);
+        values['codeUtilisateur'] = user.code;
+        console.log(values);
 
+        return $http.post(url + '/utilisateur/tracking.php', values);
+      }
+    }
+  })
+.factory('SeparateurMillier', function ($http, urlPhp) {
+        return {
+          separateurMillier: function (mnt) {
+            Number.prototype.toCurrencyString=function(){
+              return this.toFixed(2).replace(/(\d)(?=(\d{3})+\b)/g,'$1 ');
+             }
+             n=+mnt;
+             console.log(n.toCurrencyString());
+             return n.toCurrencyString();
+          }
+        }
+})
   .factory("ChekConnect", function () {
     var connect;
 

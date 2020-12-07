@@ -57,17 +57,17 @@
 
             <div class="row">
                 <div class="col text-left">M.restant</div>
-                <div class="col text-right"><p>{{ vers.montantRestant }}</p></div>
+                <div class="col text-right"><p>{{ number(vers.montantRestant) }}</p></div>
             </div>
 
             <div class="row">
                 <div class="col text-left">M.versé</div>
-                <div class="col text-right"><p>{{ vers.montantVerse }}</p></div>
+                <div class="col text-right"><p>{{ number(vers.montantVerse) }}</p></div>
             </div>
 
             <div class="row">
                 <div class="col text-left">M.total versé</div>
-                <div class="col text-right"><p>{{ vers.totalVersement }}</p></div>
+                <div class="col text-right"><p>{{ number(vers.totalVersement) }}</p></div>
             </div>
   
           </a>

@@ -81,7 +81,7 @@
         </a>
         <a class="item item-icon-left" ng-if="data.detailsPDS.montant">
           <i class="icon ion-cash"></i>
-          Montant Total : {{data.detailsPDS.montant}}
+          Montant Total : {{number(data.detailsPDS.montant)}}
         </a>
         
         <a class="item item-icon-left">
@@ -209,11 +209,11 @@
 
           <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.quantite}}</div>
 
-          <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{d.prix}}</div>
+          <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{number(d.prix)}}</div>
 
-          <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.prix}}</div>
+          <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{number(d.prix)}}</div>
 
-          <div class="col content-div-row">{{d.quantite * d.prix}}</div>
+          <div class="col content-div-row">{{number(d.quantite * d.prix)}}</div>
           
 
 

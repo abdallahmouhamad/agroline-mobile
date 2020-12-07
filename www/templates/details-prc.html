@@ -195,12 +195,12 @@
           <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.quantite}}</div>
 
 
-          <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{d.prix}}</div>
-          <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.prix}}</div>
+          <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{number(d.prix)}}</div>
+          <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{number(d.prix)}}</div>
         
 
-          <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{d.quantite * d.prix}}</div>
-          <div class="col content-div-row" ng-if="d.idMotif === 'edit'">{{d.quantite * d.prix}}</div>
+          <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{number(d.quantite * d.prix)}}</div>
+          <div class="col content-div-row" ng-if="d.idMotif === 'edit'">{{number(d.quantite * d.prix)}}</div>
         
           
          

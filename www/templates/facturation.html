@@ -221,9 +221,9 @@
                 <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{d.quantite}}</div>
 
                 <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.quantite}}</div>
-                <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{d.prix}}</div>
+                <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{number(d.prix)}}</div>
 
-                <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.prix}}</div>
+                <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{number(d.prix)}}</div>
 
                 <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" ng-click="editDetail(d)">
 
@@ -258,15 +258,15 @@
         <table style="width: 700px"> 
             <tr>
                 <th>Code</th>
-                
+                <th>Designation</th>
                 <th>Quantité</th>
                 <th>Prix</th>
             </tr>
             <tr ng-repeat="d in data.detailsFACT | filter:motcle" style="text-align: center;">
                 <td> {{d.codeArticle}}</td>
-                
+                <td> {{d.article}}</td>
                 <td>{{d.quantite}}</td>
-                <td>{{d.prix}}</td>
+                <td>{{number(d.prix)}}</td>
             </tr>
             
         </table>

@@ -74,7 +74,7 @@
 
             <div class="row" ng-if="pds.grossiste">
               <div class="col">Montant</div>
-              <div class="col"><p>{{ pds.montant }}</p></div>
+              <div class="col"><p>{{ number(pds.montant) }}</p></div>
             </div>
 
             <div class="row">
@@ -175,7 +175,7 @@
 
         <div class="row" ng-if="itemEdit.grossiste">
           <div class="col">Montant</div>
-          <div class="col"><p>{{ itemEdit.montant }}</p></div>
+          <div class="col"><p>{{ number(itemEdit.montant) }}</p></div>
         </div>
 
         <div class="row">

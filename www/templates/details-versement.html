@@ -72,10 +72,10 @@
             </div>
             <div class="row header list content-div">
           
-              <div class="col" style="text-align: center;">{{ data.details_pds_no_payed.montantRestant }}</div>
-              <div class="col" style="text-align: center;">{{ data.details_pds_no_payed.montantTotal }}</div>
-              <div class="col" style="text-align: center;">{{ data.details_pds_no_payed.montantVerse }}</div>
-              <div class="col" style="text-align: center;">{{ data.details_pds_no_payed.totalVersement }}</div>
+              <div class="col" style="text-align: center;">{{ number(data.details_pds_no_payed.montantRestant) }}</div>
+              <div class="col" style="text-align: center;">{{ number(data.details_pds_no_payed.montantTotal) }}</div>
+              <div class="col" style="text-align: center;">{{ number(data.details_pds_no_payed.montantVerse) }}</div>
+              <div class="col" style="text-align: center;">{{ number(data.details_pds_no_payed.totalVersement) }}</div>
              
           </div>
            
@@ -95,7 +95,7 @@
                 
                  <div class="col content-div-row" >{{d.codeVersement}}</div>
   
-                 <div class="col content-div-row">{{d.montant}}</div>
+                 <div class="col content-div-row">{{number(d.montant)}}</div>
     
                  <div class="col content-div-row edit">{{d.dateAjout | date :  "dd.MM.y"}}</div>
   
