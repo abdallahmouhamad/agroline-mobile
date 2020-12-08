@@ -6609,8 +6609,10 @@ setInterval(function () {
             }
             var detail = {
               codeDetail: $scope.data.pds.detailsPDS[i].codeDetail,
-             // codePRC: $scope.data.pds.detailsPDS[i].codePRC,
-              codePDS: $scope.data.pds.detailsPDS[i].codePDS,
+              codePRC: $scope.data.pds.detailsPDS[i].codePRC,
+              //codePDS: $scope.data.pds.detailsPDS[i].codePDS,
+              //codePRC: $scope.data.detailsPRC.codePRC,
+              codePDS: $scope.data.pds.codePDS,
               codeArticle: $scope.data.pds.detailsPDS[i].codeArticle,
               quantite: $scope.data.pds.detailsPDS[i].quantite,
               prix: prix && prix > 0  ? prix : $scope.data.pds.detailsPDS[i].prix,
@@ -6664,7 +6666,11 @@ setInterval(function () {
             }
 
            
-             
+            /*if ($scope.data.pds.detailsPDS[i].codePRC != " ") {
+              $scope.data.pds.detailsPDS[i].codePRC = +$scope.data.pds.detailsPDS[i].codePRC;
+            } else {
+              console.log($scope.data.pds.detailsPDS[i].codePRC)
+            }*/
            
           }
 
