@@ -2,6 +2,14 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
 .run(function($ionicPlatform, $ionicPopup) {
   $ionicPlatform.ready(function() {
 
+    $ionicPlatform.registerBackButtonAction(function (condition) {
+      if (condition) {
+        //navigator.app.exitApp();
+      } else {
+      
+      }
+    }, 100);
+
     //initialiser le stockage des fiches en local
     if(localStorage.getItem('ficheSauvegarde')==null){
       var init = [];

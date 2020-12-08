@@ -187,7 +187,7 @@ setInterval(function () {
         }
         console.log('Timer is load+++++',timeStamp)
 
-    }, 10000);
+    }, 30000);
   $scope.addTrack = function()
   {
     console.log('----Tracking envoye -------')
@@ -9141,12 +9141,16 @@ setInterval(function () {
     ApiListPrc, ApiDetailPrc, ApiAjoutPrc,
     ApiListClient, ApiListMotif,
     ApiListArticle, $ionicPopup,
-     ApiRecapPdsPrc, ApiListDechargement, ApiPdsNoPayed, ApiDetailPdsNoPayed, ApiAjoutVersement, CodeGenere, ApiAjoutVersement, SendSms,formatNewDate,SeparateurMillier) {
+     ApiRecapPdsPrc, ApiListDechargement,ApiDeletVersement, ApiPdsNoPayed, ApiDetailPdsNoPayed, ApiAjoutVersement, CodeGenere, ApiAjoutVersement, SendSms,formatNewDate,SeparateurMillier) {
 
     console.log('versement');
     $scope.data = {};
 
     $scope.initvar = function () {  
+      $scope.edit = false;
+      $scope.itemEdit = null;
+      $scope.data.listmotifs = [];
+      $scope.data.motifchoisit = null;
 
       $scope.data.codeCommerciale = localStorage.getItem('codeCommerciale');
       $scope.data.user = JSON.parse(localStorage.getItem('user'));
@@ -9162,10 +9166,144 @@ setInterval(function () {
       $scope.data.montant = null;
 
     }
+    ApiListMotif.getListMotif().success(function (response) {
+      if (response) {
+        $scope.data.listmotifs = response;
+      }
+      console.log("-----------------------list motif----------------------");
+      console.log(response);
+    });
+    $scope.getOptMotif = function (option) {
+      return option;
+    };
     $scope.number = function(mnt)
       {
         return SeparateurMillier.separateurMillier(mnt);
       }
+
+      $scope.annulerEdit = function () {
+        
+        for (var i = 0; i < $scope.data.details_pds_no_payed.details.length; i++) {
+          if (
+            $scope.data.details_pds_no_payed.details[i].idMotif === "edit" &&
+            $scope.data.details_pds_no_payed.details[i].codeVersement ===
+            $scope.itemEdit.codeVersement
+          ) {
+            $scope.data.details_pds_no_payed.details[i].idMotif = 0;
+            $scope.edit = false;
+            $scope.data.motifchoisit = null;
+            break;
+          }
+        }
+      }
+  
+      $scope.editDetail = function (item) {
+      
+      
+        $scope.edit = true;
+        item.idMotif = "edit";
+  
+        for (var i = 0; i < $scope.data.details_pds_no_payed.details.length; i++) {
+          if (
+            $scope.data.details_pds_no_payed.details[i].idMotif === "edit" &&
+            $scope.data.details_pds_no_payed.details[i].codeVersement !== item.codeVersement
+          ) {
+            $scope.data.details_pds_no_payed.details[i].idMotif = 0;
+          }
+        }
+        $scope.itemEdit = item;
+      };
+
+      $scope.valideEdit = function () {
+
+        if ($scope.data.motifchoisit && $scope.data.motifchoisit.idMotif !== "") {
+          for (var i = 0; i < $scope.data.details_pds_no_payed.details.length; i++) {
+            if (
+              $scope.data.details_pds_no_payed.details[i].idMotif === "edit" &&
+              $scope.data.details_pds_no_payed.details[i].codeVersement ===
+              $scope.itemEdit.codeVersement
+            ) {
+            //  codeVersement(string), isCanceled(int), idMotif(int)
+
+  
+                var object = {
+                  codeVersement: $scope.itemEdit.codeVersement,
+                  isCanceled: 1,
+                  idMotif: +$scope.data.motifchoisit.idMotif
+                }
+  
+                $ionicLoading.show({
+                  content: "Loading",
+                  animation: "fade-in",
+                  showBackdrop: true,
+                  maxWidth: 200,
+                  showDelay: 0,
+                  duration: 10000,
+                });
+  
+                ApiDeletVersement.deletVersement(object)
+                  .success(
+                    function (response) {
+  
+                      $ionicLoading.hide();
+                      console.log('-------Modification edit------')
+                      console.log(response)
+                      if (response.reponse == 1) {
+  
+                        for (var i = 0; i < $scope.data.details_pds_no_payed.details.length; i++) {
+                          if (
+                            $scope.data.details_pds_no_payed.details[i].idMotif === "edit" &&
+                            $scope.data.details_pds_no_payed.details[i].codeVersement ===
+                            $scope.itemEdit.codeVersement
+                          ) {
+  
+                            $scope.data.details_pds_no_payed.details.splice(i, 1);
+                          
+                            $scope.data.motifchoisit = null;
+                            $scope.edit = false;
+                            break;
+                          }
+                        }
+                        $state.transitionTo('app.versements', {}, {
+                          reload: true,
+                          inherit: true,
+                          notify: true
+                        });
+                      }
+                    }
+                  ).error(errorCallback => {
+                    $ionicPopup.show({
+                      title: "Erreur",
+                      template: "Erreur de suppression",
+                      scope: $scope,
+                      buttons: [
+                        {
+                          text: "Ok",
+                          type: "button-danger",
+                        },
+                      ],
+                    });
+                    $ionicLoading.hide();
+                  })
+  
+             
+  
+            }
+          }
+        } else {
+          $ionicPopup.show({
+            title: "Erreur",
+            template: "Veuillez choisir un motif",
+            scope: $scope,
+            buttons: [
+              {
+                text: "Ok",
+                type: "button-danger",
+              },
+            ],
+          });
+        }
+      };
 
     $scope.initDetailPdsNoPayed = function () {
       if ($scope.data.codePds) {
@@ -9324,56 +9462,74 @@ setInterval(function () {
     $scope.submit = function () {
 
       if ($scope.data.montant > 0) {
-        $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
-        var values = {
-          codeVersement: "VRS-" + $scope.data.user.code + "-" + CodeGenere.getCodeGenere(),
-          codeGrossiste: $scope.data.details_pds_no_payed.codeGrossiste,
-          codePDS: $scope.data.details_pds_no_payed.codePDS,
-          codeCommerciale: $scope.data.user.code,
-          dateAjout: formatNewDate.formatNewDate(),
-          isCanceled: 0,
-          idMotif: 0,
-          isChecked: 0,
-          codeGenere: CodeGenere.getCodeGenere(),
-          montant: $scope.data.montant,
-
-        }
-        var tab_value = [];
-        tab_value.push(values);
-        var messageMontant = '';
-
-        messageMontant = messageMontant +
-                    
-                      "\n Montant Total: " +
-                      $scope.number($scope.data.details_pds_no_payed.montantRestant) +
-                      "" +
-                      "\n Montant Ventes: " +
-                      $scope.number($scope.data.details_pds_no_payed.montantVentes) +
-                      "" +
-                      "\n Montants des verssements: " +
-                      $scope.number($scope.data.details_pds_no_payed.montantVerse) +
-                      "" + 
-                      "\n Montant Versé: " +
-                      $scope.number($scope.data.montant) +
-                      "" + 
-                      "\n \n";
-   
-        var Message = messageMontant + 'Code secret: ' + values.codeGenere
-        try {
-          SendSms.sendSMS(Message, $scope.data.details_pds_no_payed.telephone);
-          localStorage.setItem("versetopds", JSON.stringify(tab_value));
-
-          localStorage.setItem("versetopdscode", values.codeGenere);
-          $scope.data.verser = true;
-          $scope.data.versement = tab_value;
-          //console.log(messageMontant);
-          $ionicLoading.hide();
-        }
-        catch (err) {
-          $ionicLoading.hide();
+        if($scope.data.montant <= $scope.data.details_pds_no_payed.montantRestant){
+          $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+          var values = {
+            codeVersement: "VRS-" + $scope.data.user.code + "-" + CodeGenere.getCodeGenere(),
+            codeGrossiste: $scope.data.details_pds_no_payed.codeGrossiste,
+            codePDS: $scope.data.details_pds_no_payed.codePDS,
+            codeCommerciale: $scope.data.user.code,
+            dateAjout: formatNewDate.formatNewDate(),
+            isCanceled: 0,
+            idMotif: 0,
+            isChecked: 0,
+            codeGenere: CodeGenere.getCodeGenere(),
+            montant: $scope.data.montant,
+  
+          }
+          var tab_value = [];
+          tab_value.push(values);
+          var messageMontant = '';
+  
+          messageMontant = messageMontant +
+                      
+                        "\n Montant Total: " +
+                        $scope.number($scope.data.details_pds_no_payed.montantRestant) +
+                        "" +
+                        "\n Montant Ventes: " +
+                        $scope.number($scope.data.details_pds_no_payed.montantVentes) +
+                        "" +
+                        "\n Montants des verssements: " +
+                        $scope.number($scope.data.details_pds_no_payed.montantVerse) +
+                        "" + 
+                        "\n Montant Versé: " +
+                        $scope.number($scope.data.montant) +
+                        "" + 
+                        "\n \n";
+     
+          var Message = messageMontant + 'Code secret: ' + values.codeGenere
+          try {
+            SendSms.sendSMS(Message, $scope.data.details_pds_no_payed.telephone);
+            localStorage.setItem("versetopds", JSON.stringify(tab_value));
+  
+            localStorage.setItem("versetopdscode", values.codeGenere);
+            $scope.data.verser = true;
+            $scope.data.versement = tab_value;
+            console.log(Message);
+            $ionicLoading.hide();
+          }
+          catch (err) {
+            $ionicLoading.hide();
+            $ionicPopup.show({
+              title: 'Alert ',
+              template: 'Erreur lors du traitement. code erreur: MX2020',
+              scope: $scope,
+              buttons: [
+                {
+                  text: 'OK',
+                  type: 'button-positive'
+                }
+              ]
+            });
+          }
+  
+          // $scope.data.dechargement_valider = values;
+  
+        }else
+        {
           $ionicPopup.show({
             title: 'Alert ',
-            template: 'Erreur lors du traitement. code erreur: MX2020',
+            template: 'Le montant à versé doit être inférieure ou égale au montant restant',
             scope: $scope,
             buttons: [
               {
@@ -9382,13 +9538,10 @@ setInterval(function () {
               }
             ]
           });
-
         }
-
-        // $scope.data.dechargement_valider = values;
-
-
+        
       } else {
+        console.log($scope.data.details_pds_no_payed.montantRestant)
         $ionicLoading.hide();
         $ionicPopup.show({
           title: 'Erreur  ',
@@ -10490,6 +10643,19 @@ setInterval(function () {
         var codeUser = { codeUtilisateur: user.code }
 
         return $http.post(url + '/utilisateur/codePDS.php', codeUser);
+      }
+    }
+  })
+  .factory('ApiDeletVersement', function ($http, urlPhp) {
+    return {
+      deletVersement: function (values) {
+        var url = urlPhp.getUrl();
+        var user = localStorage.getItem('user');
+        console.log('-------------User-------');
+        console.log(user);
+        user = JSON.parse(user);
+
+        return $http.post(url + '/versement/supprimer.php', values);
       }
     }
   })
