@@ -40,79 +40,21 @@ angular
     $scope.data.user = JSON.parse(user);
     $scope.data.prcs = [];
     $scope.jsonPositionsLog = [];
+    console.log('----------Location local------')
+    console.log(localStorage.getItem('local'));
 
     $scope.number = function()
       {
         console.log(SeparateurMillier.separateurMillier('170000000'));
       }
-   
 
+ 
+      //document.addEventListener('deviceready', onDeviceReady, false);
+    
+  
     // cordova.plugins.printer.print("Hello\nWorld!");
 
 
-    /*$scope.checkAvailability =function (){
-      cordova.plugins.diagnostic.isGpsLocationAvailable(function(available){
-          console.log("GPS location is " + (available ? "available" : "not available"));
-          if(!available){
-             checkAuthorization();
-          }else{
-              console.log("GPS location is ready to use");
-          }
-      }, function(error){
-          console.error("The following error occurred: "+error);
-      });
-  }
-  
-  $scope.checkAuthorization =function (){
-      cordova.plugins.diagnostic.isLocationAuthorized(function(authorized){
-          console.log("Location is " + (authorized ? "authorized" : "unauthorized"));
-          if(authorized){
-              checkDeviceSetting();
-          }else{
-              cordova.plugins.diagnostic.requestLocationAuthorization(function(status){
-                  switch(status){
-                      case cordova.plugins.diagnostic.permissionStatus.GRANTED:
-                          console.log("Permission granted");
-                          checkDeviceSetting();
-                          break;
-                      case cordova.plugins.diagnostic.permissionStatus.DENIED:
-                          console.log("Permission denied");
-                          // User denied permission
-                          break;
-                      case cordova.plugins.diagnostic.permissionStatus.DENIED_ALWAYS:
-                          console.log("Permission permanently denied");
-                          // User denied permission permanently
-                          break;
-                  }
-              }, function(error){
-                  console.error(error);
-              });
-          }
-      }, function(error){
-          console.error("The following error occurred: "+error);
-      });
-  }
-  
-  $scope.checkDeviceSetting = function(){
-      cordova.plugins.diagnostic.isGpsLocationEnabled(function(enabled){
-          console.log("GPS location setting is " + (enabled ? "enabled" : "disabled"));
-          if(!enabled){
-              cordova.plugins.locationAccuracy.request(function (success){
-                  console.log("Successfully requested high accuracy location mode: "+success.message);
-              }, function onRequestFailure(error){
-                  console.error("Accuracy request failed: error code="+error.code+"; error message="+error.message);
-                  if(error.code !== cordova.plugins.locationAccuracy.ERROR_USER_DISAGREED){
-                      if(confirm("Failed to automatically set Location Mode to 'High Accuracy'. Would you like to switch to the Location Settings page and do this manually?")){
-                          cordova.plugins.diagnostic.switchToLocationSettings();
-                      }
-                  }
-              }, cordova.plugins.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY);
-          }
-      }, function(error){
-          console.error("The following error occurred: "+error);
-      });
-  }
-  $scope.checkAvailability();*/
 
   $scope.checkLocation = function()
   {
@@ -123,8 +65,8 @@ angular
     };
     $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
      console.log('Position accorde');
-
-     $scope.initGetLocationListener();
+     $scope.getCurrentPosition();
+    // $scope.initGetLocationListener();
     }, err=>{
       console.log('Erreur de position', err);
       $ionicPopup.show({
@@ -156,37 +98,61 @@ angular
     intervalGetPosition = navigator.geolocation.watchPosition(
       function (position) {
         console.log('----------Location----');
-        console.log(position);
-        $scope.jsonPositionsLog.push({
+        
+        var objet = {
           latitude             : position.coords.latitude,
           longitude            : position.coords.longitude,
           dateEnregistrement   : formatNewDate.formatNewDate()
-        });
-       // $scope.addTrack($scope.jsonPositionsLog[0]);
+        }
+        console.log(objet)
+      ApiTracking.addTrack(objet)
+      .success(
+        function (response) {
+        console.log(response);
+      })
         $scope.$apply();
       },
       function (error) {
         
       },
       {
-        timeout: 3000,
+        timeout: 30000,
       }
     );
   };
+  $scope.getCurrentPosition = function()
+  {
+    var options = {
+      timeout: 10000,
+      enableHighAccuracy: true,
+    };
+    $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
+      var objet = {
+        latitude             : position.coords.latitude,
+        longitude            : position.coords.longitude,
+        dateEnregistrement   : formatNewDate.formatNewDate()
+      }
+      console.log(objet)
+    ApiTracking.addTrack(objet)
+    .success(
+      function (response) {
+      console.log(response);
+    })
+    });
+  }
   var transactionTime = 0; //Initial time of timer
   var timeStamp = Math.floor(Date.now() / 1000);
   var deltaDelay = 1;
 
-setInterval(function () {
+  setInterval(function () {
     if (transactionTime != 0 && (Math.floor(Date.now() / 1000) - timeStamp) > deltaDelay) {
             transactionTime += (Math.floor(Date.now() / 1000) - timeStamp);
         }
         timeStamp = Math.floor(Date.now() / 1000);
         if ($scope.data.user) {  
-          $scope.addTrack();
+          $scope.getCurrentPosition();
         }
-        console.log('Timer is load+++++',timeStamp)
-
+      
     }, 30000);
   $scope.addTrack = function()
   {
@@ -281,9 +247,19 @@ setInterval(function () {
           if (response) {
             console.log('------PRC LOCAL');
             console.log($scope.data.prcs)
-            $scope.data.prcs = response;
-            console.log('------PRC EN LIGN');
-            console.log(response)
+            if(response && response.length > 0){
+              var list_prc_no_pds = [];
+              for(var i=0; i< response.length; i++)
+              {
+                if(response[i].isLoaded === "0"){
+                  list_prc_no_pds.push(response[i]);
+                }
+                
+              }
+              //isLoaded
+            }
+            $scope.data.prcs = list_prc_no_pds;
+            
           }
           console.log(response);
         },
@@ -6665,7 +6641,7 @@ setInterval(function () {
             $scope.data.pds.isLoaded   = 0
             $scope.data.pds.isCurrent  = 0
             $scope.data.pds.isCanceled = 1
-            $scope.data.pds.idMotif    = delet
+            $scope.data.pds.idMotif    = +delet
           }
           console.log('----------PDS---------');
           console.log($scope.data.pds);
@@ -6891,6 +6867,7 @@ setInterval(function () {
       $scope.data.motifchoisit = null;
       $scope.data.artcilechoisit = null;
       $scope.data.quantite = 0;
+      $scope.data.prix = 0;
       $scope.data.encaisser = false;
       $scope.data.codeCommerciale = $scope.data.user.code;
 
@@ -6957,16 +6934,9 @@ setInterval(function () {
                     },
                   ],
                 }).then(function (result) {
-
-                  $state.transitionTo(
-                    "app.facturations",
-                    {},
-                    {
-                      reload: true,
-                      inherit: true,
-                      notify: true,
-                    }
-                  );
+                  $scope.data.encaisser = false;
+                  $scope.data.montant = null;
+                  $scope.initDetailsFacturations();
 
                 })
               } else {
@@ -7081,7 +7051,7 @@ setInterval(function () {
      
       console.log(item.quantite);
       $scope.data.quantite = +item.quantite;
-
+      $scope.data.prix = +item.prix;
       for (var i = 0; i < $scope.data.detailsfactures.details.length; i++) {
         if (
           $scope.data.detailsfactures.details[i].idMotif === "edit" &&
@@ -7128,6 +7098,7 @@ setInterval(function () {
                 codeDetail: $scope.itemEdit.codeDetail,
                 codeArticle: $scope.data.artcilechoisit.code,
                 quantite: +$scope.data.quantite,
+                prix:+$scope.data.prix,
                 isCanceled: 1,
                 idMotif: +$scope.data.motifchoisit.idMotif
               }
@@ -7142,7 +7113,7 @@ setInterval(function () {
                 duration: 10000,
               });
 
-              ApiModificationDetailFact.modificationDetailFact(ligneDetailTosend)
+              ApiDeletDetailFact.deletDetailFact(ligneDetailTosend, true)
                 .success(
                   function (response) {
 
@@ -7159,7 +7130,7 @@ setInterval(function () {
 
                       $scope.edit = false;
                       $scope.data.motifchoisit = null;
-
+                      $scope.initDetailsFacturations();
                       $ionicPopup.show({
                         title: "Information",
                         template: 'réussi',
@@ -7171,6 +7142,7 @@ setInterval(function () {
                           },
                         ],
                       });
+
                     }else{
                       $scope.data.detailsfactures.details[i].idMotif = 0;
                       $scope.edit = false;
@@ -7232,7 +7204,7 @@ setInterval(function () {
       if ($scope.data.motifchoisit && $scope.data.motifchoisit.idMotif !== "") {
         $ionicPopup.show({
           title: "Infos",
-          template: "Voulez-vous vraimenet suprimer ce details?",
+          template: type == 'details' ? "Voulez-vous vraimenet suprimer ce details?" : 'Voulez-vous vraimenet suprimer cet encaissement' ,
           scope: $scope,
           buttons: [
             {
@@ -7275,7 +7247,7 @@ setInterval(function () {
               
               
   
-              ApiDeletDetailFact.deletDetailFact(ligneDetailTosend)
+              ApiDeletDetailFact.deletDetailFact(ligneDetailTosend,false)
                 .success(
                   function (response) {
   
@@ -7294,6 +7266,7 @@ setInterval(function () {
                           $scope.data.detailsfactures.details.splice(i, 1);
                           $scope.edit = false;
                           $scope.data.motifchoisit = null;
+                          $scope.initDetailsFacturations();
           
                           break;
                         }
@@ -7369,6 +7342,7 @@ setInterval(function () {
                           $scope.edit = false;
                           $scope.detailEncaisse = false;
                           $scope.data.motifchoisit = null;
+                          $scope.initDetailsFacturations();
           
                           break;
                         }
@@ -10731,11 +10705,11 @@ setInterval(function () {
       addTrack: function (values) {
         var url = urlPhp.getUrl();
         var user = localStorage.getItem('user');
-        console.log('-------------User-------');
-        console.log(user);
+        /*console.log('-------------User-------');
+        console.log(user);*/
         user = JSON.parse(user);
         values['codeUtilisateur'] = user.code;
-        console.log(values);
+        //console.log(values);
 
         return $http.post(url + '/utilisateur/tracking.php', values);
       }
@@ -10828,8 +10802,6 @@ setInterval(function () {
           minute,
           second].join(':');
 
-          console.log('---------Date depuis le service---------')
-          console.log(dformat)
         
         return dformat;
       },
@@ -11072,7 +11044,7 @@ setInterval(function () {
               return 1;
             } else {
               //Quantite insuffisante
-              return 'Quantite insuffisante'
+              return 'Quantite insuffisante.\n Quantité actuelle: '+quantiteStock
             }
           } else if (articleCheck && articleCheck.length > 1) {
 

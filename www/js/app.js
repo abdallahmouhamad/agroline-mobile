@@ -1,14 +1,16 @@
 angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers', 'starter.directives', 'ngCordova'])
 .run(function($ionicPlatform, $ionicPopup) {
   $ionicPlatform.ready(function() {
-
-    $ionicPlatform.registerBackButtonAction(function (condition) {
+    
+    /*$ionicPlatform.registerBackButtonAction(function (condition) {
       if (condition) {
-        //navigator.app.exitApp();
       } else {
       
       }
-    }, 100);
+    }, 100);*/
+
+  
+
 
     //initialiser le stockage des fiches en local
     if(localStorage.getItem('ficheSauvegarde')==null){

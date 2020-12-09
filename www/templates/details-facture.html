@@ -70,17 +70,17 @@
 
           <a class="item item-icon-left">
             <i class="icon ion-cash"></i>
-            Montant : {{data.detailsfactures.montant}}
+            Montant : {{number(data.detailsfactures.montant)}}
           </a>
 
           <a class="item item-icon-left">
             <i class="icon ion-android-download"></i>
-            Montant encaissé : {{data.detailsfactures.montantEncaisse}}
+            Montant encaissé : {{number(data.detailsfactures.montantEncaisse)}}
           </a>
 
           <a class="item item-icon-left">
             <i class="icon ion-minus-circled"></i>
-            Montant restant : {{data.detailsfactures.montantRestant}}
+            Montant restant : {{number(data.detailsfactures.montantRestant)}}
           </a>
 
           <a class="item item-icon-left">
@@ -167,13 +167,24 @@
 
         </div>
 
-        <div class="list" ng-if="edit == true && detailEncaisse == false">
-          <label class="item item-input">
-            <span class="input-label">Quantité</span>
-            <input type="number" id="quantite" ng-if="action == 'edit'" ng-model="data.quantite">
-            <input type="number" readonly="true" ng-if="action == 'sup'" id="quantite" ng-model="data.quantite">
-          </label>
+        <div class="row">
+          <div class="col list" ng-if="edit == true && detailEncaisse == false">
+            <label class="item item-input">
+              <span class="input-label">Quantité</span>
+              <input type="number" id="quantite" ng-if="action == 'edit'" ng-model="data.quantite">
+              <input type="number" readonly="true" ng-if="action == 'sup'" id="quantite" ng-model="data.quantite">
+            </label>
+          </div>
+          <div class="col list" ng-if="edit == true && detailEncaisse == false">
+            <label class="item item-input">
+              <span class="input-label">Prix</span>
+              <input type="number" id="prix" ng-if="action == 'edit'" ng-model="data.prix">
+              <input type="number" readonly="true" ng-if="action == 'sup'" id="prix" ng-model="data.prix">
+            </label>
+          </div>
         </div>
+
+        
 
 
         <div class="row" ng-if="edit == true && detailEncaisse == false">
@@ -203,6 +214,7 @@
           <div class="row header list content-div" ng-if="detailEncaisse == false">
             <div class="col" style="text-align: center;">Article</div>
             <div class="col" style="text-align: center;">Quantité</div>
+            <div class="col" style="text-align: center;">Montant</div>
             <div class="col" style="text-align: center;">Editer</div>
             <div class="col" style="text-align: center;">Supprimer</div>
           </div>
@@ -223,6 +235,10 @@
             <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{d.quantite}}</div>
 
             <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.quantite}}</div>
+
+            <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{number(d.prix)}}</div>
+
+            <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{number(d.prix)}}</div>
 
 
             <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" ng-click="editDetail(d, 'edit')">
