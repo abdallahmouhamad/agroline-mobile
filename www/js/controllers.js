@@ -2633,6 +2633,7 @@ setInterval(function () {
       $scope.data.zonechoisit = null;
       $scope.data.grossistechoisit = null;
       $scope.data.modepaiementchoisit = null;
+      
 
 
       $scope.data.codeClient = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.codeClient : null;
@@ -2886,8 +2887,15 @@ setInterval(function () {
         $ionicLoading.hide();
         console.log('----------CLient object----------');
         console.log(values);
-        console.log("cient");
+        console.log("client");
         console.log("mode", values.idModepaiement);
+
+      /*  if (values.delaiPaiement != " ") {
+          values.delaiPaiement = parseInt(values.delaiPaiement);
+        } else {
+          console.log("delaiPaiement", values.delaiPaiement)
+        }*/
+        values.delaiPaiement =0;
 
         if (values.idModepaiement == "1" || values.idModepaiement == "2") {
           values.idModepaiement = parseInt(values.idModepaiement);
