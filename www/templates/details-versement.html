@@ -3,66 +3,80 @@
   
       <ion-content padding="true" class="has-header">
       
-          <style type="text/css">
-            input[readonly] {
-              background-color: transparent !important;
-              cursor: not-allowed;
-            }
-  
-            .small_button {
-              width: 50% !important;
-              height: 50px !important;
-              margin-left: 5px;
-            }
-  
-            .footer-button {
-              margin-bottom: 10px !important;
-              height: 50px !important;
-            }
-  
-            .ml {
-              margin-left: 5px;
-            }
-  
-            .header {
-  
-              margin-top: 5px;
-              margin-bottom: 10px;
-            }
-  
-            .content-div {
-              background: grey !important;
-            }
-  
-            .content-div-row {
-              text-align: center !important;
-              border: 3px grey dashed !important;
-            }
-            .div-verse{
-              margin-top: 30%;
-            }
-          </style>
+        <style type="text/css">
+          input[readonly] {
+            background-color: transparent !important;
+            cursor: not-allowed;
+          }
+
+          .small_button {
+            width: 50% !important;
+            height: 50px !important;
+            margin-left: 5px;
+          }
+
+          .footer-button {
+            margin-bottom: 10px;
+            height: 50px !important;
+          }
+
+          .ml {
+            margin-left: 5px;
+          }
+
+          .header {
+
+            margin-top: 5px;
+            margin-bottom: 10px;
+          }
+
+          .content-div {
+            background: grey !important;
+          }
+
+          .content-div-row {
+            text-align: center !important;
+            border: 3px grey dashed !important;
+          }
+
+          .div-header {
+            margin-bottom: 20px !important;
+          }
+
+          .edit {
+            background: red !important;
+          }
+
+          ion-scroll p {
+            width: 5000px !important;
+            height: 100px !important;
+            white-space: nowrap !important;
+            padding: 10px !important;
+            line-height: 100px !important;
+          }
+        </style>
+
        
           <div class="card list" ng-if="!data.verser">
   
-              <a class="item item-icon-left">
-                <i class="icon ion-person"></i>
+              <a class="item item-icon-left" ng-if="edit == false">
+                <i class="icon ion-person" ></i>
                 Grossiste : {{ data.details_pds_no_payed.grossiste }}
               </a>
   
-              <a class="item item-icon-left">
+              <a class="item item-icon-left" ng-if="edit == false">
                 <i class="icon ion-android-call"></i>
                 Téléphone : {{ data.details_pds_no_payed.telephone }}
               </a>
-              <a class="item item-icon-left">
+              <a class="item item-icon-left" ng-if="edit == false">
                 <i class="icon ion-location"></i>
                 Adresse : {{ data.details_pds_no_payed.adresse }}
               </a>
-              <a class="item item-icon-left">
+              <a class="item item-icon-left" ng-if="edit == false">
                 <i class="icon ion-calendar"></i>
                 Date : {{data.details_pds_no_payed.dateAjout | date :  "dd.MM.y"}}
               </a>
-              <div class="row header list content-div">
+              <div class="row header list content-div" ng-if="edit == false">
           
                 <div class="col" style="text-align: center;">M:restant</div>
                 <div class="col" style="text-align: center;">M:total</div>
@@ -70,14 +84,39 @@
                 <div class="col" style="text-align: center;">T.versement</div>
                
             </div>
-            <div class="row header list content-div">
+            <div class="row header list content-div" ng-if="edit == false">
           
               <div class="col" style="text-align: center;">{{ number(data.details_pds_no_payed.montantRestant) }}</div>
               <div class="col" style="text-align: center;">{{ number(data.details_pds_no_payed.montantTotal) }}</div>
               <div class="col" style="text-align: center;">{{ number(data.details_pds_no_payed.montantVerse) }}</div>
               <div class="col" style="text-align: center;">{{ number(data.details_pds_no_payed.totalVersement) }}</div>
              
-          </div>
+             </div>
+
+            <div class="row" ng-if="edit == true">
+              <div class="col" >
+                <button class="button button-block button-assertive"
+                  cancel-button="{{ 'fichevisite_select_pv_return' | translate }}"
+                  reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
+                  cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
+                  search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
+                  ng-model="data.motifchoisit" options="data.listmotifs" option-getter="getOptMotif(option)"
+                  modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
+                  ng-change="valideEdit()" has-search="true">
+                  <label for="" ng-if="!data.motifchoisit">Motif de suppression</label>
+                  <label for="" ng-if="data.motifchoisit">{{data.motifchoisit.libelle}}</label>
+                  <div class="option">
+                    <h2> {{option.libelle}}</h2>
+                  </div>
+                </button>
+              </div>
+              
+              <div class="col">
+                <button ng-click="annulerEdit()" class="button button-block button-assertive footer-button"
+                  color="danger" type="submit" name="submit"><span style="color:white">Annuller</span></button>
+              </div>
+            </div>
+          
            
               <div class="row">
                 <div class="col">Historiques versement</div>
@@ -93,11 +132,26 @@
     
             <div class="row list" ng-repeat="d in data.details_pds_no_payed.details | filter:motcle" style="margin-bottom: 50px;" ng-if="!data.verser">
                 
-                 <div class="col content-div-row" >{{d.codeVersement}}</div>
+                 <div class="col content-div-row"  ng-if="d.idMotif !== 'edit'">{{d.codeVersement}}</div>
+                 <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.codeVersement}}</div>
   
-                 <div class="col content-div-row">{{number(d.montant)}}</div>
+                 <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{number(d.montant)}}</div>
+                 <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{number(d.montant)}}</div>
     
-                 <div class="col content-div-row edit">{{d.dateAjout | date :  "dd.MM.y"}}</div>
+                 <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{d.dateAjout | date :  "dd.MM.y"}}</div>
+                 <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.dateAjout | date :  "dd.MM.y"}}</div>
+
+                 <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" ng-click="editDetail(d)">
+
+                  <i class="icon ion-close"></i>
+
+                </div>
+
+                <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'" ng-click="editDetail(d)">
+
+                  <i class="icon ion-close"></i>
+
+                </div>
   
             </div>
 
@@ -121,7 +175,7 @@
   
   
 
-    <div ng-if="data.verser">
+    <div ng-if="data.verser" style="margin-top: 50px !important;">
      
 
       <div class="div-verse"> 

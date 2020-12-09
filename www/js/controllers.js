@@ -40,79 +40,21 @@ angular
     $scope.data.user = JSON.parse(user);
     $scope.data.prcs = [];
     $scope.jsonPositionsLog = [];
+    console.log('----------Location local------')
+    console.log(localStorage.getItem('local'));
 
     $scope.number = function()
       {
         console.log(SeparateurMillier.separateurMillier('170000000'));
       }
-   
 
+ 
+      //document.addEventListener('deviceready', onDeviceReady, false);
+    
+  
     // cordova.plugins.printer.print("Hello\nWorld!");
 
 
-    /*$scope.checkAvailability =function (){
-      cordova.plugins.diagnostic.isGpsLocationAvailable(function(available){
-          console.log("GPS location is " + (available ? "available" : "not available"));
-          if(!available){
-             checkAuthorization();
-          }else{
-              console.log("GPS location is ready to use");
-          }
-      }, function(error){
-          console.error("The following error occurred: "+error);
-      });
-  }
-  
-  $scope.checkAuthorization =function (){
-      cordova.plugins.diagnostic.isLocationAuthorized(function(authorized){
-          console.log("Location is " + (authorized ? "authorized" : "unauthorized"));
-          if(authorized){
-              checkDeviceSetting();
-          }else{
-              cordova.plugins.diagnostic.requestLocationAuthorization(function(status){
-                  switch(status){
-                      case cordova.plugins.diagnostic.permissionStatus.GRANTED:
-                          console.log("Permission granted");
-                          checkDeviceSetting();
-                          break;
-                      case cordova.plugins.diagnostic.permissionStatus.DENIED:
-                          console.log("Permission denied");
-                          // User denied permission
-                          break;
-                      case cordova.plugins.diagnostic.permissionStatus.DENIED_ALWAYS:
-                          console.log("Permission permanently denied");
-                          // User denied permission permanently
-                          break;
-                  }
-              }, function(error){
-                  console.error(error);
-              });
-          }
-      }, function(error){
-          console.error("The following error occurred: "+error);
-      });
-  }
-  
-  $scope.checkDeviceSetting = function(){
-      cordova.plugins.diagnostic.isGpsLocationEnabled(function(enabled){
-          console.log("GPS location setting is " + (enabled ? "enabled" : "disabled"));
-          if(!enabled){
-              cordova.plugins.locationAccuracy.request(function (success){
-                  console.log("Successfully requested high accuracy location mode: "+success.message);
-              }, function onRequestFailure(error){
-                  console.error("Accuracy request failed: error code="+error.code+"; error message="+error.message);
-                  if(error.code !== cordova.plugins.locationAccuracy.ERROR_USER_DISAGREED){
-                      if(confirm("Failed to automatically set Location Mode to 'High Accuracy'. Would you like to switch to the Location Settings page and do this manually?")){
-                          cordova.plugins.diagnostic.switchToLocationSettings();
-                      }
-                  }
-              }, cordova.plugins.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY);
-          }
-      }, function(error){
-          console.error("The following error occurred: "+error);
-      });
-  }
-  $scope.checkAvailability();*/
 
   $scope.checkLocation = function()
   {
@@ -123,8 +65,8 @@ angular
     };
     $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
      console.log('Position accorde');
-
-     $scope.initGetLocationListener();
+     $scope.getCurrentPosition();
+    // $scope.initGetLocationListener();
     }, err=>{
       console.log('Erreur de position', err);
       $ionicPopup.show({
@@ -156,38 +98,62 @@ angular
     intervalGetPosition = navigator.geolocation.watchPosition(
       function (position) {
         console.log('----------Location----');
-        console.log(position);
-        $scope.jsonPositionsLog.push({
+        
+        var objet = {
           latitude             : position.coords.latitude,
           longitude            : position.coords.longitude,
           dateEnregistrement   : formatNewDate.formatNewDate()
-        });
-       // $scope.addTrack($scope.jsonPositionsLog[0]);
+        }
+        console.log(objet)
+      ApiTracking.addTrack(objet)
+      .success(
+        function (response) {
+        console.log(response);
+      })
         $scope.$apply();
       },
       function (error) {
         
       },
       {
-        timeout: 3000,
+        timeout: 30000,
       }
     );
   };
+  $scope.getCurrentPosition = function()
+  {
+    var options = {
+      timeout: 10000,
+      enableHighAccuracy: true,
+    };
+    $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
+      var objet = {
+        latitude             : position.coords.latitude,
+        longitude            : position.coords.longitude,
+        dateEnregistrement   : formatNewDate.formatNewDate()
+      }
+      console.log(objet)
+    ApiTracking.addTrack(objet)
+    .success(
+      function (response) {
+      console.log(response);
+    })
+    });
+  }
   var transactionTime = 0; //Initial time of timer
   var timeStamp = Math.floor(Date.now() / 1000);
   var deltaDelay = 1;
 
-setInterval(function () {
+  setInterval(function () {
     if (transactionTime != 0 && (Math.floor(Date.now() / 1000) - timeStamp) > deltaDelay) {
             transactionTime += (Math.floor(Date.now() / 1000) - timeStamp);
         }
         timeStamp = Math.floor(Date.now() / 1000);
         if ($scope.data.user) {  
-          $scope.addTrack();
+          $scope.getCurrentPosition();
         }
-        console.log('Timer is load+++++',timeStamp)
-
-    }, 10000);
+      
+    }, 30000);
   $scope.addTrack = function()
   {
     console.log('----Tracking envoye -------')
@@ -281,9 +247,19 @@ setInterval(function () {
           if (response) {
             console.log('------PRC LOCAL');
             console.log($scope.data.prcs)
-            $scope.data.prcs = response;
-            console.log('------PRC EN LIGN');
-            console.log(response)
+            if(response && response.length > 0){
+              var list_prc_no_pds = [];
+              for(var i=0; i< response.length; i++)
+              {
+                if(response[i].isLoaded === "0"){
+                  list_prc_no_pds.push(response[i]);
+                }
+                
+              }
+              //isLoaded
+            }
+            $scope.data.prcs = list_prc_no_pds;
+            
           }
           console.log(response);
         },
@@ -6916,6 +6892,7 @@ setInterval(function () {
       $scope.data.motifchoisit = null;
       $scope.data.artcilechoisit = null;
       $scope.data.quantite = 0;
+      $scope.data.prix = 0;
       $scope.data.encaisser = false;
       $scope.data.codeCommerciale = $scope.data.user.code;
 
@@ -6982,16 +6959,9 @@ setInterval(function () {
                     },
                   ],
                 }).then(function (result) {
-
-                  $state.transitionTo(
-                    "app.facturations",
-                    {},
-                    {
-                      reload: true,
-                      inherit: true,
-                      notify: true,
-                    }
-                  );
+                  $scope.data.encaisser = false;
+                  $scope.data.montant = null;
+                  $scope.initDetailsFacturations();
 
                 })
               } else {
@@ -7106,7 +7076,7 @@ setInterval(function () {
      
       console.log(item.quantite);
       $scope.data.quantite = +item.quantite;
-
+      $scope.data.prix = +item.prix;
       for (var i = 0; i < $scope.data.detailsfactures.details.length; i++) {
         if (
           $scope.data.detailsfactures.details[i].idMotif === "edit" &&
@@ -7153,6 +7123,7 @@ setInterval(function () {
                 codeDetail: $scope.itemEdit.codeDetail,
                 codeArticle: $scope.data.artcilechoisit.code,
                 quantite: +$scope.data.quantite,
+                prix:+$scope.data.prix,
                 isCanceled: 1,
                 idMotif: +$scope.data.motifchoisit.idMotif
               }
@@ -7167,7 +7138,7 @@ setInterval(function () {
                 duration: 10000,
               });
 
-              ApiModificationDetailFact.modificationDetailFact(ligneDetailTosend)
+              ApiDeletDetailFact.deletDetailFact(ligneDetailTosend, true)
                 .success(
                   function (response) {
 
@@ -7184,7 +7155,7 @@ setInterval(function () {
 
                       $scope.edit = false;
                       $scope.data.motifchoisit = null;
-
+                      $scope.initDetailsFacturations();
                       $ionicPopup.show({
                         title: "Information",
                         template: 'réussi',
@@ -7196,6 +7167,7 @@ setInterval(function () {
                           },
                         ],
                       });
+
                     }else{
                       $scope.data.detailsfactures.details[i].idMotif = 0;
                       $scope.edit = false;
@@ -7257,7 +7229,7 @@ setInterval(function () {
       if ($scope.data.motifchoisit && $scope.data.motifchoisit.idMotif !== "") {
         $ionicPopup.show({
           title: "Infos",
-          template: "Voulez-vous vraimenet suprimer ce details?",
+          template: type == 'details' ? "Voulez-vous vraimenet suprimer ce details?" : 'Voulez-vous vraimenet suprimer cet encaissement' ,
           scope: $scope,
           buttons: [
             {
@@ -7300,7 +7272,7 @@ setInterval(function () {
               
               
   
-              ApiDeletDetailFact.deletDetailFact(ligneDetailTosend)
+              ApiDeletDetailFact.deletDetailFact(ligneDetailTosend,false)
                 .success(
                   function (response) {
   
@@ -7319,6 +7291,7 @@ setInterval(function () {
                           $scope.data.detailsfactures.details.splice(i, 1);
                           $scope.edit = false;
                           $scope.data.motifchoisit = null;
+                          $scope.initDetailsFacturations();
           
                           break;
                         }
@@ -7394,6 +7367,7 @@ setInterval(function () {
                           $scope.edit = false;
                           $scope.detailEncaisse = false;
                           $scope.data.motifchoisit = null;
+                          $scope.initDetailsFacturations();
           
                           break;
                         }
@@ -9166,12 +9140,16 @@ setInterval(function () {
     ApiListPrc, ApiDetailPrc, ApiAjoutPrc,
     ApiListClient, ApiListMotif,
     ApiListArticle, $ionicPopup,
-     ApiRecapPdsPrc, ApiListDechargement, ApiPdsNoPayed, ApiDetailPdsNoPayed, ApiAjoutVersement, CodeGenere, ApiAjoutVersement, SendSms,formatNewDate,SeparateurMillier) {
+     ApiRecapPdsPrc, ApiListDechargement,ApiDeletVersement, ApiPdsNoPayed, ApiDetailPdsNoPayed, ApiAjoutVersement, CodeGenere, ApiAjoutVersement, SendSms,formatNewDate,SeparateurMillier) {
 
     console.log('versement');
     $scope.data = {};
 
     $scope.initvar = function () {  
+      $scope.edit = false;
+      $scope.itemEdit = null;
+      $scope.data.listmotifs = [];
+      $scope.data.motifchoisit = null;
 
       $scope.data.codeCommerciale = localStorage.getItem('codeCommerciale');
       $scope.data.user = JSON.parse(localStorage.getItem('user'));
@@ -9187,10 +9165,144 @@ setInterval(function () {
       $scope.data.montant = null;
 
     }
+    ApiListMotif.getListMotif().success(function (response) {
+      if (response) {
+        $scope.data.listmotifs = response;
+      }
+      console.log("-----------------------list motif----------------------");
+      console.log(response);
+    });
+    $scope.getOptMotif = function (option) {
+      return option;
+    };
     $scope.number = function(mnt)
       {
         return SeparateurMillier.separateurMillier(mnt);
       }
+
+      $scope.annulerEdit = function () {
+        
+        for (var i = 0; i < $scope.data.details_pds_no_payed.details.length; i++) {
+          if (
+            $scope.data.details_pds_no_payed.details[i].idMotif === "edit" &&
+            $scope.data.details_pds_no_payed.details[i].codeVersement ===
+            $scope.itemEdit.codeVersement
+          ) {
+            $scope.data.details_pds_no_payed.details[i].idMotif = 0;
+            $scope.edit = false;
+            $scope.data.motifchoisit = null;
+            break;
+          }
+        }
+      }
+  
+      $scope.editDetail = function (item) {
+      
+      
+        $scope.edit = true;
+        item.idMotif = "edit";
+  
+        for (var i = 0; i < $scope.data.details_pds_no_payed.details.length; i++) {
+          if (
+            $scope.data.details_pds_no_payed.details[i].idMotif === "edit" &&
+            $scope.data.details_pds_no_payed.details[i].codeVersement !== item.codeVersement
+          ) {
+            $scope.data.details_pds_no_payed.details[i].idMotif = 0;
+          }
+        }
+        $scope.itemEdit = item;
+      };
+
+      $scope.valideEdit = function () {
+
+        if ($scope.data.motifchoisit && $scope.data.motifchoisit.idMotif !== "") {
+          for (var i = 0; i < $scope.data.details_pds_no_payed.details.length; i++) {
+            if (
+              $scope.data.details_pds_no_payed.details[i].idMotif === "edit" &&
+              $scope.data.details_pds_no_payed.details[i].codeVersement ===
+              $scope.itemEdit.codeVersement
+            ) {
+            //  codeVersement(string), isCanceled(int), idMotif(int)
+
+  
+                var object = {
+                  codeVersement: $scope.itemEdit.codeVersement,
+                  isCanceled: 1,
+                  idMotif: +$scope.data.motifchoisit.idMotif
+                }
+  
+                $ionicLoading.show({
+                  content: "Loading",
+                  animation: "fade-in",
+                  showBackdrop: true,
+                  maxWidth: 200,
+                  showDelay: 0,
+                  duration: 10000,
+                });
+  
+                ApiDeletVersement.deletVersement(object)
+                  .success(
+                    function (response) {
+  
+                      $ionicLoading.hide();
+                      console.log('-------Modification edit------')
+                      console.log(response)
+                      if (response.reponse == 1) {
+  
+                        for (var i = 0; i < $scope.data.details_pds_no_payed.details.length; i++) {
+                          if (
+                            $scope.data.details_pds_no_payed.details[i].idMotif === "edit" &&
+                            $scope.data.details_pds_no_payed.details[i].codeVersement ===
+                            $scope.itemEdit.codeVersement
+                          ) {
+  
+                            $scope.data.details_pds_no_payed.details.splice(i, 1);
+                          
+                            $scope.data.motifchoisit = null;
+                            $scope.edit = false;
+                            break;
+                          }
+                        }
+                        $state.transitionTo('app.versements', {}, {
+                          reload: true,
+                          inherit: true,
+                          notify: true
+                        });
+                      }
+                    }
+                  ).error(errorCallback => {
+                    $ionicPopup.show({
+                      title: "Erreur",
+                      template: "Erreur de suppression",
+                      scope: $scope,
+                      buttons: [
+                        {
+                          text: "Ok",
+                          type: "button-danger",
+                        },
+                      ],
+                    });
+                    $ionicLoading.hide();
+                  })
+  
+             
+  
+            }
+          }
+        } else {
+          $ionicPopup.show({
+            title: "Erreur",
+            template: "Veuillez choisir un motif",
+            scope: $scope,
+            buttons: [
+              {
+                text: "Ok",
+                type: "button-danger",
+              },
+            ],
+          });
+        }
+      };
 
     $scope.initDetailPdsNoPayed = function () {
       if ($scope.data.codePds) {
@@ -9349,56 +9461,74 @@ setInterval(function () {
     $scope.submit = function () {
 
       if ($scope.data.montant > 0) {
-        $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
-        var values = {
-          codeVersement: "VRS-" + $scope.data.user.code + "-" + CodeGenere.getCodeGenere(),
-          codeGrossiste: $scope.data.details_pds_no_payed.codeGrossiste,
-          codePDS: $scope.data.details_pds_no_payed.codePDS,
-          codeCommerciale: $scope.data.user.code,
-          dateAjout: formatNewDate.formatNewDate(),
-          isCanceled: 0,
-          idMotif: 0,
-          isChecked: 0,
-          codeGenere: CodeGenere.getCodeGenere(),
-          montant: $scope.data.montant,
-
-        }
-        var tab_value = [];
-        tab_value.push(values);
-        var messageMontant = '';
-
-        messageMontant = messageMontant +
-                    
-                      "\n Montant Total: " +
-                      $scope.number($scope.data.details_pds_no_payed.montantRestant) +
-                      "" +
-                      "\n Montant Ventes: " +
-                      $scope.number($scope.data.details_pds_no_payed.montantVentes) +
-                      "" +
-                      "\n Montants des verssements: " +
-                      $scope.number($scope.data.details_pds_no_payed.montantVerse) +
-                      "" + 
-                      "\n Montant Versé: " +
-                      $scope.number($scope.data.montant) +
-                      "" + 
-                      "\n \n";
-   
-        var Message = messageMontant + 'Code secret: ' + values.codeGenere
-        try {
-          SendSms.sendSMS(Message, $scope.data.details_pds_no_payed.telephone);
-          localStorage.setItem("versetopds", JSON.stringify(tab_value));
-
-          localStorage.setItem("versetopdscode", values.codeGenere);
-          $scope.data.verser = true;
-          $scope.data.versement = tab_value;
-          //console.log(messageMontant);
-          $ionicLoading.hide();
-        }
-        catch (err) {
-          $ionicLoading.hide();
+        if($scope.data.montant <= $scope.data.details_pds_no_payed.montantRestant){
+          $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+          var values = {
+            codeVersement: "VRS-" + $scope.data.user.code + "-" + CodeGenere.getCodeGenere(),
+            codeGrossiste: $scope.data.details_pds_no_payed.codeGrossiste,
+            codePDS: $scope.data.details_pds_no_payed.codePDS,
+            codeCommerciale: $scope.data.user.code,
+            dateAjout: formatNewDate.formatNewDate(),
+            isCanceled: 0,
+            idMotif: 0,
+            isChecked: 0,
+            codeGenere: CodeGenere.getCodeGenere(),
+            montant: $scope.data.montant,
+  
+          }
+          var tab_value = [];
+          tab_value.push(values);
+          var messageMontant = '';
+  
+          messageMontant = messageMontant +
+                      
+                        "\n Montant Total: " +
+                        $scope.number($scope.data.details_pds_no_payed.montantRestant) +
+                        "" +
+                        "\n Montant Ventes: " +
+                        $scope.number($scope.data.details_pds_no_payed.montantVentes) +
+                        "" +
+                        "\n Montants des verssements: " +
+                        $scope.number($scope.data.details_pds_no_payed.montantVerse) +
+                        "" + 
+                        "\n Montant Versé: " +
+                        $scope.number($scope.data.montant) +
+                        "" + 
+                        "\n \n";
+     
+          var Message = messageMontant + 'Code secret: ' + values.codeGenere
+          try {
+            SendSms.sendSMS(Message, $scope.data.details_pds_no_payed.telephone);
+            localStorage.setItem("versetopds", JSON.stringify(tab_value));
+  
+            localStorage.setItem("versetopdscode", values.codeGenere);
+            $scope.data.verser = true;
+            $scope.data.versement = tab_value;
+            console.log(Message);
+            $ionicLoading.hide();
+          }
+          catch (err) {
+            $ionicLoading.hide();
+            $ionicPopup.show({
+              title: 'Alert ',
+              template: 'Erreur lors du traitement. code erreur: MX2020',
+              scope: $scope,
+              buttons: [
+                {
+                  text: 'OK',
+                  type: 'button-positive'
+                }
+              ]
+            });
+          }
+  
+          // $scope.data.dechargement_valider = values;
+  
+        }else
+        {
           $ionicPopup.show({
             title: 'Alert ',
-            template: 'Erreur lors du traitement. code erreur: MX2020',
+            template: 'Le montant à versé doit être inférieure ou égale au montant restant',
             scope: $scope,
             buttons: [
               {
@@ -9407,13 +9537,10 @@ setInterval(function () {
               }
             ]
           });
-
         }
-
-        // $scope.data.dechargement_valider = values;
-
-
+        
       } else {
+        console.log($scope.data.details_pds_no_payed.montantRestant)
         $ionicLoading.hide();
         $ionicPopup.show({
           title: 'Erreur  ',
@@ -10518,6 +10645,19 @@ setInterval(function () {
       }
     }
   })
+  .factory('ApiDeletVersement', function ($http, urlPhp) {
+    return {
+      deletVersement: function (values) {
+        var url = urlPhp.getUrl();
+        var user = localStorage.getItem('user');
+        console.log('-------------User-------');
+        console.log(user);
+        user = JSON.parse(user);
+
+        return $http.post(url + '/versement/supprimer.php', values);
+      }
+    }
+  })
   .factory('ApiCaClient', function ($http, urlPhp) {
     return {
       getApiCaClient: function (codeClient, dateDebut, dateFin) {
@@ -10590,11 +10730,11 @@ setInterval(function () {
       addTrack: function (values) {
         var url = urlPhp.getUrl();
         var user = localStorage.getItem('user');
-        console.log('-------------User-------');
-        console.log(user);
+        /*console.log('-------------User-------');
+        console.log(user);*/
         user = JSON.parse(user);
         values['codeUtilisateur'] = user.code;
-        console.log(values);
+        //console.log(values);
 
         return $http.post(url + '/utilisateur/tracking.php', values);
       }
@@ -10687,8 +10827,6 @@ setInterval(function () {
           minute,
           second].join(':');
 
-          console.log('---------Date depuis le service---------')
-          console.log(dformat)
         
         return dformat;
       },
@@ -10931,7 +11069,7 @@ setInterval(function () {
               return 1;
             } else {
               //Quantite insuffisante
-              return 'Quantite insuffisante'
+              return 'Quantite insuffisante.\n Quantité actuelle: '+quantiteStock
             }
           } else if (articleCheck && articleCheck.length > 1) {
 
