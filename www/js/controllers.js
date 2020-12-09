@@ -6609,7 +6609,7 @@ setInterval(function () {
             }
             var detail = {
               codeDetail: $scope.data.pds.detailsPDS[i].codeDetail,
-              codePRC: $scope.data.pds.detailsPDS[i].codePRC,
+               codePRC: $scope.data.pds.detailsPDS[i].codePRC,
               //codePDS: $scope.data.pds.detailsPDS[i].codePDS,
               //codePRC: $scope.data.detailsPRC.codePRC,
               codePDS: $scope.data.pds.codePDS,
