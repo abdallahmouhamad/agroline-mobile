@@ -2871,7 +2871,7 @@ angular
         } else {
           console.log("delaiPaiement", values.delaiPaiement)
         }*/
-        values.delaiPaiement =0;
+       // values.delaiPaiement = 0;
 
         if (values.idModepaiement == "1" || values.idModepaiement == "2") {
           values.idModepaiement = parseInt(values.idModepaiement);
@@ -2882,6 +2882,7 @@ angular
         values.telephone = "" +values.telephone;
         values.telephone2 = ""+ values.telephone2;
         values.delaiPaiement = + values.delaiPaiement;
+        values.photo = "" +values.photo;
 
         for (var i = 0; i < $scope.data.listregions.length; i++) {
 
