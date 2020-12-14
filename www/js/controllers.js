@@ -443,7 +443,8 @@ angular
     $ionicHistory,
     $translate,
     urlPhp,
-    SendSms
+    SendSms,
+    ConnexionUser
   ) {
     $scope.user = {
       login: "",
@@ -480,14 +481,12 @@ angular
         motDePasse: $scope.user.password,
       };
 
-      $http
-        .post(str, params)
-        .success(function (res) {
-          // if login request is Accepted
-          console.log(res);
+      ConnexionUser.getConnexion(params).success(
+        function (response) {
+          console.log(response);
           $ionicLoading.hide();
-          // records is the 'server response array' variable name.
-          $scope.user_details = res; // copy response values to user-details object.
+
+          $scope.user_details = res; 
 
           sessionStorage.setItem("loggedin_id", $scope.user_details.id);
           sessionStorage.setItem(
@@ -536,10 +535,9 @@ angular
               notify: true,
             }
           );
-        })
-        .error(function () {
-          //if login failed
+        }, (error) => {
           $ionicLoading.hide();
+          console.log(error);
           $translate("alert_connexion_lost_header").then(function (header) {
             $translate("alert_connexion_lost_content").then(function (
               content
@@ -550,9 +548,19 @@ angular
               });
             });
           });
-        });
-      // }
-      // }
+        })
+
+      /*$http
+        .post(str, params)
+        .success(function (res) {
+          console.log(res);
+          $ionicLoading.hide();
+         
+        })
+        .error(function () {
+          
+        });*/
+      
     };
 
     $scope.sms_function = function () {
@@ -589,6 +597,7 @@ angular
     $scope.submit = function () {
       // var link = 'http://vps101245.ovh.net:84/webservice/compte.php';
       var url = urlPhp.getUrl();
+      
       $http
         .get(url + "/password.php?username=" + localStorage.getItem("username"))
         .then(function (res) {
@@ -620,7 +629,8 @@ angular
 
   .controller("CompteCtrl", function ($state) {
     /*
-    var login = sessionStorage.loggedin_name;
+    
+    r login = sessionStorage.loggedin_name;
     //alert(login);
     if(typeof sessionStorage!='undefined') {
                    //if login failed
@@ -10744,6 +10754,20 @@ angular
         //console.log(values);
 
         return $http.post(url + '/utilisateur/tracking.php', values);
+      }
+    }
+  })
+  .factory('ConnexionUser', function ($http, urlPhp) {
+    return {
+      getConnexion: function (values) {
+        var url = urlPhp.getUrl();
+        var user = localStorage.getItem('user');
+        /*console.log('-------------User-------');
+        console.log(user);*/
+        user = JSON.parse(user);
+        //console.log(values);
+
+        return $http.post(url + '/utilisateur/connexion.php', values);
       }
     }
   })

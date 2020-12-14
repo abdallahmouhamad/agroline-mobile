@@ -27,7 +27,6 @@
         <preference name="GradlePluginGoogleServicesVersion" value="4.2.0" />
     </config-file>
     <platform name="android">
-        <resource-file src="resources/android/xml/network_security_config.xml" target="app/src/main/res/xml/network_security_config.xml" />
         <hook src="scripts/set-gps-not-required.js" type="after_prepare" />
         <allow-intent href="market:*" />
         <preference name="android-minSdkVersion" value="22" />
