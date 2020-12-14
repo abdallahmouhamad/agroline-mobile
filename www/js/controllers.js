@@ -460,11 +460,8 @@ angular
       console.log("abou1");
       //  if (navigator.connection.type == Connection.NONE) {
       console.log("abou2");
-      $translate("alert_header_ofline").then(function (header) {
-        console.log("abou3");
-        $translate("alert_content_ofline_home").then(function (content) { });
-      });
-      //   } else {
+      console.log("abou3");
+     
       var url = urlPhp.getUrl();
       $ionicLoading.show({
         content: "Loading",
@@ -482,62 +479,74 @@ angular
       };
 
       ConnexionUser.getConnexion(params).success(
-        function (response) {
-          console.log(response);
+        function (res) {
+          console.log(res);
           $ionicLoading.hide();
+          if(res.id !== ""){
+            $scope.user_details = res; 
 
-          $scope.user_details = res; 
-
-          sessionStorage.setItem("loggedin_id", $scope.user_details.id);
-          sessionStorage.setItem(
-            "loggedin_password",
-            $scope.user_details.motDePasse
-          );
-          sessionStorage.setItem("loggedin_iduser", $scope.user_details.id);
-          // localStorage.setItem('loggedin_id', $scope.user_details.idUtilisateursPointVent);
-          localStorage.setItem("loggedin_id", $scope.user_details.id);
-          localStorage.setItem(
-            "loggedin_password",
-            $scope.user_details.motDePasse
-          );
-          localStorage.setItem("loggedin_iduser", $scope.user_details.id);
-          localStorage.setItem("user", JSON.stringify($scope.user_details));
-
-          localStorage.setItem("isconn", true);
-          $ionicHistory.nextViewOptions({
-            disableAnimate: true,
-            disableBack: true,
-          });
-          $translate("alert_connexion_reussi_header").then(function (
-            header
-          ) {
-            $translate("alert_connexion_reussi_content").then(function (
-              content
+            sessionStorage.setItem("loggedin_id", $scope.user_details.id);
+            sessionStorage.setItem(
+              "loggedin_password",
+              $scope.user_details.motDePasse
+            );
+            sessionStorage.setItem("loggedin_iduser", $scope.user_details.id);
+            // localStorage.setItem('loggedin_id', $scope.user_details.idUtilisateursPointVent);
+            localStorage.setItem("loggedin_id", $scope.user_details.id);
+            localStorage.setItem(
+              "loggedin_password",
+              $scope.user_details.motDePasse
+            );
+            localStorage.setItem("loggedin_iduser", $scope.user_details.id);
+            localStorage.setItem("user", JSON.stringify($scope.user_details));
+  
+            localStorage.setItem("isconn", true);
+            $ionicHistory.nextViewOptions({
+              disableAnimate: true,
+              disableBack: true,
+            });
+            $translate("alert_connexion_reussi_header").then(function (
+              header
             ) {
-              var alertPopup = $ionicPopup.alert({
-                title: header,
-                template:
-                  content +
-                  $scope.user_details.prenom +
-                  " " +
-                  $scope.user_details.prenom +
-                  " !",
+              $translate("alert_connexion_reussi_content").then(function (
+                content
+              ) {
+                var alertPopup = $ionicPopup.alert({
+                  title: header,
+                  template:
+                    content +
+                    $scope.user_details.prenom +
+                    " " +
+                    $scope.user_details.prenom +
+                    " !",
+                });
               });
             });
-          });
+  
+            $state.transitionTo(
+              "app.bienvenue",
+              {},
+              {
+                reload: true,
+                inherit: true,
+                notify: true,
+              }
+            );
+          }else{
+            $translate("alert_connexion_lost_header").then(function (header) {
+              $translate("alert_connexion_lost_content").then(function (
+                content
+              ) {
+                var alertPopup = $ionicPopup.alert({
+                  title: header,
+                  template: content,
+                });
+              });
+            });
+          }
 
-          $state.transitionTo(
-            "app.bienvenue",
-            {},
-            {
-              reload: true,
-              inherit: true,
-              notify: true,
-            }
-          );
-        }, (error) => {
-          $ionicLoading.hide();
-          console.log(error);
+         
+        }).error(function () {
           $translate("alert_connexion_lost_header").then(function (header) {
             $translate("alert_connexion_lost_content").then(function (
               content
@@ -548,7 +557,7 @@ angular
               });
             });
           });
-        })
+        });
 
       /*$http
         .post(str, params)
