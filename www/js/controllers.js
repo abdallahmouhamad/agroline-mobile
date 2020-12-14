@@ -484,7 +484,14 @@ angular
         .post(str, params)
         .success(function (res) {
           // if login request is Accepted
-          console.log(res);
+          console.log("la reponse",res);
+         /* if(res.code == ""){
+            console.log("la reponse vide",res);
+          }else if(res.code != ""){
+            console.log("la reponse okay",res);
+          }else{
+            console.log("la reponse non connecte",res);
+          }*/
           $ionicLoading.hide();
           // records is the 'server response array' variable name.
           $scope.user_details = res; // copy response values to user-details object.
@@ -518,9 +525,9 @@ angular
               var alertPopup = $ionicPopup.alert({
                 title: header,
                 template:
+                " " +
                   content +
                   $scope.user_details.prenom +
-                  " " +
                   $scope.user_details.prenom +
                   " !",
               });
@@ -537,7 +544,8 @@ angular
             }
           );
         })
-        .error(function () {
+        .error(function (res) {
+          console.log("la reponse non connecte");
           //if login failed
           $ionicLoading.hide();
           $translate("alert_connexion_lost_header").then(function (header) {
