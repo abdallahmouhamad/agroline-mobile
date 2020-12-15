@@ -3644,7 +3644,8 @@ angular
     formatNewDate,
     ApiListModePaiement,
     ApiListGrossiste,
-    $filter
+    $filter,
+    SendSms
   ) {
     $scope.data = {};
 
@@ -4040,6 +4041,7 @@ angular
                       }
                       else if (response.reponse == -10) {
                         console.log('-10')
+                        var user =$scope.data.user.prenom+" "+$scope.data.user.nom
                         $ionicPopup.show({
                           title: 'Alert ',
                           template: 'Le solde de votre plafond ne vous permet pas de faire cette prise de stock, veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.',
@@ -4051,35 +4053,13 @@ angular
                             }
                           ]
                         });
-/*
+
                         try {
-                         $ionicPopup.show({
-                            title: 'Alert ',
-                            template: 'Le solde de votre plafond ne vous permet pas de faire cette prise de stock, veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.',
-                            scope: $scope,
-                            buttons: [
-                              {
-                                text: 'OK',
-                                type: 'button-positive'
-                              }
-                            ]
-                          });
-                         SendSms.sendSMS("Le solde du plafond de "+client+"/"+$scope.data.clientchoisit.telephone+" ne lui permet pas de faire cette prise de stock, " +
+                       
+                         SendSms.sendSMS("Le solde du plafond de "+user+" ne lui permet pas de faire cette prise de stock, " +
                             "veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.", "776726045");                  
                          } catch (err) {
 
-                          $ionicPopup.show({
-                            title: 'Alert ',
-                            template: 'Le solde de votre plafond ne vous permet pas de faire cette prise de stock, veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.',
-                            scope: $scope,
-                            buttons: [
-                              {
-                                text: 'OK',
-                                type: 'button-positive'
-                              }
-                            ]
-                          });
-                       
                            $ionicPopup.show({
                              title: 'Alert ',
                              template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
@@ -4091,7 +4071,7 @@ angular
                                }
                              ]
                            });
-                         }*/
+                         }
                       }
                       else if (response.reponse == -20) {
                         console.log('-20')
@@ -4106,37 +4086,15 @@ angular
                             }
                           ]
                         });
-                        /*var grossisste  = ""+$scope.data.grossistechoisit.nom
+                      var grossisste  = ""+$scope.data.grossistechoisit.nom
                        
                         try {
-                          $ionicPopup.show({
-                            title: 'Alert ',
-                            template: 'Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock.',
-                            scope: $scope,
-                            buttons: [
-                              {
-                                text: 'OK',
-                                type: 'button-positive'
-                              }
-                            ]
-                          });
+                        
                           SendSms.sendSMS(
-                            "Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock." 
+                            "Le solde du plafond du gorssiste "+ grossisste+" ne lui permet de faire cette sortie de stock." 
                           , "776726045");                   
                          } catch (err) {
 
-                          $ionicPopup.show({
-                            title: 'Alert ',
-                            template: 'Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock.',
-                            scope: $scope,
-                            buttons: [
-                              {
-                                text: 'OK',
-                                type: 'button-positive'
-                              }
-                            ]
-                          });
-                       
                            $ionicPopup.show({
                              title: 'Alert ',
                              template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
@@ -4148,7 +4106,7 @@ angular
                                }
                              ]
                            });
-                         }*/
+                         }
                       }
                     },
                     (error) => {
@@ -4401,23 +4359,6 @@ angular
                   console.log(response)
                   if (response.reponse == 1) {
 
-                    /*var prclocal = JSON.parse(localStorage.getItem('prclocal'));
-
-                    if (prclocal && prclocal.length > 0) {
-                      var prcToModif = $filter('filter')(prclocal, { codePRC: $scope.data.detailsPRC.codePRC });
-
-                      if (prcToModif && prcToModif.length == 1) {
-                        prclocal.splice(prcToDelet[0], 1)
-
-                        $scope.data.detailsPRC.detailsPRC = $scope.data.detailsPRC.details;
-                        $scope.data.detailsPRC.details = $scope.data.detailsPRC.details;
-
-                        prclocal.push($scope.data.detailsPRC)
-
-                        localStorage.setItem('prclocal', JSON.stringify(prclocal));
-                      }
-
-                    }*/
                     console.log(index)
                     $scope.data.detailsPRC.details[index].idMotif =
                       $scope.data.motifchoisit.idMotif;
@@ -4440,7 +4381,76 @@ angular
                         },
                       ],
                     });
-                  } else {
+                  }
+                  else if (response.reponse == -10) {
+                    console.log('-10')
+                    var user =$scope.data.user.prenom+" "+$scope.data.user.nom
+                    $ionicPopup.show({
+                      title: 'Alert ',
+                      template: 'Le solde de votre plafond ne vous permet pas de faire cette prise de stock, veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.',
+                      scope: $scope,
+                      buttons: [
+                        {
+                          text: 'OK',
+                          type: 'button-positive'
+                        }
+                      ]
+                    });
+
+                    try {
+                   
+                     SendSms.sendSMS("Le solde du plafond de "+user+" ne lui permet pas de faire cette prise de stock, " +
+                        "veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.", "776726045");                  
+                     } catch (err) {
+
+                       $ionicPopup.show({
+                         title: 'Alert ',
+                         template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
+                         scope: $scope,
+                         buttons: [
+                           {
+                             text: 'OK',
+                             type: 'button-positive'
+                           }
+                         ]
+                       });
+                     }
+                  }
+                  else if (response.reponse == -20) {
+                    console.log('-20')
+                    $ionicPopup.show({
+                      title: 'Alert ',
+                      template: 'Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock.',
+                      scope: $scope,
+                      buttons: [
+                        {
+                          text: 'OK',
+                          type: 'button-positive'
+                        }
+                      ]
+                    });
+                   
+                    try {
+                    
+                      SendSms.sendSMS(
+                        "Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock." 
+                      , "776726045");                   
+                     } catch (err) {
+
+                       $ionicPopup.show({
+                         title: 'Alert ',
+                         template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
+                         scope: $scope,
+                         buttons: [
+                           {
+                             text: 'OK',
+                             type: 'button-positive'
+                           }
+                         ]
+                       });
+                     }
+                  }
+                   else {
                     $ionicPopup.show({
                       title: "Information",
                       template: '' + response.reponse,
