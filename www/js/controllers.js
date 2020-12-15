@@ -2614,12 +2614,14 @@ angular
       $scope.data.listmarches = [];
       $scope.data.listmodepaiements = [];
       $scope.data.listgrossistes = [];
+      $scope.data.listdepartements = [];
       $scope.data.regionchoisit = null;
       $scope.data.villechoisit = null;
       $scope.data.marchechoisit = null;
       $scope.data.zonechoisit = null;
       $scope.data.grossistechoisit = null;
       $scope.data.modepaiementchoisit = null;
+      $scope.data.departementchoisit = null;
       
 
 
@@ -2644,6 +2646,7 @@ angular
       var region = {idRegion: $scope.data.regionchoisit.idRegion}
       ApiListDepartement.listDepartement(region)
       .success(function (reponse){
+        $scope.data.listdepartements =reponse;
         console.log(reponse)
       })
     }

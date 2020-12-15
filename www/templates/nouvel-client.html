@@ -71,11 +71,11 @@
                reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
                cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
                search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
-               ng-model="data.villechoisit" options="data.listvilles" option-getter="getOptVille(option)"
+               ng-model="data.departementchoisit" options="data.listdepartements" option-getter="getOptDepartement(option)"
                modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
                has-search="true">
-               <label for="" ng-if="!data.villechoisit">Choisir une Ville</label>
-               <label for="" ng-if="data.villechoisit">{{data.villechoisit.libelle}}</label>
+               <label for="" ng-if="!data.departementchoisit">Choisir un dept</label>
+               <label for="" ng-if="data.departementchoisit">{{data.departementchoisit.libelle}}</label>
                <div class="option">
                  <h2> {{option.libelle}}</h2>
                </div>
