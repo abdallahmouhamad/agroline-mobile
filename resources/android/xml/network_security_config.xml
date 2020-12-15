@@ -9,11 +9,4 @@
 <certificates src="system" />
  </trust-anchors>
   </base-config>
-<<<<<<< HEAD
-
 </network-security-config>
-||||||| merged common ancestors
-</network-security-config>
-=======
-</network-security-config>
->>>>>>> 8ec78d284ee60e1844147679a52e6aa2a0a51178

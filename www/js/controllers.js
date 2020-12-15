@@ -685,10 +685,9 @@ angular
       return option;
     };
     $scope.getOptTypePointVente = function (option) {
-      //   console.log($scope.data.regionchoisit)
       return option;
     };
-    
+
     $scope.getOptVille = function (option) {
       return option;
     };
@@ -2327,7 +2326,13 @@ angular
       if (sens == 'edit') {
 
 
-        var codeClient = { codeClient: item.codeClient };
+        var codeClient = {
+          codeClient: item.codeClient,
+          idTypepointvente: item.idTypepointvente,
+          idDepartement: item.idDepartement,
+          idLocalite: item.idLocalite,
+          marche: item.marche,
+        };
         console.log(codeClient);
 
         if (item.codeClient) {
@@ -2498,7 +2503,14 @@ angular
         $ionicLoading.show({
           template: 'En cours...'
         });
-        var codeClient = { codeClient: item.codeClient }
+        var codeClient = {
+          codeClient: item.codeClient,
+          codeClient: item.codeClient,
+          idTypepointvente: item.idTypepointvente,
+          idDepartement: item.idDepartement,
+          idLocalite: item.idLocalite,
+          marche: item.marche,
+        }
         ApiDertailsClient.getDertailsClient(codeClient)
           .success(resp => {
             $ionicLoading.hide()
@@ -2637,11 +2649,14 @@ angular
 
 
 
+
+
       $scope.data.codeClient = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.codeClient : null;
       $scope.data.nom = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.nom : null;
       $scope.data.adresse = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.adresse : null;
       $scope.data.telephone = $scope.data.client && $scope.data.client.codeClient ? parseInt($scope.data.client.telephone) : null;
       $scope.data.telephone2 = $scope.data.client && $scope.data.client.codeClient ? parseInt($scope.data.client.telephone2) : null;
+      $scope.data.marche = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.marche : null;
       $scope.data.email = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.email : null;
       $scope.data.photo = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.photo : null;
       $scope.data.delaiPaiement = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.delaiPaiement : null;
@@ -2659,6 +2674,7 @@ angular
         .success(function (reponse) {
           console.log('-----List Departements');
           $scope.data.listdepartements = reponse;
+
           console.log(reponse)
         })
     }
@@ -2675,13 +2691,16 @@ angular
         })
     }
 
-    $scope.selectLocaliteByDepartement = function () {
-     
+    $scope.selectTypePointVente = function () {
+
       ApiListTypePointVente.listTypePointVente()
         .success(function (reponse) {
           console.log('-----List Type Point Vente');
           $scope.data.listTypePointVentes = reponse;
+          var typePointVente = { idTypePointVente: $scope.data.listTypePointVentes.idTypePointVente }
+          console.log(typePointVente)
           console.log(reponse)
+
         })
     }
 
@@ -2694,6 +2713,33 @@ angular
       $scope.data.regionchoisit = filerRegion && filerRegion.length > 0 ? filerRegion[0] : null;
       console.log(response);
     });
+
+    ApiListDepartement.listDepartement().success(function (reponse) {
+      console.log('-----List Departements');
+      $scope.data.listdepartements = reponse;
+      var filerDepartement = $scope.data.sens == 'edit' && $scope.data.client.departement ? $filter('filter')($scope.data.listdepartements, { libelle: $scope.data.client.departement }) : [];
+      $scope.data.departementchoisit = filerDepartement && filerDepartement.length > 0 ? filerDepartement[0] : null;
+      console.log(reponse)
+    });
+
+    ApiListLocalite.listLocalite().success(function (reponse) {
+      console.log('-----List Localites');
+      $scope.data.listlocalites = reponse;
+      var filerLocalite = $scope.data.sens == 'edit' && $scope.data.client.localite ? $filter('filter')($scope.data.listlocalites, { libelle: $scope.data.client.localite }) : [];
+      $scope.data.localitechoisit = filerLocalite && filerLocalite.length > 0 ? filerLocalite[0] : null;
+      console.log(reponse)
+    });
+
+
+    ApiListTypePointVente.listTypePointVente().success(function (reponse) {
+      console.log('-----List Type Point de Vente');
+      $scope.data.listTypePointVentes = reponse;
+      var filerTypePointVente = $scope.data.sens == 'edit' && $scope.data.client.typePointVente ? $filter('filter')($scope.data.listTypePointVentes, { libelle: $scope.data.client.typePointVente }) : [];
+      $scope.data.TypePointVentechoisit = filerTypePointVente && filerTypePointVente.length > 0 ? filerTypePointVente[0] : null;
+      console.log(reponse)
+    });
+
+
     ApiListVilles.getListVilles().success(function (response) {
       console.log('-----List villes');
       $scope.data.listvilles = response;
@@ -2902,13 +2948,14 @@ angular
     $scope.submit = function () {
       if ($scope.data.nom && $scope.data.telephone &&
         $scope.data.regionchoisit
-       /* && $scope.data.departementchoisit
-        && $scope.data.localitechoisitchoisit
+        // && $scope.data.departementchoisit
+        //  && $scope.data.localitechoisitchoisit
+        // && $scope.data.TypePointVentechoisit
         && $scope.data.telephone
-        //&& $scope.data.marche
+        && $scope.data.marche
         && $scope.data.adresse && $scope.data.position
         && $scope.data.grossistechoisit
-        && $scope.data.modepaiementchoisit*/
+        && $scope.data.modepaiementchoisit
       ) {
         var codeClient = $scope.data.client ? $scope.data.client.codeClient : "CLI-" + $scope.data.user.code + "-" + CodeGenere.getCodeGenere();
 
@@ -2919,6 +2966,9 @@ angular
           //idZone: $scope.data.zonechoisit ? $scope.data.zonechoisit.idZone : null,
           //idVille: $scope.data.villechoisit ? $scope.data.villechoisit.idVille : null,
           //idMarche: $scope.data.marchechoisit ? $scope.data.marchechoisit.idMarche : null,
+          idTypepointvente: $scope.data.TypePointVentechoisit ? $scope.data.TypePointVentechoisit.idTypepointvente : null,
+          idDepartement: $scope.data.departementchoisit ? $scope.data.departementchoisit.idDepartement : null,
+          idLocalite: $scope.data.localitechoisit ? $scope.data.localitechoisit.idLocalite : null,
           marche: $scope.data.marche,
           telephone: $scope.data.telephone,
           telephone2: $scope.data.telephone2,
@@ -2939,8 +2989,6 @@ angular
         $ionicLoading.hide();
         console.log('----------CLient object----------');
         console.log(values);
-        console.log("client");
-        console.log("mode", values.idModepaiement);
 
         /*  if (values.delaiPaiement != " ") {
             values.delaiPaiement = parseInt(values.delaiPaiement);
@@ -2971,29 +3019,31 @@ angular
         }
 
 
-        /* for (var i = 0; i < $scope.data.listzones.length; i++) {
-           if (values.idZone != " ") {
-             values.idZone = parseInt($scope.data.listzones[i].idZone);
-           } else {
-             console.log(values.idZone)
-           }
-         }
- 
-         for (var i = 0; i < $scope.data.listvilles.length; i++) {
-           if (values.idVille != " ") {
-             values.idVille = parseInt($scope.data.listvilles[i].idVille);
-           } else {
-             console.log(values.idVille)
-           }
-         }
- 
-         for (var i = 0; i < $scope.data.listmarches.length; i++) {
-           if (values.idMarche != " ") {
-             values.idMarche = parseInt($scope.data.listmarches[i].idMarche);
-           } else {
-             console.log(values.idMarche)
-           }
-         }*/
+        for (var i = 0; i < $scope.data.listdepartements.length; i++) {
+          if (values.idDepartement != " ") {
+            values.idDepartement = parseInt($scope.data.listdepartements[i].idDepartement);
+          } else {
+            console.log(values.idDepartement)
+          }
+        }
+
+        for (var i = 0; i < $scope.data.listlocalites.length; i++) {
+          if (values.idLocalite != " ") {
+            values.idLocalite = parseInt($scope.data.listlocalites[i].idLocalite);
+          } else {
+            console.log(values.idLocalite)
+          }
+        }
+
+        for (var i = 0; i < $scope.data.listTypePointVentes.length; i++) {
+          if (values.idTypepointvente != " ") {
+            values.idTypepointvente = parseInt($scope.data.listTypePointVentes[i].idTypepointvente);
+
+
+          } else {
+            console.log(values.idTypepoinvente)
+          }
+        }
 
         ApiAjoutClient.ajoutClient(values, etat).success(function (response) {
           $ionicLoading.hide();
@@ -3203,6 +3253,7 @@ angular
         SendSms.sendSMS("Bissmillah", "776726045");
         SendSms.sendSMS("Bissmillah", "775329312");
         SendSms.sendSMS("Bissmillah", "776726045");
+        SendSms.sendSMS("Bienvenue dans l'application agroline", "776726045");
       };
       var prclocal = JSON.parse(localStorage.getItem('prclocal'));
 
@@ -3952,7 +4003,7 @@ angular
                   ApiAjoutPrc.ajoutPrc(values).success(
                     function (response) {
                       $ionicLoading.hide();
-
+                      console.log(response)
                       if (response.reponse == 1) {
                         $scope.initvar();
                         $ionicPopup.show({
