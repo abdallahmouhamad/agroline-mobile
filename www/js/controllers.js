@@ -44,7 +44,7 @@ angular
     console.log('----------Location local------')
     console.log(localStorage.getItem('local'));
 
-    SendSms.sendSMS("Bissmillah", "776726045");
+    
 
     $scope.number = function()
       {
@@ -3949,11 +3949,10 @@ angular
                       }
                       else if (response.reponse == -10) {
                         var client = ""+$scope.data.clientchoisit.nom
-                    //SendSms.sendSMS("Bissmillah", "775329312");
                     console.log("Le client=========+>",client, $scope.data.clientchoisit.telephone)
 
                         try {
-                         /* $ionicPopup.show({
+                         $ionicPopup.show({
                             title: 'Alert ',
                             template: 'Le solde de votre plafond ne vous permet pas de faire cette prise de stock, veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.',
                             scope: $scope,
@@ -3963,11 +3962,10 @@ angular
                                 type: 'button-positive'
                               }
                             ]
-                          });*/
-                          SendSms.sendSMS("Bissmillah", "776726045");
-                          /*SendSms.sendSMS(
+                          });
+                         SendSms.sendSMS(
                             "Le solde du plafond de "+client+"/"+$scope.data.clientchoisit.telephone+" ne lui permet pas de faire cette prise de stock, " +
-                            "veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.", "776726045");  */                 
+                            "veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.", "776726045");                  
                          } catch (err) {
 
                           $ionicPopup.show({
@@ -6834,7 +6832,99 @@ angular
                     notify: true,
                   }
                 );
-              } else {
+              }
+              else if (response.reponse == -10) {
+                var utilisateur = $scope.data.user.prenom+" "+$scope.data.user.nom+"/ "+$scope.data.user.telephone
+                console.log("Le client=========+>",client, $scope.data.clientchoisit.telephone)
+
+                try {
+                 $ionicPopup.show({
+                    title: 'Alert ',
+                    template: 'Le solde de votre plafond ne vous permet pas de faire cette prise de stock, veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.',
+                    scope: $scope,
+                    buttons: [
+                      {
+                        text: 'OK',
+                        type: 'button-positive'
+                      }
+                    ]
+                  });
+                 SendSms.sendSMS(
+                    "Le solde du plafond de "+utilisateur+" ne lui permet pas de faire cette prise de stock, " +
+                    "veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.", "776726045");                  
+                 } catch (err) {
+
+                  $ionicPopup.show({
+                    title: 'Alert ',
+                    template: 'Le solde de votre plafond ne vous permet pas de faire cette prise de stock, veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.',
+                    scope: $scope,
+                    buttons: [
+                      {
+                        text: 'OK',
+                        type: 'button-positive'
+                      }
+                    ]
+                  });
+               
+                   $ionicPopup.show({
+                     title: 'Alert ',
+                     template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
+                     scope: $scope,
+                     buttons: [
+                       {
+                         text: 'OK',
+                         type: 'button-positive'
+                       }
+                     ]
+                   });
+                 }
+              }
+              else if (response.reponse == -20) {
+                var grossisste  = ""+$scope.data.grossistechoisit.nom
+               
+                try {
+                  $ionicPopup.show({
+                    title: 'Alert ',
+                    template: 'Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock.',
+                    scope: $scope,
+                    buttons: [
+                      {
+                        text: 'OK',
+                        type: 'button-positive'
+                      }
+                    ]
+                  });
+                  SendSms.sendSMS(
+                    "Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock." 
+                  , "776726045");                   
+                 } catch (err) {
+
+                  $ionicPopup.show({
+                    title: 'Alert ',
+                    template: 'Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock.',
+                    scope: $scope,
+                    buttons: [
+                      {
+                        text: 'OK',
+                        type: 'button-positive'
+                      }
+                    ]
+                  });
+               
+                   $ionicPopup.show({
+                     title: 'Alert ',
+                     template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
+                     scope: $scope,
+                     buttons: [
+                       {
+                         text: 'OK',
+                         type: 'button-positive'
+                       }
+                     ]
+                   });
+                 }
+              }
+              else {
                 $ionicPopup.show({
                   title: "Info",
                   template: "" + response.reponse,
