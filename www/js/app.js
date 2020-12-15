@@ -14,6 +14,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
 
     //initialiser le stockage des fiches en local
     if(localStorage.getItem('ficheSauvegarde')==null){
+      
       var init = [];
       var value= {"fichev":{"actionAMener":"titobiii",
           "bracheSecteur":"tito",
