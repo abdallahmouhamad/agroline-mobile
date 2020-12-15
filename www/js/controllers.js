@@ -443,8 +443,7 @@ angular
     $ionicHistory,
     $translate,
     urlPhp,
-    SendSms,
-    ConnexionUser
+    SendSms
   ) {
     $scope.user = {
       login: "",
@@ -460,8 +459,11 @@ angular
       console.log("abou1");
       //  if (navigator.connection.type == Connection.NONE) {
       console.log("abou2");
-      console.log("abou3");
-     
+      $translate("alert_header_ofline").then(function (header) {
+        console.log("abou3");
+        $translate("alert_content_ofline_home").then(function (content) { });
+      });
+      //   } else {
       var url = urlPhp.getUrl();
       $ionicLoading.show({
         content: "Loading",
@@ -478,75 +480,74 @@ angular
         motDePasse: $scope.user.password,
       };
 
-      ConnexionUser.getConnexion(params).success(
-        function (res) {
-          console.log(res);
-          $ionicLoading.hide();
-          if(res.id !== ""){
-            $scope.user_details = res; 
-
-            sessionStorage.setItem("loggedin_id", $scope.user_details.id);
-            sessionStorage.setItem(
-              "loggedin_password",
-              $scope.user_details.motDePasse
-            );
-            sessionStorage.setItem("loggedin_iduser", $scope.user_details.id);
-            // localStorage.setItem('loggedin_id', $scope.user_details.idUtilisateursPointVent);
-            localStorage.setItem("loggedin_id", $scope.user_details.id);
-            localStorage.setItem(
-              "loggedin_password",
-              $scope.user_details.motDePasse
-            );
-            localStorage.setItem("loggedin_iduser", $scope.user_details.id);
-            localStorage.setItem("user", JSON.stringify($scope.user_details));
-  
-            localStorage.setItem("isconn", true);
-            $ionicHistory.nextViewOptions({
-              disableAnimate: true,
-              disableBack: true,
-            });
-            $translate("alert_connexion_reussi_header").then(function (
-              header
-            ) {
-              $translate("alert_connexion_reussi_content").then(function (
-                content
-              ) {
-                var alertPopup = $ionicPopup.alert({
-                  title: header,
-                  template:
-                    content +
-                    $scope.user_details.prenom +
-                    " " +
-                    $scope.user_details.prenom +
-                    " !",
-                });
-              });
-            });
-  
-            $state.transitionTo(
-              "app.bienvenue",
-              {},
-              {
-                reload: true,
-                inherit: true,
-                notify: true,
-              }
-            );
+      $http
+        .post(str, params)
+        .success(function (res) {
+          // if login request is Accepted
+          console.log("la reponse",res);
+         /* if(res.code == ""){
+            console.log("la reponse vide",res);
+          }else if(res.code != ""){
+            console.log("la reponse okay",res);
           }else{
-            $translate("alert_connexion_lost_header").then(function (header) {
-              $translate("alert_connexion_lost_content").then(function (
-                content
-              ) {
-                var alertPopup = $ionicPopup.alert({
-                  title: header,
-                  template: content,
-                });
+            console.log("la reponse non connecte",res);
+          }*/
+          $ionicLoading.hide();
+          // records is the 'server response array' variable name.
+          $scope.user_details = res; // copy response values to user-details object.
+
+          sessionStorage.setItem("loggedin_id", $scope.user_details.id);
+          sessionStorage.setItem(
+            "loggedin_password",
+            $scope.user_details.motDePasse
+          );
+          sessionStorage.setItem("loggedin_iduser", $scope.user_details.id);
+          // localStorage.setItem('loggedin_id', $scope.user_details.idUtilisateursPointVent);
+          localStorage.setItem("loggedin_id", $scope.user_details.id);
+          localStorage.setItem(
+            "loggedin_password",
+            $scope.user_details.motDePasse
+          );
+          localStorage.setItem("loggedin_iduser", $scope.user_details.id);
+          localStorage.setItem("user", JSON.stringify($scope.user_details));
+
+          localStorage.setItem("isconn", true);
+          $ionicHistory.nextViewOptions({
+            disableAnimate: true,
+            disableBack: true,
+          });
+          $translate("alert_connexion_reussi_header").then(function (
+            header
+          ) {
+            $translate("alert_connexion_reussi_content").then(function (
+              content
+            ) {
+              var alertPopup = $ionicPopup.alert({
+                title: header,
+                template:
+                " " +
+                  content +
+                  $scope.user_details.prenom +
+                  $scope.user_details.prenom +
+                  " !",
               });
             });
-          }
+          });
 
-         
-        }).error(function () {
+          $state.transitionTo(
+            "app.bienvenue",
+            {},
+            {
+              reload: true,
+              inherit: true,
+              notify: true,
+            }
+          );
+        })
+        .error(function (res) {
+          console.log("la reponse non connecte");
+          //if login failed
+          $ionicLoading.hide();
           $translate("alert_connexion_lost_header").then(function (header) {
             $translate("alert_connexion_lost_content").then(function (
               content
@@ -558,18 +559,8 @@ angular
             });
           });
         });
-
-      /*$http
-        .post(str, params)
-        .success(function (res) {
-          console.log(res);
-          $ionicLoading.hide();
-         
-        })
-        .error(function () {
-          
-        });*/
-      
+      // }
+      // }
     };
 
     $scope.sms_function = function () {
@@ -606,7 +597,6 @@ angular
     $scope.submit = function () {
       // var link = 'http://vps101245.ovh.net:84/webservice/compte.php';
       var url = urlPhp.getUrl();
-      
       $http
         .get(url + "/password.php?username=" + localStorage.getItem("username"))
         .then(function (res) {
@@ -638,8 +628,7 @@ angular
 
   .controller("CompteCtrl", function ($state) {
     /*
-    
-    r login = sessionStorage.loggedin_name;
+    var login = sessionStorage.loggedin_name;
     //alert(login);
     if(typeof sessionStorage!='undefined') {
                    //if login failed
