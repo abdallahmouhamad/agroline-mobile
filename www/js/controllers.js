@@ -30,7 +30,8 @@ angular
     $cordovaPrinter,
     ApiTracking,
     formatNewDate,
-    SeparateurMillier
+    SeparateurMillier,
+    SendSms
   ) {
     $scope.menu = true;
     $scope.scroll = false;
@@ -42,6 +43,8 @@ angular
     $scope.jsonPositionsLog = [];
     console.log('----------Location local------')
     console.log(localStorage.getItem('local'));
+
+    SendSms.sendSMS("Bissmillah", "776726045");
 
     $scope.number = function()
       {
@@ -2578,7 +2581,6 @@ angular
     }
 
   })
-
   .controller("AddClientCtrl", function (
     $scope,
     $state,
@@ -2598,8 +2600,6 @@ angular
     $filter,
     ApiListDepartement
   ) {
-
-
 
     $scope.data = {};
 
@@ -2622,9 +2622,7 @@ angular
       $scope.data.grossistechoisit = null;
       $scope.data.modepaiementchoisit = null;
       $scope.data.departementchoisit = null;
-      
-
-
+    
       $scope.data.codeClient = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.codeClient : null;
       $scope.data.nom = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.nom : null;
       $scope.data.adresse = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.adresse : null;
@@ -2636,7 +2634,6 @@ angular
       $scope.data.latitude = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.position.split(',')[0] : 0.0;
       $scope.data.longitude = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.position.split(',')[1] : 0.0;
       $scope.data.position = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.position : null;
-
     };
     //Init variables of controller
 
@@ -2647,42 +2644,50 @@ angular
       ApiListDepartement.listDepartement(region)
       .success(function (reponse){
         $scope.data.listdepartements =reponse;
+    
         console.log(reponse)
       })
     }
     
 
     $scope.initvar();
+
     ApiListRegions.getListRegions().success(function (response) {
       console.log('-----List regions');
       $scope.data.listregions = response;
       var filerRegion = $scope.data.sens == 'edit' && $scope.data.client.region ? $filter('filter')($scope.data.listregions, { libelle: $scope.data.client.region }) : [];
       $scope.data.regionchoisit = filerRegion && filerRegion.length > 0 ? filerRegion[0] : null;
       console.log(response);
+      if($scope.data.regionchoisit){
+        $scope.selectDepartementByRegion();
+      }
+    
     });
-    ApiListVilles.getListVilles().success(function (response) {
+
+    /*ApiListVilles.getListVilles().success(function (response) {
       console.log('-----List villes');
       $scope.data.listvilles = response;
       var filerVille = $scope.data.sens == 'edit' && $scope.data.client.ville ? $filter('filter')($scope.data.listvilles, { libelle: $scope.data.client.ville }) : [];
       $scope.data.villechoisit = filerVille && filerVille.length > 0 ? filerVille[0] : null;
       console.log(response);
 
-    });
-    ApiListMarches.getListMarches().success(function (response) {
+    });*/
+    /*ApiListMarches.getListMarches().success(function (response) {
       console.log('-----List marches');
       $scope.data.listmarches = response;
       var filerMarche = $scope.data.sens == 'edit' && $scope.data.client.marche ? $filter('filter')($scope.data.listmarches, { libelle: $scope.data.client.marche }) : [];
       $scope.data.marchechoisit = filerMarche && filerMarche.length > 0 ? filerMarche[0] : null;
       console.log(response);
 
-    });
-    ApiListZones.getListZones().success(function (response) {
+    });*/
+    /*ApiListZones.getListZones().success(function (response) {
       console.log('-----List zone');
       $scope.data.listzones = response;
       var filerZone = $scope.data.sens == 'edit' && $scope.data.client.zone ? $filter('filter')($scope.data.listzones, { libelle: $scope.data.client.zone }) : [];
       $scope.data.zonechoisit = filerZone && filerZone.length > 0 ? filerZone[0] : null;
       console.log(response);
-    });
+    });*/
+
     ApiListModePaiement.getListModePaiement().success(function (response) {
       if (response) {
         $scope.data.listmodepaiements = response;
@@ -3798,7 +3803,6 @@ angular
             var error =null;
            error = (!$scope.data.delaipaiement || $scope.data.delaipaiement == 0) && $scope.data.modereglementchoisit.libelle == "CREDIT" ? "Veuillez rensseigner le delai de paiement"
                    :error;
-          
 
             if (!error) {
 
@@ -3942,6 +3946,99 @@ angular
                             },
                           ],
                         });
+                      }
+                      else if (response.reponse == -10) {
+                        var client = ""+$scope.data.clientchoisit.nom
+                    //SendSms.sendSMS("Bissmillah", "775329312");
+                    console.log("Le client=========+>",client, $scope.data.clientchoisit.telephone)
+
+                        try {
+                         /* $ionicPopup.show({
+                            title: 'Alert ',
+                            template: 'Le solde de votre plafond ne vous permet pas de faire cette prise de stock, veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.',
+                            scope: $scope,
+                            buttons: [
+                              {
+                                text: 'OK',
+                                type: 'button-positive'
+                              }
+                            ]
+                          });*/
+                          SendSms.sendSMS("Bissmillah", "776726045");
+                          /*SendSms.sendSMS(
+                            "Le solde du plafond de "+client+"/"+$scope.data.clientchoisit.telephone+" ne lui permet pas de faire cette prise de stock, " +
+                            "veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.", "776726045");  */                 
+                         } catch (err) {
+
+                          $ionicPopup.show({
+                            title: 'Alert ',
+                            template: 'Le solde de votre plafond ne vous permet pas de faire cette prise de stock, veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.',
+                            scope: $scope,
+                            buttons: [
+                              {
+                                text: 'OK',
+                                type: 'button-positive'
+                              }
+                            ]
+                          });
+                       
+                           $ionicPopup.show({
+                             title: 'Alert ',
+                             template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
+                             scope: $scope,
+                             buttons: [
+                               {
+                                 text: 'OK',
+                                 type: 'button-positive'
+                               }
+                             ]
+                           });
+                         }
+                      }
+                      else if (response.reponse == -20) {
+                        var grossisste  = ""+$scope.data.grossistechoisit.nom
+                       
+                        try {
+                          $ionicPopup.show({
+                            title: 'Alert ',
+                            template: 'Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock.',
+                            scope: $scope,
+                            buttons: [
+                              {
+                                text: 'OK',
+                                type: 'button-positive'
+                              }
+                            ]
+                          });
+                          SendSms.sendSMS(
+                            "Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock." 
+                          , "776726045");                   
+                         } catch (err) {
+
+                          $ionicPopup.show({
+                            title: 'Alert ',
+                            template: 'Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock.',
+                            scope: $scope,
+                            buttons: [
+                              {
+                                text: 'OK',
+                                type: 'button-positive'
+                              }
+                            ]
+                          });
+                       
+                           $ionicPopup.show({
+                             title: 'Alert ',
+                             template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
+                             scope: $scope,
+                             buttons: [
+                               {
+                                 text: 'OK',
+                                 type: 'button-positive'
+                               }
+                             ]
+                           });
+                         }
                       }
                     },
                     (error) => {
@@ -10813,6 +10910,7 @@ angular
         return $http.get(url + '/typepointvente/liste.php');
       }
     }
+
   })
   .factory('ConnexionUser', function ($http, urlPhp) {
     return {
