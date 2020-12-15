@@ -4039,9 +4039,19 @@ angular
                         });
                       }
                       else if (response.reponse == -10) {
-                        var client = ""+$scope.data.clientchoisit.nom
-                    console.log("Le client=========+>",client, $scope.data.clientchoisit.telephone)
-
+                        console.log('-10')
+                        $ionicPopup.show({
+                          title: 'Alert ',
+                          template: 'Le solde de votre plafond ne vous permet pas de faire cette prise de stock, veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.',
+                          scope: $scope,
+                          buttons: [
+                            {
+                              text: 'OK',
+                              type: 'button-positive'
+                            }
+                          ]
+                        });
+/*
                         try {
                          $ionicPopup.show({
                             title: 'Alert ',
@@ -4054,8 +4064,7 @@ angular
                               }
                             ]
                           });
-                         SendSms.sendSMS(
-                            "Le solde du plafond de "+client+"/"+$scope.data.clientchoisit.telephone+" ne lui permet pas de faire cette prise de stock, " +
+                         SendSms.sendSMS("Le solde du plafond de "+client+"/"+$scope.data.clientchoisit.telephone+" ne lui permet pas de faire cette prise de stock, " +
                             "veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.", "776726045");                  
                          } catch (err) {
 
@@ -4082,10 +4091,22 @@ angular
                                }
                              ]
                            });
-                         }
+                         }*/
                       }
                       else if (response.reponse == -20) {
-                        var grossisste  = ""+$scope.data.grossistechoisit.nom
+                        console.log('-20')
+                        $ionicPopup.show({
+                          title: 'Alert ',
+                          template: 'Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock.',
+                          scope: $scope,
+                          buttons: [
+                            {
+                              text: 'OK',
+                              type: 'button-positive'
+                            }
+                          ]
+                        });
+                        /*var grossisste  = ""+$scope.data.grossistechoisit.nom
                        
                         try {
                           $ionicPopup.show({
@@ -4127,7 +4148,7 @@ angular
                                }
                              ]
                            });
-                         }
+                         }*/
                       }
                     },
                     (error) => {
