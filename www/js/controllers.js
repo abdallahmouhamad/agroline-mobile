@@ -154,7 +154,7 @@ angular
           $scope.getCurrentPosition();
         }
       
-    }, 30000);
+    }, 1200000);
   $scope.addTrack = function()
   {
     console.log('----Tracking envoye -------')
@@ -2606,7 +2606,8 @@ angular
     CodeGenere,
     ApiAjoutClient,
     $ionicPopup,
-    $filter
+    $filter,
+    ApiListDepartement
   ) {
 
 
@@ -2647,6 +2648,17 @@ angular
 
     };
     //Init variables of controller
+
+    $scope.selectDepartementByRegion = function()
+    {
+      console.log($scope.data.regionchoisit.idRegion);
+      var region = {idRegion: $scope.data.regionchoisit.idRegion}
+      ApiListDepartement.listDepartement(region)
+      .success(function (reponse){
+        console.log(reponse)
+      })
+    }
+    
 
     $scope.initvar();
     ApiListRegions.getListRegions().success(function (response) {
@@ -2723,6 +2735,8 @@ angular
 
 
     }
+
+  
 
     $scope.getCurrentPosition = function () {
       $ionicLoading.show({
@@ -10763,6 +10777,48 @@ angular
         //console.log(values);
 
         return $http.post(url + '/utilisateur/tracking.php', values);
+      }
+    }
+  })
+  .factory('ApiListDepartement', function ($http, urlPhp) {
+    return {
+      listDepartement: function (idRegion) {
+        var url = urlPhp.getUrl();
+        var user = localStorage.getItem('user');
+        /*console.log('-------------User-------');
+        console.log(user);*/
+        user = JSON.parse(user);
+        //console.log(values);
+
+        return $http.post(url + '/departement/liste.php', idRegion);
+      }
+    }
+  })
+  .factory('ApiListLocalite', function ($http, urlPhp) {
+    return {
+      listLocalite: function (idLocalite) {
+        var url = urlPhp.getUrl();
+        var user = localStorage.getItem('user');
+        /*console.log('-------------User-------');
+        console.log(user);*/
+        user = JSON.parse(user);
+        //console.log(values);
+
+        return $http.post(url + '/localite/liste.php', idLocalite);
+      }
+    }
+  })
+  .factory('ApiListTypePointVente', function ($http, urlPhp) {
+    return {
+      listTypePointVente: function () {
+        var url = urlPhp.getUrl();
+        var user = localStorage.getItem('user');
+        /*console.log('-------------User-------');
+        console.log(user);*/
+        user = JSON.parse(user);
+        //console.log(values);
+
+        return $http.get(url + '/typepointvente/liste.php');
       }
     }
   })

@@ -53,6 +53,7 @@
                search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
                ng-model="data.regionchoisit" options="data.listregions" option-getter="getOptRegion(option)"
                modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
+               on-select="selectDepartementByRegion()"
                has-search="true">
                <label for="" ng-if="!data.regionchoisit">Choisir une Region</label>
                <label for="" ng-if="data.regionchoisit">{{data.regionchoisit.libelle}}</label>
