@@ -4057,7 +4057,9 @@ angular
                         try {
                        
                          SendSms.sendSMS("Le solde du plafond de "+user+" ne lui permet pas de faire cette prise de stock, " +
-                            "veuillez faire le point avec le(s) grossiste(s) pour qu'il puisse prendre à nouveau du stock.", "775329312");                  
+                            "veuillez faire le point avec le(s) grossiste(s) pour qu'il puisse prendre à nouveau du stock.", "775329312");  
+                            SendSms.sendSMS("Le solde du plafond de "+user+" ne lui permet pas de faire cette prise de stock, " +
+                            "veuillez faire le point avec le(s) grossiste(s) pour qu'il puisse prendre à nouveau du stock.", "776294380");                  
                          } catch (err) {
 
                            $ionicPopup.show({
@@ -4092,7 +4094,11 @@ angular
                         
                           SendSms.sendSMS(
                             "Le solde du plafond du gorssiste "+ grossisste+" ne lui permet de faire cette sortie de stock." 
-                          , "775329312");                   
+                          , "775329312");
+                          SendSms.sendSMS(
+                            "Le solde du plafond du gorssiste "+ grossisste+" ne lui permet de faire cette sortie de stock." 
+                          , "776294380");    
+                                         
                          } catch (err) {
 
                            $ionicPopup.show({
@@ -4400,7 +4406,10 @@ angular
                     try {
                    
                      SendSms.sendSMS("Le solde du plafond de "+user+" ne lui permet pas de faire cette prise de stock, " +
-                        "veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.", "775329312");                  
+                        "veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.", "775329312");
+                        SendSms.sendSMS("Le solde du plafond de "+user+" ne lui permet pas de faire cette prise de stock, " +
+                        "veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.", "776294380"); 
+                                         
                      } catch (err) {
 
                        $ionicPopup.show({
@@ -4434,7 +4443,11 @@ angular
                     
                       SendSms.sendSMS(
                         "Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock." 
-                      , "775329312");                   
+                      , "775329312"); 
+                        
+                      SendSms.sendSMS(
+                        "Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock." 
+                      , "776294380");                 
                      } catch (err) {
 
                        $ionicPopup.show({
@@ -6627,6 +6640,8 @@ angular
               SendSms.sendSMS(MessageGlobal, $scope.data.grossistechoisit.telephone);
               SendSms.sendSMS(MessageGlobal, "775329312");
               SendSms.sendSMS(MessageGlobal, "776726045");
+              SendSms.sendSMS(MessageGlobal, "776294380");
+              
               localStorage.setItem("pds", JSON.stringify($scope.data.pds));
 
               $scope.code = "attente";
@@ -6963,7 +6978,14 @@ angular
                 
                  SendSms.sendSMS(
                     "Le solde du plafond de "+utilisateur+" ne lui permet pas de faire cette prise de stock, " +
-                    "veuillez faire le point avec le(s) grossiste(s) pour qu'il puisse prendre à nouveau du stock.", "776726045");                  
+                    "veuillez faire le point avec le(s) grossiste(s) pour qu'il puisse prendre à nouveau du stock.", "776726045");
+                    SendSms.sendSMS(
+                      "Le solde du plafond de "+utilisateur+" ne lui permet pas de faire cette prise de stock, " +
+                      "veuillez faire le point avec le(s) grossiste(s) pour qu'il puisse prendre à nouveau du stock.", "775329312");
+                      SendSms.sendSMS(
+                        "Le solde du plafond de "+utilisateur+" ne lui permet pas de faire cette prise de stock, " +
+                        "veuillez faire le point avec le(s) grossiste(s) pour qu'il puisse prendre à nouveau du stock.", "776294380");     
+                                 
                  } catch (err) {
 
                 
@@ -6997,7 +7019,15 @@ angular
                 
                   SendSms.sendSMS(
                     "Le solde du plafond du grossiste "+ grossisste +" ne lui permet pas de faire cette sortie de stock." 
-                  , "776726045");                   
+                  , "776726045");    
+                     
+                  SendSms.sendSMS(
+                    "Le solde du plafond du grossiste "+ grossisste +" ne lui permet pas de faire cette sortie de stock." 
+                  , "775329312");      
+                     
+                  SendSms.sendSMS(
+                    "Le solde du plafond du grossiste "+ grossisste +" ne lui permet pas de faire cette sortie de stock." 
+                  , "776294380");                     
                  } catch (err) {
 
                   $ionicPopup.show({
@@ -9200,6 +9230,8 @@ angular
             SendSms.sendSMS(MessageGlobal, $scope.data.dechargement.telephone);
             SendSms.sendSMS(MessageGlobal, "775329312");
             SendSms.sendSMS(MessageGlobal, "776726045");
+            SendSms.sendSMS(MessageGlobal, "776294380");
+            
             localStorage.setItem("pdstodecharge", JSON.stringify(values));
 
             localStorage.setItem("pdstodechargecode", values.codeGenere);
@@ -9806,7 +9838,7 @@ angular
           try {
             SendSms.sendSMS(Message, $scope.data.details_pds_no_payed.telephone);
             SendSms.sendSMS(Message, "775329312");
-            SendSms.sendSMS(Message, "776726045");
+            SendSms.sendSMS(Message, "776294380");
             localStorage.setItem("versetopds", JSON.stringify(tab_value));
 
             localStorage.setItem("versetopdscode", values.codeGenere);
