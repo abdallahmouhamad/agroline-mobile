@@ -50,26 +50,34 @@
             <div class="col">Code</div>
             <div class="col"><p>{{ cli.codeClient }}</p></div>
           </div>
-          <div class="row">
+
+          <div class="row"  ng-if="data.marche == 'null' ||data.marche == 'NULL' || data.marche == null || data.marche == ' '  ">
             <div class="col">Adresse</div>
             <div class="col"><p>{{ cli.adresse }}</p></div>
           </div>
+          
+          <div class="row"  ng-if="data.adresse == 'null' ||data.adresse == 'NULL' || data.adresse == null || data.adresse == ' ' ">
+            <div class="col">Marche</div>
+            <div class="col"><p>{{ cli.marche }}</p></div>
+          </div>
+          
           <div class="row">
-            <div class="col">Telephone</div>
+            <div class="col">Telephone 1</div>
             <div class="col"><p>{{ cli.telephone }}</p></div>
           </div>
           <div class="row">
-            <div class="col">Telephone</div>
+            <div class="col">Telephone 2</div>
             <div class="col"><p>{{ cli.telephone2 }}</p></div>
           </div>
           <div class="row">
             <div class="col">Région</div>
             <div class="col"><p>{{ cli.region }}</p></div>
           </div>
-          <div class="row">
+        
+         <!-- <div class="row">
             <div class="col">Zone</div>
             <div class="col"><p>{{ cli.zone }}</p></div>
-          </div>
+          </div>-->
         </a>
         <div class="row content-div">
 

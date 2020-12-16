@@ -3,124 +3,122 @@
     <div ng-app="starter">
 
       <ion-content>
+        <ion-grid>
+          <style type="text/css">
+            input[readonly] {
+              background-color: transparent !important;
+              cursor: not-allowed;
+            }
 
-        <style type="text/css">
-          input[readonly] {
-            background-color: transparent !important;
-            cursor: not-allowed;
-          }
+            .small_button {
+              width: 50% !important;
+              height: 50px !important;
+              margin-left: 5px;
+            }
 
-          .small_button {
-            width: 50% !important;
-            height: 50px !important;
-            margin-left: 5px;
-          }
+            .footer-button {
+              margin-bottom: 10px;
+              height: 50px !important;
+            }
 
-          .footer-button {
-            margin-bottom: 10px;
-            height: 50px !important;
-          }
+            .ml {
+              margin-left: 5px;
+            }
 
-          .ml {
-            margin-left: 5px;
-          }
+            .header {
 
-          .header {
+              margin-top: 5px;
+              margin-bottom: 10px;
+            }
 
-            margin-top: 5px;
-            margin-bottom: 10px;
-          }
+            .content-div {
+              background: grey !important;
+            }
 
-          .content-div {
-            background: grey !important;
-          }
+            .content-div-row {
+              text-align: center !important;
+              border: 3px grey dashed !important;
+            }
 
-          .content-div-row {
-            text-align: center !important;
-            border: 3px grey dashed !important;
-          }
+            .edit {
+              background: red !important;
+            }
 
-          .edit {
-            background: red !important;
-          }
-
-          .map {
-            height: 200px !important;
-          }
-        </style>
+            .map {
+              height: 200px !important;
+            }
+          </style>
 
 
-        <div class="row">
+          <div class="row">
 
-          <div class="col">
-            <button class="button button-block button-assertive"
-              cancel-button="{{ 'fichevisite_select_pv_return' | translate }}"
-              reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
-              cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
-              search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
-              ng-model="data.regionchoisit" options="data.listregions" option-getter="getOptRegion(option)"
-              modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
-              on-select="selectDepartementByRegion()" has-search="true">
-              <label for="" ng-if="!data.regionchoisit">Choisir une Region</label>
-              <label for="" ng-if="data.regionchoisit">{{data.regionchoisit.libelle}}</label>
-              <div class="option">
-                <h2> {{option.libelle}}</h2>
-              </div>
-
-            </button>
-
-          </div>
-
-          <div class="col">
-            <button class="button button-block button-assertive"
-              cancel-button="{{ 'fichevisite_select_pv_return' | translate }}"
-              reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
-              cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
-              search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
-              ng-model="data.departementchoisit" options="data.listdepartements"
-              option-getter="getOptDepartement(option)"
-              modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
-              on-select="selectLocaliteByDepartement()"
-              has-search="true">
-              <label for="" ng-if="!data.departementchoisit">Choisir un dept</label>
-              <label for="" ng-if="data.departementchoisit">{{data.departementchoisit.libelle}}</label>
-              <div class="option">
-                <h2> {{option.libelle}}</h2>
-              </div>
-            </button>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col">
-            <button class="button button-block button-assertive"
-              cancel-button="{{ 'fichevisite_select_pv_return' | translate }}"
-              reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
-              cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
-              search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
-              ng-model="data.localitechoisit" options="data.listlocalites"
-              option-getter="getOptLocalite(option)"
-              modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
-              on-select="selectTypePointVente()"
-              has-search="true">
-              <label for="" ng-if="!data.localitechoisit">Choisir localite</label>
-              <label for="" ng-if="data.localitechoisit">{{data.localitechoisit.libelle}}</label>
-              <div class="option">
-                <h2> {{option.libelle}}</h2>
-              </div>
-            </button>
-          </div>
             <div class="col">
-              <div class="list">
+              <button class="button button-block button-assertive"
+                cancel-button="{{ 'fichevisite_select_pv_return' | translate }}"
+                reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
+                cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
+                search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
+                ng-model="data.regionchoisit" options="data.listregions" option-getter="getOptRegion(option)"
+                modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
+                on-select="selectDepartementByRegion()" has-search="true">
+                <label for="" ng-if="!data.regionchoisit">Choisir une Region</label>
+                <label for="" ng-if="data.regionchoisit">{{data.regionchoisit.libelle}}</label>
+                <div class="option">
+                  <h2> {{option.libelle}}</h2>
+                </div>
+
+              </button>
+
+            </div>
+
+            <div class="col">
+              <button class="button button-block button-assertive"
+                cancel-button="{{ 'fichevisite_select_pv_return' | translate }}"
+                reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
+                cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
+                search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
+                ng-model="data.departementchoisit" options="data.listdepartements"
+                option-getter="getOptDepartement(option)"
+                modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
+                on-select="selectLocaliteByDepartement()" has-search="true">
+                <label for="" ng-if="!data.departementchoisit">Choisir un dept</label>
+                <label for="" ng-if="data.departementchoisit">{{data.departementchoisit.libelle}}</label>
+                <div class="option">
+                  <h2> {{option.libelle}}</h2>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <div class="row"  style=" display:inline-block;">
+            <div class="col" >
+             
+                <button class="button button-block button-assertive"
+                  cancel-button="{{ 'fichevisite_select_pv_return' | translate }}"
+                  reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
+                  cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
+                  search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
+                  ng-model="data.localitechoisit" options="data.listlocalites" option-getter="getOptLocalite(option)"
+                  modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
+                  on-select="selectTypePointVente()" has-search="true">
+                  <label for="" ng-if="!data.localitechoisit">Choisir localite</label>
+                  <label for="" ng-if="data.localitechoisit">{{data.localitechoisit.libelle}}</label>
+                  <div class="option">
+                    <h2> {{option.libelle}}</h2>
+                  </div>
+                </button>
+             
+            </div>
+
+            <div class="col">
                 <label class="item item-input">
                   <input type="text" id="marhe" ng-model="data.marche" placeholder="Marche">
                 </label>
-              </div>
-            
+            </div>
+
           </div>
-          
-           
-         
+
+
           <!-- <div class="col">
                  <button class="button button-block button-assertive"
                  cancel-button="{{ 'fichevisite_select_pv_return' | translate }}"
@@ -156,184 +154,166 @@
                  </div>
                </button>
              </div>-->
-        </div>
-       <div class="row">
-        <div class="col">
-          <button class="button button-block button-assertive"
-            cancel-button="{{ 'fichevisite_select_pv_return' | translate }}"
-            reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
-            cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
-            search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
-            ng-model="data.TypePointVentechoisit" options="data.listTypePointVentes"
-            option-getter="getOptTypePointVente(option)"
-            modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
-           
-            has-search="true">
-            <label for="" ng-if="!data.TypePointVentechoisit">Type point de vente</label>
-            <label for="" ng-if="data.TypePointVentechoisit">{{data.TypePointVentechoisit.libelle}}</label>
-            <div class="option">
-              <h2> {{option.libelle}}</h2>
-            </div>
-          </button>
-        </div>
-        </div>
 
-        <div class="row">
-
-          <div class="col">
-            <div class="list">
-              <label class="item item-input">
-                <input style="text-transform: uppercase" type="text" id="nom" ng-model="data.nom"
-                  placeholder="Raison sociale"></majuscule>
-              </label>
+          <div class="row">
+            <div class="col">
+              <button class="button button-block button-assertive"
+                cancel-button="{{ 'fichevisite_select_pv_return' | translate }}"
+                reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
+                cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
+                search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
+                ng-model="data.TypePointVentechoisit" options="data.listTypePointVentes"
+                option-getter="getOptTypePointVente(option)"
+                modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
+                has-search="true">
+                <label for="" ng-if="!data.TypePointVentechoisit">Type point de vente</label>
+                <label for="" ng-if="data.TypePointVentechoisit">{{data.TypePointVentechoisit.libelle}}</label>
+                <div class="option">
+                  <h2> {{option.libelle}}</h2>
+                </div>
+              </button>
             </div>
           </div>
 
+          <div class="row">
 
-          <div class="col">
-            <div class="list">
-              <label class="item item-input">
-                <input type="text" id="adresse" ng-model="data.adresse" placeholder="Adresse client">
-              </label>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="row">
-
-          <div class="col">
-            <div class="list">
-              <label class="item item-input">
-                <input type="number" id="telephne" ng-model="data.telephone" placeholder="Telephone client">
-              </label>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="list">
-              <label class="item item-input">
-                <input type="number" id="telephone2" ng-model="data.telephone2" placeholder="Deuxième numéro">
-              </label>
-            </div>
-          </div>
-
-
-        </div>
-
-
-        <div class="row">
-
-          <div class="col">
-            <button class="button button-block button-assertive"
-              cancel-button="{{ 'fichevisite_select_pv_return' | translate }}"
-              reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
-              cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
-              search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
-              ng-model="data.grossistechoisit" options="data.listgrossistes" option-getter="getOptZone(option)"
-              modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
-              has-search="true">
-              <label for="" ng-if="!data.grossistechoisit">Choisir une Grossiste</label>
-              <label for="" ng-if="data.grossistechoisit">{{data.grossistechoisit.nom}}</label>
-              <div class="option">
-                <h2> {{option.nom}}</h2>
+            <div class="col">
+              <div class="list">
+                <label class="item item-input">
+                  <input style="text-transform: uppercase" type="text" id="nom" ng-model="data.nom"
+                    placeholder="Raison sociale"></majuscule>
+                </label>
               </div>
+            </div>
 
-            </button>
 
-          </div>
-
-          <div class="col">
-            <button class="button button-block button-assertive"
-              cancel-button="{{ 'fichevisite_select_pv_return' | translate }}"
-              reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
-              cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
-              search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
-              ng-model="data.modepaiementchoisit" options="data.listmodepaiements"
-              option-getter="getOptModePaiement(option)"
-              modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
-              has-search="true">
-              <label for="" ng-if="!data.modepaiementchoisit">M.Paiement</label>
-              <label for="" ng-if="data.modepaiementchoisit">{{data.modepaiementchoisit.libelle}}</label>
-              <div class="option">
-                <h2> {{option.libelle}}</h2>
+            <div class="col">
+              <div class="list">
+                <label class="item item-input">
+                  <input type="text" id="adresse" ng-model="data.adresse" placeholder="Adresse client">
+                </label>
               </div>
-            </button>
+            </div>
+
+
+
           </div>
-        </div>
 
-        <div class="row"
-          ng-if="data.modepaiementchoisit.libelle == 'CREDIT' || data.modepaiementchoisit.libelle == 'credit'">
+          <div class="row">
+
+            <div class="col">
+              <div class="list">
+                <label class="item item-input">
+                  <input type="number" id="telephne" ng-model="data.telephone" placeholder="Telephone client">
+                </label>
+              </div>
+            </div>
+
+            <div class="col">
+              <div class="list">
+                <label class="item item-input">
+                  <input type="number" id="telephone2" ng-model="data.telephone2" placeholder="Deuxième numéro">
+                </label>
+              </div>
+            </div>
 
 
-          <div class="col">
-            <div class="list">
-              <label class="item item-input">
-                <input type="number" id="delaiPaiement" ng-model="data.delaiPaiement" placeholder="Delai de paiement">
-              </label>
+          </div>
+
+
+          <div class="row">
+
+            <div class="col">
+              <button class="button button-block button-assertive"
+                cancel-button="{{ 'fichevisite_select_pv_return' | translate }}"
+                reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
+                cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
+                search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
+                ng-model="data.grossistechoisit" options="data.listgrossistes" option-getter="getOptZone(option)"
+                modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
+                has-search="true">
+                <label for="" ng-if="!data.grossistechoisit">Choisir une Grossiste</label>
+                <label for="" ng-if="data.grossistechoisit">{{data.grossistechoisit.nom}}</label>
+                <div class="option">
+                  <h2> {{option.nom}}</h2>
+                </div>
+
+              </button>
+
+            </div>
+
+            <div class="col">
+              <button class="button button-block button-assertive"
+                cancel-button="{{ 'fichevisite_select_pv_return' | translate }}"
+                reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
+                cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
+                search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
+                ng-model="data.modepaiementchoisit" options="data.listmodepaiements"
+                option-getter="getOptModePaiement(option)"
+                modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
+                has-search="true">
+                <label for="" ng-if="!data.modepaiementchoisit">M.Paiement</label>
+                <label for="" ng-if="data.modepaiementchoisit">{{data.modepaiementchoisit.libelle}}</label>
+                <div class="option">
+                  <h2> {{option.libelle}}</h2>
+                </div>
+              </button>
             </div>
           </div>
 
-        </div>
+          <div class="row"
+            ng-if="data.modepaiementchoisit.libelle == 'CREDIT' || data.modepaiementchoisit.libelle == 'credit'">
 
-        <div class="row">
 
-          <div class="col text-left" style="padding: 10px;">
-            <button ng-click="startTracking();" class="button button-block button-assertive" color="danger"
-              type="submit" name="submit"><span style="color:white"> Position</span></button>
+            <div class="col">
+              <div class="list">
+                <label class="item item-input">
+                  <input type="number" id="delaiPaiement" ng-model="data.delaiPaiement" placeholder="Delai de paiement">
+                </label>
+              </div>
+            </div>
+
           </div>
 
-          <div class="col text-right" style="padding: 10px;">
-            <button ng-click="addImage()" class="button button-block button-assertive" color="danger" type="submit"
-              name="submit"><span style="color:white">Photo</span></button>
+          <div class="row">
+
+            <div class="col text-left" style="padding: 10px;">
+              <button ng-click="startTracking();" class="button button-block button-assertive" color="danger"
+                type="submit" name="submit"><span style="color:white"> Position</span></button>
+            </div>
+
+            <div class="col text-right" style="padding: 10px;">
+              <button ng-click="addImage()" class="button button-block button-assertive" color="danger" type="submit"
+                name="submit"><span style="color:white">Photo</span></button>
+            </div>
+
+
           </div>
 
 
-        </div>
 
-        <!--<div class="row">
-    <div class="col">
-        <div class="list" >
-            <label class="item item-input">
-              <input type="text" id="delaiPaiement" ng-model="data.delaiPaiement" placeholder="Delai de paiement">
-            </label>
+          <div class="row">
+            <div class="col text-center">
+              {{data.latitude}} | {{data.longitude}}
+            </div>
           </div>
-    </div>
-  </div>-->
-
-
-        <div class="row">
-          <div class="col text-center">
-            {{data.latitude}} | {{data.longitude}}
+          <div>
+            <br>
+            <br>
           </div>
-        </div>
-
-        <div class="row">
-          <div class="col text-center">
-            <ion-scroll *ng-if="data.photo">
-              <img ng-src="{{data.photo}}" style="width:30%; height: 20%;margin-top: 10px;margin-left: 30px;"
-                imageViewer height="200px" />
-            </ion-scroll>
+          <div class="row">
+            <div class="col text-center">
+              <ion-scroll *ng-if="data.photo">
+                <img ng-src="{{data.photo}}" style="width:30%; height: 20%;margin-top: 10px;margin-left: 30px;"
+                  imageViewer height="200px" />
+              </ion-scroll>
+            </div>
           </div>
-        </div>
-
-
-        <!--<div class="row" ng-if="data.client.codeClient">
-    <div class="col text-center">
-      <ion-scroll *ng-if="data.photo">
-        <img src="http://test-test.h-tsoft.com/{{data.photo}}">
-      </ion-scroll>
-    </div>
-  </div>-->
-
-
-
-
-
     </div>
 
 
 
+    </ion-grid>
     </ion-content>
 
 

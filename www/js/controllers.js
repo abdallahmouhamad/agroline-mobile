@@ -2949,12 +2949,16 @@ angular
         // && $scope.data.departementchoisit
         //  && $scope.data.localitechoisitchoisit
         // && $scope.data.TypePointVentechoisit
+       // && $scope.data.marche
+      // && $scope.data.adresse
         && $scope.data.telephone
-        && $scope.data.marche
-        && $scope.data.adresse && $scope.data.position
+        
+       && $scope.data.position
         && $scope.data.grossistechoisit
         && $scope.data.modepaiementchoisit
       ) {
+
+       
         var codeClient = $scope.data.client ? $scope.data.client.codeClient : "CLI-" + $scope.data.user.code + "-" + CodeGenere.getCodeGenere();
 
         var values = {
@@ -3005,16 +3009,20 @@ angular
         values.telephone2 = "" + values.telephone2;
         values.delaiPaiement = + values.delaiPaiement;
         values.photo = "" + values.photo;
+        values.marche="" + values.marche;
+        values.adresse="" + values.adresse;
 
-        for (var i = 0; i < $scope.data.listregions.length; i++) {
+       /* for (var i = 0; i < $scope.data.listregions.length; i++) {
 
           if (values.idRegion != " ") {
             values.idRegion = parseInt($scope.data.listregions[i].idRegion);
+           values.idRegion = + $scope.data.listregions[i].idRegion;
+           console.log(values.idRegion)
 
           } else {
             console.log(values.idRegion)
           }
-        }
+        }*/
 
 
         for (var i = 0; i < $scope.data.listdepartements.length; i++) {
@@ -3046,6 +3054,7 @@ angular
         ApiAjoutClient.ajoutClient(values, etat).success(function (response) {
           $ionicLoading.hide();
           console.log(response)
+          
           if (response.reponse === 1) {
             $ionicPopup.show({
               title: "Infos",
@@ -3121,7 +3130,22 @@ angular
           console.log(err);
           $ionicLoading.hide();
         })
-      } else {
+      } else if( $scope.data.marche == " " && $scope.data.adresse == " "){
+        $ionicPopup.show({
+          title: "Alert",
+          template: "Veuillez renseigner un marche ou une adresse.",
+          scope: $scope,
+          buttons: [
+            {
+              text: 'OK',
+              type: 'button-energized',
+              onTap: function (e) {
+                return true;
+              }
+            }
+          ]
+        })
+      }else{
         $ionicPopup.show({
           title: "Alert",
           template: "Veuillez renseigner tous les champs du formulaire.",
