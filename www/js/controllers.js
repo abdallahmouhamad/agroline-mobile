@@ -2952,8 +2952,7 @@ angular
        // && $scope.data.marche
       // && $scope.data.adresse
         && $scope.data.telephone
-        
-       && $scope.data.position
+        && $scope.data.position
         && $scope.data.grossistechoisit
         && $scope.data.modepaiementchoisit
       ) {
@@ -3009,8 +3008,18 @@ angular
         values.telephone2 = "" + values.telephone2;
         values.delaiPaiement = + values.delaiPaiement;
         values.photo = "" + values.photo;
-        values.marche="" + values.marche;
-        values.adresse="" + values.adresse;
+
+        if(!values.marche ){
+          values.marche= "NULL";
+          
+        }
+
+        if( !values.adresse){
+        
+          values.adresse= "NULL";
+        }
+       
+       
 
        /* for (var i = 0; i < $scope.data.listregions.length; i++) {
 
