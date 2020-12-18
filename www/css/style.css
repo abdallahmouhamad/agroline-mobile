@@ -104,6 +104,7 @@ map {
       animation-name:fadeOutUp;
   }
   .animated.modal.fadeInUpBig.ng-leave {
+
       -webkit-animation-name:fadeOutUpBig;
       animation-name:fadeOutUpBig;
   }
@@ -188,7 +189,7 @@ map {
   .bg { background: url('../img/click.png') no-repeat center; }
 
 .button-float{
-  background: #1EAC4E !important;
+  background:#13B3DA !important;
   color:white !important;
   z-index: 12 !important;
   position: absolute !important;
@@ -209,6 +210,6 @@ map {
   -webkit-transform: translate3d(0, -1px, 0)  !important;
   transform: translate3d(0, -1px, 0) !important;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4) !important;
-    background: darken(#1EAC4E, 10%) !important;
+    background: darken(#13B3DA, 10%) !important;
 }
 

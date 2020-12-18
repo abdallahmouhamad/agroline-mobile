@@ -6092,7 +6092,7 @@ angular
                 if (response) {
                   $scope.data.recapPrc = response;
                   console.log('-_Details----');
-                  console.log($scope.data.recapPrc[0].details);
+                  //console.log($scope.data.recapPrc[0].details);
                   $scope.initDetailPDS();
 
 
@@ -8457,7 +8457,7 @@ angular
     $scope.testPrint = function () {
 
       var image = '<div style="text-align: center">' +
-        '<img src="./img/agroline.png">' +
+        '<img src="./img/poultrade.png">' +
         '</div>';
 
       var enteteComm = '' +
@@ -8527,7 +8527,7 @@ angular
       style = style + "</style>";
 
       var image = '<div style="text-align: center">' +
-        '<img src="./img/agroline.png">' +
+        '<img src="./img/poultrade.png">' +
         '</div>';
       //<h2 style="text-align: center;">Facture agroline</h2>
       var enteteComm = '' +
@@ -10077,7 +10077,7 @@ angular
         if (result) {
           var value = {
             codeInventaire: $scope.data.detailsInventaire.codeInventaire,
-            isCanceled: true,
+            isCanceled: 1,
             idMotif: $scope.data.motifchoisit.idMotif
           }
           console.log(value)
