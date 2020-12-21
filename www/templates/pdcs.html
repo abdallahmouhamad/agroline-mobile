@@ -1,0 +1,189 @@
+<ion-view title="Prise de Commande" cache-view="false">
+    <div ng-app="starter">
+  
+      <ion-content padding="true" class="has-header">
+        <style type="text/css">
+          input[readonly] {
+            background-color: transparent !important;
+            cursor: not-allowed;
+          }
+          .small_button{
+              width: 50% !important;
+              height: 50px !important;
+              margin-left: 5px;
+          }
+          .footer-button {
+            margin-bottom: 10px;
+            height: 50px !important;
+          }
+          .ml{
+            margin-left: 5px;
+          }
+          .header {
+  
+            margin-top: 5px;
+            margin-bottom: 10px;
+          }
+          .content-div {
+            background: #1EAC4E !important;
+          }
+          .content-div-row {
+            text-align: center !important;
+            border: 3px grey dashed !important;
+          }
+          .bg {
+              background-color: orange !important;
+            }
+  
+        </style>
+  
+        <div class="list" ng-repeat="pdc in data.pdcs | filter:motcle" ng-if="edit == false">
+  
+  
+  
+  
+          <div class="item item-thumbnail-left">
+  
+            <img src="./img/prc.jpg">
+  
+            <div class="row">
+              <div class="col">Code</div>
+              <div class="col"><p>{{ pdc.codePDC }}</p></div>
+            </div>
+
+            <div class="row">
+                <div class="col">Grossiste</div>
+                <div class="col"><p>{{ pdc.grossiste }}</p></div>
+              </div>
+
+            <div class="row">
+              <div class="col">Adresse</div>
+              <div class="col" ><p>{{ pdc.adresse }}</p></div>
+            </div>
+  
+            <div class="row">
+              <div class="col">Telephone</div>
+              <div class="col" ng-if="!pdc.clientchoisit"><p>{{ pdc.telephone }}</p></div>
+              <div class="col" ng-if="pdc.clientchoisit"><p>{{ pdc.clientchoisit.telephone }}</p></div>
+            </div>
+  
+            <div class="row">
+              <div class="col">Montant</div>
+              <div class="col" ><p>{{ number(pdc.montant) }}</p></div>
+            </div>
+  
+            <div class="row">
+              <div class="col">Delai paiement</div>
+              <div class="col"><p>{{ pdc.delaiPaiement }} </p></div>
+            </div>
+  
+            <div class="row">
+              <div class="col">Date ajout</div>
+              <div class="col"><p>{{ pdc.dateAjout | date :  "dd.MM.y" }}</p></div>
+            </div>
+  
+          </div>
+  
+          <div class="row content-div">
+  
+            <div class="col"  ng-click="goToFact(pdc)" ng-if="pdc.isLoaded!=='0'">
+                <button class="button button-clear button-assertive" style="color: white;">
+                  Faire facture
+                </button>
+            </div>
+  
+            <div class="col" ng-click="goToDetailPdc(pdc)" >
+              <button class="button button-clear button-assertive" style="color: white;">
+                Details pdc
+              </button>
+            </div>
+  
+            <div class="col"  ng-click="editDetail(pdc, 'sup')" ng-if="pdc.clientchoisit" >
+              <button class="button button-clear button-assertive" style="color: white;" >
+                Supprimer
+              </button>
+            </div>
+  
+        </div>
+  
+  
+      </div>
+  
+      <div>
+        <div class="col" ng-if="edit == true" >
+          <button class="button button-block button-assertive"
+            cancel-button="{{ 'fichevisite_select_pv_return' | translate }}"
+            reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
+            cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
+            search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
+            ng-model="data.motifchoisit" options="data.listmotifs" option-getter="getOptMotif(option)"
+            modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
+            has-search="true">
+            Motif
+            <div class="option">
+              <h2 > {{option.libelle}}</h2>
+            </div>
+          </button>
+        </div>
+     </div>
+  
+     <div class="row" ng-if="edit == true">
+  
+      <div class="col">{{ data.motifchoisit.libelle }}</div>
+  
+    </div>
+  
+     <div class="row" ng-if="edit == true">
+     
+      <div class="col" ng-if="action == 'sup'">
+        <button ng-click="validerDelet()" class="button button-block button-assertive footer-button" color="danger" type="submit"
+        name="submit"><span style="color:white">Supprimer</span></button>  
+      </div>
+      <div class="col">
+        <button ng-click="annulerEdit()" class="button button-block button-assertive footer-button" color="danger" type="submit"
+        name="submit"><span style="color:white">Annuler</span></button>
+      </div>
+      
+    </div>
+  
+    <div class="item item-thumbnail-left" ng-if="edit == true" >
+  
+      <img src="./img/pdc.jpg">
+  
+      <div class="row">
+        <div class="col">Code</div>
+        <div class="col"><p>{{ itemEdit.codepdc }}</p></div>
+      </div>
+      <div class="row">
+        <div class="col">Adresse</div>
+        <div class="col"><p>{{ itemEdit.clientchoisit.adresse }}</p></div>
+      </div>
+      <div class="row">
+        <div class="col">Client</div>
+        <div class="col"><p>{{ itemEdit.clientchoisit.nom }}</p></div>
+      </div>
+  
+      <div class="row">
+        <div class="col">Telephone</div>
+        <div class="col"><p>{{ itemEdit.clientchoisit.telephone }}</p></div>
+      </div>
+  
+      <div class="row">
+        <div class="col">Montant</div>
+        <div class="col"><p>{{ itemEdit.montant }}</p></div>
+      </div>
+  
+      <div class="row">
+        <div class="col">Date ajout</div>
+        <div class="col"><p>{{ itemEdit.dateAjout | date :  "dd.MM.y" }}</p></div>
+      </div>
+  
+    </div>
+  
+      </ion-content>
+      <button class="button button-float bg" ng-click="goToNewpdc()">
+        <i class="icon ion-plus"></i>
+      </button>
+    </div>
+    </ion-view>
+  

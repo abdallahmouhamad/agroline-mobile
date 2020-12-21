@@ -57,6 +57,12 @@
             <i class="icon ion-location"></i>
             Adresse : {{data.detailsPRC.clientchoisit.adresse}}
           </a>
+
+          <a class="item item-icon-left">
+            <i class="icon ion-location"></i>
+            Montant : {{data.detailsPRC.montant}}
+          </a>
+
           <a class="item item-icon-left">
             <i class="icon ion-calendar"></i>
             Date : {{data.detailsPRC.dateAjout | date :  "dd.MM.y"}}
@@ -173,11 +179,11 @@
       <div class="row header list content-div">
           <div class="col" style="text-align: center;">Article</div>
           <div class="col" style="text-align: center;">Quantité</div>
-          <div class="col" style="text-align: center;">Prix</div>
-          <div class="col" style="text-align: center;">Montant</div>
+          <div class="col" style="text-align: center;">PU</div>
+          <div class="col" style="text-align: center;">M.Total</div>
    
-          <div class="col" style="text-align: center;" ng-if="data.detailsPRC.codePDS == '0'">Editer</div>
-          <div class="col" style="text-align: center;" ng-if="data.detailsPRC.codePDS == '0'">Supprimer</div>
+          <div class="col" style="text-align: center;" >Editer</div>
+          <div class="col" style="text-align: center;" >Supprimer</div>
       </div>
 
       <div class="row list"  ng-repeat="d in data.detailsPRC.details | filter:motcle">
@@ -200,30 +206,30 @@
         
 
           <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{number(d.quantite * d.prix)}}</div>
-          <div class="col content-div-row" ng-if="d.idMotif === 'edit'">{{number(d.quantite * d.prix)}}</div>
+          <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{number(d.quantite * d.prix)}}</div>
         
           
          
 
-          <div class="col content-div-row" ng-if="d.idMotif !== 'edit' && data.detailsPRC.codePDS == '0'" ng-click="editDetail(d, 'edit')">
+          <div class="col content-div-row" ng-if="d.idMotif !== 'edit' " ng-click="editDetail(d, 'edit')">
 
             <i class="icon ion-edit" ></i>
 
          </div>
 
-         <div class="col content-div-row edit" ng-if="d.idMotif === 'edit' && data.detailsPRC.codePDS == '0'" ng-click="editDetail(d, 'edit')">
+         <div class="col content-div-row edit" ng-if="d.idMotif === 'edit' " ng-click="editDetail(d, 'edit')">
 
             <i class="icon ion-edit"></i>
 
          </div>
 
-         <div class="col content-div-row" ng-if="d.idMotif !== 'edit' && data.detailsPRC.codePDS == '0'" ng-click="editDetail(d, 'sup')">
+         <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" ng-click="editDetail(d, 'sup')">
 
           <i class="icon ion-trash-a" ></i>
 
           </div>
 
-          <div class="col content-div-row edit" ng-if="d.idMotif === 'edit' && data.detailsPRC.codePDS == '0'" ng-click="editDetail(d, 'sup')">
+          <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'" ng-click="editDetail(d, 'sup')">
 
               <i class="icon ion-trash-a"></i>
 

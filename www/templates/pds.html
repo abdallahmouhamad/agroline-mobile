@@ -86,9 +86,9 @@
 
           <div class="row content-div">
 
-            <div class="col"  ng-click="valider(pds)" ng-if="pds.local == true">
+            <div class="col" ng-click="goToDetailPds(pds, 'det')">
               <button class="button button-clear button-assertive" style="color: white;">
-                Valider
+                Details
               </button>
             </div>
 
@@ -99,13 +99,6 @@
               </button>-->
             </div>
 
-            
-
-            <div class="col" ng-click="goToDetailPds(pds, 'det')">
-              <button class="button button-clear button-assertive" style="color: white;">
-                Details
-              </button>
-            </div>
             <div class="col"  ng-click="editDetail(pds,'sup')" ng-if="pds.local == true">
               <button class="button button-clear button-assertive" style="color: white;">
                 Annuler

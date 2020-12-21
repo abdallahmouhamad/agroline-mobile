@@ -289,6 +289,19 @@ angular
         }
       );
     }
+    
+    $scope.goToPdc = function () {
+      $state.transitionTo(
+        "app.pdcs",
+        {},
+        {
+          reload: true,
+          inherit: true,
+          notify: true,
+        }
+      );
+    }
+
     $scope.goToInventaire = function () {
       $state.transitionTo(
         "app.inventaires",
@@ -3244,6 +3257,1206 @@ angular
 
 
   })
+  .controller("PdcCtrl", function (
+    $scope,
+    $state,
+    $ionicLoading,
+    ApiListPdc,
+    ApiDetailPrc,
+    ApiAjoutPrc,
+    ApiListClient,
+    ApiListMotif,
+    ApiListArticle,
+    $ionicPopup,
+    SendSms,
+    ApiDeletPRC,
+    $filter
+  ) {
+    $scope.data = {};
+
+    $scope.initvar = function () {
+
+      $scope.edit = false;
+      $scope.data.listarticles = [];
+      $scope.data.pdcs = [];
+      $scope.data.detailPrc = {};
+      $scope.data.codePrc = sessionStorage.getItem("codePrc");
+      $scope.data.listclients = [];
+      $scope.data.listmotifs = [];
+      $scope.data.clientchoisit = null;
+      $scope.data.artcilechoisit = null;
+      $scope.data.motifchoisit = null;
+      $scope.data.quantite = 0;
+      $scope.data.idMotif = 0;
+
+      var user = localStorage.getItem("user");
+      $scope.data.user = JSON.parse(user);
+
+      $scope.sms_function = function () {
+        SendSms.sendSMS("Bissmillah", "776726045");
+        SendSms.sendSMS("Bissmillah", "775329312");
+        SendSms.sendSMS("Bissmillah", "776726045");
+        SendSms.sendSMS("Bienvenue dans l'application agroline", "776726045");
+      };
+      var prclocal = JSON.parse(localStorage.getItem('prclocal'));
+
+      if (prclocal && prclocal.length > 0) {
+        $scope.data.pdcs = prclocal;
+      }
+
+      //  console.log('--------------get number --------------');
+      //  console.log($scope.getCodePrc());
+      $scope.data.detailsPRC = [];
+      $scope.isLoaded = false;
+      $scope.isCanceled = false;
+
+      $scope.data.codePrc = localStorage.getItem("codeArticle");
+      // vA isAdd = sessionStorage.setItem('newPrc', true);
+
+      var codeClient = { codeCommerciale: $scope.data.user.code };
+      // console.log('-----------------------list prc----------------------');
+      // console.log($scope.data.user);
+
+      $ionicLoading.show({
+        content: "Loading",
+        animation: "fade-in",
+        showBackdrop: true,
+        maxWidth: 200,
+        showDelay: 0,
+        duration: 10000,
+      });
+      ApiListPdc.getListPdc(codeClient).success(
+        function (response) {
+          $ionicLoading.hide();
+          if (response) {
+            console.log('------PRC LOCAL');
+            console.log($scope.data.pdcs)
+            $scope.data.pdcs = $scope.data.pdcs.concat(response);
+
+            console.log('------PRC EN LIGN');
+            console.log(response)
+          }
+          console.log(response);
+        },
+        (error) => {
+          $ionicLoading.hide();
+        }
+      );
+    };
+
+
+    $scope.number = function (mnt) {
+      Number.prototype.toCurrencyString = function () {
+        return this.toFixed(2).replace(/(\d)(?=(\d{3})+\b)/g, '$1 ');
+      }
+      n = +mnt;
+      console.log(n.toCurrencyString());
+      return n.toCurrencyString();
+    }
+
+
+    $scope.Erreur = function (message) {
+      $ionicPopup.show({
+        title: 'Erreur',
+        template: message,
+        scope: $scope,
+        buttons: [
+          {
+            text: "Ok",
+            type: "button-danger",
+          },
+        ],
+      });
+    }
+
+
+    $scope.editDetail = function (item, action) {
+      $scope.edit = true;
+      $scope.action = action;
+
+      /*for (var i = 0; i <  $scope.data.detailsPRC.details.length; i++) {
+        if (
+          $scope.data.detailsPRC.details[i].idMotif === "edit" &&
+          $scope.data.detailsPRC.details[i].codeArticle !== item.codeArticle
+        ) {
+          $scope.data.detailsPRC.details[i].idMotif = 0;
+        }
+      }*/
+      $scope.itemEdit = item;
+    };
+
+    $scope.annulerEdit = function () {
+
+      $scope.edit = false;
+
+      $scope.itemEdit = null;
+
+      $scope.data.motifchoisit = null;
+
+    }
+
+    $scope.validerDelet = function () {
+      if ($scope.data.motifchoisit && $scope.data.motifchoisit.idMotif !== "") {
+        $ionicPopup.show({
+          title: "Infos",
+          template: "Voulez-vous vraimenet suprimer ce details?",
+          scope: $scope,
+          buttons: [
+            {
+              text: 'OUI',
+              type: 'button-energized',
+              onTap: function (e) {
+                return true;
+              }
+            },
+            {
+              text: 'NON',
+              type: 'button-assertive',
+              onTap: function (e) {
+                return false;
+              }
+            },
+          ]
+        }).then(function (result) {
+          if (result) {
+            console.log('OUI');
+
+            var ligneDetailTosend = {
+              codePRC: $scope.itemEdit.codePRC,
+              isCanceled: 1,
+              idMotif: $scope.data.motifchoisit.idMotif
+            }
+            console.log('-----------Object to delet----------');
+            console.log(ligneDetailTosend);
+            $ionicLoading.show({
+              content: "Loading",
+              animation: "fade-in",
+              showBackdrop: true,
+              maxWidth: 200,
+              showDelay: 0,
+              duration: 10000,
+            });
+
+            ApiDeletPRC.deletPRC(ligneDetailTosend)
+              .success(
+                function (response) {
+
+                  $ionicLoading.hide();
+                  console.log('-------Modification edit------')
+                  console.log(response)
+                  if (response.reponse == 1) {
+
+                    for (var i = 0; i < $scope.data.pdcs.length; i++) {
+                      if (
+                        $scope.data.pdcs[i].codePRC ===
+                        $scope.itemEdit.codePRC
+                      ) {
+
+                        $scope.data.pdcs.splice(i, 1);
+                        var prclocal = JSON.parse(localStorage.getItem('prclocal'));
+
+                        if (prclocal && prclocal.length > 0) {
+                          var prcToDelet = $filter('filter')(prclocal, { codePRC: $scope.itemEdit.codePRC });
+
+                          if (prcToDelet && prcToDelet.length == 1) {
+                            prclocal.splice(prcToDelet[0], 1)
+
+                            localStorage.setItem('prclocal', JSON.stringify(prclocal));
+                          }
+
+                        }
+                        $scope.edit = false;
+                        $scope.data.motifchoisit = null;
+
+                        break;
+                      }
+                    }
+
+                    $ionicPopup.show({
+                      title: "Information",
+                      template: 'réussi',
+                      scope: $scope,
+                      buttons: [
+                        {
+                          text: "Ok",
+                          type: "button-assertive",
+                        },
+                      ],
+                    }).then(function (result) {
+
+                    })
+                  }
+
+                }, (error) => {
+                  $ionicLoading.hide();
+                  $scope.Erreur(error);
+                }
+              )
+
+
+          } else {
+            console.log('NON');
+          }
+        });
+      } else {
+        $ionicPopup.show({
+          title: "Infos",
+          template: "Veuillz choisir le motif de suppression?",
+          scope: $scope,
+          buttons: [
+            {
+              text: 'OK',
+              type: 'button-energized',
+              onTap: function (e) {
+                return true;
+              }
+            }
+          ]
+        }).then(function (result) {
+          if (result) {
+
+          }
+        })
+      }
+
+
+    }
+
+
+
+    $scope.getCodePrc = function () {
+      var rd_code = Math.floor(Math.random() * 1000 + 1);
+      console.log((rd_code + "").length);
+      var code_chaine = "";
+      if (rd_code) {
+        if ((rd_code + "").length === 1) {
+          code_chaine = "000" + (rd_code + "").length;
+        } else if ((rd_code + "").length === 2) {
+          code_chaine = "00" + rd_code;
+        } else if ((rd_code + "").length === 3) {
+          code_chaine = "0" + rd_code;
+        } else if ((rd_code + "").length === 4) {
+          code_chaine = "" + rd_code;
+        }
+      }
+      return code_chaine;
+    };
+
+    //Init variables of controller
+    $scope.initvar();
+
+    ApiListArticle.getListArticle().success(function (response) {
+      if (response) {
+        $scope.data.listarticles = response;
+      }
+      //  console.log('-----------------------list article----------------------');
+      //  console.log(response);
+    });
+
+    ApiListClient.getListClient().success(function (response) {
+      if (response) {
+        $scope.data.listclients = response;
+      }
+      //     console.log('-----------------------list client----------------------');
+      //     console.log(response);
+    });
+
+    ApiListMotif.getListMotif().success(function (response) {
+      if (response) {
+        $scope.data.listmotifs = response;
+      }
+      console.log("-----------------------list motif----------------------");
+      console.log(response);
+    });
+
+    $scope.getOptClient = function (option) {
+      return option;
+    };
+    $scope.getOptMotif = function (option) {
+      return option;
+    };
+
+    $scope.getOptArticle = function (option) {
+      return option;
+    };
+
+    $scope.getDetailPrc = function () {
+
+      if ($scope.data.codePrc !== null && $scope.data.codePrc !== "") {
+        ApiDetailPrc.getDetailPrc($scope.data.codePrc).success(function (
+          response
+        ) {
+          if (response) {
+            console.log("---------------------Detail prc--------------");
+
+            $scope.data.detailsPRC = response;
+
+            console.log(response);
+            // console.log($scope.data.detailsPRC[0]);
+
+            //sessionStorage.setItem('codePrc', '');
+          }
+        });
+      }
+    };
+
+    //  $scope.getDetailPrc();
+
+    $scope.ajouter = function () {
+      //   $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+      $scope.data.detailsPRC.push({
+        index: $scope.data.detailsPRC.length + 1,
+        codeDetail: "DPRC" + $scope.data.user.code + $scope.getCodePrc(),
+        codeArticle: $scope.data.artcilechoisit.code,
+        quantite: $scope.data.quantite,
+        isCanceled: false,
+        artcilechoisit: $scope.data.artcilechoisit,
+        idMotif: $scope.data.motifchoisit.idMotif,
+        motifchoisit: $scope.data.motifchoisit,
+      });
+      // $ionicLoading.hide();
+      $scope.data.artcilechoisit = null;
+      $scope.data.motifchoisit = null;
+      $scope.data.quantite = 0;
+      console.log("----------------------Detail-------------------");
+      console.log($scope.data.detailsPRC);
+    };
+
+    $scope.goToDetailPdc = function (pdc) {
+      console.log("----------------------Detail-------------------");
+      console.log(pdc);
+      localStorage.setItem("pdc-detail", JSON.stringify(pdc));
+      $state.transitionTo(
+        "app.details-pdc",
+        {},
+        {
+          reload: true,
+          inherit: true,
+          notify: true,
+        }
+      );
+    };
+
+    $scope.goToNewpdc = function () {
+      sessionStorage.setItem("newPdc", true);
+      $state.transitionTo(
+        "app.nouvel-pdc",
+        {},
+        {
+          reload: true,
+          inherit: true,
+          notify: true,
+        }
+      );
+    };
+
+    $scope.goToRecapPrc = function (code) {
+      localStorage.setItem("codeCommerciale", code);
+      $state.transitionTo(
+        "app.recapitulatif-pds-prc",
+        {},
+        {
+          reload: true,
+          inherit: true,
+          notify: true,
+        }
+      );
+    };
+
+    $scope.goToFact = function (prc) {
+      localStorage.setItem("prc", JSON.stringify(prc));
+      $state.transitionTo(
+        "app.facturation",
+        {},
+        {
+          reload: true,
+          inherit: true,
+          notify: true,
+        }
+      );
+    };
+  })
+
+  .controller("NewPdcCtrl", function (
+    $scope,
+    $state,
+    $ionicLoading,
+    ApiListPrc,
+    ApiDetailPrc,
+    ApiAjoutPrc,
+    ApiAjoutPdc,
+    ApiListClient,
+    ApiListMotif,
+    ApiListArticle,
+    $ionicPopup,
+    CodeGenere,
+    formatNewDate,
+    ApiListModePaiement,
+    ApiListGrossiste,
+    $filter,
+    SendSms,
+    ApiModificationDetailPDC,
+    
+  ) {
+    $scope.data = {};
+    $scope.Erreur = function (message) {
+      $ionicPopup.show({
+        title: 'Erreur',
+        template: message,
+        scope: $scope,
+        buttons: [
+          {
+            text: "Ok",
+            type: "button-danger",
+          },
+        ],
+      });
+    }
+    $scope.initvar = function () {
+      $scope.data.listarticles = [];
+      $scope.data.pdcs = [];
+      $scope.edit = false;
+      $scope.data.detailPdc = {};
+      $scope.data.codePdc = sessionStorage.getItem("codePdc");
+      $scope.data.listclients = [];
+      $scope.data.listmotifs = [];
+      $scope.data.grossistes = [];
+      $scope.data.clientchoisit = null;
+      $scope.data.artcilechoisit = null;
+      $scope.data.grossistechoisit = null;
+      $scope.data.dateAjout = formatNewDate.formatNewDate(),
+
+     $scope.data.listmodereglements = null;
+      $scope.data.modereglementchoisit = null;
+      $scope.data.motifchoisit = null;
+      $scope.data.quantite = null;
+      $scope.data.prix = null;
+      $scope.data.delaipaiement = null;
+      $scope.data.montant = 0.0;
+      $scope.data.idMotif = 0;
+      $scope.data.idModepaiement = 0;
+      var user = localStorage.getItem("user");
+      $scope.data.user = JSON.parse(user);
+      $scope.data.codePDC = "PDC-" + $scope.data.user.code + "-" + CodeGenere.getCodeGenere();
+
+      $scope.data.detailsPDC = [];
+      $scope.isLoaded = false;
+      $scope.isCanceled = false;
+
+      var codeClient = { codeCommerciale: $scope.data.user.code };
+    };
+
+    $scope.initvar();
+
+    $scope.editDetail = function (item, action) {
+      $scope.edit = true;
+      $scope.action = action;
+      item.idMotif = "edit";
+
+      $scope.data.artcilechoisit = {};
+      console.log("--------------Artcile---------------");
+      console.log(item);
+      $scope.data.artcilechoisit = item.artcilechoisit
+   //   $scope.data.artcilechoisit.code = item.codeArticle
+      console.log("--------------Quantite---------------");
+      console.log(item.quantite);
+      $scope.data.quantite = +item.quantite;
+      $scope.data.prix = +item.prix;
+
+      for (var i = 0; i < $scope.data.detailsPDC.length; i++) {
+        if (
+          $scope.data.detailsPDC[i].idMotif === "edit" &&
+          $scope.data.detailsPDC[i].codeArticle !== item.codeArticle
+        ) {
+          $scope.data.detailsPDC[i].idMotif = 0;
+        }
+      }
+      $scope.itemEdit = item;
+    };
+
+    $scope.valideEdit = function () {
+      if ($scope.data.motifchoisit && $scope.data.motifchoisit.idMotif !== "") {
+        for (var i = 0; i < $scope.data.detailsPDC.length; i++) {
+          if (
+            $scope.data.detailsPDC[i].idMotif === "edit" &&
+            $scope.data.detailsPDC[i].codeArticle ===
+            $scope.itemEdit.codeArticle
+          ) {
+            var index = i;
+
+            // var errorMessage = checkQuantite.checkQuantite($scope.data.artcilechoisit.code, $scope.data.quantite);
+
+
+
+            //   codePRC(string), codeDetail(string), codeArticle(string), prix(int), quantite(int), isCanceled(int), idMotif(int)
+
+            var ligneDetailTosend = {
+              codePDC: $scope.data.codePDC,
+              codeDetail: $scope.itemEdit.codeDetail,
+              codeArticle: $scope.data.artcilechoisit.code,
+              quantite: +$scope.data.quantite,
+              isCanceled: 1,
+              idMotif: +$scope.data.motifchoisit.idMotif,
+              prix: +$scope.data.prix
+            }
+           
+
+            console.log('-----Objet to modif');
+            console.log(ligneDetailTosend);
+            $ionicLoading.show({
+              content: "Loading",
+              animation: "fade-in",
+              showBackdrop: true,
+              maxWidth: 200,
+              showDelay: 0,
+              duration: 10000,
+            });
+
+            ApiModificationDetailPDC.modificationDetailPDC(ligneDetailTosend)
+              .success(
+                function (response) {
+
+                  $ionicLoading.hide();
+                  console.log('-------Modification edit------')
+                  console.log(response)
+                  if (response.reponse == 1) {
+
+                    console.log(index)
+                    $scope.data.detailsPDC[index].idMotif =
+                      $scope.data.motifchoisit.idMotif;
+                    $scope.data.detailsPDC[index].quantite = $scope.data.quantite;
+                    $scope.data.detailsPDC[index].prix = $scope.data.prix;
+                    $scope.data.detailsPDC[index].codeArticle = $scope.data.artcilechoisit.code;
+                    $scope.data.detailsPDC[index].article = $scope.data.artcilechoisit.libelle;
+
+                    $scope.edit = false;
+                    $scope.data.motifchoisit = null;
+                    $scope.data.artcilechoisit =null;
+                    $scope.data.quantite = null;
+                    $scope.data.prix = null;
+
+                    $ionicPopup.show({
+                      title: "Information",
+                      template: 'réussi',
+                      scope: $scope,
+                      buttons: [
+                        {
+                          text: "Ok",
+                          type: "button-assertive",
+                        },
+                      ],
+                    });
+                  }
+                  else if (response.reponse == -10) {
+                    console.log('-10')
+                    var user =$scope.data.user.prenom+" "+$scope.data.user.nom
+                    $ionicPopup.show({
+                      title: 'Alert ',
+                      template: 'Le solde de votre plafond ne vous permet pas de faire cette prise de stock, veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.',
+                      scope: $scope,
+                      buttons: [
+                        {
+                          text: 'OK',
+                          type: 'button-positive'
+                        }
+                      ]
+                    });
+
+                    try {
+                   
+                     SendSms.sendSMS("Le solde du plafond de "+user+" ne lui permet pas de faire cette prise de stock, " +
+                        "veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.", "775329312");
+                        SendSms.sendSMS("Le solde du plafond de "+user+" ne lui permet pas de faire cette prise de stock, " +
+                        "veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.", "776294380"); 
+                                         
+                     } catch (err) {
+
+                       $ionicPopup.show({
+                         title: 'Alert ',
+                         template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
+                         scope: $scope,
+                         buttons: [
+                           {
+                             text: 'OK',
+                             type: 'button-positive'
+                           }
+                         ]
+                       });
+                     }
+                  }
+                  else if (response.reponse == -20) {
+                    console.log('-20')
+                    $ionicPopup.show({
+                      title: 'Alert ',
+                      template: 'Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock.',
+                      scope: $scope,
+                      buttons: [
+                        {
+                          text: 'OK',
+                          type: 'button-positive'
+                        }
+                      ]
+                    });
+                   
+                    try {
+                    
+                      SendSms.sendSMS(
+                        "Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock." 
+                      , "775329312"); 
+                        
+                      SendSms.sendSMS(
+                        "Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock." 
+                      , "776294380");                 
+                     } catch (err) {
+
+                       $ionicPopup.show({
+                         title: 'Alert ',
+                         template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
+                         scope: $scope,
+                         buttons: [
+                           {
+                             text: 'OK',
+                             type: 'button-positive'
+                           }
+                         ]
+                       });
+                     }
+                  }
+                   else {
+                    $ionicPopup.show({
+                      title: "Information",
+                      template: '' + response.reponse,
+                      scope: $scope,
+                      buttons: [
+                        {
+                          text: "Ok",
+                          type: "button-assertive",
+                        },
+                      ],
+                    });
+                  }
+
+                }, (error) => {
+                  $ionicLoading.hide();
+                  $scope.Erreur(errorMessage);
+                }
+              )
+
+
+
+          }
+        }
+      } else {
+        var message = "Veuillez choisir un motif"
+        $scope.Erreur(message);
+
+      }
+    };
+
+    $scope.annulerEdit = function () {
+      $scope.edit = false;
+      $scope.data.artcilechoisit =null;
+      $scope.data.quantite = null;
+      $scope.data.prix = null;
+      for (var i = 0; i < $scope.data.detailsPDC.length; i++) {
+        if (
+          $scope.data.detailsPDC[i].idMotif === "edit" &&
+          $scope.data.detailsPDC[i].codeArticle ===
+          $scope.itemEdit.codeArticle
+        ) {
+          $scope.data.detailsPDC[i].idMotif = 0;
+          break;
+        }
+      }
+    }
+
+    ApiListMotif.getListMotif().success(function (response) {
+      if (response) {
+        $scope.data.listmotifs = response;
+      }
+      console.log("-----------------------list motif----------------------");
+      console.log(response);
+    });
+    $scope.number = function (mnt) {
+      Number.prototype.toCurrencyString = function () {
+        return this.toFixed(2).replace(/(\d)(?=(\d{3})+\b)/g, '$1 ');
+      }
+      n = +mnt;
+      console.log(n.toCurrencyString());
+      return n.toCurrencyString();
+    }
+    ApiListArticle.getListArticle().success(function (response) {
+      if (response) {
+        $scope.data.listarticles = response;
+      }
+      //  console.log('-----------------------list article----------------------');
+      //  console.log(response);
+    });
+
+    ApiListClient.getListClient().success(function (response) {
+      if (response) {
+        $scope.data.listclients = response;
+      }
+      //     console.log('-----------------------list client----------------------');
+      //     console.log(response);
+    });
+
+    ApiListModePaiement.getListModePaiement().success(function (response) {
+      if (response) {
+        $scope.data.listmodereglements = response;
+      }
+      console.log(
+        "-----------------------list mode paiement----------------------"
+      );
+      console.log(response);
+    });
+
+    $scope.changeCLient = function () {
+      console.log("client choisi");
+      console.log($scope.data.clientchoisit);
+      $scope.data.idModepaiement = $scope.data.clientchoisit.idModepaiement;
+      $scope.data.grossistechoisit = {}
+      $scope.data.grossistechoisit.codeGrossiste = $scope.data.clientchoisit.codeGrossiste;
+      $scope.data.grossistechoisit.nom = $scope.data.clientchoisit.grossiste;
+
+      $scope.data.modereglementchoisit = {};
+      $scope.data.modereglementchoisit.idModepaiement = $scope.data.clientchoisit.idModepaiement;
+      $scope.data.modereglementchoisit.libelle = $scope.data.clientchoisit.idModepaiement == "1" ? "COMPTANT" : "CREDIT";
+
+    };
+
+    $scope.showPopUp = function (libelle, etat, code = "") {
+      $ionicPopup.show({
+        title: etat == 1 ? "Code: " + code : "",
+        template:
+          etat == 1
+            ? libelle
+            : '<img src="http://test-test.h-tsoft.com/{{libelle}}">',
+        scope: $scope,
+        buttons: [
+          {
+            text: "Ok",
+            type: "button-assertive",
+          },
+        ],
+      });
+    };
+
+    $scope.deletObject = function (item) {
+      let index = $scope.data.detailsPDC.indexOf(item);
+
+      if (index > -1) {
+        $scope.data.detailsPDC.splice(index, 1);
+      }
+    };
+
+    ApiListGrossiste.getListGrossiste(true, codeCommerciale = null).success(function (response) {
+      if (response) {
+        $scope.data.grossistes = response;
+      }
+        console.log('-----------------------list article----------------------');
+        console.log(response);
+    });
+
+    $scope.getOptGrossiste = function (option) {
+      return option;
+    };
+
+    $scope.getOptClient = function (option) {
+      return option;
+    };
+    $scope.getOptMotif = function (option) {
+      return option;
+    };
+
+    $scope.getOptArticle = function (option) {
+      return option;
+    };
+    $scope.getOptModereglement = function (option) {
+      return option;
+    };
+
+    $scope.ajouter = function () {
+      var searchArticle = $filter('filter')($scope.data.detailsPDC, { codeArticle: $scope.data.artcilechoisit.code })
+      if (!searchArticle || searchArticle.length <= 0) {
+        if ($scope.data.artcilechoisit && $scope.data.quantite && $scope.data.prix && $scope.data.quantite > 0 && $scope.data.prix > 0) {
+          //   $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+          var mt = $scope.data.prix * $scope.data.quantite;
+          $scope.data.detailsPDC.push({
+            index: $scope.data.detailsPDC.length + 1,
+            codeDetail: "DPDC-" + $scope.data.user.code + "-" + CodeGenere.getCodeGenere(),
+            codeArticle: $scope.data.artcilechoisit.code,
+            quantite: $scope.data.quantite,
+            prix: $scope.data.prix,
+
+            isCanceled: false,
+            artcilechoisit: $scope.data.artcilechoisit,
+            idMotif: 0,
+            montant: mt
+          });
+          $scope.data.montant = $scope.data.montant + mt;
+
+          // $ionicLoading.hide();
+          $scope.data.artcilechoisit = null;
+          $scope.data.motifchoisit = null;
+          $scope.data.quantite = null;
+          $scope.data.prix = null;
+          console.log("----------------------Detail-------------------");
+          $scope.numStr = function (a, b) {
+            a = '' + a;
+            b = b || ' ';
+            var c = '',
+              d = 0;
+            while (a.match(/^0[0-9]/)) {
+              a = a.substr(1);
+            }
+            for (var i = a.length - 1; i >= 0; i--) {
+              c = (d != 0 && d % 3 == 0) ? a[i] + b + c : a[i] + c;
+              d++;
+            }
+            return c;
+          }
+          console.log($scope.data.detailsPDC);
+          if ($scope.data.artcilechoisit && $scope.data.quantite && $scope.data.prix && $scope.data.quantite > 0 && $scope.data.prix > 0) {
+
+            for (var j = 0; j < $scope.data.detailsPDC.details.length; j++) {
+
+              console.log($scope.data.detailsPDC.details[j].prix);
+              console.log($scope.data.detailsPDC.details[j].montant);
+              console.log($scope.numStr($scope.data.detailsPDC.details[j].prix, '.'));
+              console.log($scope.numStr($scope.data.detailsPDC.details[j].montant, '.'));
+            }
+          }
+        } else {
+          $ionicPopup.show({
+            title: "Infos",
+            template: "Veuillez ajouter un article avec sa quantité et son prix",
+            scope: $scope,
+            buttons: [
+              {
+                text: "Ok",
+                type: "button-positive",
+              },
+            ],
+          });
+        }
+      } else {
+        $ionicPopup.show({
+          title: "Infos",
+          template: "Desolé cet article est déjà ajouté",
+          scope: $scope,
+          buttons: [
+            {
+              text: "Ok",
+              type: "button-positive",
+            },
+          ],
+        });
+      }
+
+
+
+    };
+
+    $scope.submit = function (action) {
+
+    
+          if ($scope.data.grossistechoisit && $scope.data.grossistechoisit.codeGrossiste) {
+
+
+            if ($scope.data.modereglementchoisit.libelle == "COMPTANT") {
+              $scope.data.delaipaiement = $scope.data.delaipaiement ? $scope.data.delaipaiement : 0;
+            }
+
+            console.log('delai paiement', $scope.data.delaipaiement)
+            console.log('mode paiement', $scope.data.idModepaiement)
+            console.log($scope.data.modereglementchoisit)
+            console.log($scope.data.grossistechoisit)
+
+            var error = null;
+            error = (!$scope.data.delaipaiement || $scope.data.delaipaiement == 0) && $scope.data.modereglementchoisit.libelle == "CREDIT" ? "Veuillez rensseigner le delai de paiement"
+              : error;
+             
+            $scope.data.idModepaiement = $scope.data.modereglementchoisit.idModepaiement;
+
+            if (!error) {
+
+              var values = {
+                codePDC:$scope.data.codePDC,
+                codeGrossiste: $scope.data.grossistechoisit.codeGrossiste,
+                dateAjout: formatNewDate.formatNewDate(),
+                idModepaiement: $scope.data.idModepaiement,
+                codeCommerciale: $scope.data.user.code,
+                isCanceled: 0,
+                idMotif: $scope.data.idMotif,
+                detailsPDC: $scope.data.detailsPDC,
+                delaiPaiement: $scope.data.delaipaiement
+              };
+
+              console.log("---------------------Value to submit--------------------");
+              console.log(values);
+
+              $ionicLoading.show({
+                content: "Loading",
+                animation: "fade-in",
+                showBackdrop: true,
+                maxWidth: 200,
+                showDelay: 0,
+                duration: 10000,
+              });
+              if (action == 'sauv') {
+
+                var prclocal = JSON.parse(localStorage.getItem('prclocal'));
+                if (!prclocal || prclocal.length == 0) {
+                  prclocal = [];
+                }
+                values.clientchoisit = $scope.data.clientchoisit;
+                values.grossistechoisit = $scope.data.grossistechoisit;
+                values.montant = $scope.data.montant
+                values.local = true
+                prclocal.push(values);
+                localStorage.setItem('prclocal', JSON.stringify(prclocal));
+                $scope.initvar();
+                $ionicPopup.show({
+                  title: "Infos",
+                  template: "réussi",
+                  scope: $scope,
+                  buttons: [
+                    {
+                      text: "Ok",
+                      type: "button-positive",
+                      onTap: function (e) {
+                        return true;
+                      }
+                    },
+                  ],
+                }).then(function (result) {
+                  $state.transitionTo(
+                    "app.prcs",
+                    {},
+                    {
+                      reload: true,
+                      inherit: true,
+                      notify: true,
+                    }
+                  );
+                });
+                $ionicLoading.hide();
+
+              } else {
+
+                if (values.detailsPDC && values.detailsPDC.length > 0) {
+
+                  values.dateAjout = formatNewDate.formatNewDate();
+
+
+                  if (values.idModepaiement == "1" || values.idModepaiement == "2") {
+                    values.idModepaiement = parseInt(values.idModepaiement);
+                  } else {
+                    console.log("idModepaiement", values.idModepaiement)
+                  }
+                  var details = [];
+
+                  for (var i = 0; i < values.detailsPDC.length; i++) {
+                    values.detailsPDC[i].isCanceled = values.detailsPDC[i].isCanceled ? 1 : 0;
+
+                    if (values.detailsPDC[i].artcilechoisit.idArticle != " ") {
+                      values.detailsPDC[i].artcilechoisit.idArticle = parseInt(values.detailsPDC[i].artcilechoisit.idArticle);
+                      console.log("idArticle", values.detailsPDC[i].artcilechoisit.idArticle)
+                    } else {
+                      console.log("idArticle", values.detailsPDC[i].artcilechoisit.idArticle)
+                    }
+
+                    if (values.detailsPDC[i].artcilechoisit.prix != " ") {
+                      values.detailsPDC[i].artcilechoisit.prix = parseInt(values.detailsPDC[i].artcilechoisit.prix);
+                      console.log("prix", values.detailsPDC[i].artcilechoisit.prix)
+                    } else {
+                      console.log("prix", values.detailsPDC[i].artcilechoisit.prix)
+                    }
+                    details.push({
+                      codeDetail: values.detailsPDC[i].codeDetail,
+                      codeArticle:values.detailsPDC[i].codeArticle,
+                      prix       :values.detailsPDC[i].prix,   
+                      quantite   :values.detailsPDC[i].quantite,
+                      isCanceled :values.detailsPDC[i].isCanceled,
+                      idMotif    :values.detailsPDC[i].idMotif
+                    })
+
+
+                  }
+                  values.detailsPDC = details;
+                  
+            ApiAjoutPdc.ajoutPdc(values).success(
+                    function (response) {
+                      $ionicLoading.hide();
+                      console.log(response)
+                      if (response.reponse == 1) {
+                        $scope.initvar();
+                        $ionicPopup.show({
+                          title: "Infos",
+                          template: "réussi",
+                          scope: $scope,
+                          buttons: [
+                            {
+                              text: "Ok",
+                              type: "button-positive",
+                            },
+                          ],
+                        }).then(function (result) {
+                          $state.transitionTo(
+                            "app.pdcs",
+                            {},
+                            {
+                              reload: true,
+                              inherit: true,
+                              notify: true,
+                            }
+                          );
+                        });
+                      } else if (response.reponse == -41) {
+                        $ionicPopup.show({
+                          title: "Infos",
+                          template: "Impossible d'ajouter un prc sans details",
+                          scope: $scope,
+                          buttons: [
+                            {
+                              text: "Ok",
+                              type: "button-positive",
+                            },
+                          ],
+                        });
+                      }
+                      else if (response.reponse == -10) {
+                        console.log('-10')
+                        var user =$scope.data.user.prenom+" "+$scope.data.user.nom
+                        $ionicPopup.show({
+                          title: 'Alert ',
+                          template: 'Le solde de votre plafond ne vous permet pas de faire cette prise de stock, veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.',
+                          scope: $scope,
+                          buttons: [
+                            {
+                              text: 'OK',
+                              type: 'button-positive'
+                            }
+                          ]
+                        });
+
+                        try {
+                       
+                         SendSms.sendSMS("Le solde du plafond de "+user+" ne lui permet pas de faire cette prise de stock, " +
+                            "veuillez faire le point avec le(s) grossiste(s) pour qu'il puisse prendre à nouveau du stock.", "775329312");  
+                            SendSms.sendSMS("Le solde du plafond de "+user+" ne lui permet pas de faire cette prise de stock, " +
+                            "veuillez faire le point avec le(s) grossiste(s) pour qu'il puisse prendre à nouveau du stock.", "776294380");                  
+                         } catch (err) {
+
+                           $ionicPopup.show({
+                             title: 'Alert ',
+                             template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
+                             scope: $scope,
+                             buttons: [
+                               {
+                                 text: 'OK',
+                                 type: 'button-positive'
+                               }
+                             ]
+                           });
+                         }
+                      }
+                      else if (response.reponse == -20) {
+                        console.log('-20')
+                        $ionicPopup.show({
+                          title: 'Alert ',
+                          template: 'Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock.',
+                          scope: $scope,
+                          buttons: [
+                            {
+                              text: 'OK',
+                              type: 'button-positive'
+                            }
+                          ]
+                        });
+                      var grossisste  = ""+$scope.data.grossistechoisit.nom
+                       
+                        try {
+                        
+                          SendSms.sendSMS(
+                            "Le solde du plafond du gorssiste "+ grossisste+" ne lui permet de faire cette sortie de stock." 
+                          , "775329312");
+                          SendSms.sendSMS(
+                            "Le solde du plafond du gorssiste "+ grossisste+" ne lui permet de faire cette sortie de stock." 
+                          , "776294380");    
+                                         
+                         } catch (err) {
+
+                           $ionicPopup.show({
+                             title: 'Alert ',
+                             template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
+                             scope: $scope,
+                             buttons: [
+                               {
+                                 text: 'OK',
+                                 type: 'button-positive'
+                               }
+                             ]
+                           });
+                         }
+                      }
+                    },
+                    (error) => {
+                      $ionicLoading.hide();
+                    }
+                  );
+                } else {
+                  $ionicLoading.hide();
+                  $ionicPopup.show({
+                    title: "Infos",
+                    template: "Impossible d'ajouter un prc sans details",
+                    scope: $scope,
+                    buttons: [
+                      {
+                        text: "Ok",
+                        type: "button-positive",
+                      },
+                    ],
+                  });
+                }
+
+              }
+            } else {
+              $ionicLoading.hide();
+              $ionicPopup.show({
+                title: "Infos",
+                template: "Veuillez rensseigner le delai de paiement",
+                scope: $scope,
+                buttons: [
+                  {
+                    text: "Ok",
+                    type: "button-positive",
+                  },
+                ],
+              });
+
+            }
+
+          } else {
+            $ionicLoading.hide();
+            $ionicPopup.show({
+              title: "Infos",
+              template: "Veuillez choisir un grosssite",
+              scope: $scope,
+              buttons: [
+                {
+                  text: "Ok",
+                  type: "button-positive",
+                },
+              ],
+            });
+          }
+
+    };
+
+
+  })
 
   .controller("PrcCtrl", function (
     $scope,
@@ -3662,6 +4875,9 @@ angular
       );
     };
   })
+
+ 
+
   .controller("NewPrcCtrl", function (
     $scope,
     $state,
@@ -4408,7 +5624,7 @@ angular
 
                     $scope.edit = false;
                     $scope.data.motifchoisit = null;
-
+                    $scope.getDetailPrc();
                     $ionicPopup.show({
                       title: "Information",
                       template: 'réussi',
@@ -4496,10 +5712,10 @@ angular
                        });
                      }
                   }
-                   else {
+                  else  {
                     $ionicPopup.show({
                       title: "Information",
-                      template: '' + response.reponse,
+                      template: '' + response.msg,
                       scope: $scope,
                       buttons: [
                         {
@@ -4631,7 +5847,7 @@ angular
                         break;
                       }
                     }
-
+                    $scope.getDetailPrc();
                     $ionicPopup.show({
                       title: "Information",
                       template: 'réussi',
@@ -4774,6 +5990,547 @@ angular
 
   })
 
+  .controller("DetailPdcCtrl", function (
+    $scope,
+    $state,
+    $ionicLoading,
+    ApiListPdc,
+    ApiDetailPdc,
+    ApiAjoutPdc,
+    ApiListClient,
+    ApiListMotif,
+    ApiListArticle,
+    $ionicPopup,
+    SendSms,
+    checkQuantite,
+    ApiModificationDetailPDC,
+    ApiDeletDetailPDC
+  ) {
+    $scope.data = {};
+
+    $scope.initvar = function () {
+      $scope.edit = false;
+      $scope.data.listarticles = [];
+      $scope.data.pdcs = [];
+      $scope.data.detailPdc = {};
+
+
+      $scope.data.pdc = JSON.parse(localStorage.getItem("pdc-detail"));
+
+      // $scope.data.codePrc = $scope.data.prc ? $scope.data.prc.codePRC : '';
+
+      $scope.data.listclients = [];
+      $scope.data.listmotifs = [];
+      $scope.data.clientchoisit = null;
+      $scope.data.artcilechoisit = null;
+      $scope.data.motifchoisit = null;
+      $scope.data.quantite = 0;
+      $scope.data.prix = 0;
+      $scope.data.montantDtails = 0;
+      $scope.data.idMotif = 0;
+      var user = localStorage.getItem("user");
+      $scope.data.user = JSON.parse(user);
+
+      $scope.sms_function = function () {
+        SendSms.sendSMS("Bissmillah", "776726045");
+      };
+
+      //  console.log('--------------get number --------------');
+      //  console.log($scope.getCodePrc());
+      $scope.data.detailsPDC = [];
+      $scope.isLoaded = false;
+      $scope.isCanceled = false;
+
+      // $scope.data.codePrc = localStorage.getItem("codeArticle");
+
+
+    };
+    $scope.number = function (mnt) {
+      Number.prototype.toCurrencyString = function () {
+        return this.toFixed(2).replace(/(\d)(?=(\d{3})+\b)/g, '$1 ');
+      }
+      n = +mnt;
+      console.log(n.toCurrencyString());
+      return n.toCurrencyString();
+    }
+
+    $scope.showPopUp = function (libelle, etat, code = "") {
+      $ionicPopup.show({
+        title: etat == 1 ? "Code: " + code : "",
+        template:
+          etat == 1
+            ? libelle
+            : '<img src="http://test-test.h-tsoft.com/{{libelle}}">',
+        scope: $scope,
+        buttons: [
+          {
+            text: "Ok",
+            type: "button-assertive",
+          },
+        ],
+      });
+    };
+    $scope.Erreur = function (message) {
+      $ionicPopup.show({
+        title: 'Erreur',
+        template: message,
+        scope: $scope,
+        buttons: [
+          {
+            text: "Ok",
+            type: "button-danger",
+          },
+        ],
+      });
+    }
+
+
+    $scope.editDetail = function (item, action) {
+      $scope.edit = true;
+      $scope.action = action;
+      item.idMotif = "edit";
+
+      $scope.data.artcilechoisit = {};
+      console.log("--------------Artcile---------------");
+      console.log(item.article);
+      $scope.data.artcilechoisit.libelle = item.article
+      $scope.data.artcilechoisit.code = item.codeArticle
+      console.log("--------------Quantite---------------");
+      console.log(item.quantite);
+      $scope.data.quantite = +item.quantite;
+      $scope.data.prix = +item.prix;
+
+      for (var i = 0; i < $scope.data.detailsPDC.details.length; i++) {
+        if (
+          $scope.data.detailsPDC.details[i].idMotif === "edit" &&
+          $scope.data.detailsPDC.details[i].codeArticle !== item.codeArticle
+        ) {
+          $scope.data.detailsPDC.details[i].idMotif = 0;
+        }
+      }
+      $scope.itemEdit = item;
+    };
+
+    $scope.valideEdit = function () {
+      if ($scope.data.motifchoisit && $scope.data.motifchoisit.idMotif !== "") {
+        for (var i = 0; i < $scope.data.detailsPDC.details.length; i++) {
+          if (
+            $scope.data.detailsPDC.details[i].idMotif === "edit" &&
+            $scope.data.detailsPDC.details[i].codeArticle ===
+            $scope.itemEdit.codeArticle
+          ) {
+            var index = i;
+
+            // var errorMessage = checkQuantite.checkQuantite($scope.data.artcilechoisit.code, $scope.data.quantite);
+
+
+
+            //   codePRC(string), codeDetail(string), codeArticle(string), prix(int), quantite(int), isCanceled(int), idMotif(int)
+
+            var ligneDetailTosend = {
+              codePDC: $scope.data.detailsPDC.codePDC,
+              codeDetail: $scope.itemEdit.codeDetail,
+              codeArticle: $scope.data.artcilechoisit.code,
+              quantite: +$scope.data.quantite,
+              isCanceled: 1,
+              idMotif: +$scope.data.motifchoisit.idMotif,
+              prix: +$scope.data.prix
+            }
+            console.log('-----Objet to modif');
+            console.log(ligneDetailTosend);
+            $ionicLoading.show({
+              content: "Loading",
+              animation: "fade-in",
+              showBackdrop: true,
+              maxWidth: 200,
+              showDelay: 0,
+              duration: 10000,
+            });
+
+            ApiModificationDetailPDC.modificationDetailPDC(ligneDetailTosend)
+              .success(
+                function (response) {
+
+                  $ionicLoading.hide();
+                  console.log('-------Modification edit------')
+                  console.log(response)
+                  if (response.reponse == 1) {
+
+                    console.log(index)
+                    $scope.data.detailsPDC.details[index].idMotif =
+                      $scope.data.motifchoisit.idMotif;
+                    $scope.data.detailsPDC.details[index].quantite = $scope.data.quantite;
+                    $scope.data.detailsPDC.details[index].prix = $scope.data.prix;
+                    $scope.data.detailsPDC.details[index].codeArticle = $scope.data.artcilechoisit.code;
+                    $scope.data.detailsPDC.details[index].article = $scope.data.artcilechoisit.libelle;
+
+                    $scope.edit = false;
+                    $scope.data.motifchoisit = null;
+                    //$scope.getDetailPdc();
+
+                    $ionicPopup.show({
+                      title: "Information",
+                      template: 'réussi',
+                      scope: $scope,
+                      buttons: [
+                        {
+                          text: "Ok",
+                          type: "button-assertive",
+                        },
+                      ],
+                    });
+                  }
+                  else if (response.reponse == -10) {
+                    console.log('-10')
+                    var user =$scope.data.user.prenom+" "+$scope.data.user.nom
+                    $ionicPopup.show({
+                      title: 'Alert ',
+                      template: 'Le solde de votre plafond ne vous permet pas de faire cette prise de stock, veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.',
+                      scope: $scope,
+                      buttons: [
+                        {
+                          text: 'OK',
+                          type: 'button-positive'
+                        }
+                      ]
+                    });
+
+                    try {
+                   
+                     SendSms.sendSMS("Le solde du plafond de "+user+" ne lui permet pas de faire cette prise de stock, " +
+                        "veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.", "775329312");
+                        SendSms.sendSMS("Le solde du plafond de "+user+" ne lui permet pas de faire cette prise de stock, " +
+                        "veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.", "776294380"); 
+                                         
+                     } catch (err) {
+
+                       $ionicPopup.show({
+                         title: 'Alert ',
+                         template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
+                         scope: $scope,
+                         buttons: [
+                           {
+                             text: 'OK',
+                             type: 'button-positive'
+                           }
+                         ]
+                       });
+                     }
+                  }
+                  else if (response.reponse == -20) {
+                    console.log('-20')
+                    $ionicPopup.show({
+                      title: 'Alert ',
+                      template: 'Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock.',
+                      scope: $scope,
+                      buttons: [
+                        {
+                          text: 'OK',
+                          type: 'button-positive'
+                        }
+                      ]
+                    });
+                   
+                    try {
+                    
+                      SendSms.sendSMS(
+                        "Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock." 
+                      , "775329312"); 
+                        
+                      SendSms.sendSMS(
+                        "Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock." 
+                      , "776294380");                 
+                     } catch (err) {
+
+                       $ionicPopup.show({
+                         title: 'Alert ',
+                         template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
+                         scope: $scope,
+                         buttons: [
+                           {
+                             text: 'OK',
+                             type: 'button-positive'
+                           }
+                         ]
+                       });
+                     }
+                  }
+                   else {
+                    $ionicPopup.show({
+                      title: "Information",
+                      template: '' + response.reponse,
+                      scope: $scope,
+                      buttons: [
+                        {
+                          text: "Ok",
+                          type: "button-assertive",
+                        },
+                      ],
+                    });
+                  }
+
+                }, (error) => {
+                  $ionicLoading.hide();
+                  $scope.Erreur(errorMessage);
+                }
+              )
+
+
+
+          }
+        }
+      } else {
+        var message = "Veuillez choisir un motif"
+        $scope.Erreur(message);
+
+      }
+    };
+
+    $scope.annulerEdit = function () {
+      $scope.edit = false;
+      for (var i = 0; i < $scope.data.detailsPDC.details.length; i++) {
+        if (
+          $scope.data.detailsPDC.details[i].idMotif === "edit" &&
+          $scope.data.detailsPDC.details[i].codeArticle ===
+          $scope.itemEdit.codeArticle
+        ) {
+          $scope.data.detailsPDC.details[i].idMotif = 0;
+          break;
+        }
+      }
+    }
+
+    $scope.validerDelet = function () {
+      if ($scope.data.motifchoisit && $scope.data.motifchoisit.idMotif !== "") {
+        $ionicPopup.show({
+          title: "Infos",
+          template: "Voulez-vous vraimenet suprimer ce details?",
+          scope: $scope,
+          buttons: [
+            {
+              text: 'OUI',
+              type: 'button-energized',
+              onTap: function (e) {
+                return true;
+              }
+            },
+            {
+              text: 'NON',
+              type: 'button-assertive',
+              onTap: function (e) {
+                return false;
+              }
+            },
+          ]
+        }).then(function (result) {
+          if (result) {
+            console.log('OUI');
+
+            // codePRC(string), codeDetail(string), isCanceled(int), idMotif(int)
+
+            var ligneDetailTosend = {
+              codePDC: $scope.data.detailsPDC.codePDC,
+              codeDetail: $scope.itemEdit.codeDetail,
+              // codeArticle :$scope.data.artcilechoisit.code,
+              // quantite    :+$scope.data.quantite,
+              isCanceled: 1,
+              idMotif: +$scope.data.motifchoisit.idMotif
+            }
+            console.log('-----------Object to delet----------');
+            console.log(ligneDetailTosend);
+            $ionicLoading.show({
+              content: "Loading",
+              animation: "fade-in",
+              showBackdrop: true,
+              maxWidth: 200,
+              showDelay: 0,
+              duration: 10000,
+            });
+
+
+            ApiDeletDetailPDC.deletDetailPDC(ligneDetailTosend)
+              .success(
+                function (response) {
+
+                  $ionicLoading.hide();
+                  console.log('-------Modification edit------')
+                  console.log(response)
+                  if (response.reponse == 1) {
+
+                    for (var i = 0; i < $scope.data.detailsPDC.details.length; i++) {
+                      if (
+                        $scope.data.detailsPDC.details[i].idMotif === "edit" &&
+                        $scope.data.detailsPDC.details[i].codeArticle ===
+                        $scope.itemEdit.codeArticle
+                      ) {
+                        $scope.data.detailsPDC.details.splice(i, 1);
+
+                        var pdclocal = JSON.parse(localStorage.getItem('pdclocal'));
+
+                        if (pdclocal && pdclocal.length > 0) {
+                          var pdcToModif = $filter('filter')(pdclocal, { codePDC: $scope.data.detailsPDC.codePDC });
+
+                          if (pdcToModif && pdcToModif.length == 1) {
+                            pdclocal.splice(pdcToDelet[0], 1)
+
+                            $scope.data.detailsPDC.detailsPDC = $scope.data.detailsPDC.details;
+                            $scope.data.detailsPDC.details = $scope.data.detailsPDC.details;
+
+                            pdclocal.push($scope.data.detailsPDC)
+
+                            localStorage.setItem('pdclocal', JSON.stringify(pdclocal));
+                          }
+
+                        }
+
+
+                        $scope.edit = false;
+                        $scope.data.motifchoisit = null;
+                        $scope.getDetailPdc();
+                        break;
+                      }
+                    }
+
+                    $ionicPopup.show({
+                      title: "Information",
+                      template: 'réussi',
+                      scope: $scope,
+                      buttons: [
+                        {
+                          text: "Ok",
+                          type: "button-assertive",
+                        },
+                      ],
+                    });
+                  }
+
+                }, (error) => {
+                  $ionicLoading.hide();
+                  $scope.Erreur(error);
+                }
+              )
+
+
+          } else {
+            console.log('NON');
+          }
+        });
+      } else {
+        $ionicPopup.show({
+          title: "Infos",
+          template: "Veuillz choisir le motif de suppression?",
+          scope: $scope,
+          buttons: [
+            {
+              text: 'OK',
+              type: 'button-energized',
+              onTap: function (e) {
+                return true;
+              }
+            }
+          ]
+        }).then(function (result) {
+          if (result) {
+
+          }
+        })
+      }
+
+
+    }
+
+
+
+
+    //Init variables of controller
+    $scope.initvar();
+
+    ApiListArticle.getListArticle().success(function (response) {
+      if (response) {
+        $scope.data.listarticles = response;
+      }
+      //  console.log('-----------------------list article----------------------');
+      //  console.log(response);
+    });
+
+    ApiListClient.getListClient().success(function (response) {
+      if (response) {
+        $scope.data.listclients = response;
+      }
+      //     console.log('-----------------------list client----------------------');
+      //     console.log(response);
+    });
+
+    ApiListMotif.getListMotif().success(function (response) {
+      if (response) {
+        $scope.data.listmotifs = response;
+      }
+      console.log("-----------------------list motif----------------------");
+      console.log(response);
+    });
+
+    $scope.getOptClient = function (option) {
+      return option;
+    };
+    $scope.getOptMotif = function (option) {
+      return option;
+    };
+
+    $scope.getOptArticle = function (option) {
+      return option;
+    };
+
+    $scope.getDetailPdc = function () {
+      $scope.data.montantDtails = 0;
+
+
+
+      if ($scope.data.pdc && !$scope.data.pdc.local) {
+
+        ApiDetailPdc.getDetailPdc($scope.data.pdc.codePDC).success(function (
+          response
+        ) {
+          if (response) {
+            console.log("---------------------Detail pdc--------------");
+
+            $scope.data.detailsPDC = response;
+            console.log($scope.data.detailsPDC)
+
+
+          }
+        });
+
+      } else {
+        //  var prclocal = JSON.parse(localStorage.getItem('prclocal'));
+        $scope.data.detailsPDC = $scope.data.pdc;
+        $scope.data.detailsPDC.details = $scope.data.pdc.detailsPDC;
+
+      }
+    };
+
+    $scope.getDetailPdc();
+
+    $scope.ajouter = function () {
+      //   $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+      $scope.data.detailsPDC.push({
+        index: $scope.data.detailsPDC.length + 1,
+        codeDetail: "DPDC" + $scope.data.user.code + $scope.getCodePrc(),
+        codeArticle: $scope.data.artcilechoisit.code,
+        quantite: $scope.data.quantite,
+        isCanceled: false,
+        artcilechoisit: $scope.data.artcilechoisit,
+        idMotif: $scope.data.motifchoisit.idMotif,
+        motifchoisit: $scope.data.motifchoisit,
+      });
+      // $ionicLoading.hide();
+      $scope.data.artcilechoisit = null;
+      $scope.data.motifchoisit = null;
+      $scope.data.quantite = 0;
+      console.log("----------------------Detail-------------------");
+      console.log($scope.data.detailsPDC);
+    };
+
+  })
 
   .controller("RecapPdsPrcCtrl", function (
     $scope,
@@ -5230,6 +6987,7 @@ angular
       $scope.data.artcilechoisit = null;
       $scope.data.motifchoisit = null;
       $scope.data.quantite = 0;
+      $scope.data.prix = 0;
       $scope.data.idMotif = 0;
       $scope.data.codePDS = pds ? pds.codePDS : null;
       var user = localStorage.getItem("user");
@@ -5387,6 +7145,7 @@ angular
       console.log("--------------Quantite---------------");
       console.log(item.quantite);
       $scope.data.quantite = +item.quantite;
+      $scope.data.prix = +item.prix;
 
       for (var i = 0; i < $scope.data.detailsPDS.details.length; i++) {
         if (
@@ -10569,6 +12328,18 @@ angular
       },
     };
   })
+  .factory("ApiListPdc", function ($http, urlPhp) {
+    return {
+      getListPdc: function (codeCommerciale) {
+        var url = urlPhp.getUrl();
+        var user = localStorage.getItem("user");
+        user = JSON.parse(user);
+      
+
+        return $http.post(url + "/pdc/liste.php", codeCommerciale);
+      },
+    };
+  })
   .factory("ApiListPrc", function ($http, urlPhp) {
     return {
       getListPrc: function (codeCommerciale, hasPDS = null) {
@@ -10600,6 +12371,19 @@ angular
       },
     };
   })
+  .factory("ApiDetailPdc", function ($http, urlPhp) {
+    return {
+      getDetailPdc: function (codePDC) {
+        var url = urlPhp.getUrl();
+        var user = localStorage.getItem("user");
+        user = JSON.parse(user);
+        // console.log(user);
+        //  var params = {codeUtilisateur:user.code}
+        var code = { codePDC: codePDC };
+        return $http.post(url + "/pdc/details.php", code);
+      },
+    };
+  })
   .factory("ApiAjoutPrc", function ($http, urlPhp) {
     return {
       ajoutPrc: function (values) {
@@ -10609,6 +12393,18 @@ angular
         // console.log(user);
         //  var params = {codeUtilisateur:user.code}
         return $http.post(url + "/prc/ajout.php", values);
+      },
+    };
+  })
+  .factory("ApiAjoutPdc", function ($http, urlPhp) {
+    return {
+      ajoutPdc: function (values) {
+        var url = urlPhp.getUrl();
+        var user = localStorage.getItem("user");
+        user = JSON.parse(user);
+        // console.log(user);
+        //  var params = {codeUtilisateur:user.code}
+        return $http.post(url + "/pdc/ajout.php", values);
       },
     };
   })
@@ -10822,6 +12618,22 @@ angular
       },
     };
   })
+  .factory("ApiModificationDetailPDC", function ($http, urlPhp) {
+    return {
+      modificationDetailPDC: function (values) {
+        var url = urlPhp.getUrl();
+        var user = localStorage.getItem("user");
+        user = JSON.parse(user);
+
+        console.log('Jai bien modifie avec :', );
+        console.log(url + "/pdc/modifierDetails.php")
+        console.log(values)
+
+         
+        return $http.post(url + "/pdc/modifierDetails.php", values);
+      },
+    };
+  })
   .factory("ApiDeletDetailPRC", function ($http, urlPhp) {
     return {
       deletDetailPRC: function (values) {
@@ -10830,6 +12642,17 @@ angular
         user = JSON.parse(user);
 
         return $http.post(url + "/prc/supprimerDetails.php", values);
+      },
+    };
+  })
+  .factory("ApiDeletDetailPDC", function ($http, urlPhp) {
+    return {
+      deletDetailPDC: function (values) {
+        var url = urlPhp.getUrl();
+        var user = localStorage.getItem("user");
+        user = JSON.parse(user);
+
+        return $http.post(url + "/pdc/supprimerDetails.php", values);
       },
     };
   })
