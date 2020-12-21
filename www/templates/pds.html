@@ -26,7 +26,7 @@
             margin-bottom: 10px;
           }
           .content-div {
-            background: #1EAC4E !important;
+            background: #13B3DA !important;
           }
           .content-div-row {
             text-align: center !important;
@@ -34,7 +34,7 @@
           }
 
           .bg {
-            background-color: orange !important;
+            background-color: rgb(25, 0, 255) !important;
           }
           .ft{
 
@@ -86,9 +86,9 @@
 
           <div class="row content-div">
 
-            <div class="col"  ng-click="valider(pds)" ng-if="pds.local == true">
+            <div class="col" ng-click="goToDetailPds(pds, 'det')">
               <button class="button button-clear button-assertive" style="color: white;">
-                Valider
+                Details
               </button>
             </div>
 
@@ -99,18 +99,12 @@
               </button>-->
             </div>
 
-            
-
-            <div class="col" ng-click="goToDetailPds(pds, 'det')">
-              <button class="button button-clear button-assertive" style="color: white;">
-                Details
-              </button>
-            </div>
             <div class="col"  ng-click="editDetail(pds,'sup')" ng-if="pds.local == true">
-              <button class="button button-clear button-assertive" style="color: white;">
+              <button class="button button-clear button-assertive" style="color: white; float: right;">
                 Annuler
               </button>
           </div>
+        </div>
 
         </div>
 
@@ -196,12 +190,12 @@
 
       <div class="row bar bar-footer ft" >
           <div class="col mt">
-            <button ng-click="goToNewPds('nouvelle')" class="button button-block button-assertive footer-button" color="danger" type="submit"
+            <button ng-click="goToNewPds('nouvelle')" class="button button-block button-assertive footer-button"  type="submit"
             name="submit"><span style="color:white">Demande sans PRC</span></button>
           </div>
 
           <div class="col mt">
-            <button  ng-click="goToNewPds('recap')" class="button button-block button-assertive footer-button" color="danger" type="submit"
+            <button  ng-click="goToNewPds('recap')" class="button button-block button-assertive footer-button"  type="submit"
             name="submit"><span style="color:white">Demande avec PRC</span></button>
           </div>
       </div>

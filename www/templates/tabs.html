@@ -9,91 +9,120 @@
       <ion-nav-back-button style="margin-right: 30px;">
       </ion-nav-back-button>
 
-    <ion-nav-buttons side="left" >
-        <button class="button button-icon button-clear ion-navicon" style="margin-right: 30px;" menu-toggle="left" ng-style="buttonleft">
+      <ion-nav-buttons side="left">
+        <button class="button button-icon button-clear ion-navicon" style="margin-right: 30px;" menu-toggle="left"
+          ng-style="buttonleft">
         </button>
-    </ion-nav-buttons>
+      </ion-nav-buttons>
 
 
     </ion-nav-bar>
     <ion-nav-view name="menuContent"></ion-nav-view>
   </ion-side-menu-content>
 
-  <ion-side-menu  side="left">
+  <ion-side-menu side="left">
     <ion-header-bar class="bar-assertive">
-      <h1 class="title">AGROLINE</h1>
-      <a id="buttonright" ng-click="majStat()" class="button button-icon button-clear ion-settings" ng-style="buttonleft">
+      <h1 class="title">POULTRADE</h1>
+      <a id="buttonright" ng-click="majStat()" class="button button-icon button-clear ion-settings"
+        ng-style="buttonleft">
       </a>
     </ion-header-bar>
 
-    <ion-content>
+    <ion-content class="backlineair">
+      <ion-grid>
 
-      <ion-list ng-show="menu">
+        <style type="text/css">
+          .backlineair {
+            background-image: url(./img/poultrade.png);
+            background-repeat: no-repeat;
+            Background-position: center bottom 111px;
+            max-width: 100%;
+            height: auto;
+            display: block;
 
-        <ion-item   menu-close href="#/app/bienvenue">
-          <i class="icon ion-home"></i> &nbsp;{{ 'menu_acceuil' | translate }}
-        </ion-item>
-        <ion-item  menu-close href="#/app/prcs">
-          <i class="icon ion-ios-list"></i>&nbsp;PRCS
-        </ion-item>
 
-        <ion-item  menu-close href="#/app/pds">
-          <i class="icon ion-ios-list"></i>&nbsp;PDS
-        </ion-item>
 
-        <ion-item  menu-close href="#/app/facturations">
-          <i class="icon ion-ios-list"></i>&nbsp;Facture
-        </ion-item>
 
-        <!--<ion-item  menu-close href="#/app/prospects">
+          }
+        </style>
+
+        <ion-list>
+
+          <ion-item menu-close href="#/app/bienvenue">
+            <i class="icon ion-home"></i> &nbsp;{{ 'menu_acceuil' | translate }}
+          </ion-item>
+          <ion-item menu-close href="#/app/prcs">
+            <i class="icon ion-ios-list"></i>&nbsp;PRCS
+          </ion-item>
+
+          <ion-item menu-close href="#/app/pds">
+            <i class="icon ion-ios-list"></i>&nbsp;PDS
+          </ion-item>
+
+          <ion-item menu-close href="#/app/facturations">
+            <i class="icon ion-ios-list"></i>&nbsp;Facture
+          </ion-item>
+
+          <!--<ion-item  menu-close href="#/app/prospects">
           <i class="icon ion-plus"></i> &nbsp;Nouvelle visite
         </ion-item>-->
 
-        <ion-item  menu-close href="#/app/stocks">
-          <i class="icon ion-ios-list"></i> &nbsp;Mon Stock
-        </ion-item>
+          <ion-item menu-close href="#/app/stocks">
+            <i class="icon ion-ios-list"></i> &nbsp;Mon Stock
+          </ion-item>
 
-        <ion-item  menu-close href="#/app/clients">
-          <i class="icon ion-ios-list"></i>&nbsp;Clients
-        </ion-item>
+          <ion-item menu-close href="#/app/clients">
+            <i class="icon ion-ios-list"></i>&nbsp;Clients
+          </ion-item>
 
-        <ion-item  menu-close href="#/app/articles">
-          <i class="icon ion-ios-list"></i>&nbsp;Articles
-        </ion-item>
+          <ion-item menu-close href="#/app/articles">
+            <i class="icon ion-ios-list"></i>&nbsp;Articles
+          </ion-item>
 
 
-        <!--<ion-item  menu-close href="#/app/mesprospects">
+          <!--<ion-item  menu-close href="#/app/mesprospects">
           <i class="icon ion-ios-list"></i> &nbsp;Mes prospects
         </ion-item>-->
 
-        <ion-item  menu-close href="#/app/maps">
-          <i class="icon ion-ios-location"></i> &nbsp;Carte Map
-        </ion-item>
+          <ion-item menu-close href="#/app/maps">
+            <i class="icon ion-ios-location"></i> &nbsp;Carte Map
+          </ion-item>
 
-        <ion-item menu-close href="#/app/login1">
-          <i class="icon ion-log-out"></i> &nbsp;{{ 'menu_sedeconnecter' | translate }}
-        </ion-item>
+          <ion-item menu-close href="#/app/login1">
+            <i class="icon ion-log-out"></i> &nbsp;{{ 'menu_sedeconnecter' | translate }}
+          </ion-item>
 
-      </ion-list>
-
-
+        </ion-list>
+      </ion-grid>
     </ion-content>
 
+
+
+
+
+
+    <div class="bar bar-footer footer-button" style="background-color: #13B3DA; color: white; text-align: center;">
+      <p style="text-align: center;" >&copy; 2020
+      <p>
+    </div>
+
+
+
+
+
   </ion-side-menu>
-<ion-side-menu ng-show="menutab" side="left">
+  <ion-side-menu ng-show="menutab" side="left">
 
     <ion-tabs class="tabs-icon-bottom">
 
-        <ion-tab ng-click="majStat()" title="CCBM-R"  icon="icon ion-home" href="#/app/acceuil">
-          <ion-nav-view name="tab-dash"></ion-nav-view>
-        </ion-tab>
+      <ion-tab ng-click="majStat()" title="CCBM-R" icon="icon ion-home" href="#/app/acceuil">
+        <ion-nav-view name="tab-dash"></ion-nav-view>
+      </ion-tab>
 
-        <ion-tab title="{{ 'TAB3' | translate }}" icon="icon ion-gear-b" href="#/app/account">
-          <ion-nav-view name="tab-account"></ion-nav-view>
-        </ion-tab>
+      <ion-tab title="{{ 'TAB3' | translate }}" icon="icon ion-gear-b" href="#/app/account">
+        <ion-nav-view name="tab-account"></ion-nav-view>
+      </ion-tab>
 
     </ion-tabs>
-</ion-side-menu>
+  </ion-side-menu>
 </ion-side-menus>
-
-

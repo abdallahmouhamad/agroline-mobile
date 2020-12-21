@@ -233,6 +233,35 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
       }
     })
 
+
+    .state('app.pdcs', {
+      url: '/pdcs',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/pdcs.html',
+          controller: 'PdcCtrl'
+        }
+      }
+    })
+    .state('app.details-pdc', {
+      url: '/details-pdc',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/details-pdc.html',
+          controller: 'DetailPdcCtrl'
+        }
+      }
+    })
+    .state('app.nouvel-pdc', {
+      url: '/nouvel-pdc',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/nouvel-pdc.html',
+          controller: 'NewPdcCtrl'
+        }
+      }
+    })
+
     .state('app.pds', {
       url: '/pds',
       views: {
