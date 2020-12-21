@@ -2947,14 +2947,15 @@ angular
       if ($scope.data.nom && $scope.data.telephone &&
         $scope.data.regionchoisit
         // && $scope.data.departementchoisit
-        //  && $scope.data.localitechoisitchoisit
+        // && $scope.data.localitechoisitchoisit
         // && $scope.data.TypePointVentechoisit
-       // && $scope.data.marche
-      // && $scope.data.adresse
+        // && $scope.data.marche
+        // && $scope.data.adresse
+         && $scope.data.modepaiementchoisit
         && $scope.data.telephone
         && $scope.data.position
         && $scope.data.grossistechoisit
-        && $scope.data.modepaiementchoisit
+      
       ) {
 
        
