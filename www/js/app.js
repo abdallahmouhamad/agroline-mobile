@@ -524,6 +524,15 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
           controller: 'LoginCtrl'
         }
       }
+    })
+    .state('app.nouvel-grossiste', {
+      url: '/nouvel-grossiste',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/nouvel-grossiste.html',
+          controller: 'nouvelGrossisteCtrl'
+        }
+      }
     }).state('app.account', {
       url: '/account',
       views: {

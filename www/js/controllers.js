@@ -2291,7 +2291,7 @@ angular
     $ionicLoading,
     ApiListClient,
     ApiDertailsClient,
-    ApiCaClient
+    ApiCaClient,
   ) {
     $scope.data = {};
     $scope.data.datefin = null;
@@ -2300,6 +2300,20 @@ angular
     //  localStorage.setItem('clientca', null);
     var clientca = localStorage.getItem('clientca')
     $scope.clientCa = clientca ? JSON.parse(clientca) : null;
+
+    /*const searchbar = document.querySelector('ion-searchbar');
+    const items = Array.from(document.querySelector('ion-list').children);
+    searchbar.addEventListener('ionInput', handleInput);
+
+    $scope.handleInput = function (event) {
+      const query = event.target.value.toLowerCase();
+      requestAnimationFrame(() => {
+        items.forEach(item => {
+          const shouldShow = item.textContent.toLowerCase().indexOf(query) > -1;
+          item.style.display = shouldShow ? 'block' : 'none';
+        });
+      });
+    }*/
 
     $scope.initvar = function () {
       $scope.data.clients = [];
@@ -2955,7 +2969,17 @@ angular
         console.log(err);
       });
     }
-
+    $scope.gotoNewGrossiste = function () {
+      $state.transitionTo(
+        "app.nouvel-grossiste",
+        {},
+        {
+          reload: true,
+          inherit: true,
+          notify: true,
+        }
+      );
+    }
     $scope.submit = function () {
       if ($scope.data.nom && $scope.data.telephone &&
         $scope.data.regionchoisit
@@ -3190,7 +3214,32 @@ angular
       console.log(values);
     }
   })
+  .controller("nouvelGrossisteCtrl", function (
+    $scope,
+    $state,
+    $ionicLoading,
+    ApiListClient,
+    ApiListRegions,
+    ApiListVilles,
+    ApiListMarches,
+    ApiListZones,
+    ApiListLocalite,
+    ApiListTypePointVente,
+    ApiListModePaiement,
+    ApiListGrossiste,
+    $cordovaGeolocation,
+    $cordovaCamera,
+    CodeGenere,
+    ApiAjoutClient,
+    $ionicPopup,
+    $filter,
+    ApiListDepartement
+  ) {
 
+   
+
+   
+  })
   .controller("ArticleCtrl", function (
     $scope,
     $state,
@@ -10217,7 +10266,7 @@ angular
     $scope.testPrint = function () {
 
       var image = '<div style="text-align: center">' +
-        '<img src="./img/poultrade.png">' +
+        '<img src="./img/agroline.png">' +
         '</div>';
 
       var enteteComm = '' +
@@ -10287,7 +10336,7 @@ angular
       style = style + "</style>";
 
       var image = '<div style="text-align: center">' +
-        '<img src="./img/poultrade.png">' +
+        '<img src="./img/agroline.png">' +
         '</div>';
       //<h2 style="text-align: center;">Facture agroline</h2>
       var enteteComm = '' +
