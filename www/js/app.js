@@ -340,6 +340,56 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
       }
     })
 
+    .state('app.planning', {
+      url: '/planning',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/planning.html',
+          controller: 'PlanningCtrl'
+        }
+      }
+    })
+
+    .state('app.details-planning', {
+      url: '/details-planning',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/details-planning.html',
+          controller: 'detailsPlanningCtrl'
+        }
+      }
+    })
+
+    .state('app.consultationSole', {
+      url: '/consultationSole',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/consultationSole.html',
+          controller: 'ConsultationSoleCtrl'
+        }
+      }
+    })
+
+    .state('app.details-soleGrossiste', {
+      url: '/details-soleGrossiste',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/details-soleGrossiste.html',
+          controller: 'detailsSoleGrossisteCtrl'
+        }
+      }
+    })
+
+    .state('app.details-soleAgent', {
+      url: '/details-soleAgent',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/details-soleAgent.html',
+          controller: 'detailsSoleAgentCtrl'
+        }
+      }
+    })
+
     .state('app.envoi', {
       url: '/envoi',
       views: {

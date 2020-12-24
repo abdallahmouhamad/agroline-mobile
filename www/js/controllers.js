@@ -7488,6 +7488,428 @@ angular
 
 
   })
+  /*================planning==================== */
+  .controller("PlanningCtrl", function (
+    $scope,
+    $state,
+    $ionicLoading,
+    ApiListPrc,
+    ApiDetailPrc,
+    ApiAjoutPrc,
+    ApiListClient,
+    ApiListMotif,
+    ApiListArticle,
+    $ionicPopup,
+    CodeGenere,
+    ApiListGrossiste,
+    ApiAjoutPdsFromRecap,
+    SendSms,
+    $filter,
+    ApiAjoutPrc
+
+  ) {
+    console.log('--------planning-------');
+    $scope.goToDetailsPlanning = function () {
+      
+      $state.transitionTo(
+        "app.details-planning",
+        {},
+        {
+          reload: true,
+          inherit: true,
+          notify: true,
+        }
+      );
+    };
+    $scope.synchroPRC = function () {
+
+
+      $ionicLoading.show({
+        content: "Loading",
+        animation: "fade-in",
+        showBackdrop: true,
+        maxWidth: 200,
+        showDelay: 0,
+        duration: 10000,
+      });
+      var compte = 0;
+      var totalItem = $scope.data.prcs.length;
+      for (var i = 0; i < $scope.data.prcs.length; i++) {
+        var values = {
+          codePRC: $scope.data.prcs[i].codePRC,
+          codeClient: $scope.data.prcs[i].codeClient,
+          dateAjout: $scope.data.prcs[i].dateAjout,
+          idModepaiement: $scope.data.prcs[i].idModepaiement,
+          codeCommerciale: $scope.data.prcs[i].codeCommerciale,
+          isLoaded: $scope.data.prcs[i].isLoaded,
+          isCanceled: $scope.data.prcs[i].isCanceled,
+          idMotif: $scope.data.prcs[i].idMotif,
+          detailsPRC: $scope.data.prcs[i].detailsPRC
+        };
+        console.log("---------------------Value to submit--------------------");
+        console.log(values);
+        ApiAjoutPrc.ajoutPrc(values).success(
+          function (response) {
+            console.log(response);
+
+            if (response.reponse == 1) {
+              compte = compte + 1;
+              var searchPrc = $filter('filter')($scope.data.prcs, { codePRC: values.codePRC });
+              console.log('------PRC to delet');
+              console.log(searchPrc);
+              if (searchPrc && searchPrc.length === 1) {
+                var prcLocal = searchPrc[0];
+                console.log('------PRC to delet');
+                console.log(prcLocal);
+                $scope.data.prcstmp.splice(prcLocal, 1);
+
+                localStorage.setItem('prclocal', JSON.stringify($scope.data.prcstmp))
+
+                console.log(compte)
+                console.log($scope.data.prcs.length)
+
+                if (compte === totalItem) {
+                  $scope.data.prcs = [];
+                  $ionicLoading.hide();
+                  $state.transitionTo(
+                    "app.prcs",
+                    {},
+                    {
+                      reload: true,
+                      inherit: true,
+                      notify: true,
+                    }
+                  );
+
+                }
+              }
+
+            }
+
+
+          },
+          (error) => {
+            erreur = 0;
+            $ionicLoading.hide();
+          }
+        );
+
+      }
+
+    
+
+    };
+  })
+  /*=================planning===================*/
+  .controller("detailsPlanningCtrl", function (
+    $scope,
+    $state,
+    $ionicLoading,
+    ApiListPrc,
+    ApiDetailPrc,
+    ApiAjoutPrc,
+    ApiListClient,
+    ApiListMotif,
+    ApiListArticle,
+    $ionicPopup,
+    CodeGenere,
+    ApiListGrossiste,
+    ApiAjoutPdsFromRecap,
+    SendSms,
+    $filter,
+    ApiAjoutPrc
+
+  ) {
+    console.log('-------- details planning-------');
+  
+  })
+
+  .controller("detailsSoleGrossisteCtrl", function (
+    $scope,
+    $state,
+    $ionicLoading,
+    ApiListPrc,
+    ApiDetailPrc,
+    ApiAjoutPrc,
+    ApiListClient,
+    ApiListMotif,
+    ApiListArticle,
+    $ionicPopup,
+    CodeGenere,
+    ApiListGrossiste,
+    ApiAjoutPdsFromRecap,
+    SendSms,
+    $filter,
+    ApiListSoldeAgent,
+    ApiAjoutPrc
+
+  ) {
+    console.log('-------- details Solde Grossiste-------');
+
+    $scope.initvar = function () {
+      $scope.data.codeChefzone = localStorage.getItem('codeChefzone');
+      var user = localStorage.getItem('user');
+      $scope.data.user = JSON.parse(user);
+
+      $scope.data.detailsSoldeAgent = [];
+
+      var codeChefzone = { "codeChefzone": $scope.data.codeChefzone };
+
+      $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+      console.log('-----------------------Detail Solde Grossiste ---------------------');
+      console.log(codeChefzone);
+      ApiListSoldeAgent.ListSoldeAgent(codeChefzone).
+        success(function (response) {
+          $ionicLoading.hide();
+          if (response) {
+            $scope.data.detailsSoldeAgent = response;
+          }
+          console.log('-----------------------Detail Solde Grossiste ---------------------');
+          console.log(response);
+        }, error => {
+          $ionicLoading.hide();
+        });
+    }
+    $scope.initvar();
+  
+  })
+
+  .controller("detailsSoleAgentCtrl", function (
+    $scope,
+    $state,
+    $ionicLoading,
+    ApiListPrc,
+    ApiDetailPrc,
+    ApiAjoutPrc,
+    ApiListClient,
+    ApiListMotif,
+    ApiListArticle,
+    $ionicPopup,
+    CodeGenere,
+    ApiListGrossiste,
+    ApiAjoutPdsFromRecap,
+    SendSms,
+    $filter,
+    ApiListSoldeAgent,
+    ApiAjoutPrc
+
+  ) {
+    console.log('-------- details Solde Agent-------');
+    $scope.initvar = function () {
+      $scope.data.codeChefzone = localStorage.getItem('codeChefzone');
+      var user = localStorage.getItem('user');
+      $scope.data.user = JSON.parse(user);
+
+      $scope.data.detailsSoldeAgent = [];
+
+      var codeChefzone = { "codeChefzone": $scope.data.codeChefzone };
+
+      $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+      console.log('-----------------------Detail Solde Agent ---------------------');
+      console.log(codeChefzone);
+      ApiListSoldeAgent.ListSoldeAgent(codeChefzone).
+        success(function (response) {
+          $ionicLoading.hide();
+          if (response) {
+            $scope.data.detailsSoldeAgent = response;
+          }
+          console.log('-----------------------Detail Solde Agent ---------------------');
+          console.log(response);
+        }, error => {
+          $ionicLoading.hide();
+        });
+    }
+    $scope.initvar();
+  
+  })
+  /*+++++++++++++++++++consultation Sole++++++++++++++++++++++++++*/
+  .controller("ConsultationSoleCtrl", function (
+    $scope,
+    $state,
+    $ionicLoading,
+    ApiListPrc,
+    ApiDetailPrc,
+    ApiAjoutPrc,
+    ApiListGrossisteChefZone,
+    ApiListAgentChefZone,
+    ApiListClient,
+    ApiListMotif,
+    ApiListArticle,
+    $ionicPopup,
+    CodeGenere,
+    ApiListGrossiste,
+    ApiAjoutPdsFromRecap,
+    SendSms,
+    $filter,
+    ApiAjoutPrc
+
+  ) {
+    console.log('--------consultation sole-------');
+
+    $scope.initvar = function () {
+      $scope.data.user = JSON.parse(localStorage.getItem('user'));
+      $scope.data.client = JSON.parse(localStorage.getItem('clientEdit'));
+
+      $scope.data.listGrossisteChefZones = [];
+      $scope.data.GrossisteChefZonechoisit = null;
+
+      $scope.data.listAgentChefZones = [];
+      $scope.data.AgentChefZonechoisit = null;
+
+      $scope.data.codeClient = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.codeClient : null;
+      $scope.data.nom = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.nom : null;
+      $scope.data.adresse = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.adresse : null;
+      $scope.data.telephone = $scope.data.client && $scope.data.client.codeClient ? parseInt($scope.data.client.telephone) : null;
+      $scope.data.telephone2 = $scope.data.client && $scope.data.client.codeClient ? parseInt($scope.data.client.telephone2) : null;
+      $scope.data.marche = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.marche : null;
+      $scope.data.email = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.email : null;
+      $scope.data.photo = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.photo : null;
+      $scope.data.delaiPaiement = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.delaiPaiement : null;
+      $scope.data.latitude = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.position.split(',')[0] : 0.0;
+      $scope.data.longitude = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.position.split(',')[1] : 0.0;
+      $scope.data.position = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.position : null;
+    };
+
+    $scope.initvar();
+    $scope.getOptGrossiste = function (option) {
+      return option;
+    };
+
+    $scope.getOptAgent = function (option) {
+      return option;
+    };
+
+    $scope.selectGrossiste = function () {
+      console.log('-----Liste Grossiste');
+      ApiListGrossisteChefZone.ListGrossisteChefZone(codeChefzone)
+        .success(function (reponse) {
+          console.log('-----Liste Grossiste Chef Zone');
+          $scope.data.listGrossisteChefZones = reponse;
+         // var grossisteChefZone = { codeChefzone: $scope.data.GrossisteChefZonechoisit.codeChefzone }
+          console.log(grossisteChefZone)
+          console.log(reponse)
+
+        })
+    }
+
+    $scope.selectAgent = function () {
+      console.log('-----Liste Agent');
+      ApiListAgentChefZone.ListAgentChefZone(codeChefzone)
+        .success(function (reponse) {
+          console.log('-----Liste Agent Chef Zone');
+          $scope.data.listAgentChefZones = reponse;
+        //  var agentChefZone = { codeChefzone: $scope.data.AgentChefZonechoisit.codeChefzone }
+          console.log(agentChefZone)
+          console.log(reponse)
+
+        })
+    }
+
+    $scope.goToDetailsSoleGrossiste = function () {
+      
+      $state.transitionTo(
+        "app.details-soleGrossiste",
+        {},
+        {
+          reload: true,
+          inherit: true,
+          notify: true,
+        }
+      );
+    };
+
+    $scope.goToDetailsSoleAgent = function () {
+      
+      $state.transitionTo(
+        "app.details-soleAgent",
+        {},
+        {
+          reload: true,
+          inherit: true,
+          notify: true,
+        }
+      );
+    };
+    $scope.synchroPRC = function () {
+
+
+      $ionicLoading.show({
+        content: "Loading",
+        animation: "fade-in",
+        showBackdrop: true,
+        maxWidth: 200,
+        showDelay: 0,
+        duration: 10000,
+      });
+      var compte = 0;
+      var totalItem = $scope.data.prcs.length;
+      for (var i = 0; i < $scope.data.prcs.length; i++) {
+        var values = {
+          codePRC: $scope.data.prcs[i].codePRC,
+          codeClient: $scope.data.prcs[i].codeClient,
+          dateAjout: $scope.data.prcs[i].dateAjout,
+          idModepaiement: $scope.data.prcs[i].idModepaiement,
+          codeCommerciale: $scope.data.prcs[i].codeCommerciale,
+          isLoaded: $scope.data.prcs[i].isLoaded,
+          isCanceled: $scope.data.prcs[i].isCanceled,
+          idMotif: $scope.data.prcs[i].idMotif,
+          detailsPRC: $scope.data.prcs[i].detailsPRC
+        };
+        console.log("---------------------Value to submit--------------------");
+        console.log(values);
+        ApiAjoutPrc.ajoutPrc(values).success(
+          function (response) {
+            console.log(response);
+
+            if (response.reponse == 1) {
+              compte = compte + 1;
+              var searchPrc = $filter('filter')($scope.data.prcs, { codePRC: values.codePRC });
+              console.log('------PRC to delet');
+              console.log(searchPrc);
+              if (searchPrc && searchPrc.length === 1) {
+                var prcLocal = searchPrc[0];
+                console.log('------PRC to delet');
+                console.log(prcLocal);
+                $scope.data.prcstmp.splice(prcLocal, 1);
+
+                localStorage.setItem('prclocal', JSON.stringify($scope.data.prcstmp))
+
+                console.log(compte)
+                console.log($scope.data.prcs.length)
+
+                if (compte === totalItem) {
+                  $scope.data.prcs = [];
+                  $ionicLoading.hide();
+                  $state.transitionTo(
+                    "app.prcs",
+                    {},
+                    {
+                      reload: true,
+                      inherit: true,
+                      notify: true,
+                    }
+                  );
+
+                }
+              }
+
+            }
+
+
+          },
+          (error) => {
+            erreur = 0;
+            $ionicLoading.hide();
+          }
+        );
+
+      }
+
+
+
+    };
+  })
+  /*++++++++++++++++++++++consultation sole+++++++++++++++++++++++*/
 
   .controller("EnvoiCtrl", function (
     $scope,
@@ -13024,6 +13446,54 @@ angular
         //console.log(values);
 
         return $http.get(url + '/typepointvente/liste.php');
+      }
+    }
+
+  })
+
+  .factory('ApiListSoldeAgent', function ($http, urlPhp) {
+    return {
+      ListSoldeAgent: function (codeChefzone) {
+        var url = urlPhp.getUrl();
+        var user = localStorage.getItem('user');
+        /*console.log('-------------User-------');
+        console.log(user);*/
+        user = JSON.parse(user);
+        //console.log(values);
+
+        return $http.get(url + '/apiagroline/utilisateur/soldeGrossiste.php',codeChefzone);
+      }
+    }
+
+  })
+
+  .factory('ApiListGrossisteChefZone', function ($http, urlPhp) {
+    return {
+      ListGrossisteChefZone: function (codeChefzone) {
+        var url = urlPhp.getUrl();
+        var user = localStorage.getItem('user');
+        /*console.log('-------------User-------');
+        console.log(user);*/
+        user = JSON.parse(user);
+        //console.log(values);
+
+        return $http.get(url + '/apiagroline/grossiste/liste.php',codeChefzone);
+      }
+    }
+
+  })
+
+  .factory('ApiListAgentChefZone', function ($http, urlPhp) {
+    return {
+      ListAgentChefZone: function (codeChefzone) {
+        var url = urlPhp.getUrl();
+        var user = localStorage.getItem('user');
+        /*console.log('-------------User-------');
+        console.log(user);*/
+        user = JSON.parse(user);
+        //console.log(values);
+
+        return $http.get(url + '/apiagroline/utilisateur/liste.php',codeChefzone);
       }
     }
 
