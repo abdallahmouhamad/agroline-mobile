@@ -1,0 +1,119 @@
+<ion-view title="Detail Planning" cache-view="false">
+    <div ng-app="starter">
+  
+      <ion-content padding="true" class="has-header">
+        <style type="text/css">
+          input[readonly] {
+            background-color: transparent !important;
+            cursor: not-allowed;
+          }
+          .small_button{
+              width: 50% !important;
+              height: 50px !important;
+              margin-left: 5px;
+          }
+          .footer-button {
+            margin-bottom: 10px;
+            height: 50px !important;
+          }
+          .ml{
+            margin-left: 5px;
+          }
+          .header {
+  
+            margin-top: 5px;
+            margin-bottom: 10px;
+          }
+          .content-div {
+            background: grey !important;
+          }
+          .content-div-row {
+            text-align: center !important;
+            border: 3px grey dashed !important;
+          }
+          .edit {
+             background: red !important;
+          }
+          .map {
+            height: 200px !important;
+          }
+  
+        </style>
+          <div class="card list" >
+  
+            <a class="item item-icon-left" ng-if="!data.detailsPRC.clientchoisit">
+              <i class="icon ion-person"></i>
+              Destockeur : {{data.detailsPlanning.destockeur}}
+            </a>
+            <a class="item item-icon-left" ng-if="data.detailsPRC.clientchoisit">
+              <i class="icon ion-person"></i>
+              Destockeur : {{data.detailsPlanning.destockeurchoisit.nom}}
+            </a>
+           
+  
+  
+            <a class="item item-icon-left">
+              <i class="icon ion-calendar"></i>
+              Date Debut: {{data.detailsPlaning.dateAjout | date :  "dd.MM.y"}}
+            </a>
+
+            
+            <a class="item item-icon-left">
+                <i class="icon ion-calendar"></i>
+                Date fin: {{data.detailsPlaning.dateAjout | date :  "dd.MM.y"}}
+              </a>
+        </div>
+  
+    
+  
+      
+  
+        <div class="row"  style="margin-top: 10px;">
+  
+           <div class="col" style="font-size: 130%;">Details Planning</div>
+   
+        </div>
+  
+  
+        <div class="row header list content-div">
+            <div class="col" style="text-align: center;">Date</div>
+            <div class="col" style="text-align: center;">Action</div>
+            <div class="col" style="text-align: center;">Zone</div>
+            <div class="col" style="text-align: center;">Heure</div>
+     
+          
+        </div>
+  
+        <div class="row list"  ng-repeat="d in data.detailsPlanning.details | filter:motcle">
+  
+            <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" >
+              {{d.date}}
+            </div>
+  
+            <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'" >
+              {{d.date}}
+            </div>
+  
+            <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{d.action}}</div>
+  
+            <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.action}}</div>
+  
+  
+            <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{d.zone}}</div>
+            <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.zone}}</div>
+          
+  
+            <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{d.heure}}</div>
+            <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.heure}}</div>
+        
+  
+  
+        </div>
+  
+      
+  
+      </ion-content>
+  
+    </div>
+    </ion-view>
+  

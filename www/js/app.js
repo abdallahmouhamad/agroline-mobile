@@ -340,6 +340,56 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
       }
     })
 
+    .state('app.planning', {
+      url: '/planning',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/planning.html',
+          controller: 'PlanningCtrl'
+        }
+      }
+    })
+
+    .state('app.details-planning', {
+      url: '/details-planning',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/details-planning.html',
+          controller: 'detailsPlanningCtrl'
+        }
+      }
+    })
+
+    .state('app.consultationSole', {
+      url: '/consultationSole',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/consultationSole.html',
+          controller: 'ConsultationSoleCtrl'
+        }
+      }
+    })
+
+    .state('app.details-soleGrossiste', {
+      url: '/details-soleGrossiste',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/details-soleGrossiste.html',
+          controller: 'detailsSoleGrossisteCtrl'
+        }
+      }
+    })
+
+    .state('app.details-soleAgent', {
+      url: '/details-soleAgent',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/details-soleAgent.html',
+          controller: 'detailsSoleAgentCtrl'
+        }
+      }
+    })
+
     .state('app.envoi', {
       url: '/envoi',
       views: {
@@ -522,6 +572,15 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
         'menuContent': {
           templateUrl: 'templates/login1.html',
           controller: 'LoginCtrl'
+        }
+      }
+    })
+    .state('app.nouvel-grossiste', {
+      url: '/nouvel-grossiste',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/nouvel-grossiste.html',
+          controller: 'nouvelGrossisteCtrl'
         }
       }
     }).state('app.account', {

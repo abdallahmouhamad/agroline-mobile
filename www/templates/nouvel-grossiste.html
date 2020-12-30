@@ -1,0 +1,110 @@
+<ion-view view-title="Nouveau grossiste" cache-view="false">
+    <ion-pane>
+      <div ng-app="starter">
+  
+        <ion-content>
+          <ion-grid>
+            <style type="text/css">
+              input[readonly] {
+                background-color: transparent !important;
+                cursor: not-allowed;
+              }
+  
+              .small_button {
+                width: 50% !important;
+                height: 50px !important;
+                margin-left: 5px;
+              }
+  
+              .footer-button {
+                margin-bottom: 10px;
+                height: 50px !important;
+              }
+  
+              .ml {
+                margin-left: 5px;
+              }
+  
+              .header {
+  
+                margin-top: 5px;
+                margin-bottom: 10px;
+              }
+  
+              .content-div {
+                background: grey !important;
+              }
+  
+              .content-div-row {
+                text-align: center !important;
+                border: 3px grey dashed !important;
+              }
+  
+              .edit {
+                background: red !important;
+              }
+  
+              .map {
+                height: 200px !important;
+              }
+            </style>
+
+            <div class="row">
+  
+              <div class="col">
+                <div class="list">
+                  <label class="item item-input">
+                    <input style="text-transform: uppercase" type="text" id="nom" ng-model="data.nom"
+                      placeholder="Raison sociale"></majuscule>
+                  </label>
+                </div>
+              </div>
+  
+  
+              <div class="col">
+                <div class="list">
+                  <label class="item item-input">
+                    <input type="text" id="adresse" ng-model="data.adresse" placeholder="Adresse client">
+                  </label>
+                </div>
+              </div>
+  
+  
+  
+            </div>
+  
+            <div class="row">
+  
+              <div class="col">
+                <div class="list">
+                  <label class="item item-input">
+                    <input type="number" id="telephne" ng-model="data.telephone" placeholder="Telephone client">
+                  </label>
+                </div>
+              </div>
+  
+              <div class="col">
+                <div class="list">
+                  <label class="item item-input">
+                    <input type="number" id="telephone2" ng-model="data.telephone2" placeholder="Deuxième numéro">
+                  </label>
+                </div>
+              </div>
+  
+  
+            </div>
+      </div>
+  
+  
+  
+      </ion-grid>
+      </ion-content>
+  
+  
+      </div>
+      <div class="bar bar-footer footer-button">
+        <button ng-click="submit()" class="button button-block button-assertive footer-button" color="danger"
+          type="submit" name="submit"><span style="color:white">Valider</span></button>
+      </div>
+    </ion-pane>
+  </ion-view>

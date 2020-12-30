@@ -31,7 +31,8 @@ angular
     ApiTracking,
     formatNewDate,
     SeparateurMillier,
-    SendSms
+    SendSms,
+    checkPermissionModule
   ) {
     $scope.menu = true;
     $scope.scroll = false;
@@ -46,6 +47,23 @@ angular
 
     $scope.number = function () {
       console.log(SeparateurMillier.separateurMillier('170000000'));
+    }
+         /*PRISE DE COMMANDE
+FACTURATION
+RESTANT VERSEMENT
+MARKETING
+PREPARATION DE COMMANDE
+INVENTAIRE
+CLIENT
+STOCK
+SUPERVISION DE DESTOCKEUR
+RECUPERATION DE MARCHANDISES
+DECHARGEMENT
+GEOLOCALISATION DESTOCKEURS
+CONSULTATION SOLDE
+PLANNING DESTOCKEURS*/
+    $scope.permission = function(module){
+      return checkPermissionModule.getPermissionModule(module);
     }
 
 
@@ -289,7 +307,7 @@ angular
         }
       );
     }
-    
+
     $scope.goToPdc = function () {
       $state.transitionTo(
         "app.pdcs",
@@ -458,6 +476,7 @@ angular
       login: "",
       password: "",
     };
+    $scope.roles = {};
     //test connexion abou
     $scope.sowmenu = function () {
       console.log("ici ici");
@@ -494,6 +513,7 @@ angular
         .success(function (res) {
           // if login request is Accepted
           console.log("la reponse", res);
+
           /* if(res.code == ""){
              console.log("la reponse vide",res);
            }else if(res.code != ""){
@@ -504,6 +524,73 @@ angular
           $ionicLoading.hide();
           // records is the 'server response array' variable name.
           $scope.user_details = res; // copy response values to user-details object.
+
+           
+     
+
+          var role = $scope.user_details.roles;
+
+         // var indexOfRole = {
+          
+         
+            indexOf1 = role[1];
+            indexOf2 = role[2];
+            indexOf3 = role[3];
+            indexOf4 = role[4];
+            indexOf5 = role[5];
+            indexOf6 = role[6];
+            indexOf7 = role[7];
+            indexOf8 = role[8];
+            indexOf9 = role[9];
+            indexOf10 = role[10];
+            indexOf11 = role[11];
+            indexOf12 = role[12];
+            indexOf13 = role[13];
+            indexOf14 = role[14];
+        
+        //  };
+        console.log("com",indexOf1);
+        console.log("fac",indexOf2);
+if(role){
+          var PRISE_DE_COMMANDE = "PRISE DE COMMANDE";
+          var FACTURATION = "FACTURATION";
+          var RESTANT_VERSEMENT = "RESTANT VERSEMENT";
+          var MARKETING = "MARKETING";
+          var PREPARATION_DE_COMMANDE = "PREPARATION DE COMMANDE";
+          var INVENTAIRE = "INVENTAIRE";
+          var CLIENT = "CLIENT";
+          var STOCK = "STOCK";
+          var SUPERVISION_DE_DESTOCKEUR = "SUPERVISION DE DESTOCKEUR";
+          var RECUPERATION_DE_MARCHANDISES = "RECUPERATION DE MARCHANDISES";
+          var DECHARGEMENT = "DECHARGEMENT";
+          var GEOLOCALISATION_DESTOCKEURS = "GEOLOCALISATION DESTOCKEURS";
+          var CONSULTATION_SOLDE = "CONSULTATION SOLDE";
+          var PLANNING_DESTOCKEURS = "PLANNING DESTOCKEURS"; 
+        }
+
+          console.log(indexOf1);
+          console.log(PRISE_DE_COMMANDE);
+          console.log(indexOf2);
+          console.log(FACTURATION);
+
+
+         /* PRISE_DE_COMMANDE = indexOfRole.indexOf1;
+         FACTURATION = indexOfRole.indexOf2;
+          RESTANT_VERSEMENT = indexOfRole.indexOf3;
+          MARKETING = indexOfRole.indexOf4;
+          PREPARATION_DE_COMMANDE = indexOfRole.indexOf5;
+          INVENTAIRE = indexOfRole.indexOf6;
+          CLIENT = indexOfRole.indexOf7;
+          STOCK = indexOfRole.indexOf8;
+          SUPERVISION_DE_DESTOCKEUR = indexOfRole.indexOf9;
+          RECUPERATION_DE_MARCHANDISES = indexOfRole.indexOf10;
+          DECHARGEMENT = indexOfRole.indexOf11;
+          GEOLOCALISATION_DESTOCKEURS = indexOfRole.indexOf12;
+          CONSULTATION_SOLDE = indexOfRole.indexOf13;
+          PLANNING_DESTOCKEURS = indexOfRole.indexOf14;*/
+
+         // console.log("les roles", indexOfRole);
+        //  console.log("PRISE", FACTURATION);
 
           sessionStorage.setItem("loggedin_id", $scope.user_details.id);
           sessionStorage.setItem(
@@ -519,7 +606,8 @@ angular
           );
           localStorage.setItem("loggedin_iduser", $scope.user_details.id);
           localStorage.setItem("user", JSON.stringify($scope.user_details));
-
+          //console.log($scope.user_details.roles)
+          localStorage.setItem("identifiants", JSON.stringify(params));
           localStorage.setItem("isconn", true);
           $ionicHistory.nextViewOptions({
             disableAnimate: true,
@@ -667,7 +755,10 @@ angular
     ChekConnect,
     $translate,
     ProfilUser,
-    urlJava
+    urlJava,
+    ApiListAgentChefZone,
+    ApiListLocationAgent,
+    formatNewDate
   ) {
     $scope.data.payschoisit = null;
     $scope.pvtempon = [];
@@ -677,10 +768,140 @@ angular
     $scope.data.regionchoisit;
     $scope.data.villechoisit;
     $scope.data.cache = true;
+    $scope.data.listAgentChefZones;
+    $scope.data.agentchoisit = null;
+    $scope.data.datefilter;
+    var user        =  JSON.parse(localStorage.getItem("user"));
     $scope.getOptPays = function (option) {
       // console.log(option)
       return option;
     };
+
+    $scope.selectAgent = function () {
+      
+      console.log('-----Liste Agent');
+      if(user && user.code){
+        var codeChef = {codeChefzone : user.code};
+        ApiListAgentChefZone.ListAgentChefZone(codeChef)
+          .success(function (reponse) {
+            console.log('-----Liste Agent Chef Zone');
+            $scope.data.listAgentChefZones = reponse;
+            console.log($scope.data.listAgentChefZones)
+          })
+      }
+      
+    }
+    $scope.localisationAgent = function(){
+      if($scope.data.datefilter){
+        console.log('-------------La date----------');
+        console.log($scope.data.datefilter);
+        if($scope.data.agentchoisit && user && user.code){
+
+          var params  = {
+            codeChefzone: user.code,
+             codeAgent:$scope.data.agentchoisit.codeAgent,
+             dateEnregistrement : $scope.data.datefilter
+            }
+            $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+          ApiListLocationAgent.getListLocationAgent(params)
+          .success(function(response){
+            console.log('-----_Locations chefs zone----------');
+            console.log(response);
+            var locationsAgent = response[0];
+
+            console.log('-----get objet----------');
+            console.log(locationsAgent);
+
+              $ionicLoading.hide();
+              
+              var options = {
+                timeout: 10000,
+                enableHighAccuracy: true
+              };
+              
+              if(locationsAgent.localisations){
+                console.log('-----_Locations chefs zone----------');
+                console.log(response);
+    
+                var lat;
+                var long ;
+                if(locationsAgent.localisations.length > 0){
+                  lat =locationsAgent.localisations[0].latitude;
+                  long =  locationsAgent.localisations[0].longitude;
+                }else{
+                  lat = 0;
+                  long = 0;
+                }
+    
+                  var latLng = new google.maps.LatLng(lat, long);
+    
+                  var mapOptions = {
+                    center: latLng,
+                    zoom: 12,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                  };
+      
+                  $scope.map = new google.maps.Map(document.getElementById("map2"), mapOptions);
+      
+                  //Wait until the map is loaded
+                  google.maps.event.addListenerOnce($scope.map, 'idle', function () {
+      
+                    var marker = new google.maps.Marker({
+                      map: $scope.map,
+                      animation: google.maps.Animation.DROP,
+                      position: latLng,
+                      icon: 'img/marker.png'
+                    });
+                    $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+                    
+                      if(locationsAgent.localisations && locationsAgent.localisations.length > 0){
+                        locationsAgent.localisations.forEach(function (pv) {
+                          if (pv.latitude !== 0 && pv.longitude !== 0 && pv.latitude !== '' && pv.longitude !== '' && pv.latitude !== null && pv.longitude !== null) {
+                            var marker = new google.maps.Marker({
+                              map: $scope.map,
+                              animation: google.maps.Animation.DROP,
+                              position: new google.maps.LatLng(pv.latitude, pv.longitude),
+                              icon: 'img/map-marker.png'
+                            });
+                            
+                            var infoWindow = new google.maps.InfoWindow({
+                              content: 
+                                 "date: " + pv.dateEnregistrement
+                             //  + "<br/>Adresse: " + pv.adresse 
+                              // + "<br/>heure d'arrivée: " + pv.heureArrivee 
+                             //  + "<br/>heure de départ: " + pv.heureDepart
+                              // + "<br/>Outils: " + pv.outils 
+            
+                            });
+          
+                            google.maps.event.addListener(marker, 'click', function () {
+                              infoWindow.open($scope.map, marker);
+                            })
+          
+                          }
+          
+                        });
+                      }
+
+                    $ionicLoading.hide();
+      
+      
+                  });
+                //});
+              }
+          
+
+          })
+        }
+
+      }
+        
+    }
+    
+
+   
+
+    $scope.selectAgent();
 
     $scope.cacheselect = function () {
       if ($scope.data.cache) {
@@ -690,6 +911,10 @@ angular
       }
     };
     $scope.getOptRegion = function (option) {
+      //   console.log($scope.data.regionchoisit)
+      return option;
+    };
+    $scope.getOptAgent = function (option) {
       //   console.log($scope.data.regionchoisit)
       return option;
     };
@@ -2291,7 +2516,7 @@ angular
     $ionicLoading,
     ApiListClient,
     ApiDertailsClient,
-    ApiCaClient
+    ApiCaClient,
   ) {
     $scope.data = {};
     $scope.data.datefin = null;
@@ -2300,6 +2525,20 @@ angular
     //  localStorage.setItem('clientca', null);
     var clientca = localStorage.getItem('clientca')
     $scope.clientCa = clientca ? JSON.parse(clientca) : null;
+
+    /*const searchbar = document.querySelector('ion-searchbar');
+    const items = Array.from(document.querySelector('ion-list').children);
+    searchbar.addEventListener('ionInput', handleInput);
+
+    $scope.handleInput = function (event) {
+      const query = event.target.value.toLowerCase();
+      requestAnimationFrame(() => {
+        items.forEach(item => {
+          const shouldShow = item.textContent.toLowerCase().indexOf(query) > -1;
+          item.style.display = shouldShow ? 'block' : 'none';
+        });
+      });
+    }*/
 
     $scope.initvar = function () {
       $scope.data.clients = [];
@@ -2718,10 +2957,10 @@ angular
       var filerRegion = $scope.data.sens == 'edit' && $scope.data.client.region ? $filter('filter')($scope.data.listregions, { libelle: $scope.data.client.region }) : [];
       $scope.data.regionchoisit = filerRegion && filerRegion.length > 0 ? filerRegion[0] : null;
       console.log(response);
-      if($scope.data.regionchoisit){
+      if ($scope.data.regionchoisit) {
         $scope.selectDepartementByRegion();
       }
-    
+
     });
 
     ApiListDepartement.listDepartement().success(function (reponse) {
@@ -2955,22 +3194,33 @@ angular
         console.log(err);
       });
     }
-
+    $scope.gotoNewGrossiste = function () {
+      $state.transitionTo(
+        "app.nouvel-grossiste",
+        {},
+        {
+          reload: true,
+          inherit: true,
+          notify: true,
+        }
+      );
+    }
     $scope.submit = function () {
       if ($scope.data.nom && $scope.data.telephone &&
         $scope.data.regionchoisit
         // && $scope.data.departementchoisit
-        //  && $scope.data.localitechoisitchoisit
+        // && $scope.data.localitechoisitchoisit
         // && $scope.data.TypePointVentechoisit
-       // && $scope.data.marche
-      // && $scope.data.adresse
+        // && $scope.data.marche
+        // && $scope.data.adresse
+        && $scope.data.modepaiementchoisit
         && $scope.data.telephone
         && $scope.data.position
         && $scope.data.grossistechoisit
-        && $scope.data.modepaiementchoisit
+
       ) {
 
-       
+
         var codeClient = $scope.data.client ? $scope.data.client.codeClient : "CLI-" + $scope.data.user.code + "-" + CodeGenere.getCodeGenere();
 
         var values = {
@@ -3022,29 +3272,29 @@ angular
         values.delaiPaiement = + values.delaiPaiement;
         values.photo = "" + values.photo;
 
-        if(!values.marche ){
-          values.marche= "NULL";
-          
+        if (!values.marche) {
+          values.marche = "NULL";
+
         }
 
-        if( !values.adresse){
-        
-          values.adresse= "NULL";
+        if (!values.adresse) {
+
+          values.adresse = "NULL";
         }
-       
-       
 
-       /* for (var i = 0; i < $scope.data.listregions.length; i++) {
 
-          if (values.idRegion != " ") {
-            values.idRegion = parseInt($scope.data.listregions[i].idRegion);
-           values.idRegion = + $scope.data.listregions[i].idRegion;
-           console.log(values.idRegion)
 
-          } else {
+        /* for (var i = 0; i < $scope.data.listregions.length; i++) {
+ 
+           if (values.idRegion != " ") {
+             values.idRegion = parseInt($scope.data.listregions[i].idRegion);
+            values.idRegion = + $scope.data.listregions[i].idRegion;
             console.log(values.idRegion)
-          }
-        }*/
+ 
+           } else {
+             console.log(values.idRegion)
+           }
+         }*/
 
 
         for (var i = 0; i < $scope.data.listdepartements.length; i++) {
@@ -3076,7 +3326,7 @@ angular
         ApiAjoutClient.ajoutClient(values, etat).success(function (response) {
           $ionicLoading.hide();
           console.log(response)
-          
+
           if (response.reponse === 1) {
             $ionicPopup.show({
               title: "Infos",
@@ -3152,7 +3402,7 @@ angular
           console.log(err);
           $ionicLoading.hide();
         })
-      } else if( $scope.data.marche == " " && $scope.data.adresse == " "){
+      } else if ($scope.data.marche == " " && $scope.data.adresse == " ") {
         $ionicPopup.show({
           title: "Alert",
           template: "Veuillez renseigner un marche ou une adresse.",
@@ -3167,7 +3417,7 @@ angular
             }
           ]
         })
-      }else{
+      } else {
         $ionicPopup.show({
           title: "Alert",
           template: "Veuillez renseigner tous les champs du formulaire.",
@@ -3189,7 +3439,32 @@ angular
       console.log(values);
     }
   })
+  .controller("nouvelGrossisteCtrl", function (
+    $scope,
+    $state,
+    $ionicLoading,
+    ApiListClient,
+    ApiListRegions,
+    ApiListVilles,
+    ApiListMarches,
+    ApiListZones,
+    ApiListLocalite,
+    ApiListTypePointVente,
+    ApiListModePaiement,
+    ApiListGrossiste,
+    $cordovaGeolocation,
+    $cordovaCamera,
+    CodeGenere,
+    ApiAjoutClient,
+    $ionicPopup,
+    $filter,
+    ApiListDepartement
+  ) {
 
+
+
+
+  })
   .controller("ArticleCtrl", function (
     $scope,
     $state,
@@ -3696,7 +3971,7 @@ angular
     $filter,
     SendSms,
     ApiModificationDetailPDC,
-    
+
   ) {
     $scope.data = {};
     $scope.Erreur = function (message) {
@@ -3726,7 +4001,7 @@ angular
       $scope.data.grossistechoisit = null;
       $scope.data.dateAjout = formatNewDate.formatNewDate(),
 
-     $scope.data.listmodereglements = null;
+        $scope.data.listmodereglements = null;
       $scope.data.modereglementchoisit = null;
       $scope.data.motifchoisit = null;
       $scope.data.quantite = null;
@@ -3757,7 +4032,7 @@ angular
       console.log("--------------Artcile---------------");
       console.log(item);
       $scope.data.artcilechoisit = item.artcilechoisit
-   //   $scope.data.artcilechoisit.code = item.codeArticle
+      //   $scope.data.artcilechoisit.code = item.codeArticle
       console.log("--------------Quantite---------------");
       console.log(item.quantite);
       $scope.data.quantite = +item.quantite;
@@ -3799,7 +4074,7 @@ angular
               idMotif: +$scope.data.motifchoisit.idMotif,
               prix: +$scope.data.prix
             }
-           
+
 
             console.log('-----Objet to modif');
             console.log(ligneDetailTosend);
@@ -3831,7 +4106,7 @@ angular
 
                     $scope.edit = false;
                     $scope.data.motifchoisit = null;
-                    $scope.data.artcilechoisit =null;
+                    $scope.data.artcilechoisit = null;
                     $scope.data.quantite = null;
                     $scope.data.prix = null;
 
@@ -3849,7 +4124,7 @@ angular
                   }
                   else if (response.reponse == -10) {
                     console.log('-10')
-                    var user =$scope.data.user.prenom+" "+$scope.data.user.nom
+                    var user = $scope.data.user.prenom + " " + $scope.data.user.nom
                     $ionicPopup.show({
                       title: 'Alert ',
                       template: 'Le solde de votre plafond ne vous permet pas de faire cette prise de stock, veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.',
@@ -3863,26 +4138,26 @@ angular
                     });
 
                     try {
-                   
-                     SendSms.sendSMS("Le solde du plafond de "+user+" ne lui permet pas de faire cette prise de stock, " +
-                        "veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.", "775329312");
-                        SendSms.sendSMS("Le solde du plafond de "+user+" ne lui permet pas de faire cette prise de stock, " +
-                        "veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.", "776294380"); 
-                                         
-                     } catch (err) {
 
-                       $ionicPopup.show({
-                         title: 'Alert ',
-                         template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
-                         scope: $scope,
-                         buttons: [
-                           {
-                             text: 'OK',
-                             type: 'button-positive'
-                           }
-                         ]
-                       });
-                     }
+                      SendSms.sendSMS("Le solde du plafond de " + user + " ne lui permet pas de faire cette prise de stock, " +
+                        "veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.", "775329312");
+                      SendSms.sendSMS("Le solde du plafond de " + user + " ne lui permet pas de faire cette prise de stock, " +
+                        "veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.", "776294380");
+
+                    } catch (err) {
+
+                      $ionicPopup.show({
+                        title: 'Alert ',
+                        template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
+                        scope: $scope,
+                        buttons: [
+                          {
+                            text: 'OK',
+                            type: 'button-positive'
+                          }
+                        ]
+                      });
+                    }
                   }
                   else if (response.reponse == -20) {
                     console.log('-20')
@@ -3897,32 +4172,32 @@ angular
                         }
                       ]
                     });
-                   
-                    try {
-                    
-                      SendSms.sendSMS(
-                        "Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock." 
-                      , "775329312"); 
-                        
-                      SendSms.sendSMS(
-                        "Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock." 
-                      , "776294380");                 
-                     } catch (err) {
 
-                       $ionicPopup.show({
-                         title: 'Alert ',
-                         template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
-                         scope: $scope,
-                         buttons: [
-                           {
-                             text: 'OK',
-                             type: 'button-positive'
-                           }
-                         ]
-                       });
-                     }
+                    try {
+
+                      SendSms.sendSMS(
+                        "Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock."
+                        , "775329312");
+
+                      SendSms.sendSMS(
+                        "Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock."
+                        , "776294380");
+                    } catch (err) {
+
+                      $ionicPopup.show({
+                        title: 'Alert ',
+                        template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
+                        scope: $scope,
+                        buttons: [
+                          {
+                            text: 'OK',
+                            type: 'button-positive'
+                          }
+                        ]
+                      });
+                    }
                   }
-                   else {
+                  else {
                     $ionicPopup.show({
                       title: "Information",
                       template: '' + response.reponse,
@@ -3955,7 +4230,7 @@ angular
 
     $scope.annulerEdit = function () {
       $scope.edit = false;
-      $scope.data.artcilechoisit =null;
+      $scope.data.artcilechoisit = null;
       $scope.data.quantite = null;
       $scope.data.prix = null;
       for (var i = 0; i < $scope.data.detailsPDC.length; i++) {
@@ -4054,8 +4329,8 @@ angular
       if (response) {
         $scope.data.grossistes = response;
       }
-        console.log('-----------------------list article----------------------');
-        console.log(response);
+      console.log('-----------------------list article----------------------');
+      console.log(response);
     });
 
     $scope.getOptGrossiste = function (option) {
@@ -4160,273 +4435,257 @@ angular
 
     $scope.submit = function (action) {
 
-    
-          if ($scope.data.grossistechoisit && $scope.data.grossistechoisit.codeGrossiste) {
+
+      if ($scope.data.grossistechoisit && $scope.data.grossistechoisit.codeGrossiste) {
 
 
-            if ($scope.data.modereglementchoisit.libelle == "COMPTANT") {
-              $scope.data.delaipaiement = $scope.data.delaipaiement ? $scope.data.delaipaiement : 0;
+        if ($scope.data.modereglementchoisit.libelle == "COMPTANT") {
+          $scope.data.delaipaiement = $scope.data.delaipaiement ? $scope.data.delaipaiement : 0;
+        }
+
+        console.log('delai paiement', $scope.data.delaipaiement)
+        console.log('mode paiement', $scope.data.idModepaiement)
+        console.log($scope.data.modereglementchoisit)
+        console.log($scope.data.grossistechoisit)
+
+        var error = null;
+        error = (!$scope.data.delaipaiement || $scope.data.delaipaiement == 0) && $scope.data.modereglementchoisit.libelle == "CREDIT" ? "Veuillez rensseigner le delai de paiement"
+          : error;
+
+        $scope.data.idModepaiement = $scope.data.modereglementchoisit.idModepaiement;
+
+        if (!error) {
+
+          var values = {
+            codePDC: $scope.data.codePDC,
+            codeGrossiste: $scope.data.grossistechoisit.codeGrossiste,
+            dateAjout: formatNewDate.formatNewDate(),
+            idModepaiement: $scope.data.idModepaiement,
+            codeCommerciale: $scope.data.user.code,
+            isCanceled: 0,
+            idMotif: $scope.data.idMotif,
+            detailsPDC: $scope.data.detailsPDC,
+            delaiPaiement: $scope.data.delaipaiement
+          };
+
+          console.log("---------------------Value to submit--------------------");
+          console.log(values);
+
+          $ionicLoading.show({
+            content: "Loading",
+            animation: "fade-in",
+            showBackdrop: true,
+            maxWidth: 200,
+            showDelay: 0,
+            duration: 10000,
+          });
+          if (action == 'sauv') {
+
+            var prclocal = JSON.parse(localStorage.getItem('prclocal'));
+            if (!prclocal || prclocal.length == 0) {
+              prclocal = [];
             }
-
-            console.log('delai paiement', $scope.data.delaipaiement)
-            console.log('mode paiement', $scope.data.idModepaiement)
-            console.log($scope.data.modereglementchoisit)
-            console.log($scope.data.grossistechoisit)
-
-            var error = null;
-            error = (!$scope.data.delaipaiement || $scope.data.delaipaiement == 0) && $scope.data.modereglementchoisit.libelle == "CREDIT" ? "Veuillez rensseigner le delai de paiement"
-              : error;
-             
-            $scope.data.idModepaiement = $scope.data.modereglementchoisit.idModepaiement;
-
-            if (!error) {
-
-              var values = {
-                codePDC:$scope.data.codePDC,
-                codeGrossiste: $scope.data.grossistechoisit.codeGrossiste,
-                dateAjout: formatNewDate.formatNewDate(),
-                idModepaiement: $scope.data.idModepaiement,
-                codeCommerciale: $scope.data.user.code,
-                isCanceled: 0,
-                idMotif: $scope.data.idMotif,
-                detailsPDC: $scope.data.detailsPDC,
-                delaiPaiement: $scope.data.delaipaiement
-              };
-
-              console.log("---------------------Value to submit--------------------");
-              console.log(values);
-
-              $ionicLoading.show({
-                content: "Loading",
-                animation: "fade-in",
-                showBackdrop: true,
-                maxWidth: 200,
-                showDelay: 0,
-                duration: 10000,
-              });
-              if (action == 'sauv') {
-
-                var prclocal = JSON.parse(localStorage.getItem('prclocal'));
-                if (!prclocal || prclocal.length == 0) {
-                  prclocal = [];
+            values.clientchoisit = $scope.data.clientchoisit;
+            values.grossistechoisit = $scope.data.grossistechoisit;
+            values.montant = $scope.data.montant
+            values.local = true
+            prclocal.push(values);
+            localStorage.setItem('prclocal', JSON.stringify(prclocal));
+            $scope.initvar();
+            $ionicPopup.show({
+              title: "Infos",
+              template: "réussi",
+              scope: $scope,
+              buttons: [
+                {
+                  text: "Ok",
+                  type: "button-positive",
+                  onTap: function (e) {
+                    return true;
+                  }
+                },
+              ],
+            }).then(function (result) {
+              $state.transitionTo(
+                "app.prcs",
+                {},
+                {
+                  reload: true,
+                  inherit: true,
+                  notify: true,
                 }
-                values.clientchoisit = $scope.data.clientchoisit;
-                values.grossistechoisit = $scope.data.grossistechoisit;
-                values.montant = $scope.data.montant
-                values.local = true
-                prclocal.push(values);
-                localStorage.setItem('prclocal', JSON.stringify(prclocal));
-                $scope.initvar();
-                $ionicPopup.show({
-                  title: "Infos",
-                  template: "réussi",
-                  scope: $scope,
-                  buttons: [
-                    {
-                      text: "Ok",
-                      type: "button-positive",
-                      onTap: function (e) {
-                        return true;
-                      }
-                    },
-                  ],
-                }).then(function (result) {
-                  $state.transitionTo(
-                    "app.prcs",
-                    {},
-                    {
-                      reload: true,
-                      inherit: true,
-                      notify: true,
-                    }
-                  );
-                });
-                $ionicLoading.hide();
+              );
+            });
+            $ionicLoading.hide();
 
+          } else {
+
+            if (values.detailsPDC && values.detailsPDC.length > 0) {
+
+              values.dateAjout = formatNewDate.formatNewDate();
+
+
+              if (values.idModepaiement == "1" || values.idModepaiement == "2") {
+                values.idModepaiement = parseInt(values.idModepaiement);
               } else {
+                console.log("idModepaiement", values.idModepaiement)
+              }
+              var details = [];
 
-                if (values.detailsPDC && values.detailsPDC.length > 0) {
+              for (var i = 0; i < values.detailsPDC.length; i++) {
+                values.detailsPDC[i].isCanceled = values.detailsPDC[i].isCanceled ? 1 : 0;
 
-                  values.dateAjout = formatNewDate.formatNewDate();
-
-
-                  if (values.idModepaiement == "1" || values.idModepaiement == "2") {
-                    values.idModepaiement = parseInt(values.idModepaiement);
-                  } else {
-                    console.log("idModepaiement", values.idModepaiement)
-                  }
-                  var details = [];
-
-                  for (var i = 0; i < values.detailsPDC.length; i++) {
-                    values.detailsPDC[i].isCanceled = values.detailsPDC[i].isCanceled ? 1 : 0;
-
-                    if (values.detailsPDC[i].artcilechoisit.idArticle != " ") {
-                      values.detailsPDC[i].artcilechoisit.idArticle = parseInt(values.detailsPDC[i].artcilechoisit.idArticle);
-                      console.log("idArticle", values.detailsPDC[i].artcilechoisit.idArticle)
-                    } else {
-                      console.log("idArticle", values.detailsPDC[i].artcilechoisit.idArticle)
-                    }
-
-                    if (values.detailsPDC[i].artcilechoisit.prix != " ") {
-                      values.detailsPDC[i].artcilechoisit.prix = parseInt(values.detailsPDC[i].artcilechoisit.prix);
-                      console.log("prix", values.detailsPDC[i].artcilechoisit.prix)
-                    } else {
-                      console.log("prix", values.detailsPDC[i].artcilechoisit.prix)
-                    }
-                    details.push({
-                      codeDetail: values.detailsPDC[i].codeDetail,
-                      codeArticle:values.detailsPDC[i].codeArticle,
-                      prix       :values.detailsPDC[i].prix,   
-                      quantite   :values.detailsPDC[i].quantite,
-                      isCanceled :values.detailsPDC[i].isCanceled,
-                      idMotif    :values.detailsPDC[i].idMotif
-                    })
-
-
-                  }
-                  values.detailsPDC = details;
-                  
-            ApiAjoutPdc.ajoutPdc(values).success(
-                    function (response) {
-                      $ionicLoading.hide();
-                      console.log(response)
-                      if (response.reponse == 1) {
-                        $scope.initvar();
-                        $ionicPopup.show({
-                          title: "Infos",
-                          template: "réussi",
-                          scope: $scope,
-                          buttons: [
-                            {
-                              text: "Ok",
-                              type: "button-positive",
-                            },
-                          ],
-                        }).then(function (result) {
-                          $state.transitionTo(
-                            "app.pdcs",
-                            {},
-                            {
-                              reload: true,
-                              inherit: true,
-                              notify: true,
-                            }
-                          );
-                        });
-                      } else if (response.reponse == -41) {
-                        $ionicPopup.show({
-                          title: "Infos",
-                          template: "Impossible d'ajouter un prc sans details",
-                          scope: $scope,
-                          buttons: [
-                            {
-                              text: "Ok",
-                              type: "button-positive",
-                            },
-                          ],
-                        });
-                      }
-                      else if (response.reponse == -10) {
-                        console.log('-10')
-                        var user =$scope.data.user.prenom+" "+$scope.data.user.nom
-                        $ionicPopup.show({
-                          title: 'Alert ',
-                          template: 'Le solde de votre plafond ne vous permet pas de faire cette prise de stock, veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.',
-                          scope: $scope,
-                          buttons: [
-                            {
-                              text: 'OK',
-                              type: 'button-positive'
-                            }
-                          ]
-                        });
-
-                        try {
-                       
-                         SendSms.sendSMS("Le solde du plafond de "+user+" ne lui permet pas de faire cette prise de stock, " +
-                            "veuillez faire le point avec le(s) grossiste(s) pour qu'il puisse prendre à nouveau du stock.", "775329312");  
-                            SendSms.sendSMS("Le solde du plafond de "+user+" ne lui permet pas de faire cette prise de stock, " +
-                            "veuillez faire le point avec le(s) grossiste(s) pour qu'il puisse prendre à nouveau du stock.", "776294380");                  
-                         } catch (err) {
-
-                           $ionicPopup.show({
-                             title: 'Alert ',
-                             template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
-                             scope: $scope,
-                             buttons: [
-                               {
-                                 text: 'OK',
-                                 type: 'button-positive'
-                               }
-                             ]
-                           });
-                         }
-                      }
-                      else if (response.reponse == -20) {
-                        console.log('-20')
-                        $ionicPopup.show({
-                          title: 'Alert ',
-                          template: 'Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock.',
-                          scope: $scope,
-                          buttons: [
-                            {
-                              text: 'OK',
-                              type: 'button-positive'
-                            }
-                          ]
-                        });
-                      var grossisste  = ""+$scope.data.grossistechoisit.nom
-                       
-                        try {
-                        
-                          SendSms.sendSMS(
-                            "Le solde du plafond du gorssiste "+ grossisste+" ne lui permet de faire cette sortie de stock." 
-                          , "775329312");
-                          SendSms.sendSMS(
-                            "Le solde du plafond du gorssiste "+ grossisste+" ne lui permet de faire cette sortie de stock." 
-                          , "776294380");    
-                                         
-                         } catch (err) {
-
-                           $ionicPopup.show({
-                             title: 'Alert ',
-                             template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
-                             scope: $scope,
-                             buttons: [
-                               {
-                                 text: 'OK',
-                                 type: 'button-positive'
-                               }
-                             ]
-                           });
-                         }
-                      }
-                    },
-                    (error) => {
-                      $ionicLoading.hide();
-                    }
-                  );
+                if (values.detailsPDC[i].artcilechoisit.idArticle != " ") {
+                  values.detailsPDC[i].artcilechoisit.idArticle = parseInt(values.detailsPDC[i].artcilechoisit.idArticle);
+                  console.log("idArticle", values.detailsPDC[i].artcilechoisit.idArticle)
                 } else {
-                  $ionicLoading.hide();
-                  $ionicPopup.show({
-                    title: "Infos",
-                    template: "Impossible d'ajouter un prc sans details",
-                    scope: $scope,
-                    buttons: [
-                      {
-                        text: "Ok",
-                        type: "button-positive",
-                      },
-                    ],
-                  });
+                  console.log("idArticle", values.detailsPDC[i].artcilechoisit.idArticle)
                 }
+
+                if (values.detailsPDC[i].artcilechoisit.prix != " ") {
+                  values.detailsPDC[i].artcilechoisit.prix = parseInt(values.detailsPDC[i].artcilechoisit.prix);
+                  console.log("prix", values.detailsPDC[i].artcilechoisit.prix)
+                } else {
+                  console.log("prix", values.detailsPDC[i].artcilechoisit.prix)
+                }
+                details.push({
+                  codeDetail: values.detailsPDC[i].codeDetail,
+                  codeArticle: values.detailsPDC[i].codeArticle,
+                  prix: values.detailsPDC[i].prix,
+                  quantite: values.detailsPDC[i].quantite,
+                  isCanceled: values.detailsPDC[i].isCanceled,
+                  idMotif: values.detailsPDC[i].idMotif
+                })
+
 
               }
+              values.detailsPDC = details;
+
+              ApiAjoutPdc.ajoutPdc(values).success(
+                function (response) {
+                  $ionicLoading.hide();
+                  console.log(response)
+                  if (response.reponse == 1) {
+                    $scope.initvar();
+                    $ionicPopup.show({
+                      title: "Infos",
+                      template: "réussi",
+                      scope: $scope,
+                      buttons: [
+                        {
+                          text: "Ok",
+                          type: "button-positive",
+                        },
+                      ],
+                    }).then(function (result) {
+                      $state.transitionTo(
+                        "app.pdcs",
+                        {},
+                        {
+                          reload: true,
+                          inherit: true,
+                          notify: true,
+                        }
+                      );
+                    });
+                  } else if (response.reponse == -41) {
+                    $ionicPopup.show({
+                      title: "Infos",
+                      template: "Impossible d'ajouter un prc sans details",
+                      scope: $scope,
+                      buttons: [
+                        {
+                          text: "Ok",
+                          type: "button-positive",
+                        },
+                      ],
+                    });
+                  }
+                  else if (response.reponse == -10) {
+                    console.log('-10')
+                    var user = $scope.data.user.prenom + " " + $scope.data.user.nom
+                    $ionicPopup.show({
+                      title: 'Alert ',
+                      template: 'Le solde de votre plafond ne vous permet pas de faire cette prise de stock, veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.',
+                      scope: $scope,
+                      buttons: [
+                        {
+                          text: 'OK',
+                          type: 'button-positive'
+                        }
+                      ]
+                    });
+
+                    try {
+
+                      SendSms.sendSMS("Le solde du plafond de " + user + " ne lui permet pas de faire cette prise de stock, " +
+                        "veuillez faire le point avec le(s) grossiste(s) pour qu'il puisse prendre à nouveau du stock.", "775329312");
+                      SendSms.sendSMS("Le solde du plafond de " + user + " ne lui permet pas de faire cette prise de stock, " +
+                        "veuillez faire le point avec le(s) grossiste(s) pour qu'il puisse prendre à nouveau du stock.", "776294380");
+                    } catch (err) {
+
+                      $ionicPopup.show({
+                        title: 'Alert ',
+                        template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
+                        scope: $scope,
+                        buttons: [
+                          {
+                            text: 'OK',
+                            type: 'button-positive'
+                          }
+                        ]
+                      });
+                    }
+                  }
+                  else if (response.reponse == -20) {
+                    console.log('-20')
+                    $ionicPopup.show({
+                      title: 'Alert ',
+                      template: 'Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock.',
+                      scope: $scope,
+                      buttons: [
+                        {
+                          text: 'OK',
+                          type: 'button-positive'
+                        }
+                      ]
+                    });
+                    var grossisste = "" + $scope.data.grossistechoisit.nom
+
+                    try {
+
+                      SendSms.sendSMS(
+                        "Le solde du plafond du gorssiste " + grossisste + " ne lui permet de faire cette sortie de stock."
+                        , "775329312");
+                      SendSms.sendSMS(
+                        "Le solde du plafond du gorssiste " + grossisste + " ne lui permet de faire cette sortie de stock."
+                        , "776294380");
+
+                    } catch (err) {
+
+                      $ionicPopup.show({
+                        title: 'Alert ',
+                        template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
+                        scope: $scope,
+                        buttons: [
+                          {
+                            text: 'OK',
+                            type: 'button-positive'
+                          }
+                        ]
+                      });
+                    }
+                  }
+                },
+                (error) => {
+                  $ionicLoading.hide();
+                }
+              );
             } else {
               $ionicLoading.hide();
               $ionicPopup.show({
                 title: "Infos",
-                template: "Veuillez rensseigner le delai de paiement",
+                template: "Impossible d'ajouter un prc sans details",
                 scope: $scope,
                 buttons: [
                   {
@@ -4435,23 +4694,39 @@ angular
                   },
                 ],
               });
-
             }
 
-          } else {
-            $ionicLoading.hide();
-            $ionicPopup.show({
-              title: "Infos",
-              template: "Veuillez choisir un grosssite",
-              scope: $scope,
-              buttons: [
-                {
-                  text: "Ok",
-                  type: "button-positive",
-                },
-              ],
-            });
           }
+        } else {
+          $ionicLoading.hide();
+          $ionicPopup.show({
+            title: "Infos",
+            template: "Veuillez rensseigner le delai de paiement",
+            scope: $scope,
+            buttons: [
+              {
+                text: "Ok",
+                type: "button-positive",
+              },
+            ],
+          });
+
+        }
+
+      } else {
+        $ionicLoading.hide();
+        $ionicPopup.show({
+          title: "Infos",
+          template: "Veuillez choisir un grosssite",
+          scope: $scope,
+          buttons: [
+            {
+              text: "Ok",
+              type: "button-positive",
+            },
+          ],
+        });
+      }
 
     };
 
@@ -4526,6 +4801,7 @@ angular
         showDelay: 0,
         duration: 10000,
       });
+
       ApiListPrc.getListPrc(codeClient).success(
         function (response) {
           $ionicLoading.hide();
@@ -4533,6 +4809,7 @@ angular
             console.log('------PRC LOCAL');
             console.log($scope.data.prcs)
             $scope.data.prcs = $scope.data.prcs.concat(response);
+
 
             console.log('------PRC EN LIGN');
             console.log(response)
@@ -4876,7 +5153,7 @@ angular
     };
   })
 
- 
+
 
   .controller("NewPrcCtrl", function (
     $scope,
@@ -5290,7 +5567,7 @@ angular
                       }
                       else if (response.reponse == -10) {
                         console.log('-10')
-                        var user =$scope.data.user.prenom+" "+$scope.data.user.nom
+                        var user = $scope.data.user.prenom + " " + $scope.data.user.nom
                         $ionicPopup.show({
                           title: 'Alert ',
                           template: 'Le solde de votre plafond ne vous permet pas de faire cette prise de stock, veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.',
@@ -5304,25 +5581,25 @@ angular
                         });
 
                         try {
-                       
-                         SendSms.sendSMS("Le solde du plafond de "+user+" ne lui permet pas de faire cette prise de stock, " +
-                            "veuillez faire le point avec le(s) grossiste(s) pour qu'il puisse prendre à nouveau du stock.", "775329312");  
-                            SendSms.sendSMS("Le solde du plafond de "+user+" ne lui permet pas de faire cette prise de stock, " +
-                            "veuillez faire le point avec le(s) grossiste(s) pour qu'il puisse prendre à nouveau du stock.", "776294380");                  
-                         } catch (err) {
 
-                           $ionicPopup.show({
-                             title: 'Alert ',
-                             template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
-                             scope: $scope,
-                             buttons: [
-                               {
-                                 text: 'OK',
-                                 type: 'button-positive'
-                               }
-                             ]
-                           });
-                         }
+                          SendSms.sendSMS("Le solde du plafond de " + user + " ne lui permet pas de faire cette prise de stock, " +
+                            "veuillez faire le point avec le(s) grossiste(s) pour qu'il puisse prendre à nouveau du stock.", "775329312");
+                          SendSms.sendSMS("Le solde du plafond de " + user + " ne lui permet pas de faire cette prise de stock, " +
+                            "veuillez faire le point avec le(s) grossiste(s) pour qu'il puisse prendre à nouveau du stock.", "776294380");
+                        } catch (err) {
+
+                          $ionicPopup.show({
+                            title: 'Alert ',
+                            template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
+                            scope: $scope,
+                            buttons: [
+                              {
+                                text: 'OK',
+                                type: 'button-positive'
+                              }
+                            ]
+                          });
+                        }
                       }
                       else if (response.reponse == -20) {
                         console.log('-20')
@@ -5337,31 +5614,31 @@ angular
                             }
                           ]
                         });
-                      var grossisste  = ""+$scope.data.grossistechoisit.nom
-                       
-                        try {
-                        
-                          SendSms.sendSMS(
-                            "Le solde du plafond du gorssiste "+ grossisste+" ne lui permet de faire cette sortie de stock." 
-                          , "775329312");
-                          SendSms.sendSMS(
-                            "Le solde du plafond du gorssiste "+ grossisste+" ne lui permet de faire cette sortie de stock." 
-                          , "776294380");    
-                                         
-                         } catch (err) {
+                        var grossisste = "" + $scope.data.grossistechoisit.nom
 
-                           $ionicPopup.show({
-                             title: 'Alert ',
-                             template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
-                             scope: $scope,
-                             buttons: [
-                               {
-                                 text: 'OK',
-                                 type: 'button-positive'
-                               }
-                             ]
-                           });
-                         }
+                        try {
+
+                          SendSms.sendSMS(
+                            "Le solde du plafond du gorssiste " + grossisste + " ne lui permet de faire cette sortie de stock."
+                            , "775329312");
+                          SendSms.sendSMS(
+                            "Le solde du plafond du gorssiste " + grossisste + " ne lui permet de faire cette sortie de stock."
+                            , "776294380");
+
+                        } catch (err) {
+
+                          $ionicPopup.show({
+                            title: 'Alert ',
+                            template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
+                            scope: $scope,
+                            buttons: [
+                              {
+                                text: 'OK',
+                                type: 'button-positive'
+                              }
+                            ]
+                          });
+                        }
                       }
                     },
                     (error) => {
@@ -5639,7 +5916,7 @@ angular
                   }
                   else if (response.reponse == -10) {
                     console.log('-10')
-                    var user =$scope.data.user.prenom+" "+$scope.data.user.nom
+                    var user = $scope.data.user.prenom + " " + $scope.data.user.nom
                     $ionicPopup.show({
                       title: 'Alert ',
                       template: 'Le solde de votre plafond ne vous permet pas de faire cette prise de stock, veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.',
@@ -5653,26 +5930,26 @@ angular
                     });
 
                     try {
-                   
-                     SendSms.sendSMS("Le solde du plafond de "+user+" ne lui permet pas de faire cette prise de stock, " +
-                        "veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.", "775329312");
-                        SendSms.sendSMS("Le solde du plafond de "+user+" ne lui permet pas de faire cette prise de stock, " +
-                        "veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.", "776294380"); 
-                                         
-                     } catch (err) {
 
-                       $ionicPopup.show({
-                         title: 'Alert ',
-                         template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
-                         scope: $scope,
-                         buttons: [
-                           {
-                             text: 'OK',
-                             type: 'button-positive'
-                           }
-                         ]
-                       });
-                     }
+                      SendSms.sendSMS("Le solde du plafond de " + user + " ne lui permet pas de faire cette prise de stock, " +
+                        "veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.", "775329312");
+                      SendSms.sendSMS("Le solde du plafond de " + user + " ne lui permet pas de faire cette prise de stock, " +
+                        "veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.", "776294380");
+
+                    } catch (err) {
+
+                      $ionicPopup.show({
+                        title: 'Alert ',
+                        template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
+                        scope: $scope,
+                        buttons: [
+                          {
+                            text: 'OK',
+                            type: 'button-positive'
+                          }
+                        ]
+                      });
+                    }
                   }
                   else if (response.reponse == -20) {
                     console.log('-20')
@@ -5687,32 +5964,32 @@ angular
                         }
                       ]
                     });
-                   
-                    try {
-                    
-                      SendSms.sendSMS(
-                        "Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock." 
-                      , "775329312"); 
-                        
-                      SendSms.sendSMS(
-                        "Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock." 
-                      , "776294380");                 
-                     } catch (err) {
 
-                       $ionicPopup.show({
-                         title: 'Alert ',
-                         template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
-                         scope: $scope,
-                         buttons: [
-                           {
-                             text: 'OK',
-                             type: 'button-positive'
-                           }
-                         ]
-                       });
-                     }
+                    try {
+
+                      SendSms.sendSMS(
+                        "Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock."
+                        , "775329312");
+
+                      SendSms.sendSMS(
+                        "Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock."
+                        , "776294380");
+                    } catch (err) {
+
+                      $ionicPopup.show({
+                        title: 'Alert ',
+                        template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
+                        scope: $scope,
+                        buttons: [
+                          {
+                            text: 'OK',
+                            type: 'button-positive'
+                          }
+                        ]
+                      });
+                    }
                   }
-                  else  {
+                  else {
                     $ionicPopup.show({
                       title: "Information",
                       template: '' + response.msg,
@@ -6182,7 +6459,7 @@ angular
                   }
                   else if (response.reponse == -10) {
                     console.log('-10')
-                    var user =$scope.data.user.prenom+" "+$scope.data.user.nom
+                    var user = $scope.data.user.prenom + " " + $scope.data.user.nom
                     $ionicPopup.show({
                       title: 'Alert ',
                       template: 'Le solde de votre plafond ne vous permet pas de faire cette prise de stock, veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.',
@@ -6196,26 +6473,26 @@ angular
                     });
 
                     try {
-                   
-                     SendSms.sendSMS("Le solde du plafond de "+user+" ne lui permet pas de faire cette prise de stock, " +
-                        "veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.", "775329312");
-                        SendSms.sendSMS("Le solde du plafond de "+user+" ne lui permet pas de faire cette prise de stock, " +
-                        "veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.", "776294380"); 
-                                         
-                     } catch (err) {
 
-                       $ionicPopup.show({
-                         title: 'Alert ',
-                         template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
-                         scope: $scope,
-                         buttons: [
-                           {
-                             text: 'OK',
-                             type: 'button-positive'
-                           }
-                         ]
-                       });
-                     }
+                      SendSms.sendSMS("Le solde du plafond de " + user + " ne lui permet pas de faire cette prise de stock, " +
+                        "veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.", "775329312");
+                      SendSms.sendSMS("Le solde du plafond de " + user + " ne lui permet pas de faire cette prise de stock, " +
+                        "veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.", "776294380");
+
+                    } catch (err) {
+
+                      $ionicPopup.show({
+                        title: 'Alert ',
+                        template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
+                        scope: $scope,
+                        buttons: [
+                          {
+                            text: 'OK',
+                            type: 'button-positive'
+                          }
+                        ]
+                      });
+                    }
                   }
                   else if (response.reponse == -20) {
                     console.log('-20')
@@ -6230,32 +6507,32 @@ angular
                         }
                       ]
                     });
-                   
-                    try {
-                    
-                      SendSms.sendSMS(
-                        "Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock." 
-                      , "775329312"); 
-                        
-                      SendSms.sendSMS(
-                        "Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock." 
-                      , "776294380");                 
-                     } catch (err) {
 
-                       $ionicPopup.show({
-                         title: 'Alert ',
-                         template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
-                         scope: $scope,
-                         buttons: [
-                           {
-                             text: 'OK',
-                             type: 'button-positive'
-                           }
-                         ]
-                       });
-                     }
+                    try {
+
+                      SendSms.sendSMS(
+                        "Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock."
+                        , "775329312");
+
+                      SendSms.sendSMS(
+                        "Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock."
+                        , "776294380");
+                    } catch (err) {
+
+                      $ionicPopup.show({
+                        title: 'Alert ',
+                        template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
+                        scope: $scope,
+                        buttons: [
+                          {
+                            text: 'OK',
+                            type: 'button-positive'
+                          }
+                        ]
+                      });
+                    }
                   }
-                   else {
+                  else {
                     $ionicPopup.show({
                       title: "Information",
                       template: '' + response.reponse,
@@ -7438,6 +7715,428 @@ angular
 
 
   })
+  /*================planning==================== */
+  .controller("PlanningCtrl", function (
+    $scope,
+    $state,
+    $ionicLoading,
+    ApiListPrc,
+    ApiDetailPrc,
+    ApiAjoutPrc,
+    ApiListClient,
+    ApiListMotif,
+    ApiListArticle,
+    $ionicPopup,
+    CodeGenere,
+    ApiListGrossiste,
+    ApiAjoutPdsFromRecap,
+    SendSms,
+    $filter,
+    ApiAjoutPrc
+
+  ) {
+    console.log('--------planning-------');
+    $scope.goToDetailsPlanning = function () {
+
+      $state.transitionTo(
+        "app.details-planning",
+        {},
+        {
+          reload: true,
+          inherit: true,
+          notify: true,
+        }
+      );
+    };
+    $scope.synchroPRC = function () {
+
+
+      $ionicLoading.show({
+        content: "Loading",
+        animation: "fade-in",
+        showBackdrop: true,
+        maxWidth: 200,
+        showDelay: 0,
+        duration: 10000,
+      });
+      var compte = 0;
+      var totalItem = $scope.data.prcs.length;
+      for (var i = 0; i < $scope.data.prcs.length; i++) {
+        var values = {
+          codePRC: $scope.data.prcs[i].codePRC,
+          codeClient: $scope.data.prcs[i].codeClient,
+          dateAjout: $scope.data.prcs[i].dateAjout,
+          idModepaiement: $scope.data.prcs[i].idModepaiement,
+          codeCommerciale: $scope.data.prcs[i].codeCommerciale,
+          isLoaded: $scope.data.prcs[i].isLoaded,
+          isCanceled: $scope.data.prcs[i].isCanceled,
+          idMotif: $scope.data.prcs[i].idMotif,
+          detailsPRC: $scope.data.prcs[i].detailsPRC
+        };
+        console.log("---------------------Value to submit--------------------");
+        console.log(values);
+        ApiAjoutPrc.ajoutPrc(values).success(
+          function (response) {
+            console.log(response);
+
+            if (response.reponse == 1) {
+              compte = compte + 1;
+              var searchPrc = $filter('filter')($scope.data.prcs, { codePRC: values.codePRC });
+              console.log('------PRC to delet');
+              console.log(searchPrc);
+              if (searchPrc && searchPrc.length === 1) {
+                var prcLocal = searchPrc[0];
+                console.log('------PRC to delet');
+                console.log(prcLocal);
+                $scope.data.prcstmp.splice(prcLocal, 1);
+
+                localStorage.setItem('prclocal', JSON.stringify($scope.data.prcstmp))
+
+                console.log(compte)
+                console.log($scope.data.prcs.length)
+
+                if (compte === totalItem) {
+                  $scope.data.prcs = [];
+                  $ionicLoading.hide();
+                  $state.transitionTo(
+                    "app.prcs",
+                    {},
+                    {
+                      reload: true,
+                      inherit: true,
+                      notify: true,
+                    }
+                  );
+
+                }
+              }
+
+            }
+
+
+          },
+          (error) => {
+            erreur = 0;
+            $ionicLoading.hide();
+          }
+        );
+
+      }
+
+
+
+    };
+  })
+  /*=================planning===================*/
+  .controller("detailsPlanningCtrl", function (
+    $scope,
+    $state,
+    $ionicLoading,
+    ApiListPrc,
+    ApiDetailPrc,
+    ApiAjoutPrc,
+    ApiListClient,
+    ApiListMotif,
+    ApiListArticle,
+    $ionicPopup,
+    CodeGenere,
+    ApiListGrossiste,
+    ApiAjoutPdsFromRecap,
+    SendSms,
+    $filter,
+    ApiAjoutPrc
+
+  ) {
+    console.log('-------- details planning-------');
+
+  })
+
+  .controller("detailsSoleGrossisteCtrl", function (
+    $scope,
+    $state,
+    $ionicLoading,
+    ApiListPrc,
+    ApiDetailPrc,
+    ApiAjoutPrc,
+    ApiListClient,
+    ApiListMotif,
+    ApiListArticle,
+    $ionicPopup,
+    CodeGenere,
+    ApiListGrossiste,
+    ApiAjoutPdsFromRecap,
+    SendSms,
+    $filter,
+    ApiListSoldeAgent,
+    ApiAjoutPrc
+
+  ) {
+    console.log('-------- details Solde Grossiste-------');
+
+    $scope.initvar = function () {
+      $scope.data.codeChefzone = localStorage.getItem('codeChefzone');
+      var user = localStorage.getItem('user');
+      $scope.data.user = JSON.parse(user);
+
+      $scope.data.detailsSoldeAgent = [];
+
+      var codeChefzone = { "codeChefzone": $scope.data.codeChefzone };
+
+      $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+      console.log('-----------------------Detail Solde Grossiste ---------------------');
+      console.log(codeChefzone);
+      ApiListSoldeAgent.ListSoldeAgent(codeChefzone).
+        success(function (response) {
+          $ionicLoading.hide();
+          if (response) {
+            $scope.data.detailsSoldeAgent = response;
+          }
+          console.log('-----------------------Detail Solde Grossiste ---------------------');
+          console.log(response);
+        }, error => {
+          $ionicLoading.hide();
+        });
+    }
+    $scope.initvar();
+
+  })
+
+  .controller("detailsSoleAgentCtrl", function (
+    $scope,
+    $state,
+    $ionicLoading,
+    ApiListPrc,
+    ApiDetailPrc,
+    ApiAjoutPrc,
+    ApiListClient,
+    ApiListMotif,
+    ApiListArticle,
+    $ionicPopup,
+    CodeGenere,
+    ApiListGrossiste,
+    ApiAjoutPdsFromRecap,
+    SendSms,
+    $filter,
+    ApiListSoldeAgent,
+    ApiAjoutPrc
+
+  ) {
+    console.log('-------- details Solde Agent-------');
+    $scope.initvar = function () {
+      $scope.data.codeChefzone = localStorage.getItem('codeChefzone');
+      var user = localStorage.getItem('user');
+      $scope.data.user = JSON.parse(user);
+
+      $scope.data.detailsSoldeAgent = [];
+
+      var codeChefzone = { "codeChefzone": $scope.data.codeChefzone };
+
+      $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+      console.log('-----------------------Detail Solde Agent ---------------------');
+      console.log(codeChefzone);
+      ApiListSoldeAgent.ListSoldeAgent(codeChefzone).
+        success(function (response) {
+          $ionicLoading.hide();
+          if (response) {
+            $scope.data.detailsSoldeAgent = response;
+          }
+          console.log('-----------------------Detail Solde Agent ---------------------');
+          console.log(response);
+        }, error => {
+          $ionicLoading.hide();
+        });
+    }
+    $scope.initvar();
+
+  })
+  /*+++++++++++++++++++consultation Sole++++++++++++++++++++++++++*/
+  .controller("ConsultationSoleCtrl", function (
+    $scope,
+    $state,
+    $ionicLoading,
+    ApiListPrc,
+    ApiDetailPrc,
+    ApiAjoutPrc,
+    ApiListGrossisteChefZone,
+    ApiListAgentChefZone,
+    ApiListClient,
+    ApiListMotif,
+    ApiListArticle,
+    $ionicPopup,
+    CodeGenere,
+    ApiListGrossiste,
+    ApiAjoutPdsFromRecap,
+    SendSms,
+    $filter,
+    ApiAjoutPrc
+
+  ) {
+    console.log('--------consultation sole-------');
+
+    $scope.initvar = function () {
+      $scope.data.user = JSON.parse(localStorage.getItem('user'));
+      $scope.data.client = JSON.parse(localStorage.getItem('clientEdit'));
+
+      $scope.data.listGrossisteChefZones = [];
+      $scope.data.GrossisteChefZonechoisit = null;
+
+      $scope.data.listAgentChefZones = [];
+      $scope.data.AgentChefZonechoisit = null;
+
+      $scope.data.codeClient = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.codeClient : null;
+      $scope.data.nom = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.nom : null;
+      $scope.data.adresse = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.adresse : null;
+      $scope.data.telephone = $scope.data.client && $scope.data.client.codeClient ? parseInt($scope.data.client.telephone) : null;
+      $scope.data.telephone2 = $scope.data.client && $scope.data.client.codeClient ? parseInt($scope.data.client.telephone2) : null;
+      $scope.data.marche = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.marche : null;
+      $scope.data.email = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.email : null;
+      $scope.data.photo = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.photo : null;
+      $scope.data.delaiPaiement = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.delaiPaiement : null;
+      $scope.data.latitude = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.position.split(',')[0] : 0.0;
+      $scope.data.longitude = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.position.split(',')[1] : 0.0;
+      $scope.data.position = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.position : null;
+    };
+
+    $scope.initvar();
+    $scope.getOptGrossiste = function (option) {
+      return option;
+    };
+
+    $scope.getOptAgent = function (option) {
+      return option;
+    };
+
+    $scope.selectGrossiste = function () {
+      console.log('-----Liste Grossiste');
+      ApiListGrossisteChefZone.ListGrossisteChefZone(codeChefzone)
+        .success(function (reponse) {
+          console.log('-----Liste Grossiste Chef Zone');
+          $scope.data.listGrossisteChefZones = reponse;
+          // var grossisteChefZone = { codeChefzone: $scope.data.GrossisteChefZonechoisit.codeChefzone }
+          console.log(grossisteChefZone)
+          console.log(reponse)
+
+        })
+    }
+
+    $scope.selectAgent = function () {
+      console.log('-----Liste Agent');
+      ApiListAgentChefZone.ListAgentChefZone(codeChefzone)
+        .success(function (reponse) {
+          console.log('-----Liste Agent Chef Zone');
+          $scope.data.listAgentChefZones = reponse;
+          //  var agentChefZone = { codeChefzone: $scope.data.AgentChefZonechoisit.codeChefzone }
+          console.log(agentChefZone)
+          console.log(reponse)
+
+        })
+    }
+
+    $scope.goToDetailsSoleGrossiste = function () {
+
+      $state.transitionTo(
+        "app.details-soleGrossiste",
+        {},
+        {
+          reload: true,
+          inherit: true,
+          notify: true,
+        }
+      );
+    };
+
+    $scope.goToDetailsSoleAgent = function () {
+
+      $state.transitionTo(
+        "app.details-soleAgent",
+        {},
+        {
+          reload: true,
+          inherit: true,
+          notify: true,
+        }
+      );
+    };
+    $scope.synchroPRC = function () {
+
+
+      $ionicLoading.show({
+        content: "Loading",
+        animation: "fade-in",
+        showBackdrop: true,
+        maxWidth: 200,
+        showDelay: 0,
+        duration: 10000,
+      });
+      var compte = 0;
+      var totalItem = $scope.data.prcs.length;
+      for (var i = 0; i < $scope.data.prcs.length; i++) {
+        var values = {
+          codePRC: $scope.data.prcs[i].codePRC,
+          codeClient: $scope.data.prcs[i].codeClient,
+          dateAjout: $scope.data.prcs[i].dateAjout,
+          idModepaiement: $scope.data.prcs[i].idModepaiement,
+          codeCommerciale: $scope.data.prcs[i].codeCommerciale,
+          isLoaded: $scope.data.prcs[i].isLoaded,
+          isCanceled: $scope.data.prcs[i].isCanceled,
+          idMotif: $scope.data.prcs[i].idMotif,
+          detailsPRC: $scope.data.prcs[i].detailsPRC
+        };
+        console.log("---------------------Value to submit--------------------");
+        console.log(values);
+        ApiAjoutPrc.ajoutPrc(values).success(
+          function (response) {
+            console.log(response);
+
+            if (response.reponse == 1) {
+              compte = compte + 1;
+              var searchPrc = $filter('filter')($scope.data.prcs, { codePRC: values.codePRC });
+              console.log('------PRC to delet');
+              console.log(searchPrc);
+              if (searchPrc && searchPrc.length === 1) {
+                var prcLocal = searchPrc[0];
+                console.log('------PRC to delet');
+                console.log(prcLocal);
+                $scope.data.prcstmp.splice(prcLocal, 1);
+
+                localStorage.setItem('prclocal', JSON.stringify($scope.data.prcstmp))
+
+                console.log(compte)
+                console.log($scope.data.prcs.length)
+
+                if (compte === totalItem) {
+                  $scope.data.prcs = [];
+                  $ionicLoading.hide();
+                  $state.transitionTo(
+                    "app.prcs",
+                    {},
+                    {
+                      reload: true,
+                      inherit: true,
+                      notify: true,
+                    }
+                  );
+
+                }
+              }
+
+            }
+
+
+          },
+          (error) => {
+            erreur = 0;
+            $ionicLoading.hide();
+          }
+        );
+
+      }
+
+
+
+    };
+  })
+  /*++++++++++++++++++++++consultation sole+++++++++++++++++++++++*/
 
   .controller("EnvoiCtrl", function (
     $scope,
@@ -8433,7 +9132,7 @@ angular
               SendSms.sendSMS(MessageGlobal, "775329312");
               SendSms.sendSMS(MessageGlobal, "776726045");
               SendSms.sendSMS(MessageGlobal, "776294380");
-              
+
               localStorage.setItem("pds", JSON.stringify($scope.data.pds));
 
               $scope.code = "attente";
@@ -8753,8 +9452,8 @@ angular
                 );
               }
               else if (response.reponse == -10) {
-                var utilisateur = $scope.data.user.prenom+" "+$scope.data.user.nom+"/ "+$scope.data.user.telephone
-                console.log("Le client=========+>",client, $scope.data.clientchoisit.telephone)
+                var utilisateur = $scope.data.user.prenom + " " + $scope.data.user.nom + "/ " + $scope.data.user.telephone
+                console.log("Le client=========+>", client, $scope.data.clientchoisit.telephone)
                 $ionicPopup.show({
                   title: 'Alert ',
                   template: 'Le solde de votre plafond ne vous permet pas de faire cette prise de stock, veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.',
@@ -8767,35 +9466,35 @@ angular
                   ]
                 });
                 try {
-                
-                 SendSms.sendSMS(
-                    "Le solde du plafond de "+utilisateur+" ne lui permet pas de faire cette prise de stock, " +
-                    "veuillez faire le point avec le(s) grossiste(s) pour qu'il puisse prendre à nouveau du stock.", "776726045");
-                    SendSms.sendSMS(
-                      "Le solde du plafond de "+utilisateur+" ne lui permet pas de faire cette prise de stock, " +
-                      "veuillez faire le point avec le(s) grossiste(s) pour qu'il puisse prendre à nouveau du stock.", "775329312");
-                      SendSms.sendSMS(
-                        "Le solde du plafond de "+utilisateur+" ne lui permet pas de faire cette prise de stock, " +
-                        "veuillez faire le point avec le(s) grossiste(s) pour qu'il puisse prendre à nouveau du stock.", "776294380");     
-                                 
-                 } catch (err) {
 
-                
-                   $ionicPopup.show({
-                     title: 'Alert ',
-                     template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
-                     scope: $scope,
-                     buttons: [
-                       {
-                         text: 'OK',
-                         type: 'button-positive'
-                       }
-                     ]
-                   });
-                 }
+                  SendSms.sendSMS(
+                    "Le solde du plafond de " + utilisateur + " ne lui permet pas de faire cette prise de stock, " +
+                    "veuillez faire le point avec le(s) grossiste(s) pour qu'il puisse prendre à nouveau du stock.", "776726045");
+                  SendSms.sendSMS(
+                    "Le solde du plafond de " + utilisateur + " ne lui permet pas de faire cette prise de stock, " +
+                    "veuillez faire le point avec le(s) grossiste(s) pour qu'il puisse prendre à nouveau du stock.", "775329312");
+                  SendSms.sendSMS(
+                    "Le solde du plafond de " + utilisateur + " ne lui permet pas de faire cette prise de stock, " +
+                    "veuillez faire le point avec le(s) grossiste(s) pour qu'il puisse prendre à nouveau du stock.", "776294380");
+
+                } catch (err) {
+
+
+                  $ionicPopup.show({
+                    title: 'Alert ',
+                    template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
+                    scope: $scope,
+                    buttons: [
+                      {
+                        text: 'OK',
+                        type: 'button-positive'
+                      }
+                    ]
+                  });
+                }
               }
               else if (response.reponse == -20) {
-                var grossisste  = ""+$scope.data.grossistechoisit.nom
+                var grossisste = "" + $scope.data.grossistechoisit.nom
                 $ionicPopup.show({
                   title: 'Alert ',
                   template: 'Le solde du plafond de ce grossiste ne lui permet de faire cette sortie de stock.',
@@ -8808,19 +9507,19 @@ angular
                   ]
                 });
                 try {
-                
+
                   SendSms.sendSMS(
-                    "Le solde du plafond du grossiste "+ grossisste +" ne lui permet pas de faire cette sortie de stock." 
-                  , "776726045");    
-                     
+                    "Le solde du plafond du grossiste " + grossisste + " ne lui permet pas de faire cette sortie de stock."
+                    , "776726045");
+
                   SendSms.sendSMS(
-                    "Le solde du plafond du grossiste "+ grossisste +" ne lui permet pas de faire cette sortie de stock." 
-                  , "775329312");      
-                     
+                    "Le solde du plafond du grossiste " + grossisste + " ne lui permet pas de faire cette sortie de stock."
+                    , "775329312");
+
                   SendSms.sendSMS(
-                    "Le solde du plafond du grossiste "+ grossisste +" ne lui permet pas de faire cette sortie de stock." 
-                  , "776294380");                     
-                 } catch (err) {
+                    "Le solde du plafond du grossiste " + grossisste + " ne lui permet pas de faire cette sortie de stock."
+                    , "776294380");
+                } catch (err) {
 
                   $ionicPopup.show({
                     title: 'Alert ',
@@ -8833,19 +9532,19 @@ angular
                       }
                     ]
                   });
-               
-                   $ionicPopup.show({
-                     title: 'Alert ',
-                     template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
-                     scope: $scope,
-                     buttons: [
-                       {
-                         text: 'OK',
-                         type: 'button-positive'
-                       }
-                     ]
-                   });
-                 }
+
+                  $ionicPopup.show({
+                    title: 'Alert ',
+                    template: 'Erreur lors du traitement. code erreur: MX2020. Veuillez Contacter votre administrateur svp',
+                    scope: $scope,
+                    buttons: [
+                      {
+                        text: 'OK',
+                        type: 'button-positive'
+                      }
+                    ]
+                  });
+                }
               }
               else {
                 $ionicPopup.show({
@@ -10216,7 +10915,7 @@ angular
     $scope.testPrint = function () {
 
       var image = '<div style="text-align: center">' +
-        '<img src="./img/poultrade.png">' +
+        '<img src="./img/agroline.png">' +
         '</div>';
 
       var enteteComm = '' +
@@ -10286,7 +10985,7 @@ angular
       style = style + "</style>";
 
       var image = '<div style="text-align: center">' +
-        '<img src="./img/poultrade.png">' +
+        '<img src="./img/agroline.png">' +
         '</div>';
       //<h2 style="text-align: center;">Facture agroline</h2>
       var enteteComm = '' +
@@ -11023,7 +11722,7 @@ angular
             SendSms.sendSMS(MessageGlobal, "775329312");
             SendSms.sendSMS(MessageGlobal, "776726045");
             SendSms.sendSMS(MessageGlobal, "776294380");
-            
+
             localStorage.setItem("pdstodecharge", JSON.stringify(values));
 
             localStorage.setItem("pdstodechargecode", values.codeGenere);
@@ -11271,7 +11970,11 @@ angular
     ApiListPrc, ApiDetailPrc, ApiAjoutPrc,
     ApiListClient, ApiListMotif,
     ApiListArticle, $ionicPopup,
-    ApiRecapPdsPrc, ApiListDechargement, ApiDeletVersement, ApiPdsNoPayed, ApiDetailPdsNoPayed, ApiAjoutVersement, CodeGenere, ApiAjoutVersement, SendSms, formatNewDate, SeparateurMillier) {
+    ApiRecapPdsPrc, ApiListDechargement,
+    ApiDeletVersement, ApiPdsNoPayed,
+    ApiDetailPdsNoPayed, ApiAjoutVersement,
+    CodeGenere, ApiAjoutVersement, SendSms,
+    formatNewDate, SeparateurMillier) {
 
     console.log('versement');
     $scope.data = {};
@@ -12298,9 +13001,57 @@ angular
         var url = urlPhp.getUrl();
         var user = localStorage.getItem("user");
         user = JSON.parse(user);
-        console.log(user.roles);
+        // console.log(user);
         var params = { codeUtilisateur: user.code };
         return $http.post(url + "/utilisateur/stock.php", params);
+      },
+    };
+  })
+  .factory("ApiListLocationAgent", function ($http, urlPhp) {
+    return {
+      getListLocationAgent: function (params) {
+        var url = urlPhp.getUrl();
+        var user = localStorage.getItem("user");
+        user = JSON.parse(user);
+        
+       // var params = { codeUtilisateur: user.code };
+        return $http.post(url + "/utilisateur/localisation.php", params);
+      },
+    };
+  }).
+  factory("checkPermissionModule", function () {
+     /*PRISE DE COMMANDE
+FACTURATION
+RESTANT VERSEMENT
+MARKETING
+PREPARATION DE COMMANDE
+INVENTAIRE
+CLIENT
+STOCK
+SUPERVISION DE DESTOCKEUR
+RECUPERATION DE MARCHANDISES
+DECHARGEMENT
+GEOLOCALISATION DESTOCKEURS
+CONSULTATION SOLDE
+PLANNING DESTOCKEURS*/
+    return {
+      getPermissionModule: function (module) {
+        var permission  = false;
+        var user        =  JSON.parse(localStorage.getItem("user"));
+       // console.log(user);
+       // var permissions =  JSON.parse(localStorage.getItem("permissions"));
+        if(user){
+            if(user.roles && user.roles.length > 0){
+        
+                    for(var i=0;i<user.roles.length;i++){
+                           if(module == user.roles[i].libelle){
+                            permission = true;
+                            break;
+                           } 
+                    }
+            }
+        }
+        return permission;
       },
     };
   })
@@ -12334,7 +13085,7 @@ angular
         var url = urlPhp.getUrl();
         var user = localStorage.getItem("user");
         user = JSON.parse(user);
-      
+
 
         return $http.post(url + "/pdc/liste.php", codeCommerciale);
       },
@@ -12625,11 +13376,11 @@ angular
         var user = localStorage.getItem("user");
         user = JSON.parse(user);
 
-        console.log('Jai bien modifie avec :', );
+        console.log('Jai bien modifie avec :',);
         console.log(url + "/pdc/modifierDetails.php")
         console.log(values)
 
-         
+
         return $http.post(url + "/pdc/modifierDetails.php", values);
       },
     };
@@ -12978,6 +13729,54 @@ angular
     }
 
   })
+
+  .factory('ApiListSoldeAgent', function ($http, urlPhp) {
+    return {
+      ListSoldeAgent: function (codeChefzone) {
+        var url = urlPhp.getUrl();
+        var user = localStorage.getItem('user');
+        /*console.log('-------------User-------');
+        console.log(user);*/
+        user = JSON.parse(user);
+        //console.log(values);
+
+        return $http.get(url + '/apiagroline/utilisateur/soldeGrossiste.php', codeChefzone);
+      }
+    }
+
+  })
+
+  .factory('ApiListGrossisteChefZone', function ($http, urlPhp) {
+    return {
+      ListGrossisteChefZone: function (codeChefzone) {
+        var url = urlPhp.getUrl();
+        var user = localStorage.getItem('user');
+        /*console.log('-------------User-------');
+        console.log(user);*/
+        user = JSON.parse(user);
+        //console.log(values);
+
+        return $http.get(url + '/apiagroline/grossiste/liste.php', codeChefzone);
+      }
+    }
+
+  })
+
+  .factory('ApiListAgentChefZone', function ($http, urlPhp) {
+    return {
+      ListAgentChefZone: function (codeChefzone) {
+        var url = urlPhp.getUrl();
+        var user = localStorage.getItem('user');
+        /*console.log('-------------User-------');
+        console.log(user);*/
+        user = JSON.parse(user);
+        //console.log(values);
+
+        return $http.post(url + '/utilisateur/liste.php', codeChefzone);
+      }
+    }
+
+  })
   .factory('ConnexionUser', function ($http, urlPhp) {
     return {
       getConnexion: function (values) {
@@ -13043,13 +13842,16 @@ angular
       },
     };
   })
-
   .factory("formatNewDate", function () {
 
     //$scope.data.profile = sessionStorage.getItem("")
     return {
-      formatNewDate: function () {
+      formatNewDate: function (dateParams = null) {
         var d = new Date();
+        if(dateParams){
+            d = dateParams;
+        }
+        
         var hours = parseInt(d.getHours());
         if (hours < 10) {
           hours = "0" + "" + hours;
@@ -13079,7 +13881,7 @@ angular
             minute,
             second].join(':');
 
-
+              console.log("date format: "+ dformat)
         return dformat;
       },
     };

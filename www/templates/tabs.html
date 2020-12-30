@@ -22,7 +22,7 @@
 
   <ion-side-menu side="left">
     <ion-header-bar class="bar-assertive">
-      <h1 class="title">POULTRADE</h1>
+      <h1 class="title">AGROLINE</h1>
       <a id="buttonright" ng-click="majStat()" class="button button-icon button-clear ion-settings"
         ng-style="buttonleft">
       </a>
@@ -33,7 +33,7 @@
 
         <style type="text/css">
           .backlineair {
-            background-image: url(./img/poultrade.png);
+            /* background-image: url(./img/agroline.png);*/
             background-repeat: no-repeat;
             Background-position: center bottom 111px;
             max-width: 100%;
@@ -44,22 +44,27 @@
 
 
           }
+
+          .listItem {
+            line-height: 34px;
+           
+          }
         </style>
 
-        <ion-list>
+        <ion-list class="listItem">
 
-          <ion-item menu-close href="#/app/bienvenue">
+          <ion-item menu-close href="#/app/bienvenue" style="color: ivory;">
             <i class="icon ion-home"></i> &nbsp;{{ 'menu_acceuil' | translate }}
           </ion-item>
-          <ion-item menu-close href="#/app/prcs">
+          <ion-item ng-if="permission('PREPARATION DE COMMANDE')" menu-close href="#/app/prcs" style="color: ivory;">
             <i class="icon ion-ios-list"></i>&nbsp;PRCS
           </ion-item>
 
-          <ion-item menu-close href="#/app/pds">
+          <ion-item ng-if="permission('RECUPERATION DE MARCHANDISES')" menu-close href="#/app/pds" style="color: ivory;">
             <i class="icon ion-ios-list"></i>&nbsp;PDS
           </ion-item>
 
-          <ion-item menu-close href="#/app/facturations">
+          <ion-item ng-if="permission('FACTURATION')" menu-close href="#/app/facturations" style="color: ivory;">
             <i class="icon ion-ios-list"></i>&nbsp;Facture
           </ion-item>
 
@@ -67,15 +72,15 @@
           <i class="icon ion-plus"></i> &nbsp;Nouvelle visite
         </ion-item>-->
 
-          <ion-item menu-close href="#/app/stocks">
+          <ion-item ng-if="permission('STOCK')" menu-close href="#/app/stocks" style="color: ivory;">
             <i class="icon ion-ios-list"></i> &nbsp;Mon Stock
           </ion-item>
 
-          <ion-item menu-close href="#/app/clients">
+          <ion-item ng-if="permission('CLIENT')" menu-close href="#/app/clients" style="color: ivory;">
             <i class="icon ion-ios-list"></i>&nbsp;Clients
           </ion-item>
 
-          <ion-item menu-close href="#/app/articles">
+          <ion-item menu-close href="#/app/articles" style="color: ivory;">
             <i class="icon ion-ios-list"></i>&nbsp;Articles
           </ion-item>
 
@@ -84,11 +89,11 @@
           <i class="icon ion-ios-list"></i> &nbsp;Mes prospects
         </ion-item>-->
 
-          <ion-item menu-close href="#/app/maps">
-            <i class="icon ion-ios-location"></i> &nbsp;Carte Map
+          <ion-item menu-close href="#/app/maps" style="color: ivory;">
+            <i class="icon ion-ios-location"></i> &nbsp;GEO. DESTOCKEURS
           </ion-item>
 
-          <ion-item menu-close href="#/app/login1">
+          <ion-item menu-close href="#/app/login1" style="color: ivory;">
             <i class="icon ion-log-out"></i> &nbsp;{{ 'menu_sedeconnecter' | translate }}
           </ion-item>
 
@@ -101,8 +106,8 @@
 
 
 
-    <div class="bar bar-footer footer-button" style="background-color: #13B3DA; color: white; text-align: center;">
-      <p style="text-align: center;" >&copy; 2020
+    <div class="bar bar-footer footer-button" style="background-color: #ef473a; color: white; text-align: center;">
+      <p style="text-align: center;">HTSOFT&copy; 2020
       <p>
     </div>
 

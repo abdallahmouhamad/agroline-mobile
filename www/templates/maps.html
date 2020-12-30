@@ -1,4 +1,4 @@
-<ion-view  title="Carte des points visités" style="color: red" cache-view="false">
+<ion-view  title="Geolocalisation destockeurs" style="color: red" cache-view="false">
   <div ng-app="starter">
 
     <style type="text/css">
@@ -15,61 +15,46 @@
 
     <ion-content>
         <!--Test-->
-         <div ng-if="data.cache">
-          <div class="item item-body"  ng-if="data.profile=='super'">
+         <div>
+          <div class="item item-body" >
             <button class="button button-block button-assertive"
             cancel-button="{{ 'fichevisite_select_pv_return' | translate }}"
             reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
             cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
             search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}"
             modal-select=""
-            ng-model="data.payschoisit"
-            on-select="refreshregion()"
-            options="data.listpays"
+            ng-model="data.agentchoisit"
+            on-select="localisationAgent()"
+            options="data.listAgentChefZones"
             modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}"
-             option-getter="getOptPays(option)"
+             option-getter="getOptAgent(option)"
               modal-title="Selection"
               has-search="true">
-              {{ 'label_choix_pays' | translate }}
+              <label for="" ng-if="!data.agentchoisit">Choisir agent</label>
+              <label for="" ng-if="data.agentchoisit">{{data.agentchoisit.nom}}</label>
+              
               <div class="option">
-                <h2>{{option.name}}</h2>
+                <h2>{{option.nom}}</h2>
 
               </div>
 
             </button>
           </div>
+          
           <div class="item" style="color: #222222;font-weight: bolder">
-            {{ 'label_pays' | translate }} : <b style="color: #0a9dc7;" ng-if="data.payschoisit!=null">{{data.payschoisit.name}}</b>
+            Filtrer par date
           </div>
+          <label class="item item-input ">
+  
+            <input type="text" id="datefilter" style="color:#0a9dc7;font-weight: bold;" class=" checkbox-assertive" name="datefilter"
+            placeholder="MM/DD/YYYY" onfocus="(this.type='date')" ng-model="data.datefilter">
+  
+          </label>
 
-          <div class="item item-body"
-                ng-if="data.payschoisit!=null">
-                <button ng-if="data.payschoisit!=null"
-                 class="button button-block button-assertive"
-                 cancel-button="{{ 'fichevisite_select_pv_return' | translate }}"
-                 reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
-                 cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
-                 search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}"
-                 modal-select=""
-                 ng-model="data.regionchoisit"
-                 on-select="listPvByRegion()"
-                 options="listregions"
-                 option-getter="getOptRegion(option)"
-                 modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}"
-                 modal-title="Selection"
-                 has-search="true">
-                  {{ 'label_choix_region' | translate }}
-                  <div  class="option">
-                    <h2 > {{option.name}}</h2>
-                  </div>
-                </button>
-              </div>
-              <div ng-if="data.payschoisit!=null" class="item" style="color: #222222;font-weight: bolder">
-                <u ng-if="data.payschoisit!=null">{{ 'label_region_choisi' | translate }} :</u> <b style="color: #0a9dc7;" ng-if="data.regionchoisit!=null">{{data.regionchoisit.name}}</b>
-              </div>
-
-
-
+          <div class="row">
+            <button ng-click="localisationAgent()" class="button button-block button-assertive footer-button" color="danger"
+              type="submit" name="submit"><span style="color:white">Afficher</span></button>
+          </div>
          </div>
          <style>
           /* Always set the map height explicitly to define the size of the div

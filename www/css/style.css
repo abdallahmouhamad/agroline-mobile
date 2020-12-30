@@ -189,7 +189,7 @@ map {
   .bg { background: url('../img/click.png') no-repeat center; }
 
 .button-float{
-  background:#13B3DA !important;
+  background:#ef473a !important;
   color:white !important;
   z-index: 12 !important;
   position: absolute !important;
