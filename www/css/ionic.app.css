@@ -6005,7 +6005,8 @@ button.item.item-complex {
   z-index: 2;
   padding: 16px 49px 16px 16px;
   border: none;
-  background-color: #ef473a; }
+  /*background-color: #f8f4f4;*/
+ }
 
 a.item-content {
   display: block;

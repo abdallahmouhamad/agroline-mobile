@@ -493,7 +493,7 @@ angular
 
 
 
-    
+
 
       $http
         .post(str, params)
@@ -512,49 +512,49 @@ angular
           // records is the 'server response array' variable name.
           $scope.user_details = res; // copy response values to user-details object.
 
-           
-     
+
+
 
           var role = $scope.user_details.roles;
 
-         // var indexOfRole = {
-          
-         
-            indexOf1 = role[1];
-            indexOf2 = role[2];
-            indexOf3 = role[3];
-            indexOf4 = role[4];
-            indexOf5 = role[5];
-            indexOf6 = role[6];
-            indexOf7 = role[7];
-            indexOf8 = role[8];
-            indexOf9 = role[9];
-            indexOf10 = role[10];
-            indexOf11 = role[11];
-            indexOf12 = role[12];
-            indexOf13 = role[13];
-            indexOf14 = role[14];
-        
-         
-        //  };
-        console.log("com",indexOf1);
-        console.log("fac",indexOf2);
-if(role){
-          var PRISE_DE_COMMANDE = "PRISE DE COMMANDE";
-          var FACTURATION = "FACTURATION";
-          var RESTANT_VERSEMENT = "RESTANT VERSEMENT";
-          var MARKETING = "MARKETING";
-          var PREPARATION_DE_COMMANDE = "PREPARATION DE COMMANDE";
-          var INVENTAIRE = "INVENTAIRE";
-          var CLIENT = "CLIENT";
-          var STOCK = "STOCK";
-          var SUPERVISION_DE_DESTOCKEUR = "SUPERVISION DE DESTOCKEUR";
-          var RECUPERATION_DE_MARCHANDISES = "RECUPERATION DE MARCHANDISES";
-          var DECHARGEMENT = "DECHARGEMENT";
-          var GEOLOCALISATION_DESTOCKEURS = "GEOLOCALISATION DESTOCKEURS";
-          var CONSULTATION_SOLDE = "CONSULTATION SOLDE";
-          var PLANNING_DESTOCKEURS = "PLANNING DESTOCKEURS"; 
-        }
+          // var indexOfRole = {
+
+
+          indexOf1 = role[1];
+          indexOf2 = role[2];
+          indexOf3 = role[3];
+          indexOf4 = role[4];
+          indexOf5 = role[5];
+          indexOf6 = role[6];
+          indexOf7 = role[7];
+          indexOf8 = role[8];
+          indexOf9 = role[9];
+          indexOf10 = role[10];
+          indexOf11 = role[11];
+          indexOf12 = role[12];
+          indexOf13 = role[13];
+          indexOf14 = role[14];
+
+
+          //  };
+          console.log("com", indexOf1);
+          console.log("fac", indexOf2);
+          if (role) {
+            var PRISE_DE_COMMANDE = "PRISE DE COMMANDE";
+            var FACTURATION = "FACTURATION";
+            var RESTANT_VERSEMENT = "RESTANT VERSEMENT";
+            var MARKETING = "MARKETING";
+            var PREPARATION_DE_COMMANDE = "PREPARATION DE COMMANDE";
+            var INVENTAIRE = "INVENTAIRE";
+            var CLIENT = "CLIENT";
+            var STOCK = "STOCK";
+            var SUPERVISION_DE_DESTOCKEUR = "SUPERVISION DE DESTOCKEUR";
+            var RECUPERATION_DE_MARCHANDISES = "RECUPERATION DE MARCHANDISES";
+            var DECHARGEMENT = "DECHARGEMENT";
+            var GEOLOCALISATION_DESTOCKEURS = "GEOLOCALISATION DESTOCKEURS";
+            var CONSULTATION_SOLDE = "CONSULTATION SOLDE";
+            var PLANNING_DESTOCKEURS = "PLANNING DESTOCKEURS";
+          }
 
           console.log(indexOf1);
           console.log(PRISE_DE_COMMANDE);
@@ -562,23 +562,23 @@ if(role){
           console.log(FACTURATION);
 
 
-         /* PRISE_DE_COMMANDE = indexOfRole.indexOf1;
-         FACTURATION = indexOfRole.indexOf2;
-          RESTANT_VERSEMENT = indexOfRole.indexOf3;
-          MARKETING = indexOfRole.indexOf4;
-          PREPARATION_DE_COMMANDE = indexOfRole.indexOf5;
-          INVENTAIRE = indexOfRole.indexOf6;
-          CLIENT = indexOfRole.indexOf7;
-          STOCK = indexOfRole.indexOf8;
-          SUPERVISION_DE_DESTOCKEUR = indexOfRole.indexOf9;
-          RECUPERATION_DE_MARCHANDISES = indexOfRole.indexOf10;
-          DECHARGEMENT = indexOfRole.indexOf11;
-          GEOLOCALISATION_DESTOCKEURS = indexOfRole.indexOf12;
-          CONSULTATION_SOLDE = indexOfRole.indexOf13;
-          PLANNING_DESTOCKEURS = indexOfRole.indexOf14;*/
+          /* PRISE_DE_COMMANDE = indexOfRole.indexOf1;
+          FACTURATION = indexOfRole.indexOf2;
+           RESTANT_VERSEMENT = indexOfRole.indexOf3;
+           MARKETING = indexOfRole.indexOf4;
+           PREPARATION_DE_COMMANDE = indexOfRole.indexOf5;
+           INVENTAIRE = indexOfRole.indexOf6;
+           CLIENT = indexOfRole.indexOf7;
+           STOCK = indexOfRole.indexOf8;
+           SUPERVISION_DE_DESTOCKEUR = indexOfRole.indexOf9;
+           RECUPERATION_DE_MARCHANDISES = indexOfRole.indexOf10;
+           DECHARGEMENT = indexOfRole.indexOf11;
+           GEOLOCALISATION_DESTOCKEURS = indexOfRole.indexOf12;
+           CONSULTATION_SOLDE = indexOfRole.indexOf13;
+           PLANNING_DESTOCKEURS = indexOfRole.indexOf14;*/
 
-         // console.log("les roles", indexOfRole);
-        //  console.log("PRISE", FACTURATION);
+          // console.log("les roles", indexOfRole);
+          //  console.log("PRISE", FACTURATION);
 
           sessionStorage.setItem("loggedin_id", $scope.user_details.id);
           sessionStorage.setItem(
@@ -2913,6 +2913,10 @@ if(role){
     $scope.getOptGrossiste = function (option) {
       return option;
     };
+
+    $scope.getOptAgent = function (option) {
+      return option;
+    };
     $scope.startTracking = function () {
 
       $scope.getCurrentPosition();
@@ -4186,6 +4190,9 @@ if(role){
     $scope.getOptGrossiste = function (option) {
       return option;
     };
+    $scope.getOptAgent = function (option) {
+      return option;
+    };
 
     $scope.getOptClient = function (option) {
       return option;
@@ -5146,6 +5153,9 @@ if(role){
     });
 
     $scope.getOptGrossiste = function (option) {
+      return option;
+    };
+    $scope.getOptAgent = function (option) {
       return option;
     };
 
@@ -7725,6 +7735,7 @@ if(role){
 
     $scope.initvar = function () {
       $scope.data.codeChefzone = localStorage.getItem('codeChefzone');
+      console.log($scope.data.codeChefzone);
       var user = localStorage.getItem('user');
       $scope.data.user = JSON.parse(user);
 
@@ -7809,6 +7820,8 @@ if(role){
     ApiAjoutPrc,
     ApiListGrossisteChefZone,
     ApiListAgentChefZone,
+    $http,
+    urlPhp,
     ApiListClient,
     ApiListMotif,
     ApiListArticle,
@@ -7821,6 +7834,10 @@ if(role){
     ApiAjoutPrc
 
   ) {
+    $scope.user = {
+      login: "",
+      password: "",
+    };
     console.log('--------consultation sole-------');
 
     $scope.initvar = function () {
@@ -7846,8 +7863,57 @@ if(role){
       $scope.data.longitude = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.position.split(',')[1] : 0.0;
       $scope.data.position = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.position : null;
     };
+    var url = urlPhp.getUrl();
+    var str = url + "/utilisateur/connexion.php";
+    var params = {
+      login: $scope.user.login,
+      motDePasse: $scope.user.password,
+    };
+
+    $http
+      .post(str, params)
+      .success(function (res) {
+      
+        $scope.user_details = res;
+      });
+    var user = localStorage.getItem('user');
+ 
+
+    codeChefzone = user.substr(19, 2);
+    console.log("codeChefzone", codeChefzone);
+
+    $scope.selectGrossiste = function () {
+      console.log('-----Liste Grossiste');
+      console.log(codeChefzone);
+      ApiListGrossisteChefZone.ListGrossisteChefZone(codeChefzone)
+        .success(function (reponse) {
+          console.log('-----Liste Grossiste Chef Zone');
+          $scope.data.listGrossisteChefZones = reponse;
+          for (var i = 0; i <  $scope.data.listGrossisteChefZones.length; i++) {
+          var grossistes = $scope.data.listGrossisteChefZones[i].nom;
+          }
+          console.log(grossistes)
+          console.log(reponse)
+
+        })
+    }
+
+    $scope.selectAgent = function () {
+
+      console.log('-----Liste Agent');
+      ApiListAgentChefZone.ListAgentChefZone(codeChefzone)
+        .success(function (reponse) {
+          console.log('-----Liste Agent Chef Zone');
+          $scope.data.listAgentChefZones = reponse;
+          console.log(reponse);
+        })
+    }
+
 
     $scope.initvar();
+     $scope.selectAgent();
+     $scope.selectGrossiste();
+
     $scope.getOptGrossiste = function (option) {
       return option;
     };
@@ -7855,32 +7921,6 @@ if(role){
     $scope.getOptAgent = function (option) {
       return option;
     };
-
-    $scope.selectGrossiste = function () {
-      console.log('-----Liste Grossiste');
-      ApiListGrossisteChefZone.ListGrossisteChefZone(codeChefzone)
-        .success(function (reponse) {
-          console.log('-----Liste Grossiste Chef Zone');
-          $scope.data.listGrossisteChefZones = reponse;
-          // var grossisteChefZone = { codeChefzone: $scope.data.GrossisteChefZonechoisit.codeChefzone }
-          console.log(grossisteChefZone)
-          console.log(reponse)
-
-        })
-    }
-
-    $scope.selectAgent = function () {
-      console.log('-----Liste Agent');
-      ApiListAgentChefZone.ListAgentChefZone(codeChefzone)
-        .success(function (reponse) {
-          console.log('-----Liste Agent Chef Zone');
-          $scope.data.listAgentChefZones = reponse;
-          //  var agentChefZone = { codeChefzone: $scope.data.AgentChefZonechoisit.codeChefzone }
-          console.log(agentChefZone)
-          console.log(reponse)
-
-        })
-    }
 
     $scope.goToDetailsSoleGrossiste = function () {
 
@@ -8876,6 +8916,9 @@ if(role){
 
     };
     $scope.getOptGrossiste = function (option) {
+      return option;
+    };
+    $scope.getOptAgent = function (option) {
       return option;
     };
     $scope.getOptMotif = function (option) {
@@ -12684,6 +12727,10 @@ if(role){
     $scope.getOptGrossiste = function (option) {
       return option;
     };
+
+    $scope.getOptAgent = function (option) {
+      return option;
+    };
     $scope.getOptMotif = function (option) {
       return option;
     };
@@ -13537,12 +13584,12 @@ if(role){
       ListSoldeAgent: function (codeChefzone) {
         var url = urlPhp.getUrl();
         var user = localStorage.getItem('user');
-        /*console.log('-------------User-------');
-        console.log(user);*/
+        console.log('-------------User-------');
+        console.log(user);
         user = JSON.parse(user);
         //console.log(values);
 
-        return $http.get(url + '/apiagroline/utilisateur/soldeGrossiste.php', codeChefzone);
+        return $http.get(url + '/utilisateur/soldeGrossiste.php',codeChefzone);
       }
     }
 
@@ -13558,7 +13605,7 @@ if(role){
         user = JSON.parse(user);
         //console.log(values);
 
-        return $http.get(url + '/apiagroline/grossiste/liste.php', codeChefzone);
+        return $http.get(url + '/grossiste/liste.php',codeChefzone);
       }
     }
 
@@ -13569,12 +13616,28 @@ if(role){
       ListAgentChefZone: function (codeChefzone) {
         var url = urlPhp.getUrl();
         var user = localStorage.getItem('user');
+         console.log('-------------User-------');
+         console.log(user);
+        user = JSON.parse(user);
+        //console.log(values);
+
+        return $http.get(url + '/utilisateur/liste.php',codeChefzone);
+      }
+    }
+
+  })
+
+  .factory('ApiRechercheClient', function ($http, urlPhp) {
+    return {
+      ListRechercheClient: function () {
+        var url = urlPhp.getUrl();
+        var user = localStorage.getItem('user');
         /*console.log('-------------User-------');
         console.log(user);*/
         user = JSON.parse(user);
         //console.log(values);
 
-        return $http.get(url + '/apiagroline/utilisateur/liste.php', codeChefzone);
+        return $http.get(url + '/client/recherche.php');
       }
     }
 
@@ -13646,7 +13709,7 @@ if(role){
   })
 
   .factory("checkPermissionModule", function () {
-   
+
   })
 
   .factory("formatNewDate", function () {
