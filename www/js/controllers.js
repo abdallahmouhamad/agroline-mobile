@@ -12298,7 +12298,7 @@ angular
         var url = urlPhp.getUrl();
         var user = localStorage.getItem("user");
         user = JSON.parse(user);
-        console.log(user);
+        console.log(user.roles);
         var params = { codeUtilisateur: user.code };
         return $http.post(url + "/utilisateur/stock.php", params);
       },
