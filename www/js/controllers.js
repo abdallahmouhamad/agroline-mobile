@@ -458,6 +458,7 @@ angular
       login: "",
       password: "",
     };
+    $scope.roles = {};
     //test connexion abou
     $scope.sowmenu = function () {
       console.log("ici ici");
@@ -493,6 +494,7 @@ angular
 
 
     
+
       $http
         .post(str, params)
         .success(function (res) {
@@ -509,92 +511,156 @@ angular
           $ionicLoading.hide();
           // records is the 'server response array' variable name.
           $scope.user_details = res; // copy response values to user-details object.
-          var Roles = {
-            roles: $scope.user_details.roles
-        };
-        console.log("les roles", Roles);
+
+           
+     
+
+          var role = $scope.user_details.roles;
+
+         // var indexOfRole = {
+          
+         
+            indexOf1 = role[1];
+            indexOf2 = role[2];
+            indexOf3 = role[3];
+            indexOf4 = role[4];
+            indexOf5 = role[5];
+            indexOf6 = role[6];
+            indexOf7 = role[7];
+            indexOf8 = role[8];
+            indexOf9 = role[9];
+            indexOf10 = role[10];
+            indexOf11 = role[11];
+            indexOf12 = role[12];
+            indexOf13 = role[13];
+            indexOf14 = role[14];
+        
+         
+        //  };
+        console.log("com",indexOf1);
+        console.log("fac",indexOf2);
+if(role){
+          var PRISE_DE_COMMANDE = "PRISE DE COMMANDE";
+          var FACTURATION = "FACTURATION";
+          var RESTANT_VERSEMENT = "RESTANT VERSEMENT";
+          var MARKETING = "MARKETING";
+          var PREPARATION_DE_COMMANDE = "PREPARATION DE COMMANDE";
+          var INVENTAIRE = "INVENTAIRE";
+          var CLIENT = "CLIENT";
+          var STOCK = "STOCK";
+          var SUPERVISION_DE_DESTOCKEUR = "SUPERVISION DE DESTOCKEUR";
+          var RECUPERATION_DE_MARCHANDISES = "RECUPERATION DE MARCHANDISES";
+          var DECHARGEMENT = "DECHARGEMENT";
+          var GEOLOCALISATION_DESTOCKEURS = "GEOLOCALISATION DESTOCKEURS";
+          var CONSULTATION_SOLDE = "CONSULTATION SOLDE";
+          var PLANNING_DESTOCKEURS = "PLANNING DESTOCKEURS"; 
+        }
+
+          console.log(indexOf1);
+          console.log(PRISE_DE_COMMANDE);
+          console.log(indexOf2);
+          console.log(FACTURATION);
+
+
+         /* PRISE_DE_COMMANDE = indexOfRole.indexOf1;
+         FACTURATION = indexOfRole.indexOf2;
+          RESTANT_VERSEMENT = indexOfRole.indexOf3;
+          MARKETING = indexOfRole.indexOf4;
+          PREPARATION_DE_COMMANDE = indexOfRole.indexOf5;
+          INVENTAIRE = indexOfRole.indexOf6;
+          CLIENT = indexOfRole.indexOf7;
+          STOCK = indexOfRole.indexOf8;
+          SUPERVISION_DE_DESTOCKEUR = indexOfRole.indexOf9;
+          RECUPERATION_DE_MARCHANDISES = indexOfRole.indexOf10;
+          DECHARGEMENT = indexOfRole.indexOf11;
+          GEOLOCALISATION_DESTOCKEURS = indexOfRole.indexOf12;
+          CONSULTATION_SOLDE = indexOfRole.indexOf13;
+          PLANNING_DESTOCKEURS = indexOfRole.indexOf14;*/
+
+         // console.log("les roles", indexOfRole);
+        //  console.log("PRISE", FACTURATION);
 
           sessionStorage.setItem("loggedin_id", $scope.user_details.id);
-      sessionStorage.setItem(
-        "loggedin_password",
-        $scope.user_details.motDePasse
-      );
-      sessionStorage.setItem("loggedin_iduser", $scope.user_details.id);
-      // localStorage.setItem('loggedin_id', $scope.user_details.idUtilisateursPointVent);
-      localStorage.setItem("loggedin_id", $scope.user_details.id);
-      localStorage.setItem(
-        "loggedin_password",
-        $scope.user_details.motDePasse
-      );
-      localStorage.setItem("loggedin_iduser", $scope.user_details.id);
-      localStorage.setItem("user", JSON.stringify($scope.user_details));
-      //console.log($scope.user_details.roles)
-      localStorage.setItem("isconn", true);
-      $ionicHistory.nextViewOptions({
-        disableAnimate: true,
-        disableBack: true,
-      });
-      $translate("alert_connexion_reussi_header").then(function (
-        header
-      ) {
-        $translate("alert_connexion_reussi_content").then(function (
-          content
-        ) {
-          var alertPopup = $ionicPopup.alert({
-            title: header,
-            template:
-              " " +
-              content +
-              $scope.user_details.prenom +
-              $scope.user_details.prenom +
-              " !",
+          sessionStorage.setItem(
+            "loggedin_password",
+            $scope.user_details.motDePasse
+          );
+          sessionStorage.setItem("loggedin_iduser", $scope.user_details.id);
+          // localStorage.setItem('loggedin_id', $scope.user_details.idUtilisateursPointVent);
+          localStorage.setItem("loggedin_id", $scope.user_details.id);
+          localStorage.setItem(
+            "loggedin_password",
+            $scope.user_details.motDePasse
+          );
+          localStorage.setItem("loggedin_iduser", $scope.user_details.id);
+          localStorage.setItem("user", JSON.stringify($scope.user_details));
+          //console.log($scope.user_details.roles)
+          localStorage.setItem("isconn", true);
+          $ionicHistory.nextViewOptions({
+            disableAnimate: true,
+            disableBack: true,
+          });
+          $translate("alert_connexion_reussi_header").then(function (
+            header
+          ) {
+            $translate("alert_connexion_reussi_content").then(function (
+              content
+            ) {
+              var alertPopup = $ionicPopup.alert({
+                title: header,
+                template:
+                  " " +
+                  content +
+                  $scope.user_details.prenom +
+                  $scope.user_details.prenom +
+                  " !",
+              });
+            });
+          });
+
+          $state.transitionTo(
+            "app.bienvenue",
+            {},
+            {
+              reload: true,
+              inherit: true,
+              notify: true,
+            }
+          );
+        })
+        .error(function (res) {
+          console.log("la reponse non connecte");
+          //if login failed
+          $ionicLoading.hide();
+          $translate("alert_connexion_lost_header").then(function (header) {
+            $translate("alert_connexion_lost_content").then(function (
+              content
+            ) {
+              var alertPopup = $ionicPopup.alert({
+                title: header,
+                template: content,
+              });
+            });
           });
         });
-      });
-
-      $state.transitionTo(
-        "app.bienvenue",
-        {},
-        {
-          reload: true,
-          inherit: true,
-          notify: true,
-        }
-      );
-    })
-  .error(function (res) {
-    console.log("la reponse non connecte");
-    //if login failed
-    $ionicLoading.hide();
-    $translate("alert_connexion_lost_header").then(function (header) {
-      $translate("alert_connexion_lost_content").then(function (
-        content
-      ) {
-        var alertPopup = $ionicPopup.alert({
-          title: header,
-          template: content,
-        });
-      });
-    });
-  });
       // }
       // }
     };
 
-$scope.sms_function = function () {
-  SendSms.sendSMS("Bissmillah", "776294380");
-  SendSms.sendSMS("Bissmillah", "775329312");
-};
+    $scope.sms_function = function () {
+      SendSms.sendSMS("Bissmillah", "776294380");
+      SendSms.sendSMS("Bissmillah", "775329312");
+    };
   })
 
   .controller("SignupCtrl", function (
-  $scope,
-  $http,
-  $ionicPopup,
-  $state,
-  $translate,
-  urlPhp
-) { })
+    $scope,
+    $http,
+    $ionicPopup,
+    $state,
+    $translate,
+    urlPhp
+  ) { })
 
   .controller("LogoutCtrl", function () {
     sessionStorage.clear();
@@ -13577,6 +13643,10 @@ $scope.sms_function = function () {
         // return "http://www.yosard.com:8080/yup/rest";
       },
     };
+  })
+
+  .factory("checkPermissionModule", function () {
+   
   })
 
   .factory("formatNewDate", function () {

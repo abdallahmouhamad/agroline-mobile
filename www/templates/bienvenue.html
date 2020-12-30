@@ -356,9 +356,9 @@
             </div>
           </div>
 
-          <div class="row">
+          <div class="row" >
 
-            <div class="col" ng-click="goToClient()" >
+            <div class="col" ng-click="goToClient()" ng-if="indexOf7 === CLIENT">
               <div class="card cardHome" style="background-color: #1EAC4E; color: white">
                 <div class="item item-text-wrap">
                   <p style="text-align: center"><img src="./img/client.png" style="width:50%; height: 10%;"></p>
@@ -369,7 +369,7 @@
               </div>
             </div>
 
-            <div class="col"  ng-click="goToPrc()">
+            <div class="col"  ng-click="goToPrc()" ng-if="indexOf5 === PREPARATION_DE_COMMANDE">
             <div class="bgsize">
               <div class="card cardHome" style="background-color:#1EAC4E; color: white;">
                 <div class="item item-text-wrap" >
@@ -391,8 +391,8 @@
           </div>
           <div class="row">
 
-            <div class="col" ng-click="goToPdc()">
-              <div class="card cardHome" style="background-color: #28a54c; color: white">
+            <div class="col" ng-click="goToPdc()" ng-if=" indexOf1 === PRISE_DE_COMMANDE">
+              <div class="card cardHome" style="background-color: #1EAC4E; color: white">
                 <div class="item item-text-wrap">
                   <p style="text-align: center"><img src="./img/prise_de_commande.jpg" style="width:50%; height: 3%;"></p>
                 </div>
@@ -402,7 +402,7 @@
               </div>
             </div>
 
-            <div class="col"  ng-click="goToPds()">
+            <div class="col"  ng-click="goToPds()"  ng-if=" indexOf10 === RECUPERATION_DE_MARCHANDISES">
               
               <div class="card cardHome" style="background-color: #1EAC4E; color: white">
                
@@ -424,7 +424,7 @@
 
          <div class="row">
 
-          <div class="col"  ng-click="goToFacture()">
+          <div class="col"  ng-click="goToFacture()" ng-if=" indexOf2 === FACTURATION">
             <div class="card cardHome" style="background-color: #28a54c; color: white">
               <div class="item item-text-wrap">
                 <p style="text-align: center"><img src="./img/prc.jpg" style="width:50%; height: 5%;"></p>
@@ -436,7 +436,7 @@
             </div>
           </div>
 
-          <div class="col" ng-click="goToDechargement()">
+          <div class="col" ng-click="goToDechargement()" ng-if="indexOf11 === DECHARGEMENT">
             <div class="card cardHome" style="background-color: #28a54c; color: white">
               <div class="item item-text-wrap">
                 <p style="text-align: center"><img src="./img/dechargement.png" style="width:45%; height: 5%;"></p>
@@ -453,7 +453,7 @@
 
           <div class="row">
 
-            <div class="col" ng-click="goToVersement()">
+            <div class="col" ng-click="goToVersement()" ng-if="indexOf3 === RESTANT_VERSEMENT">
               <div class="card cardHome" style="background-color: #28a54c; color: white">
                 <div class="item item-text-wrap">
                   <p style="text-align: center"><img src="./img/versement.png" style="width:50%; height: 10%;"></p>
@@ -464,7 +464,7 @@
               </div>
             </div>
 
-            <div class="col" ng-click="goToInventaire()">
+            <div class="col" ng-click="goToInventaire()" ng-if="indexOf6 === INVENTAIRE">
               <div class="card cardHome" style="background-color: #28a54c; color: white">
                 <div class="item item-text-wrap">
                   <p style="text-align: center"><img src="./img/inventaire.jpg" style="width:67%; height: 10%;"></p>
