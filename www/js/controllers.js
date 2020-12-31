@@ -7962,32 +7962,39 @@ PLANNING DESTOCKEURS*/
   ) {
     console.log('-------- details Solde Agent-------');
     $scope.initvar = function () {
-      $scope.data.codeChefzone = localStorage.getItem('codeChefzone');
-      var user = localStorage.getItem('user');
+     // $scope.data.codeChefzone = localStorage.getItem('codeChefzone');
+     // var user = localStorage.getItem('user');
       var user = JSON.parse(localStorage.getItem("user"));
-      $scope.data.user = JSON.parse(user);
+     
+      $scope.data.detailsSoldeAgent=[];
+     // $scope.data.user = JSON.parse(user);
+    }
 
-      $scope.data.detailsSoldeAgent = [];
+    $scope.soldeAgent = function () {
+      var user = JSON.parse(localStorage.getItem("user"));
+    //  $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
       if (user && user.code) {
-        var codeChefzone = { "codeChefzone": $scope.data.codeChefzone };
-
-        $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+        var codeChef = { codeChefzone :  user.code };
         console.log('-----------------------Detail Solde Agent ---------------------');
-        console.log(codeChefzone);
-        ApiListSoldeAgent.ListSoldeAgent(codeChefzone).
-          success(function (response) {
-            $ionicLoading.hide();
-            if (response) {
+        console.log(codeChef);
+        ApiListSoldeAgent.ListSoldeAgent(codeChef)
+        .success(function (response) {
+           // $ionicLoading.hide();
+           if(response){
               $scope.data.detailsSoldeAgent = response;
             }
-            console.log('-----------------------Detail Solde Agent ---------------------');
-            console.log(response);
+            
+            console.log('----------------------- Liste Detail Solde Agent ---------------------');
+            console.log("res:",response);
+            console.log($scope.data.detailsSoldeAgent);
+            console.log($scope.data.detailsSoldeAgent.nom);
           }, error => {
             $ionicLoading.hide();
           });
       }
     }
     $scope.initvar();
+    $scope.soldeAgent();
 
   })
 
@@ -13850,12 +13857,12 @@ PLANNING DESTOCKEURS*/
       ListSoldeAgent: function (codeChefzone) {
         var url = urlPhp.getUrl();
         var user = localStorage.getItem('user');
-        console.log('-------------User-------');
-        console.log(user);
+       /* console.log('-------------User-------');
+        console.log(user);*/
         user = JSON.parse(user);
         //console.log(values);
 
-        return $http.get(url + '/utilisateur/soldeGrossiste.php', codeChefzone);
+        return $http.post(url + '/utilisateur/soldeGrossiste.php', codeChefzone);
       }
     }
 

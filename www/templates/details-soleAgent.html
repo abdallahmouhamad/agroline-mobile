@@ -73,33 +73,30 @@
         </div>
   
   
-        <div class="row header list content-div">
+        <div class="row header list content-div" >
             <div class="col" style="text-align: center;">Agent</div>
-            <div class="col" style="text-align: center;">Grossite</div>
+             <!--<div class="col" style="text-align: center;">Grossite</div> -->
           
             <div class="col" style="text-align: center;">Solde</div>
      
           
         </div>
   
-        <div class="row list"  ng-repeat="d in data.detailsPlanning.details | filter:motcle">
+        <div class="row list"  ng-repeat="d in data.detailsSoldeAgent | filter:motcle">
   
-            <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" >
-              {{d.agent}}
+            <div class="col content-div-row" >
+              {{d.nom}}
             </div>
   
-            <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'" >
-              {{d.agent}}
-            </div>
+         
   
-            <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{d.grossiste}}</div>
+            <!--<div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{data.detailsSoldeAgent.grossiste}}</div>
   
-            <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.grossiste}}</div>
-  
+            <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{data.detailsSoldeAgent.grossiste}}</div>-->  
   
     
-            <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{d.solde}}</div>
-            <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.solde}}</div>
+            <div class="col content-div-row" >{{d.solde}}</div>
+          
         
   
   
