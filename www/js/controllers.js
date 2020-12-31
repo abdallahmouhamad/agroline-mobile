@@ -48,7 +48,7 @@ angular
     $scope.number = function () {
       console.log(SeparateurMillier.separateurMillier('170000000'));
     }
-         /*PRISE DE COMMANDE
+    /*PRISE DE COMMANDE
 FACTURATION
 RESTANT VERSEMENT
 MARKETING
@@ -62,7 +62,7 @@ DECHARGEMENT
 GEOLOCALISATION DESTOCKEURS
 CONSULTATION SOLDE
 PLANNING DESTOCKEURS*/
-    $scope.permission = function(module){
+    $scope.permission = function (module) {
       return checkPermissionModule.getPermissionModule(module);
     }
 
@@ -530,43 +530,43 @@ PLANNING DESTOCKEURS*/
 
           var role = $scope.user_details.roles;
 
-         // var indexOfRole = {
-          
-         
-            indexOf1 = role[1];
-            indexOf2 = role[2];
-            indexOf3 = role[3];
-            indexOf4 = role[4];
-            indexOf5 = role[5];
-            indexOf6 = role[6];
-            indexOf7 = role[7];
-            indexOf8 = role[8];
-            indexOf9 = role[9];
-            indexOf10 = role[10];
-            indexOf11 = role[11];
-            indexOf12 = role[12];
-            indexOf13 = role[13];
-            indexOf14 = role[14];
-        
-        //  };
-        console.log("com",indexOf1);
-        console.log("fac",indexOf2);
-if(role){
-          var PRISE_DE_COMMANDE = "PRISE DE COMMANDE";
-          var FACTURATION = "FACTURATION";
-          var RESTANT_VERSEMENT = "RESTANT VERSEMENT";
-          var MARKETING = "MARKETING";
-          var PREPARATION_DE_COMMANDE = "PREPARATION DE COMMANDE";
-          var INVENTAIRE = "INVENTAIRE";
-          var CLIENT = "CLIENT";
-          var STOCK = "STOCK";
-          var SUPERVISION_DE_DESTOCKEUR = "SUPERVISION DE DESTOCKEUR";
-          var RECUPERATION_DE_MARCHANDISES = "RECUPERATION DE MARCHANDISES";
-          var DECHARGEMENT = "DECHARGEMENT";
-          var GEOLOCALISATION_DESTOCKEURS = "GEOLOCALISATION DESTOCKEURS";
-          var CONSULTATION_SOLDE = "CONSULTATION SOLDE";
-          var PLANNING_DESTOCKEURS = "PLANNING DESTOCKEURS"; 
-        }
+          // var indexOfRole = {
+
+
+          indexOf1 = role[1];
+          indexOf2 = role[2];
+          indexOf3 = role[3];
+          indexOf4 = role[4];
+          indexOf5 = role[5];
+          indexOf6 = role[6];
+          indexOf7 = role[7];
+          indexOf8 = role[8];
+          indexOf9 = role[9];
+          indexOf10 = role[10];
+          indexOf11 = role[11];
+          indexOf12 = role[12];
+          indexOf13 = role[13];
+          indexOf14 = role[14];
+
+          //  };
+          console.log("com", indexOf1);
+          console.log("fac", indexOf2);
+          if (role) {
+            var PRISE_DE_COMMANDE = "PRISE DE COMMANDE";
+            var FACTURATION = "FACTURATION";
+            var RESTANT_VERSEMENT = "RESTANT VERSEMENT";
+            var MARKETING = "MARKETING";
+            var PREPARATION_DE_COMMANDE = "PREPARATION DE COMMANDE";
+            var INVENTAIRE = "INVENTAIRE";
+            var CLIENT = "CLIENT";
+            var STOCK = "STOCK";
+            var SUPERVISION_DE_DESTOCKEUR = "SUPERVISION DE DESTOCKEUR";
+            var RECUPERATION_DE_MARCHANDISES = "RECUPERATION DE MARCHANDISES";
+            var DECHARGEMENT = "DECHARGEMENT";
+            var GEOLOCALISATION_DESTOCKEURS = "GEOLOCALISATION DESTOCKEURS";
+            var CONSULTATION_SOLDE = "CONSULTATION SOLDE";
+            var PLANNING_DESTOCKEURS = "PLANNING DESTOCKEURS";
+          }
 
           console.log(indexOf1);
           console.log(PRISE_DE_COMMANDE);
@@ -771,7 +771,7 @@ if(role){
     $scope.data.listAgentChefZones;
     $scope.data.agentchoisit = null;
     $scope.data.datefilter;
-    var user        =  JSON.parse(localStorage.getItem("user"));
+    var user = JSON.parse(localStorage.getItem("user"));
     $scope.getOptPays = function (option) {
       // console.log(option)
       return option;
@@ -780,8 +780,8 @@ if(role){
     $scope.selectAgent = function () {
       console.log('-----Liste Agent');
       console.log(user);
-      if(user && user.code){
-        var codeChef = {codeChefzone : user.code};
+      if (user && user.code) {
+        var codeChef = { codeChefzone: user.code };
         ApiListAgentChefZone.ListAgentChefZone(codeChef)
           .success(function (reponse) {
             console.log('-----Liste Agent Chef Zone');
@@ -789,116 +789,116 @@ if(role){
             console.log($scope.data.listAgentChefZones)
           })
       }
-      
+
     }
     $scope.selectAgent();
-    $scope.localisationAgent = function(){
-      if($scope.data.datefilter){
+    $scope.localisationAgent = function () {
+      if ($scope.data.datefilter) {
         console.log('-------------La date----------');
         console.log($scope.data.datefilter);
-        if($scope.data.agentchoisit && user && user.code){
+        if ($scope.data.agentchoisit && user && user.code) {
 
-          var params  = {
+          var params = {
             codeChefzone: user.code,
-             codeAgent:$scope.data.agentchoisit.codeAgent,
-             dateEnregistrement : $scope.data.datefilter
-            }
-            $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+            codeAgent: $scope.data.agentchoisit.codeAgent,
+            dateEnregistrement: $scope.data.datefilter
+          }
+          $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
           ApiListLocationAgent.getListLocationAgent(params)
-          .success(function(response){
-            console.log('-----_Locations chefs zone----------');
-            console.log(response);
-            var locationsAgent = response[0];
+            .success(function (response) {
+              console.log('-----_Locations chefs zone----------');
+              console.log(response);
+              var locationsAgent = response[0];
 
-            console.log('-----get objet----------');
-            console.log(locationsAgent);
+              console.log('-----get objet----------');
+              console.log(locationsAgent);
 
               $ionicLoading.hide();
-              
+
               var options = {
                 timeout: 10000,
                 enableHighAccuracy: true
               };
-              
-              if(locationsAgent.localisations){
+
+              if (locationsAgent.localisations) {
                 console.log('-----_Locations chefs zone----------');
                 console.log(response);
-    
+
                 var lat;
-                var long ;
-                if(locationsAgent.localisations.length > 0){
-                  lat =locationsAgent.localisations[0].latitude;
-                  long =  locationsAgent.localisations[0].longitude;
-                }else{
+                var long;
+                if (locationsAgent.localisations.length > 0) {
+                  lat = locationsAgent.localisations[0].latitude;
+                  long = locationsAgent.localisations[0].longitude;
+                } else {
                   lat = 0;
                   long = 0;
                 }
-    
-                  var latLng = new google.maps.LatLng(lat, long);
-    
-                  var mapOptions = {
-                    center: latLng,
-                    zoom: 12,
-                    mapTypeId: google.maps.MapTypeId.ROADMAP
-                  };
-      
-                  $scope.map = new google.maps.Map(document.getElementById("map2"), mapOptions);
-      
-                  //Wait until the map is loaded
-                  google.maps.event.addListenerOnce($scope.map, 'idle', function () {
-      
-                    var marker = new google.maps.Marker({
-                      map: $scope.map,
-                      animation: google.maps.Animation.DROP,
-                      position: latLng,
-                      icon: 'img/marker.png'
-                    });
-                    $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
-                    
-                      if(locationsAgent.localisations && locationsAgent.localisations.length > 0){
-                        locationsAgent.localisations.forEach(function (pv) {
-                          if (pv.latitude !== 0 && pv.longitude !== 0 && pv.latitude !== '' && pv.longitude !== '' && pv.latitude !== null && pv.longitude !== null) {
-                            var marker = new google.maps.Marker({
-                              map: $scope.map,
-                              animation: google.maps.Animation.DROP,
-                              position: new google.maps.LatLng(pv.latitude, pv.longitude),
-                              icon: 'img/map-marker.png'
-                            });
-                            
-                            var infoWindow = new google.maps.InfoWindow({
-                              content: 
-                                 "date: " + pv.dateEnregistrement
-                             //  + "<br/>Adresse: " + pv.adresse 
-                              // + "<br/>heure d'arrivée: " + pv.heureArrivee 
-                             //  + "<br/>heure de départ: " + pv.heureDepart
-                              // + "<br/>Outils: " + pv.outils 
-            
-                            });
-          
-                            google.maps.event.addListener(marker, 'click', function () {
-                              infoWindow.open($scope.map, marker);
-                            })
-          
-                          }
-          
+
+                var latLng = new google.maps.LatLng(lat, long);
+
+                var mapOptions = {
+                  center: latLng,
+                  zoom: 12,
+                  mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+
+                $scope.map = new google.maps.Map(document.getElementById("map2"), mapOptions);
+
+                //Wait until the map is loaded
+                google.maps.event.addListenerOnce($scope.map, 'idle', function () {
+
+                  var marker = new google.maps.Marker({
+                    map: $scope.map,
+                    animation: google.maps.Animation.DROP,
+                    position: latLng,
+                    icon: 'img/marker.png'
+                  });
+                  $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+
+                  if (locationsAgent.localisations && locationsAgent.localisations.length > 0) {
+                    locationsAgent.localisations.forEach(function (pv) {
+                      if (pv.latitude !== 0 && pv.longitude !== 0 && pv.latitude !== '' && pv.longitude !== '' && pv.latitude !== null && pv.longitude !== null) {
+                        var marker = new google.maps.Marker({
+                          map: $scope.map,
+                          animation: google.maps.Animation.DROP,
+                          position: new google.maps.LatLng(pv.latitude, pv.longitude),
+                          icon: 'img/map-marker.png'
                         });
+
+                        var infoWindow = new google.maps.InfoWindow({
+                          content:
+                            "date: " + pv.dateEnregistrement
+                          //  + "<br/>Adresse: " + pv.adresse 
+                          // + "<br/>heure d'arrivée: " + pv.heureArrivee 
+                          //  + "<br/>heure de départ: " + pv.heureDepart
+                          // + "<br/>Outils: " + pv.outils 
+
+                        });
+
+                        google.maps.event.addListener(marker, 'click', function () {
+                          infoWindow.open($scope.map, marker);
+                        })
+
                       }
 
-                    $ionicLoading.hide();
-      
-      
-                  });
+                    });
+                  }
+
+                  $ionicLoading.hide();
+
+
+                });
                 //});
               }
-          
 
-          })
+
+            })
         }
 
       }
-        
+
     }
-  
+
 
     $scope.cacheselect = function () {
       if ($scope.data.cache) {
@@ -7962,32 +7962,42 @@ if(role){
   ) {
     console.log('-------- details Solde Agent-------');
     $scope.initvar = function () {
-      $scope.data.codeChefzone = localStorage.getItem('codeChefzone');
-      var user = localStorage.getItem('user');
-      $scope.data.user = JSON.parse(user);
+     // $scope.data.codeChefzone = localStorage.getItem('codeChefzone');
+     // var user = localStorage.getItem('user');
+      var user = JSON.parse(localStorage.getItem("user"));
+     
+      $scope.data.detailsSoldeAgent=[];
+     // $scope.data.user = JSON.parse(user);
+    }
 
-      $scope.data.detailsSoldeAgent = [];
-
-      var codeChefzone = { "codeChefzone": $scope.data.codeChefzone };
-
-      $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
-      console.log('-----------------------Detail Solde Agent ---------------------');
-      console.log(codeChefzone);
-      ApiListSoldeAgent.ListSoldeAgent(codeChefzone).
-        success(function (response) {
-          $ionicLoading.hide();
-          if (response) {
-            $scope.data.detailsSoldeAgent = response;
-          }
-          console.log('-----------------------Detail Solde Agent ---------------------');
-          console.log(response);
-        }, error => {
-          $ionicLoading.hide();
-        });
+    $scope.soldeAgent = function () {
+      var user = JSON.parse(localStorage.getItem("user"));
+    //  $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+      if (user && user.code) {
+        var codeChef = { codeChefzone :  user.code };
+        console.log('-----------------------Detail Solde Agent ---------------------');
+        console.log(codeChef);
+        ApiListSoldeAgent.ListSoldeAgent(codeChef)
+        .success(function (response) {
+           // $ionicLoading.hide();
+           if(response){
+              $scope.data.detailsSoldeAgent = response;
+            }
+            
+            console.log('----------------------- Liste Detail Solde Agent ---------------------');
+            console.log("res:",response);
+            console.log($scope.data.detailsSoldeAgent);
+            console.log($scope.data.detailsSoldeAgent.nom);
+          }, error => {
+            $ionicLoading.hide();
+          });
+      }
     }
     $scope.initvar();
+    $scope.soldeAgent();
 
   })
+
   /*+++++++++++++++++++consultation Sole++++++++++++++++++++++++++*/
   .controller("ConsultationSoleCtrl", function (
     $scope,
@@ -8042,21 +8052,21 @@ if(role){
       $scope.data.longitude = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.position.split(',')[1] : 0.0;
       $scope.data.position = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.position : null;
 
-     /* ApiListAgentChefZone.ListAgentChefZone().success(function (reponse) {
-        console.log('-----Liste Agent Chef Zone');
-        $scope.data.listAgentChefZones = reponse;
-        var filerAgent = $scope.data.sens == 'edit' && $scope.data.listAgentChefZones.nom ? $filter('filter')($scope.data.listAgentChefZones, { nom: $scope.data.listAgentChefZones.nom }) : [];
-        $scope.data.AgentChefZonechoisit = filerAgent && filerAgent.length > 0 ? filerAgent[0] : null;
-        console.log(reponse);
-      })
-
-      ApiListGrossisteChefZone.ListGrossisteChefZone().success(function (reponse) {
-        console.log('-----Liste Grossiste Chef Zone');
-        $scope.data.listGrossisteChefZones = reponse;
-        var filerGrossiste = $scope.data.sens == 'edit' && $scope.data.listGrossisteChefZones.nom ? $filter('filter')($scope.data.listGrossisteChefZones, { nom: $scope.data.listGrossisteChefZones.nom }) : [];
-        $scope.data.GrossisteChefZonechoisit = filerGrossiste && filerGrossiste.length > 0 ? filerGrossiste[0] : null;
-        console.log(reponse);
-      })*/
+      /* ApiListAgentChefZone.ListAgentChefZone().success(function (reponse) {
+         console.log('-----Liste Agent Chef Zone');
+         $scope.data.listAgentChefZones = reponse;
+         var filerAgent = $scope.data.sens == 'edit' && $scope.data.listAgentChefZones.nom ? $filter('filter')($scope.data.listAgentChefZones, { nom: $scope.data.listAgentChefZones.nom }) : [];
+         $scope.data.AgentChefZonechoisit = filerAgent && filerAgent.length > 0 ? filerAgent[0] : null;
+         console.log(reponse);
+       })
+ 
+       ApiListGrossisteChefZone.ListGrossisteChefZone().success(function (reponse) {
+         console.log('-----Liste Grossiste Chef Zone');
+         $scope.data.listGrossisteChefZones = reponse;
+         var filerGrossiste = $scope.data.sens == 'edit' && $scope.data.listGrossisteChefZones.nom ? $filter('filter')($scope.data.listGrossisteChefZones, { nom: $scope.data.listGrossisteChefZones.nom }) : [];
+         $scope.data.GrossisteChefZonechoisit = filerGrossiste && filerGrossiste.length > 0 ? filerGrossiste[0] : null;
+         console.log(reponse);
+       })*/
     };
     var url = urlPhp.getUrl();
     var str = url + "/utilisateur/connexion.php";
@@ -8096,7 +8106,7 @@ if(role){
             console.log(grossistes)
             console.log(reponse)
 
-       })
+          })
       }
     }
 
@@ -8127,7 +8137,7 @@ if(role){
 
     $scope.initvar();
     $scope.selectAgent();
-     $scope.selectGrossiste();
+    $scope.selectGrossiste();
 
     $scope.getOptGrossiste = function (option) {
       return option;
@@ -13125,14 +13135,14 @@ if(role){
         var url = urlPhp.getUrl();
         var user = localStorage.getItem("user");
         user = JSON.parse(user);
-        
-       // var params = { codeUtilisateur: user.code };
+
+        // var params = { codeUtilisateur: user.code };
         return $http.post(url + "/utilisateur/localisation.php", params);
       },
     };
   }).
   factory("checkPermissionModule", function () {
-     /*PRISE DE COMMANDE
+    /*PRISE DE COMMANDE
 FACTURATION
 RESTANT VERSEMENT
 MARKETING
@@ -13148,20 +13158,20 @@ CONSULTATION SOLDE
 PLANNING DESTOCKEURS*/
     return {
       getPermissionModule: function (module) {
-        var permission  = false;
-        var user        =  JSON.parse(localStorage.getItem("user"));
-       // console.log(user);
-       // var permissions =  JSON.parse(localStorage.getItem("permissions"));
-        if(user){
-            if(user.roles && user.roles.length > 0){
-        
-                    for(var i=0;i<user.roles.length;i++){
-                           if(module == user.roles[i].libelle){
-                            permission = true;
-                            break;
-                           } 
-                    }
+        var permission = false;
+        var user = JSON.parse(localStorage.getItem("user"));
+        // console.log(user);
+        // var permissions =  JSON.parse(localStorage.getItem("permissions"));
+        if (user) {
+          if (user.roles && user.roles.length > 0) {
+
+            for (var i = 0; i < user.roles.length; i++) {
+              if (module == user.roles[i].libelle) {
+                permission = true;
+                break;
+              }
             }
+          }
         }
         return permission;
       },
@@ -13847,12 +13857,12 @@ PLANNING DESTOCKEURS*/
       ListSoldeAgent: function (codeChefzone) {
         var url = urlPhp.getUrl();
         var user = localStorage.getItem('user');
-        console.log('-------------User-------');
-        console.log(user);
+       /* console.log('-------------User-------');
+        console.log(user);*/
         user = JSON.parse(user);
         //console.log(values);
 
-        return $http.get(url + '/utilisateur/soldeGrossiste.php', codeChefzone);
+        return $http.post(url + '/utilisateur/soldeGrossiste.php', codeChefzone);
       }
     }
 
@@ -13976,10 +13986,10 @@ PLANNING DESTOCKEURS*/
     return {
       formatNewDate: function (dateParams = null) {
         var d = new Date();
-        if(dateParams){
-            d = dateParams;
+        if (dateParams) {
+          d = dateParams;
         }
-        
+
         var hours = parseInt(d.getHours());
         if (hours < 10) {
           hours = "0" + "" + hours;
@@ -14009,7 +14019,7 @@ PLANNING DESTOCKEURS*/
             minute,
             second].join(':');
 
-              console.log("date format: "+ dformat)
+        console.log("date format: " + dformat)
         return dformat;
       },
     };
