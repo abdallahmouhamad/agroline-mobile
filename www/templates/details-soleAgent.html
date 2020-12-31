@@ -41,32 +41,22 @@
         </style>
           <div class="card list" >
   
-            <a class="item item-icon-left" ng-if="!data.detailsPRC.clientchoisit">
+            <a class="item item-icon-left" >
               <i class="icon ion-person"></i>
-              Code Agent : {{data.detailsSoleAgent.agent}}
-            </a>
-            <a class="item item-icon-left" ng-if="data.detailsPRC.clientchoisit">
-              <i class="icon ion-person"></i>
-              Code Agent : {{data.detailsSoleAgent.agentchoisit.nom}}
+              Code Agent : {{data.AgentChefZonechoisit.codeAgent}}
             </a>
 
-            <a class="item item-icon-left" ng-if="!data.detailsPRC.clientchoisit">
+            <a class="item item-icon-left" >
                 <i class="icon ion-person"></i>
-                Nom : {{data.detailsSoleAgent.agent}}
+                Nom : {{data.AgentChefZonechoisit.nom}}
               </a>
-              <a class="item item-icon-left" ng-if="data.detailsPRC.clientchoisit">
-                <i class="icon ion-person"></i>
-                Nom : {{data.detailsSoleAgent.agentchoisit.nom}}
-              </a>
+             
 
-              <a class="item item-icon-left" ng-if="!data.detailsPRC.clientchoisit">
+              <a class="item item-icon-left">
                 <i class="icon ion-android-call"></i>
-               Telephone : {{data.detailsSoleAgent.agent}}
+               Telephone : {{data.AgentChefZonechoisit.telephone}}
               </a>
-              <a class="item item-icon-left" ng-if="data.detailsPRC.clientchoisit">
-                <i class="icon ion-android-call"></i>
-               Telephone : {{data.detailsSoleAgent.agentchoisit.nom}}
-              </a>
+             
 
 
             
@@ -78,7 +68,7 @@
   
         <div class="row"  style="margin-top: 10px;">
   
-           <div class="col" style="font-size: 130%;">Solde Grossiste</div>
+           <div class="col" style="font-size: 130%;">Solde Agent</div>
    
         </div>
   

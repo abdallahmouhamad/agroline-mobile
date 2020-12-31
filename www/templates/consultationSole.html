@@ -93,16 +93,17 @@
             reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
             cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
             search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
-            ng-model="data.GrossisteChefZonechoisit" options="data.listGrossisteChefZones"
+            ng-model="data.GrossisteChefZonechoisit"
+            options="data.listGrossisteChefZones"
             option-getter="getOptGrossiste(option)"
             modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}"
             modal-title="Selection" 
           
              has-search="true">
             <label for="" ng-if="!data.GrossisteChefZonechoisit">Choisir un Grossiste</label>
-            <label for="" ng-if="GrossisteChefZonechoisit">{{data.GrossisteChefZonechoisit.libelle}}</label>
+            <label for="" ng-if="data.GrossisteChefZonechoisit">{{data.GrossisteChefZonechoisit.nom}}</label>
             <div class="option">
-                <h2> {{option.libelle}}</h2>
+                <h2> {{option.nom}}</h2>
             </div>
 
         </button>
@@ -115,15 +116,17 @@
             reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
             cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
             search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
-            ng-model="data.AgentChefZonechoisit" options="data.listAgentChefZones"
+            ng-model="data.AgentChefZonechoisit"
+            options="data.listAgentChefZones"
             option-getter="getOptAgent(option)"
             modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}"
             modal-title="Selection"
-            on-select="selectAgent()" has-search="true">
+          
+            has-search="true">
             <label for="" ng-if="!data.AgentChefZonechoisit">Choisir un Agent</label>
-            <label for="" ng-if="data.AgentChefZonechoisit">{{data.AgentChefZonechoisit.libelle}}</label>
+            <label for="" ng-if="data.AgentChefZonechoisit">{{data.AgentChefZonechoisit.nom}}</label>
             <div class="option">
-                <h2> {{option.libelle}}</h2>
+                <h2> {{option.nom}}</h2>
             </div>
         </button>
     </div>
