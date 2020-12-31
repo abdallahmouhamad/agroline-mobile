@@ -2518,6 +2518,7 @@ if(role){
     $scope.data = {};
     $scope.data.datefin = null;
     $scope.data.datedebut = null;
+    $scope.data.searchValue = null
 
     //  localStorage.setItem('clientca', null);
     var clientca = localStorage.getItem('clientca')
@@ -2536,6 +2537,10 @@ if(role){
         });
       });
     }*/
+    $scope.clearSearch = function(){
+      console.log('search');
+      $scope.data.searchValue= null;
+    }
 
     $scope.initvar = function () {
       $scope.data.clients = [];
