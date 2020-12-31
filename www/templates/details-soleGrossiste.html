@@ -41,23 +41,17 @@
         </style>
           <div class="card list" >
   
-            <a class="item item-icon-left" ng-if="!data.detailsPRC.clientchoisit">
+            <a class="item item-icon-left" >
               <i class="icon ion-person"></i>
-              Grossiste : {{data.detailsSoleGrossiste.destockeur}}
+              Grossiste : {{data.GrossisteChefZonechoisit.nom}}
             </a>
-            <a class="item item-icon-left" ng-if="data.detailsPRC.clientchoisit">
-              <i class="icon ion-person"></i>
-              Grossite : {{data.detailsSoleGrossiste.destockeurchoisit.nom}}
-            </a>
+           
 
             
-            <a class="item item-icon-left" ng-if="!data.detailsPRC.clientchoisit">
+           
+            <a class="item item-icon-left" >
               <i class="icon ion-android-call"></i>
-              Telephone : {{data.detailsSoleGrossiste.destockeur}}
-            </a>
-            <a class="item item-icon-left" ng-if="data.detailsPRC.clientchoisit">
-              <i class="icon ion-android-call"></i>
-              Telephone : {{data.detailsSoleGrossiste.destockeurchoisit.nom}}
+              Telephone : {{data.GrossisteChefZonechoisit.telephone}}
             </a>
 
 
@@ -87,7 +81,7 @@
           
         </div>
   
-        <div class="row list"  ng-repeat="d in data.detailsPlanning.details | filter:motcle">
+        <div class="row list"  ng-repeat="d in data.GrossisteChefZonechoisit | filter:motcle">
   
             <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" >
               {{d.numeroFac}}

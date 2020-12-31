@@ -7724,6 +7724,8 @@ angular
     $ionicPopup,
     CodeGenere,
     ApiListGrossiste,
+    $http,
+    urlPhp,
     ApiAjoutPdsFromRecap,
     SendSms,
     $filter,
@@ -7731,25 +7733,49 @@ angular
     ApiAjoutPrc
 
   ) {
+    $scope.user = {
+      login: "",
+      password: "",
+    };
     console.log('-------- details Solde Grossiste-------');
+    var url = urlPhp.getUrl();
+    var str = url + "/utilisateur/connexion.php";
+    var params = {
+      login: $scope.user.login,
+      motDePasse: $scope.user.password,
+    };
 
+    $http
+      .post(str, params)
+      .success(function (res) {
+
+        $scope.user_details = res;
+      });
+    var user = localStorage.getItem('user');
+
+
+    codeChefzone = user.substr(19, 2);
+    console.log("codeChefzone", codeChefzone);
     $scope.initvar = function () {
-      $scope.data.codeChefzone = localStorage.getItem('codeChefzone');
-      console.log($scope.data.codeChefzone);
+
       var user = localStorage.getItem('user');
       $scope.data.user = JSON.parse(user);
 
       $scope.data.detailsSoldeAgent = [];
+      if (codeChefzone !== " ") {
 
-      var codeChefzone = { "codeChefzone": $scope.data.codeChefzone };
 
+        var codeChefzone = { "codeChefzone": parseInt(user.substr(19, 2)) };
+      }
       $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
       console.log('-----------------------Detail Solde Grossiste ---------------------');
       console.log(codeChefzone);
       ApiListSoldeAgent.ListSoldeAgent(codeChefzone).
         success(function (response) {
           $ionicLoading.hide();
+
           if (response) {
+            console.log(response);
             $scope.data.detailsSoldeAgent = response;
           }
           console.log('-----------------------Detail Solde Grossiste ---------------------');
@@ -7841,8 +7867,9 @@ angular
     console.log('--------consultation sole-------');
 
     $scope.initvar = function () {
-      $scope.data.user = JSON.parse(localStorage.getItem('user'));
+      var user = JSON.parse(localStorage.getItem('user'));
       $scope.data.client = JSON.parse(localStorage.getItem('clientEdit'));
+      $scope.data.sens = localStorage.getItem('sens');
 
       $scope.data.listGrossisteChefZones = [];
       $scope.data.GrossisteChefZonechoisit = null;
@@ -7862,6 +7889,22 @@ angular
       $scope.data.latitude = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.position.split(',')[0] : 0.0;
       $scope.data.longitude = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.position.split(',')[1] : 0.0;
       $scope.data.position = $scope.data.client && $scope.data.client.codeClient ? $scope.data.client.position : null;
+
+     /* ApiListAgentChefZone.ListAgentChefZone().success(function (reponse) {
+        console.log('-----Liste Agent Chef Zone');
+        $scope.data.listAgentChefZones = reponse;
+        var filerAgent = $scope.data.sens == 'edit' && $scope.data.listAgentChefZones.nom ? $filter('filter')($scope.data.listAgentChefZones, { nom: $scope.data.listAgentChefZones.nom }) : [];
+        $scope.data.AgentChefZonechoisit = filerAgent && filerAgent.length > 0 ? filerAgent[0] : null;
+        console.log(reponse);
+      })
+
+      ApiListGrossisteChefZone.ListGrossisteChefZone().success(function (reponse) {
+        console.log('-----Liste Grossiste Chef Zone');
+        $scope.data.listGrossisteChefZones = reponse;
+        var filerGrossiste = $scope.data.sens == 'edit' && $scope.data.listGrossisteChefZones.nom ? $filter('filter')($scope.data.listGrossisteChefZones, { nom: $scope.data.listGrossisteChefZones.nom }) : [];
+        $scope.data.GrossisteChefZonechoisit = filerGrossiste && filerGrossiste.length > 0 ? filerGrossiste[0] : null;
+        console.log(reponse);
+      })*/
     };
     var url = urlPhp.getUrl();
     var str = url + "/utilisateur/connexion.php";
@@ -7873,45 +7916,65 @@ angular
     $http
       .post(str, params)
       .success(function (res) {
-      
+
         $scope.user_details = res;
       });
     var user = localStorage.getItem('user');
- 
 
-    codeChefzone = user.substr(19, 2);
+
+    codeChefzone
+      = {
+      codeChefzone: + user.substr(19, 2)
+    }
     console.log("codeChefzone", codeChefzone);
 
     $scope.selectGrossiste = function () {
+      var user = JSON.parse(localStorage.getItem("user"));
       console.log('-----Liste Grossiste');
-      console.log(codeChefzone);
-      ApiListGrossisteChefZone.ListGrossisteChefZone(codeChefzone)
-        .success(function (reponse) {
-          console.log('-----Liste Grossiste Chef Zone');
-          $scope.data.listGrossisteChefZones = reponse;
-          for (var i = 0; i <  $scope.data.listGrossisteChefZones.length; i++) {
-          var grossistes = $scope.data.listGrossisteChefZones[i].nom;
-          }
-          console.log(grossistes)
-          console.log(reponse)
+      if (user && user.code) {
+        var codeChef = { codeChefzone: user.code };
+        console.log(codeChef);
+        ApiListGrossisteChefZone.ListGrossisteChefZone(codeChef)
+          .success(function (reponse) {
+            console.log('-----Liste Grossiste Chef Zone');
+            $scope.data.listGrossisteChefZones = reponse;
+            for (var i = 0; i < $scope.data.listGrossisteChefZones.length; i++) {
+              var grossistes = $scope.data.listGrossisteChefZones[i].nom;
+            }
+            console.log(grossistes)
+            console.log(reponse)
 
-        })
+       })
+      }
     }
 
-    $scope.selectAgent = function () {
 
+    $scope.selectAgent = function () {
+      var user = JSON.parse(localStorage.getItem("user"));
       console.log('-----Liste Agent');
-      ApiListAgentChefZone.ListAgentChefZone(codeChefzone)
-        .success(function (reponse) {
-          console.log('-----Liste Agent Chef Zone');
-          $scope.data.listAgentChefZones = reponse;
-          console.log(reponse);
-        })
+      console.log(codeChefzone);
+      if (user && user.code) {
+        var codeChef = { codeChefzone: user.code };
+        console.log(codeChef);
+        ApiListAgentChefZone.ListAgentChefZone(codeChef)
+          .success(function (reponse) {
+            console.log('-----Liste Agent Chef Zone');
+            $scope.data.listAgentChefZones = reponse;
+            console.log($scope.data.listAgentChefZones)
+          })
+      }
+      /* ApiListAgentChefZone.ListAgentChefZone(codeChefzone)
+         .success(function (reponse) {
+           console.log('-----Liste Agent Chef Zone');
+           $scope.data.listAgentChefZones = reponse;
+           console.log(reponse);
+         
+         })*/
     }
 
 
     $scope.initvar();
-     $scope.selectAgent();
+    $scope.selectAgent();
      $scope.selectGrossiste();
 
     $scope.getOptGrossiste = function (option) {
@@ -13589,7 +13652,7 @@ angular
         user = JSON.parse(user);
         //console.log(values);
 
-        return $http.get(url + '/utilisateur/soldeGrossiste.php',codeChefzone);
+        return $http.get(url + '/utilisateur/soldeGrossiste.php', codeChefzone);
       }
     }
 
@@ -13605,7 +13668,7 @@ angular
         user = JSON.parse(user);
         //console.log(values);
 
-        return $http.get(url + '/grossiste/liste.php',codeChefzone);
+        return $http.get(url + '/grossiste/liste.php', codeChefzone);
       }
     }
 
@@ -13616,12 +13679,12 @@ angular
       ListAgentChefZone: function (codeChefzone) {
         var url = urlPhp.getUrl();
         var user = localStorage.getItem('user');
-         console.log('-------------User-------');
-         console.log(user);
+        console.log('-------------User-------');
+        console.log(user);
         user = JSON.parse(user);
         //console.log(values);
 
-        return $http.get(url + '/utilisateur/liste.php',codeChefzone);
+        return $http.post(url + '/utilisateur/liste.php', codeChefzone);
       }
     }
 
@@ -13629,7 +13692,7 @@ angular
 
   .factory('ApiRechercheClient', function ($http, urlPhp) {
     return {
-      ListRechercheClient: function () {
+      ListRechercheClient: function (motRecherche) {
         var url = urlPhp.getUrl();
         var user = localStorage.getItem('user');
         /*console.log('-------------User-------');
@@ -13637,7 +13700,7 @@ angular
         user = JSON.parse(user);
         //console.log(values);
 
-        return $http.get(url + '/client/recherche.php');
+        return $http.get(url + '/client/recherche.php', motRecherche);
       }
     }
 
