@@ -2537,9 +2537,9 @@ PLANNING DESTOCKEURS*/
         });
       });
     }*/
-    $scope.clearSearch = function(){
+    $scope.clearSearch = function () {
       console.log('search');
-      $scope.data.searchValue= null;
+      $scope.data.searchValue = null;
     }
 
     $scope.initvar = function () {
@@ -3408,7 +3408,8 @@ PLANNING DESTOCKEURS*/
           console.log(err);
           $ionicLoading.hide();
         })
-      } else if ($scope.data.marche == " " && $scope.data.adresse == " ") {
+      }
+      else if ($scope.data.marche == " " && $scope.data.adresse == " ") {
         $ionicPopup.show({
           title: "Alert",
           template: "Veuillez renseigner un marche ou une adresse.",
@@ -7885,58 +7886,40 @@ PLANNING DESTOCKEURS*/
     ApiAjoutPrc
 
   ) {
-    $scope.user = {
-      login: "",
-      password: "",
-    };
+    
     console.log('-------- details Solde Grossiste-------');
-    var url = urlPhp.getUrl();
-    var str = url + "/utilisateur/connexion.php";
-    var params = {
-      login: $scope.user.login,
-      motDePasse: $scope.user.password,
-    };
-
-    $http
-      .post(str, params)
-      .success(function (res) {
-
-        $scope.user_details = res;
-      });
-    var user = localStorage.getItem('user');
-
-
-    codeChefzone = user.substr(19, 2);
-    console.log("codeChefzone", codeChefzone);
+    
     $scope.initvar = function () {
 
-      var user = localStorage.getItem('user');
-      $scope.data.user = JSON.parse(user);
+      var user = JSON.parse(localStorage.getItem("user"));
 
       $scope.data.detailsSoldeAgent = [];
-      if (codeChefzone !== " ") {
+    }
+    $scope.soldeGrossiste = function () {
+      var user = JSON.parse(localStorage.getItem("user"));
+      //  $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+      if (user && user.code) {
+        var codeChef = { codeChefzone: user.code };
+        console.log('-----------------------Detail Solde Grossiste ---------------------');
+        console.log(codeChef);
+        ApiListSoldeAgent.ListSoldeAgent(codeChef)
+          .success(function (response) {
+            // $ionicLoading.hide();
+            if (response) {
+              $scope.data.detailsSoldeGrossiste = response;
+            }
 
-
-        var codeChefzone = { "codeChefzone": parseInt(user.substr(19, 2)) };
+            console.log('----------------------- Liste Detail Solde Grossiste ---------------------');
+            console.log("res:", response);
+            console.log($scope.data.detailsSoldeGrossiste);
+            console.log($scope.data.detailsSoldeGrossiste.nom);
+          }, error => {
+            $ionicLoading.hide();
+          });
       }
-      $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
-      console.log('-----------------------Detail Solde Grossiste ---------------------');
-      console.log(codeChefzone);
-      ApiListSoldeAgent.ListSoldeAgent(codeChefzone).
-        success(function (response) {
-          $ionicLoading.hide();
-
-          if (response) {
-            console.log(response);
-            $scope.data.detailsSoldeAgent = response;
-          }
-          console.log('-----------------------Detail Solde Grossiste ---------------------');
-          console.log(response);
-        }, error => {
-          $ionicLoading.hide();
-        });
     }
     $scope.initvar();
+    $scope.soldeGrossiste();
 
   })
 
@@ -7962,30 +7945,29 @@ PLANNING DESTOCKEURS*/
   ) {
     console.log('-------- details Solde Agent-------');
     $scope.initvar = function () {
-     // $scope.data.codeChefzone = localStorage.getItem('codeChefzone');
-     // var user = localStorage.getItem('user');
-      var user = JSON.parse(localStorage.getItem("user"));
      
-      $scope.data.detailsSoldeAgent=[];
-     // $scope.data.user = JSON.parse(user);
+      var user = JSON.parse(localStorage.getItem("user"));
+
+      $scope.data.detailsSoldeAgent = [];
+     
     }
 
     $scope.soldeAgent = function () {
       var user = JSON.parse(localStorage.getItem("user"));
-    //  $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+      //  $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
       if (user && user.code) {
-        var codeChef = { codeChefzone :  user.code };
+        var codeChef = { codeChefzone: user.code };
         console.log('-----------------------Detail Solde Agent ---------------------');
         console.log(codeChef);
         ApiListSoldeAgent.ListSoldeAgent(codeChef)
-        .success(function (response) {
-           // $ionicLoading.hide();
-           if(response){
+          .success(function (response) {
+            // $ionicLoading.hide();
+            if (response) {
               $scope.data.detailsSoldeAgent = response;
             }
-            
+
             console.log('----------------------- Liste Detail Solde Agent ---------------------');
-            console.log("res:",response);
+            console.log("res:", response);
             console.log($scope.data.detailsSoldeAgent);
             console.log($scope.data.detailsSoldeAgent.nom);
           }, error => {
@@ -8148,20 +8130,37 @@ PLANNING DESTOCKEURS*/
     };
 
     $scope.goToDetailsSoleGrossiste = function () {
-
-      $state.transitionTo(
-        "app.details-soleGrossiste",
-        {},
-        {
-          reload: true,
-          inherit: true,
-          notify: true,
-        }
-      );
-    };
-
+      if ($scope.data.GrossisteChefZonechoisit) {
+        $state.transitionTo(
+          "app.details-soleGrossiste",
+          {},
+          {
+            reload: true,
+            inherit: true,
+            notify: true,
+          }
+        );
+      }else 
+      {
+        $ionicPopup.show({
+          title: "Alert",
+          template: "Veuillez choisir un grossiste.",
+          scope: $scope,
+          buttons: [
+            {
+              text: 'OK',
+              type: 'button-energized',
+              onTap: function (e) {
+                return true;
+              }
+            }
+          ]
+        })
+      }
+      };
+    
     $scope.goToDetailsSoleAgent = function () {
-
+      if ($scope.data.AgentChefZonechoisit) {
       $state.transitionTo(
         "app.details-soleAgent",
         {},
@@ -8171,6 +8170,23 @@ PLANNING DESTOCKEURS*/
           notify: true,
         }
       );
+    }else 
+    {
+      $ionicPopup.show({
+        title: "Alert",
+        template: "Veuillez choisir un agent.",
+        scope: $scope,
+        buttons: [
+          {
+            text: 'OK',
+            type: 'button-energized',
+            onTap: function (e) {
+              return true;
+            }
+          }
+        ]
+      })
+    }
     };
     $scope.synchroPRC = function () {
 
@@ -13857,8 +13873,8 @@ PLANNING DESTOCKEURS*/
       ListSoldeAgent: function (codeChefzone) {
         var url = urlPhp.getUrl();
         var user = localStorage.getItem('user');
-       /* console.log('-------------User-------');
-        console.log(user);*/
+        /* console.log('-------------User-------');
+         console.log(user);*/
         user = JSON.parse(user);
         //console.log(values);
 
@@ -13867,6 +13883,21 @@ PLANNING DESTOCKEURS*/
     }
 
   })
+
+ /* .factory('ApiListSoldeGrossiste', function ($http, urlPhp) {
+    return {
+      ListSoldeGrossiste: function (codeChefzone) {
+        var url = urlPhp.getUrl();
+        var user = localStorage.getItem('user');
+     
+        user = JSON.parse(user);
+      
+
+        return $http.post(url + '', codeChefzone);
+      }
+    }
+
+  })*/
 
   .factory('ApiListGrossisteChefZone', function ($http, urlPhp) {
     return {

@@ -82,20 +82,19 @@
           
         </div>
   
-        <div class="row list"  ng-repeat="d in data.detailsSoldeAgent | filter:motcle">
+        <div class="row list"  ng-repeat="d in data.detailsSoldeAgent  | filter:motcle  | limitTo: 1">
   
             <div class="col content-div-row" >
-              {{d.nom}}
+              {{data.AgentChefZonechoisit.nom}}
             </div>
   
-         
-  
-            <!--<div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{data.detailsSoldeAgent.grossiste}}</div>
-  
-            <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{data.detailsSoldeAgent.grossiste}}</div>-->  
   
     
-            <div class="col content-div-row" >{{d.solde}}</div>
+            <div class="col content-div-row" ng-if="d.solde.length === 0">non endetté</div>
+            <div class="col content-div-row" ng-if="d.solde.length > 0">endetté</div>
+             <!--<div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{data.detailsSoldeAgent.grossiste}}</div>
+  
+            <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{data.detailsSoldeAgent.grossiste}}</div>-->  
           
         
   
