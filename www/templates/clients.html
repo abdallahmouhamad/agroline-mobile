@@ -4,56 +4,70 @@
       <ion-toolbar>
         <ion-title>Searchbar</ion-title>
       </ion-toolbar>
-      <ion-toolbar>
-        <ion-searchbar></ion-searchbar>
-      </ion-toolbar>
+     
+    
+     
     </ion-header>
     <ion-content padding="true" class="has-header">
-      <!--<label class="item-input-wrapper" >
+
+     
+
+      <label class="item-input-wrapper" style="height: 6%;" >
         <i class="icon ion-ios-search placeholder-icon"></i>
         
-        <input style="background-color: rgb(209, 208, 208); width: 75%; height: 7%; text-transform: uppercase;"type="search" placeholder="rechercher" ng-model="data.searchValue" class="ng-pristine ng-untouched ng-valid ng-empty">
+        <input style="background-color: rgb(209, 208, 208); width: 80%; height: 35%; text-transform: uppercase;" type="text" ng-model="data.search"  placeholder="rechercher">
         <ion-toolbar>
-        <ion-searchbar ion-button-end type="button" class="button button-clear ng-binding" >
-        <p style="color: gray;" ng-click="clearSearch()"> effacer</p>
-         
-        </ion-searchbar>
+          <button style="color: gray;" ng-click="recherche()">
+          Search
+        </button>
       </ion-toolbar>
-      </label>-->
+      </label>
 <br>
       <style type="text/css">
         input[readonly] {
           background-color: transparent !important;
           cursor: not-allowed;
         }
-        .small_button{
-            width: 50% !important;
-            height: 50px !important;
-            margin-left: 5px;
+
+        .search {
+          --background: #1EAC4E;
+          --color: white;
+
         }
+
+        .small_button {
+          width: 50% !important;
+          height: 50px !important;
+          margin-left: 5px;
+        }
+
         .footer-button {
           margin-bottom: 10px;
           height: 50px !important;
         }
-        .ml{
+
+        .ml {
           margin-left: 5px;
         }
+
         .header {
 
           margin-top: 5px;
           margin-bottom: 10px;
         }
+
         .content-div {
           background: #1EAC4E !important;
         }
+
         .content-div-row {
           text-align: center !important;
           border: 3px grey dashed !important;
         }
-        .bg {
-            background-color: #ef473a(4, 0, 255) !important;
-          }
 
+        .bg {
+          background-color: #ef473a(4, 0, 255) !important;
+        }
       </style>
 
 
@@ -63,66 +77,82 @@
           <img ng-if="cli.photo" src="http://test-test.h-tsoft.com/{{cli.photo}}">
           <div class="row">
             <div class="col">Raison sociale</div>
-            <div class="col"><p>{{ cli.nom }}</majuscule></p></div>
+            <div class="col">
+              <p>{{ cli.nom }}</majuscule>
+              </p>
+            </div>
           </div>
           <div class="row">
             <div class="col">Code</div>
-            <div class="col"><p>{{ cli.codeClient }}</p></div>
+            <div class="col">
+              <p>{{ cli.codeClient }}</p>
+            </div>
           </div>
 
-          <div class="row"  ng-if="cli.adresse !== 'NULL'">
+          <div class="row" ng-if="cli.adresse !== 'NULL'">
 
-            <div class="col" >Adresse</div>
-            <div class="col" ><p>{{ cli.adresse }}</p></div>
-           </div>
+            <div class="col">Adresse</div>
+            <div class="col">
+              <p>{{ cli.adresse }}</p>
+            </div>
+          </div>
 
           <div class="row" ng-if="cli.marche !== 'NULL'">
 
             <div class="col">Marche</div>
-            <div class="col"><p>{{ cli.marche }}</p></div>
+            <div class="col">
+              <p>{{ cli.marche }}</p>
+            </div>
           </div>
-          
+
           <div class="row">
             <div class="col">Telephone 1</div>
-            <div class="col"><p>{{ cli.telephone }}</p></div>
+            <div class="col">
+              <p>{{ cli.telephone }}</p>
+            </div>
           </div>
-          <div class="row"  ng-if="cli.telephone2 !== 'null' && cli.telephone2 !== '0' ">
+          <div class="row" ng-if="cli.telephone2 !== 'null' && cli.telephone2 !== '0' ">
             <div class="col">Telephone 2</div>
-            <div class="col"><p>{{ cli.telephone2 }}</p></div>
+            <div class="col">
+              <p>{{ cli.telephone2 }}</p>
+            </div>
           </div>
           <div class="row">
             <div class="col">Région</div>
-            <div class="col"><p>{{ cli.region }}</p></div>
+            <div class="col">
+              <p>{{ cli.region }}</p>
+            </div>
           </div>
-        
-         <!-- <div class="row">
+
+          <!-- <div class="row">
             <div class="col">Zone</div>
             <div class="col"><p>{{ cli.zone }}</p></div>
           </div>-->
         </a>
         <div class="row content-div">
 
-          <div class="col" >
+          <div class="col">
             <button class="button button-clear button-assertive" ng-click="goTocaClient(cli)" style="color: white;">
               Chiffre d'affaire
             </button>
           </div>
-    
-          <div class="col" >
-            <button class="button button-clear button-assertive"  style="color: white;">
-            
+
+          <div class="col">
+            <button class="button button-clear button-assertive" style="color: white;">
+
             </button>
           </div>
-    
-          <div class="col"   >
-           
-            <button class="button button-clear button-assertive" ng-click="goToNewClient(cli, 'edit')" style="color: white;">
+
+          <div class="col">
+
+            <button class="button button-clear button-assertive" ng-click="goToNewClient(cli, 'edit')"
+              style="color: white;">
               Modifier
             </button>
           </div>
-    
+
+        </div>
       </div>
-    </div>
 
 
     </ion-content>
@@ -130,4 +160,4 @@
       <i class="icon ion-plus"></i>
     </button>
   </div>
-  </ion-view>
+</ion-view>

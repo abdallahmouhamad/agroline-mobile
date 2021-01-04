@@ -2514,29 +2514,54 @@ PLANNING DESTOCKEURS*/
     ApiListClient,
     ApiDertailsClient,
     ApiCaClient,
+    ApiRechercheClient,
+   
   ) {
     $scope.data = {};
     $scope.data.datefin = null;
     $scope.data.datedebut = null;
-    $scope.data.searchValue = null
+
+    $scope.data.search = null;
+    $scope.data.ListRechercheClients = [];
+    $scope.data.client=[];
+    
 
     //  localStorage.setItem('clientca', null);
     var clientca = localStorage.getItem('clientca')
     $scope.clientCa = clientca ? JSON.parse(clientca) : null;
 
-    /*const searchbar = document.querySelector('ion-searchbar');
-    const items = Array.from(document.querySelector('ion-list').children);
-    searchbar.addEventListener('ionInput', handleInput);
+    $scope.recherche = function () {
+      
+      console.log('-----recherche-----');
+      ApiListClient.getListClient().success(
+        function (response) {
+          $ionicLoading.hide();
+          if (response) {
+            $scope.data.client = response;
+          }
+          console.log("....",$scope.data.client);
+        },
+        (error) => {
+          $ionicLoading.hide();
+        }
+      );
+        var mot = { motRecherche: $scope.data.search };
+        console.log("mot",mot)
+        ApiRechercheClient.ListRechercheClient(mot)
+          .success(function (reponse) {
+            $scope.data.ListRechercheClients = reponse;
+            console.log("recherche 1", $scope.data.ListRechercheClients);
+              console.log("recherche 2", $scope.data.client);
+              if(mot){
+             
+              $scope.data.ListRechercheClients  = $scope.data.client.filter(term =>
+                term.libelle.toLowerCase().indexOf(val.toLowerCase()) > -1)
+            }else{
+              $scope.data.ListRechercheClients  = $scope.data.client;
+            }
+          })
+    }
 
-    $scope.handleInput = function (event) {
-      const query = event.target.value.toLowerCase();
-      requestAnimationFrame(() => {
-        items.forEach(item => {
-          const shouldShow = item.textContent.toLowerCase().indexOf(query) > -1;
-          item.style.display = shouldShow ? 'block' : 'none';
-        });
-      });
-    }*/
     $scope.clearSearch = function () {
       console.log('search');
       $scope.data.searchValue = null;
@@ -2574,6 +2599,7 @@ PLANNING DESTOCKEURS*/
 
     }
     $scope.initvar();
+    $scope.recherche();
 
     $scope.goToNewClient = function (item = null, sens) {
       localStorage.setItem('sens', sens)
@@ -3026,6 +3052,7 @@ PLANNING DESTOCKEURS*/
       );
       console.log(response);
     });
+
     ApiListGrossiste.getListGrossiste(true, codeCommerciale = null).success(function (response) {
       if (response) {
         $scope.data.listgrossistes = response;
@@ -3219,7 +3246,7 @@ PLANNING DESTOCKEURS*/
         // && $scope.data.TypePointVentechoisit
         // && $scope.data.marche
         // && $scope.data.adresse
-        && $scope.data.modepaiementchoisit
+       // && $scope.data.modepaiementchoisit
         && $scope.data.telephone
         && $scope.data.position
         && $scope.data.grossistechoisit
@@ -3267,12 +3294,12 @@ PLANNING DESTOCKEURS*/
           }*/
         // values.delaiPaiement = 0;
 
-        if (values.idModepaiement == "1" || values.idModepaiement == "2") {
+       /* if (values.idModepaiement == "1" || values.idModepaiement == "2") {
           values.idModepaiement = parseInt(values.idModepaiement);
         } else {
           console.log("else", values.idModepaiement)
-        }
-
+        }*/
+        values.idModepaiement = 2;
         values.telephone = "" + values.telephone;
         values.telephone2 = "" + values.telephone2;
         values.delaiPaiement = + values.delaiPaiement;
