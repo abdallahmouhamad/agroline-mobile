@@ -46,26 +46,27 @@
           }
 
           .listItem {
-            line-height: 34px;
+            line-height: 30px;
            
           }
+          
         </style>
 
         <ion-list class="listItem">
 
           <ion-item menu-close href="#/app/bienvenue" style="color: rgb(7, 7, 7);">
-            <i class="icon ion-home"></i> &nbsp;{{ 'menu_acceuil' | translate }}
+            <i class="icon ion-home" style="color:#1EAC4E;"></i> &nbsp;{{ 'menu_acceuil' | translate }}
           </ion-item>
           <ion-item ng-if="permission('PREPARATION DE COMMANDE')" menu-close href="#/app/prcs" style="color: rgb(7, 7, 7);">
-            <i class="icon ion-ios-list"></i>&nbsp;PRCS
+            <i class="icon ion-ios-list" style="color:#1EAC4E;"></i>&nbsp;PRCS
           </ion-item>
 
           <ion-item ng-if="permission('RECUPERATION DE MARCHANDISES')" menu-close href="#/app/pds" style="color: rgb(7, 7, 7)">
-            <i class="icon ion-ios-list"></i>&nbsp;PDS
+            <i class="icon ion-ios-list" style="color:#1EAC4E;"></i>&nbsp;PDS
           </ion-item>
 
           <ion-item ng-if="permission('FACTURATION')" menu-close href="#/app/facturations" style="color: rgb(7, 7, 7)">
-            <i class="icon ion-ios-list"></i>&nbsp;Facture
+            <i class="icon ion-ios-list" style="color:#1EAC4E;"></i>&nbsp;Facture
           </ion-item>
 
           <!--<ion-item  menu-close href="#/app/prospects">
@@ -73,15 +74,15 @@
         </ion-item>-->
 
           <ion-item ng-if="permission('STOCK')" menu-close href="#/app/stocks" style="color:rgb(7, 7, 7);">
-            <i class="icon ion-ios-list"></i> &nbsp;Mon Stock
+            <i class="icon ion-ios-list" style="color:#1EAC4E;"></i> &nbsp;Mon Stock
           </ion-item>
 
           <ion-item ng-if="permission('CLIENT')" menu-close href="#/app/clients" style="color:rgb(7, 7, 7);">
-            <i class="icon ion-ios-list"></i>&nbsp;Clients
+            <i class="icon ion-ios-list" style="color:#1EAC4E;"></i>&nbsp;Clients
           </ion-item>
 
           <ion-item menu-close href="#/app/articles" style="color:rgb(7, 7, 7);">
-            <i class="icon ion-ios-list"></i>&nbsp;Articles
+            <i class="icon ion-ios-list" style="color:#1EAC4E;"></i>&nbsp;Articles
           </ion-item>
 
 
@@ -90,11 +91,11 @@
         </ion-item>-->
 
           <ion-item ng-if="permission('GEOLOCALISATION DESTOCKEURS')" menu-close href="#/app/maps" style="color:rgb(7, 7, 7);">
-            <i class="icon ion-ios-location"></i> &nbsp;GEO. DESTOCKEURS
+            <i class="icon ion-ios-location" style="color:#1EAC4E;"></i> &nbsp;GEO. DESTOCKEURS
           </ion-item>
 
           <ion-item menu-close href="#/app/login1" style="color: rgb(7, 7, 7);">
-            <i class="icon ion-log-out"></i> &nbsp;{{ 'menu_sedeconnecter' | translate }}
+            <i class="icon ion-log-out" style="color:#1EAC4E;"></i> &nbsp;{{ 'menu_sedeconnecter' | translate }}
           </ion-item>
 
         </ion-list>
@@ -106,9 +107,9 @@
 
 
 
-    <div class="bar bar-footer footer-button" style="background-color: white; color: black; text-align: center;">
-      <p style="text-align: center;">HTSOFT&copy; 2020
-      <p>
+    <div class="bar bar-footer footer-button" style="background-color: white; color: black; align-content: center;">
+      <p>HTSOFT&copy; 2020
+      </p>
     </div>
 
 

@@ -2515,23 +2515,23 @@ PLANNING DESTOCKEURS*/
     ApiDertailsClient,
     ApiCaClient,
     ApiRechercheClient,
-   
+
   ) {
     $scope.data = {};
     $scope.data.datefin = null;
     $scope.data.datedebut = null;
 
-    $scope.data.search = null;
+    $scope.data.searchValue = null;
     $scope.data.ListRechercheClients = [];
-    $scope.data.client=[];
-    
+    $scope.data.clientTempon = [];
+
 
     //  localStorage.setItem('clientca', null);
     var clientca = localStorage.getItem('clientca')
     $scope.clientCa = clientca ? JSON.parse(clientca) : null;
 
     $scope.recherche = function () {
-      
+
       console.log('-----recherche-----');
       ApiListClient.getListClient().success(
         function (response) {
@@ -2539,33 +2539,45 @@ PLANNING DESTOCKEURS*/
           if (response) {
             $scope.data.client = response;
           }
-          console.log("....",$scope.data.client);
+          console.log("....", $scope.data.client);
         },
         (error) => {
           $ionicLoading.hide();
         }
       );
-        var mot = { motRecherche: $scope.data.search };
-        console.log("mot",mot)
+
+      var mot = { motRecherche: $scope.data.searchValue };
+      console.log("mot", mot)
+      if (mot) {
         ApiRechercheClient.ListRechercheClient(mot)
           .success(function (reponse) {
             $scope.data.ListRechercheClients = reponse;
+            console.log(reponse);
             console.log("recherche 1", $scope.data.ListRechercheClients);
-              console.log("recherche 2", $scope.data.client);
-              if(mot){
-             
-              $scope.data.ListRechercheClients  = $scope.data.client.filter(term =>
-                term.libelle.toLowerCase().indexOf(val.toLowerCase()) > -1)
-            }else{
-              $scope.data.ListRechercheClients  = $scope.data.client;
+            if (mot !== " ") {
+              $scope.data.clientTempon = $scope.data.client;
+              console.log("tem", $scope.data.clientTempon);
+              $scope.data.clients = $scope.data.ListRechercheClients;
+              
+            }
+            if (mot === " ") {
+              $scope.data.clients=[];
+              $scope.data.clients = $scope.data.clientTempon;
+              
             }
           })
+      }
+    }
+    $scope.resetSearch = function(){
+      $scope.data.clients = $scope.data.clientTempon;
     }
 
-    $scope.clearSearch = function () {
-      console.log('search');
-      $scope.data.searchValue = null;
+    $scope.listenSearch = function(){
+      if(!$scope.data.searchValue || $scope.data.searchValue == ''){
+        $scope.resetSearch();
+      }
     }
+   
 
     $scope.initvar = function () {
       $scope.data.clients = [];
@@ -3246,7 +3258,7 @@ PLANNING DESTOCKEURS*/
         // && $scope.data.TypePointVentechoisit
         // && $scope.data.marche
         // && $scope.data.adresse
-       // && $scope.data.modepaiementchoisit
+        // && $scope.data.modepaiementchoisit
         && $scope.data.telephone
         && $scope.data.position
         && $scope.data.grossistechoisit
@@ -3294,14 +3306,15 @@ PLANNING DESTOCKEURS*/
           }*/
         // values.delaiPaiement = 0;
 
-       /* if (values.idModepaiement == "1" || values.idModepaiement == "2") {
-          values.idModepaiement = parseInt(values.idModepaiement);
-        } else {
-          console.log("else", values.idModepaiement)
-        }*/
+        /* if (values.idModepaiement == "1" || values.idModepaiement == "2") {
+           values.idModepaiement = parseInt(values.idModepaiement);
+         } else {
+           console.log("else", values.idModepaiement)
+         }*/
         values.idModepaiement = 2;
         values.telephone = "" + values.telephone;
-        values.telephone2 = "" + values.telephone2;
+       // values.telephone2 = "" + values.telephone2;
+        values.telephone2 = "0";
         values.delaiPaiement = + values.delaiPaiement;
         values.photo = "" + values.photo;
 
@@ -7913,9 +7926,9 @@ PLANNING DESTOCKEURS*/
     ApiAjoutPrc
 
   ) {
-    
+
     console.log('-------- details Solde Grossiste-------');
-    
+
     $scope.initvar = function () {
 
       var user = JSON.parse(localStorage.getItem("user"));
@@ -7972,11 +7985,11 @@ PLANNING DESTOCKEURS*/
   ) {
     console.log('-------- details Solde Agent-------');
     $scope.initvar = function () {
-     
+
       var user = JSON.parse(localStorage.getItem("user"));
 
       $scope.data.detailsSoldeAgent = [];
-     
+
     }
 
     $scope.soldeAgent = function () {
@@ -8167,8 +8180,7 @@ PLANNING DESTOCKEURS*/
             notify: true,
           }
         );
-      }else 
-      {
+      } else {
         $ionicPopup.show({
           title: "Alert",
           template: "Veuillez choisir un grossiste.",
@@ -8184,36 +8196,35 @@ PLANNING DESTOCKEURS*/
           ]
         })
       }
-      };
-    
+    };
+
     $scope.goToDetailsSoleAgent = function () {
       if ($scope.data.AgentChefZonechoisit) {
-      $state.transitionTo(
-        "app.details-soleAgent",
-        {},
-        {
-          reload: true,
-          inherit: true,
-          notify: true,
-        }
-      );
-    }else 
-    {
-      $ionicPopup.show({
-        title: "Alert",
-        template: "Veuillez choisir un agent.",
-        scope: $scope,
-        buttons: [
+        $state.transitionTo(
+          "app.details-soleAgent",
+          {},
           {
-            text: 'OK',
-            type: 'button-energized',
-            onTap: function (e) {
-              return true;
-            }
+            reload: true,
+            inherit: true,
+            notify: true,
           }
-        ]
-      })
-    }
+        );
+      } else {
+        $ionicPopup.show({
+          title: "Alert",
+          template: "Veuillez choisir un agent.",
+          scope: $scope,
+          buttons: [
+            {
+              text: 'OK',
+              type: 'button-energized',
+              onTap: function (e) {
+                return true;
+              }
+            }
+          ]
+        })
+      }
     };
     $scope.synchroPRC = function () {
 
@@ -13911,20 +13922,20 @@ PLANNING DESTOCKEURS*/
 
   })
 
- /* .factory('ApiListSoldeGrossiste', function ($http, urlPhp) {
-    return {
-      ListSoldeGrossiste: function (codeChefzone) {
-        var url = urlPhp.getUrl();
-        var user = localStorage.getItem('user');
-     
-        user = JSON.parse(user);
+  /* .factory('ApiListSoldeGrossiste', function ($http, urlPhp) {
+     return {
+       ListSoldeGrossiste: function (codeChefzone) {
+         var url = urlPhp.getUrl();
+         var user = localStorage.getItem('user');
       
-
-        return $http.post(url + '', codeChefzone);
-      }
-    }
-
-  })*/
+         user = JSON.parse(user);
+       
+ 
+         return $http.post(url + '', codeChefzone);
+       }
+     }
+ 
+   })*/
 
   .factory('ApiListGrossisteChefZone', function ($http, urlPhp) {
     return {
@@ -13968,7 +13979,7 @@ PLANNING DESTOCKEURS*/
         user = JSON.parse(user);
         //console.log(values);
 
-        return $http.get(url + '/client/recherche.php', motRecherche);
+        return $http.post(url + '/client/recherche.php', motRecherche);
       }
     }
 

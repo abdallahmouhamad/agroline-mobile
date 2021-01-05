@@ -8716,7 +8716,7 @@ progress {
       text-decoration: none; }
     .button.button-positive.active, .button.button-positive.activated {
       border-color: #1EAC4E;
-      background-color: #0c60ee; }
+      background-color: #1EAC4E; }
     .button.button-positive.button-clear {
       border-color: transparent;
       background: none;
@@ -8735,7 +8735,7 @@ progress {
         color: #fff; }
   .button.button-calm {
     border-color: transparent;
-    background-color: #11c1f3;
+    background-color: #1EAC4E;
     color: #fff; }
     .button.button-calm:hover {
       color: #fff;
@@ -8780,7 +8780,7 @@ progress {
     .button.button-assertive.button-outline {
       border-color: #1EAC4E;
       background: transparent;
-      color: #007aff; }
+      color: #1EAC4E; }
       .button.button-assertive.button-outline.active, .button.button-assertive.button-outline.activated {
         background-color: #1EAC4E;
         box-shadow: none;
@@ -8846,7 +8846,7 @@ progress {
       text-decoration: none; }
     .button.button-royal.active, .button.button-royal.activated {
       border-color: #a2a2a2;
-      background-color: #6b46e5; }
+      background-color: #1EAC4E; }
     .button.button-royal.button-clear {
       border-color: transparent;
       background: none;

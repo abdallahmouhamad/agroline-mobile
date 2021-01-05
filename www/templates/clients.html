@@ -4,15 +4,31 @@
       <ion-toolbar>
         <ion-title>Searchbar</ion-title>
       </ion-toolbar>
-     
-    
-     
+
+
+
     </ion-header>
     <ion-content padding="true" class="has-header">
+      <div class="row" style="align-content: center;">
+        <div class="col" >
+          <label class="item-input-wrapper" style=" width: 120%;height: 100%;">
+            <i class="icon ion-ios-search placeholder-icon"></i>
+            <input type="text" ng-model="data.searchValue" placeholder="Taper un text" (ionInput) ="listenSearch()" style="background-color: rgb(252, 249, 249); width: 100%; height: 75%;">
+            
+          </label>
+          
+        </div>
+        <div class="col" >
+          <button  slot="end" ng-click="resetSearch()">
+            x
+          </button>
+          <button  slot="end" ng-click="recherche()">
+            Chercher
+          </button>
+        </div>
+      </div>
 
-     
-
-      <label class="item-input-wrapper" style="height: 6%;" >
+      <!-- <label class="item-input-wrapper" style="height: 6%;" >
         <i class="icon ion-ios-search placeholder-icon"></i>
         
         <input style="background-color: rgb(209, 208, 208); width: 80%; height: 35%; text-transform: uppercase;" type="text" ng-model="data.search"  placeholder="rechercher">
@@ -21,8 +37,8 @@
           Search
         </button>
       </ion-toolbar>
-      </label>
-<br>
+      </label>-->
+      <br>
       <style type="text/css">
         input[readonly] {
           background-color: transparent !important;
@@ -71,7 +87,8 @@
       </style>
 
 
-      <div class="list" ng-repeat="cli in data.clients | filter:motcle">
+       <div class="list" ng-repeat="cli in data.clients | filter:motcle">
+     <!-- <div class="list" ng-repeat="cli in data.ListRechercheClients | filter:motcle">-->
         <a class="item item-thumbnail-left">
           <img ng-if="!cli.photo" src="./img/client.png">
           <img ng-if="cli.photo" src="http://test-test.h-tsoft.com/{{cli.photo}}">
@@ -153,11 +170,12 @@
 
         </div>
       </div>
+  </div>
 
 
-    </ion-content>
-    <button class="button button-float bg" ng-click="goToNewClient(null,'new')">
-      <i class="icon ion-plus"></i>
-    </button>
+  </ion-content>
+  <button class="button button-float bg" ng-click="goToNewClient(null,'new')">
+    <i class="icon ion-plus"></i>
+  </button>
   </div>
 </ion-view>
