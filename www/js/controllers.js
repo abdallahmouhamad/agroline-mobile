@@ -9624,8 +9624,8 @@ PLANNING DESTOCKEURS*/
                 );
               }
               else if (response.reponse == -10) {
-                var utilisateur = $scope.data.user.prenom + " " + $scope.data.user.nom + "/ " + $scope.data.user.telephone
-                console.log("Le client=========+>", client, $scope.data.clientchoisit.telephone)
+                var utilisateur = $scope.data.user.prenom + " " + $scope.data.user.nom + "/ "
+            
                 $ionicPopup.show({
                   title: 'Alert ',
                   template: 'Le solde de votre plafond ne vous permet pas de faire cette prise de stock, veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.',
