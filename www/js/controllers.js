@@ -14031,7 +14031,8 @@ PLANNING DESTOCKEURS*/
 
     return {
       getUrl: function () {
-        return "http://test-test.h-tsoft.com/apiagroline";
+       // return "http://test-test.h-tsoft.com/apiagroline";
+        return "http://test-test.h-tsoft.com/apiagrolineprod";
         //return "http://htsoftdemo.com/apiccbm";
         //return "http://192.168.1.34/CCBM-serveur";
         //  return "http://mob-test.yosard.com/webservice";
