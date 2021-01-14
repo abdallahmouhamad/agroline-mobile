@@ -45,7 +45,7 @@
             }
 
             .map {
-              height: 200px !important;
+              height: 250px !important;
             }
           </style>
 
@@ -58,8 +58,7 @@
                 reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
                 cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
                 search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
-                ng-model="data.regionchoisit" options="data.listregions"
-                option-getter="getOptRegion(option)"
+                ng-model="data.regionchoisit" options="data.listregions" option-getter="getOptRegion(option)"
                 modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
                 on-select="selectDepartementByRegion()" has-search="true">
                 <label for="" ng-if="!data.regionchoisit">Choisir une Region</label>
@@ -91,30 +90,30 @@
             </div>
           </div>
 
-          <div class="row"  style=" display:inline-block;">
-            <div class="col" >
-             
-                <button class="button button-block button-assertive"
-                  cancel-button="{{ 'fichevisite_select_pv_return' | translate }}"
-                  reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
-                  cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
-                  search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
-                  ng-model="data.localitechoisit" options="data.listlocalites" option-getter="getOptLocalite(option)"
-                  modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
-                  on-select="selectTypePointVente()" has-search="true">
-                  <label for="" ng-if="!data.localitechoisit">Choisir localite</label>
-                  <label for="" ng-if="data.localitechoisit">{{data.localitechoisit.libelle}}</label>
-                  <div class="option">
-                    <h2> {{option.libelle}}</h2>
-                  </div>
-                </button>
-             
+          <div class="row" style=" display:inline-block;">
+            <div class="col">
+
+              <button class="button button-block button-assertive"
+                cancel-button="{{ 'fichevisite_select_pv_return' | translate }}"
+                reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
+                cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
+                search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
+                ng-model="data.localitechoisit" options="data.listlocalites" option-getter="getOptLocalite(option)"
+                modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
+                on-select="selectTypePointVente()" has-search="true">
+                <label for="" ng-if="!data.localitechoisit">Choisir localite</label>
+                <label for="" ng-if="data.localitechoisit">{{data.localitechoisit.libelle}}</label>
+                <div class="option">
+                  <h2> {{option.libelle}}</h2>
+                </div>
+              </button>
+
             </div>
 
             <div class="col">
-                <label class="item item-input">
-                  <input type="text" id="marhe" ng-model="data.marche" placeholder="Marche">
-                </label>
+              <label class="item item-input">
+                <input type="text" id="marhe" ng-model="data.marche" placeholder="Marche">
+              </label>
             </div>
 
           </div>
@@ -243,7 +242,7 @@
 
             </div>
 
-           <!-- <div class="col">
+            <!-- <div class="col">
               <button class="button button-block button-assertive"
                 cancel-button="{{ 'fichevisite_select_pv_return' | translate }}"
                 reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
@@ -262,7 +261,7 @@
             </div>-->
           </div>
 
-        <!--  <div class="row"
+          <!--  <div class="row"
             ng-if="data.modepaiementchoisit.libelle == 'CREDIT' || data.modepaiementchoisit.libelle == 'credit'">
 
 
@@ -297,9 +296,9 @@
             <div class="col text-center">
               {{data.latitude}} | {{data.longitude}}
             </div>
+
           </div>
           <div>
-            <br>
             <br>
           </div>
           <div class="row">
@@ -310,13 +309,23 @@
               </ion-scroll>
             </div>
           </div>
+
+          <div class="row list map" id="map" data-tap-disabled="true"></div>
+
+          </div>
+
+
     </div>
 
 
-
     </ion-grid>
-    </ion-content>
 
+    </ion-content>
+    <!-- <div class="row">
+      <div class="col text-center">
+        <div class="row list map" id="map" data-tap-disabled="true"></div>
+      </div>
+    </div>-->
 
     </div>
     <div class="bar bar-footer footer-button">

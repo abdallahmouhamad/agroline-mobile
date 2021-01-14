@@ -56,10 +56,14 @@
             <div class="col">Code</div>
             <div class="col"><p>{{ prc.codePRC }}</p></div>
           </div>
-          <div class="row">
+          <div class="row" ng-if="prc.adresse !== 'NULL'">
             <div class="col">Adresse</div>
             <div class="col" ng-if="!prc.clientchoisit"><p>{{ prc.adresse }}</p></div>
             <div class="col" ng-if="prc.clientchoisit"><p>{{ prc.clientchoisit.adresse }}</p></div>
+          </div>
+          <div class="row" ng-if="prc.marche !== 'NULL'">
+            <div class="col">Marche</div>
+            <div class="col"><p>{{ prc.marche }}</p></div>
           </div>
           <div class="row">
             <div class="col">Client</div>
@@ -68,6 +72,20 @@
           </div>
 
           <div class="row">
+            <div class="col">Region</div>
+            <div class="col"><p>{{ prc.region }}</p></div>
+          </div>
+          <div class="row">
+            <div class="col">Departement</div>
+            <div class="col"><p>{{ prc.departement }}</p></div>
+          </div>
+
+          <div class="row">
+            <div class="col">Localité</div>
+            <div class="col"><p>{{ prc.localite }}</p></div>
+          </div>
+
+          <div class="row"> 
             <div class="col">Telephone</div>
             <div class="col" ng-if="!prc.clientchoisit"><p>{{ prc.telephone }}</p></div>
             <div class="col" ng-if="prc.clientchoisit"><p>{{ prc.clientchoisit.telephone }}</p></div>

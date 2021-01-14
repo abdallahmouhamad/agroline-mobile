@@ -140,7 +140,19 @@
     
   
         </div>
+  <div class="row">
+    <div class="col">
   
+      <div class="list">
+        <label class="item item-input" style="margin-top: 43px;">
+          <span class="input-label">Commentaire</span>
+            <input type="textarea" style="height: 75px; width:550px ;border-color: #ddd;" ng-model="data.commentaire" rows="6" cols="20" placeholder="Entrer une note ici...">
+          </label>
+      </div>
+
+      
+    </div>
+  </div>
         <div class="row">
   
           <div class="col">
@@ -351,6 +363,8 @@
         <div class="col"></div>
     </div>
   
+    
+
     <div class="col mt">
       <button ng-click="submit('val')" class="button button-block button-assertive footer-button" color="danger" type="submit"
       name="submit"><span style="color:white">Valider PDC</span></button>

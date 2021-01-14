@@ -757,6 +757,11 @@ PLANNING DESTOCKEURS*/
     ProfilUser,
     urlJava,
     ApiListAgentChefZone,
+    $filter,
+    ApiDateGeolocalisationAgent,
+    ApiDernierPositionAgent,
+    formatNewDate,
+    formatDate,
     ApiListLocationAgent,
     formatNewDate
   ) {
@@ -771,6 +776,12 @@ PLANNING DESTOCKEURS*/
     $scope.data.listAgentChefZones;
     $scope.data.agentchoisit = null;
     $scope.data.datefilter;
+    $scope.data.dernierPositionAgent = [];
+    $scope.data.positionAgents = [];
+    $scope.data.datefilterDebut;
+    $scope.data.datefilterFin;
+    $scope.data.NomChef;
+
     var user = JSON.parse(localStorage.getItem("user"));
     $scope.getOptPays = function (option) {
       // console.log(option)
@@ -780,6 +791,8 @@ PLANNING DESTOCKEURS*/
     $scope.selectAgent = function () {
       console.log('-----Liste Agent');
       console.log(user);
+      $scope.data.NomChef = user.nom;
+      console.log("NOM", $scope.data.NomChef);
       if (user && user.code) {
         var codeChef = { codeChefzone: user.code };
         ApiListAgentChefZone.ListAgentChefZone(codeChef)
@@ -793,9 +806,9 @@ PLANNING DESTOCKEURS*/
     }
     $scope.selectAgent();
     $scope.localisationAgent = function () {
-      if ($scope.data.datefilter) {
+      if ($scope.data.datefilterDebut && $scope.data.datefilterFin) {
         console.log('-------------La date----------');
-        console.log($scope.data.datefilter);
+        console.log("debut1:", $scope.data.datefilterDebut, "fin1:", $scope.data.datefilterFin);
         if ($scope.data.agentchoisit && user && user.code) {
 
           var params = {
@@ -803,15 +816,139 @@ PLANNING DESTOCKEURS*/
             codeAgent: $scope.data.agentchoisit.codeAgent,
             dateEnregistrement: $scope.data.datefilter
           }
+
+
+          /* if($scope.data.datefilterDebut !== " "){
+             return {
+             formatNewDate: function (dateParams = null) {
+               var d = $scope.data.datefilterDebut;
+               if (dateParams) {
+                 d = dateParams;
+               }
+       
+               var hours = parseInt(d.getHours());
+               if (hours < 10) {
+                 hours = "0" + "" + hours;
+               }
+               var minute = parseInt(d.getMinutes());
+               if (minute < 10) {
+                 minute = "0" + "" + minute;
+               }
+               var mounth = parseInt(d.getMonth()) + 1
+               if (mounth < 10) {
+                 mounth = "0" + "" + mounth;
+               }
+               var day = parseInt(d.getDate())
+               if (day < 10) {
+                 day = "0" + "" + day;
+               }
+               var second = parseInt(d.getSeconds())
+               if (second < 10) {
+                 second = "0" + "" + second;
+               }
+             $scope.data.datefilterDebut =[
+               d.getFullYear(),
+               mounth,
+               day
+             ].join('-') + ' ' +
+               [hours,
+                 minute,
+                 second].join(':');
+                 console.log("date debut: " + $scope.data.datefilterDebut);
+                 return $scope.data.datefilterDebut;
+               },
+             };
+           }
+          /* if($scope.data.datefilterFin !== " "){
+             return {
+               formatNewDate: function (dateParams = null) {
+                 var d = $scope.data.datefilterFin;
+                 console.log("d",d);
+                 if (dateParams) {
+                   d = dateParams;
+                 }
+         
+                 var hours = parseInt(d.getHours());
+                 if (hours < 10) {
+                   hours = "0" + "" + hours;
+                 }
+                 var minute = parseInt(d.getMinutes());
+                 if (minute < 10) {
+                   minute = "0" + "" + minute;
+                 }
+                 var mounth = parseInt(d.getMonth()) + 1
+                 if (mounth < 10) {
+                   mounth = "0" + "" + mounth;
+                 }
+                 var day = parseInt(d.getDate())
+                 if (day < 10) {
+                   day = "0" + "" + day;
+                 }
+                 var second = parseInt(d.getSeconds())
+                 if (second < 10) {
+                   second = "0" + "" + second;
+                 }
+               $scope.data.datefilterFin =[
+                 d.getFullYear(),
+                 mounth,
+                 day
+               ].join('-') + ' ' +
+                 [hours,
+                   minute,
+                   second].join(':');
+                   console.log("date fin: " + $scope.data.datefilterFin);
+                   return $scope.data.datefilterFin;
+                 },
+               };
+           }*/
+          var parametres = {
+            codeChefzone: user.code,
+            codeAgent: $scope.data.agentchoisit.codeAgent,
+            dateDebut: $scope.data.datefilterDebut,
+            dateFin: $scope.data.datefilterFin
+          }
+          console.log("parametres", parametres)
+          if ($scope.data.datefilterDebut !== " ") {
+            console.log("Debut!");
+            const event = new Date($scope.data.datefilterDebut);
+
+            var valDebut = event.toISOString();
+
+            var valDebut1 = valDebut.replace('T', ' ');
+
+            var valDebut2 = valDebut1.substr(0, 19)
+
+          }
+
+          if ($scope.data.datefilterFin !== " ") {
+            console.log("Fin!");
+            const event = new Date($scope.data.datefilterFin);
+
+            var valFin = event.toISOString();
+
+            var valFin1 = valFin.replace('T', ' ');
+
+            var valFin2 = valFin1.substr(0, 19)
+
+          }
           $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
-          ApiListLocationAgent.getListLocationAgent(params)
+          if ($scope.data.datefilterDebut !== " " && $scope.data.datefilterFin !== " ") {
+
+            $scope.data.datefilterDebut = valDebut2;
+            $scope.data.datefilterFin = valFin2;
+          }
+          console.log("debut:", $scope.data.datefilterDebut, "fin:", $scope.data.datefilterFin);
+          console.log("parametres 2", parametres)
+          // ApiListLocationAgent.getListLocationAgent(params)
+          ApiDateGeolocalisationAgent.ListDateGeolocalisationAgent(parametres)
             .success(function (response) {
               console.log('-----_Locations chefs zone----------');
               console.log(response);
               var locationsAgent = response[0];
-
+              var nomAgents = response[0].nom;
+              console.log("nomAgents",nomAgents);
               console.log('-----get objet----------');
-              console.log(locationsAgent);
+              console.log("position", locationsAgent);
 
               $ionicLoading.hide();
 
@@ -826,9 +963,11 @@ PLANNING DESTOCKEURS*/
 
                 var lat;
                 var long;
+
                 if (locationsAgent.localisations.length > 0) {
                   lat = locationsAgent.localisations[0].latitude;
                   long = locationsAgent.localisations[0].longitude;
+
                 } else {
                   lat = 0;
                   long = 0;
@@ -862,12 +1001,13 @@ PLANNING DESTOCKEURS*/
                           map: $scope.map,
                           animation: google.maps.Animation.DROP,
                           position: new google.maps.LatLng(pv.latitude, pv.longitude),
-                          icon: 'img/map-marker.png'
+                          icon: 'img/marker.png'
                         });
 
                         var infoWindow = new google.maps.InfoWindow({
-                          content:
-                            "date: " + pv.dateEnregistrement
+                          content: " Position entre 2 dates " +
+                            "<br/>Nom: " + nomAgents +
+                            "<br/> date: " + pv.dateEnregistrement
                           //  + "<br/>Adresse: " + pv.adresse 
                           // + "<br/>heure d'arrivée: " + pv.heureArrivee 
                           //  + "<br/>heure de départ: " + pv.heureDepart
@@ -935,42 +1075,223 @@ PLANNING DESTOCKEURS*/
       $scope.testProfile();
     };
     $scope.checkConnect();
-    $scope.initMap = function () {
-      var options = {
-        timeout: 10000,
-        enableHighAccuracy: true,
-      };
-      $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
-        var latLng = new google.maps.LatLng(
-          position.coords.latitude,
-          position.coords.longitude
-        );
+    $scope.initMapDernierePosition = function () {
+      var user = JSON.parse(localStorage.getItem("user"));
+      if (user && user.code) {
+        var codeChef = { codeChefzone: user.code };
+        console.log('---------Dernier Position Agent ----------');
+        console.log(codeChef);
+        ApiDernierPositionAgent.ListDernierPositionAgent(codeChef)
+          .success(function (response) {
+            // $ionicLoading.hide();
+            if (response) {
+              $scope.data.dernierPositionAgent = response;
+            }
 
-        var mapOptions = {
-          center: latLng,
-          zoom: 12,
-          mapTypeId: google.maps.MapTypeId.ROADMAP,
-        };
+            console.log('--------- Liste Dernier Position Agent ------------');
+            console.log("res:", response);
+            console.log($scope.data.dernierPositionAgent);
+            var lat;
+            var long;
+            var nom;
+            for (var i = 0; i < $scope.data.dernierPositionAgent.length; i++) {
+              if ($scope.data.dernierPositionAgent[i].latitude !== " " && $scope.data.dernierPositionAgent[i].longitude !== " ") {
+                $scope.data.positionAgents = $scope.data.dernierPositionAgent[i].latitude + "," + $scope.data.dernierPositionAgent[i].longitude;
+                lat = $scope.data.dernierPositionAgent[1].latitude;
+                long = $scope.data.dernierPositionAgent[1].longitude;
+                nom = $scope.data.dernierPositionAgent[1].nom;
+                dateEnregistrement = $scope.data.dernierPositionAgent[1].dateEnregistrement;
+              }
+            };
 
-        $scope.map = new google.maps.Map(
-          document.getElementById("map2"),
-          mapOptions
-        );
 
-        //Wait until the map is loaded
-        google.maps.event.addListenerOnce($scope.map, "idle", function () {
-          var marker = new google.maps.Marker({
-            map: $scope.map,
-            animation: google.maps.Animation.DROP,
-            position: latLng,
-            icon: "img/marker.png",
+            var latLng = new google.maps.LatLng(lat, long);
+            var mapOptions = {
+              center: latLng,
+              zoom: 12,
+              mapTypeId: google.maps.MapTypeId.ROADMAP,
+            };
+            $scope.maps = new google.maps.Map(
+              document.getElementById("map2"),
+              mapOptions
+            );
+            google.maps.event.addListenerOnce($scope.maps, "idle", function () {
+              var marker = new google.maps.Marker({
+                map: $scope.maps,
+                animation: google.maps.Animation.DROP,
+                position: latLng,
+                icon: "img/map-marker.png",
+
+              });
+
+              var infoWindow = new google.maps.InfoWindow({
+                content: "Ma Derniere position! "
+                  + "<br/>Nom: " + nom
+                  + "<br/>Date: " + dateEnregistrement
+                //  + "<br/>heure de départ: " + pv.heureDepart
+                // + "<br/>Outils: " + pv.outils ,
+
+              });
+
+              google.maps.event.addListener(marker, "click", function () {
+                infoWindow.open($scope.maps, marker);
+              });
+            });
+            console.log($scope.data.positionAgents);
+          }, error => {
+            $ionicLoading.hide();
           });
-        });
-      });
+      }
     };
+
+    // $scope.initMapDernierePosition();
+
+    $scope.initMap = function () {
+      var user = JSON.parse(localStorage.getItem("user"));
+      /******************/
+      if (user && user.code) {
+        var codeChef = { codeChefzone: user.code };
+        console.log('---------Dernier Position Agent ----------');
+        console.log(codeChef);
+        ApiDernierPositionAgent.ListDernierPositionAgent(codeChef)
+          .success(function (response) {
+            // $ionicLoading.hide();
+            if (response) {
+              $scope.data.dernierPositionAgent = response;
+            }
+
+            console.log('--------- Liste Dernier Position Agent ------------');
+            console.log("res:", response);
+            console.log($scope.data.dernierPositionAgent);
+            var lat;
+            var long;
+            var nom;
+            for (var i = 0; i < $scope.data.dernierPositionAgent.length; i++) {
+              if ($scope.data.dernierPositionAgent[i].latitude !== " " && $scope.data.dernierPositionAgent[i].longitude !== " ") {
+                $scope.data.positionAgents = $scope.data.dernierPositionAgent[i].latitude + "," + $scope.data.dernierPositionAgent[i].longitude;
+                lat = $scope.data.dernierPositionAgent[1].latitude;
+                long = $scope.data.dernierPositionAgent[1].longitude;
+                nomAgent = $scope.data.dernierPositionAgent[1].nom;
+                dateEnregistrement = $scope.data.dernierPositionAgent[1].dateEnregistrement;
+
+                lat2 = $scope.data.dernierPositionAgent[2].latitude;
+                long2 = $scope.data.dernierPositionAgent[2].longitude;
+                nomAgent2 = $scope.data.dernierPositionAgent[2].nom;
+                dateEnregistrement2 = $scope.data.dernierPositionAgent[2].dateEnregistrement;
+              }
+            };
+            var latLng1 = new google.maps.LatLng(lat, long);
+            var latLng2 = new google.maps.LatLng(lat2, long2);
+            console.log(latLng1);
+            console.log(latLng2);
+            var mapOption1 = {
+              center:  latLng1,
+              zoom: 12,
+              mapTypeId: google.maps.MapTypeId.ROADMAP,
+            };
+            var mapOption2 = {
+              center:  latLng2,
+              zoom: 12,
+              mapTypeId: google.maps.MapTypeId.ROADMAP,
+            };
+
+
+            date = formatNewDate.formatNewDate();
+            var options = {
+              timeout: 10000,
+              enableHighAccuracy: true,
+            };
+            $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
+              var latLng = new google.maps.LatLng(
+                position.coords.latitude,
+                position.coords.longitude
+              );
+
+
+              var mapOptions = {
+                center: latLng,
+                zoom: 12,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+              };
+
+              $scope.map = new google.maps.Map(
+                document.getElementById("map2"),
+                mapOptions, mapOption1,mapOption2
+              );
+              //Wait until the map is loaded
+              google.maps.event.addListenerOnce($scope.map, "idle", function () {
+                var marker = new google.maps.Marker({
+                  map: $scope.map,
+                  animation: google.maps.Animation.DROP,
+                  position: latLng,
+                  icon: "img/marker.png",
+                });
+
+                var marker1 = new google.maps.Marker({
+                  map: $scope.map,
+                  animation: google.maps.Animation.DROP,
+                  position: latLng1,
+                  icon: "img/map-marker.png",
+                });
+
+                var marker2 = new google.maps.Marker({
+                  map: $scope.map,
+                  animation: google.maps.Animation.DROP,
+                  position: latLng2,
+                  icon: "img/map-marker.png",
+                });
+                var infoWindow = new google.maps.InfoWindow({
+                  content: "Ma position actuelle!" +
+                    "<br/>Nom: " + $scope.data.NomChef
+                    + "<br/>Date: " + date
+                });
+
+                var infoWindow1 = new google.maps.InfoWindow({
+                  content: "Ma Derniere position! "
+                    + "<br/>Nom: " + nomAgent
+                    + "<br/>Date: " + dateEnregistrement
+
+                });
+
+                var infoWindow2 = new google.maps.InfoWindow({
+                  content: "Ma Derniere position! "
+                    + "<br/>Nom: " + nomAgent2
+                    + "<br/>Date: " + dateEnregistrement2
+
+                });
+
+                google.maps.event.addListener(marker,  "click", function () {
+                  infoWindow.open($scope.map, marker);
+                 
+                });
+
+                google.maps.event.addListener(marker1,  "click", function () {
+                  infoWindow1.open($scope.map, marker1);
+                });
+
+                google.maps.event.addListener(marker2,  "click", function () {
+                  infoWindow2.open($scope.map, marker2);
+                });
+              });
+
+            });
+            console.log($scope.data.positionAgents);
+          }, error => {
+            $ionicLoading.hide();
+          });
+      }
+      /*****************/
+
+    };
+
     $scope.listpays = function () {
-      // $scope.data.profil = ProfilUser.profilUser();
+
       $scope.initMap();
+      // $scope.data.profil = ProfilUser.profilUser();
+
+
+
+
       var pays;
       var listdespays;
       var payschoisit;
@@ -2515,6 +2836,8 @@ PLANNING DESTOCKEURS*/
     ApiDertailsClient,
     ApiCaClient,
     ApiRechercheClient,
+    ApiListDepartement,
+    ApiListLocalite
 
   ) {
     $scope.data = {};
@@ -2524,6 +2847,11 @@ PLANNING DESTOCKEURS*/
     $scope.data.searchValue = null;
     $scope.data.ListRechercheClients = [];
     $scope.data.clientTempon = [];
+
+    $scope.data.regionchoisit = null;
+    $scope.data.departementchoisit = null;
+    $scope.data.listdepartements = [];
+    $scope.data.localitechoisit = null;
 
 
     //  localStorage.setItem('clientca', null);
@@ -2558,30 +2886,61 @@ PLANNING DESTOCKEURS*/
               $scope.data.clientTempon = $scope.data.client;
               console.log("tem", $scope.data.clientTempon);
               $scope.data.clients = $scope.data.ListRechercheClients;
-              
+
             }
             if (mot === " ") {
-              $scope.data.clients=[];
+              $scope.data.clients = [];
               $scope.data.clients = $scope.data.clientTempon;
-              
+
             }
           })
       }
     }
-    $scope.resetSearch = function(){
+    $scope.resetSearch = function () {
       $scope.data.clients = $scope.data.clientTempon;
     }
 
-    $scope.listenSearch = function(){
-      if(!$scope.data.searchValue || $scope.data.searchValue == ''){
+    $scope.listenSearch = function () {
+      if (!$scope.data.searchValue || $scope.data.searchValue == '') {
         $scope.resetSearch();
       }
     }
-   
+
+    /* $scope.selectDepartementByRegion = function () {
+      // console.log($scope.data.regionchoisit.idRegion);
+       var region = { idRegion:$scope.data.clients.region }
+       console.log("hello", region)
+      // var departements= { libelle: $scope.data.regionchoisit.libelle }
+       ApiListDepartement.listDepartement(region)
+         .success(function (reponse) {
+           console.log('-----List Departements');
+           $scope.data.listdepartements = reponse;
+ 
+           console.log(reponse)
+         //  console.log(departements)
+         })
+     }*/
+
+
+    /* $scope.selectLocaliteByDepartement = function () {
+       // console.log($scope.data.departementchoisit.idDepartement);
+       var departement = { idDepartement: $scope.data.departementchoisit.idDepartement }
+       var localites = { libelle: $scope.data.departementchoisit.libelle }
+       ApiListLocalite.listLocalite(departement)
+         .success(function (reponse) {
+           console.log('-----List localites');
+           $scope.data.listlocalites = reponse;
+           console.log(reponse)
+           console.log(localite)
+         })
+     }*/
+
 
     $scope.initvar = function () {
       $scope.data.clients = [];
       $scope.listClients();
+      // $scope.selectDepartementByRegion();
+      //  $scope.selectLocaliteByDepartement();
     };
     //Init variables of controller
 
@@ -2603,6 +2962,8 @@ PLANNING DESTOCKEURS*/
             $scope.data.clients = response;
           }
           console.log(response);
+
+
         },
         (error) => {
           $ionicLoading.hide();
@@ -2907,10 +3268,64 @@ PLANNING DESTOCKEURS*/
     ApiAjoutClient,
     $ionicPopup,
     $filter,
+    formatNewDate,
     ApiListDepartement
   ) {
-
+     date = formatNewDate.formatNewDate();
+     $scope.nomclient;
     $scope.data = {};
+    var user = JSON.parse(localStorage.getItem("user"));
+    $scope.getPosition = function () {
+      $scope.nomclient = user.nom;
+      var options = { timeout: 10000, enableHighAccuracy: true };
+
+      $cordovaGeolocation.getCurrentPosition(options).then(
+        function (position) {
+          var latLng = new google.maps.LatLng(
+            position.coords.latitude,
+            position.coords.longitude
+          );
+
+          $scope.position = position.coords.latitude + "," + position.coords.longitude
+
+          var mapOptions = {
+            center: latLng,
+            zoom: 15,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+          };
+
+          $scope.map = new google.maps.Map(
+            document.getElementById("map"),
+            mapOptions
+          );
+
+          google.maps.event.addListenerOnce($scope.map, "idle", function () {
+            var marker = new google.maps.Marker({
+              map: $scope.map,
+              animation: google.maps.Animation.DROP,
+              position: latLng,
+              icon: "http://i.imgur.com/fDUI8bZ.png",
+
+            });
+
+            var infoWindow = new google.maps.InfoWindow({
+              content: "Ma position actuelle!"
+              + "<br/>Nom: " + $scope.nomclient
+              + "<br/>Date: " + date
+            });
+
+            google.maps.event.addListener(marker, "click", function () {
+              infoWindow.open($scope.map, marker);
+            });
+          });
+        },
+        function (error) {
+          console.log("Could not get location");
+        }
+      );
+    };
+
+    $scope.getPosition();
 
     $scope.initvar = function () {
       $scope.data.user = JSON.parse(localStorage.getItem('user'));
@@ -3313,7 +3728,7 @@ PLANNING DESTOCKEURS*/
          }*/
         values.idModepaiement = 2;
         values.telephone = "" + values.telephone;
-       // values.telephone2 = "" + values.telephone2;
+        // values.telephone2 = "" + values.telephone2;
         values.telephone2 = "0";
         values.delaiPaiement = + values.delaiPaiement;
         values.photo = "" + values.photo;
@@ -3343,7 +3758,7 @@ PLANNING DESTOCKEURS*/
          }*/
 
 
-        for (var i = 0; i < $scope.data.listdepartements.length; i++) {
+        /*for (var i = 0; i < $scope.data.listdepartements.length; i++) {
           if (values.idDepartement != " ") {
             values.idDepartement = parseInt($scope.data.listdepartements[i].idDepartement);
           } else {
@@ -3357,7 +3772,7 @@ PLANNING DESTOCKEURS*/
           } else {
             console.log(values.idLocalite)
           }
-        }
+        }*/
 
         for (var i = 0; i < $scope.data.listTypePointVentes.length; i++) {
           if (values.idTypepointvente != " ") {
@@ -3669,7 +4084,7 @@ PLANNING DESTOCKEURS*/
 
     $scope.number = function (mnt) {
       Number.prototype.toCurrencyString = function () {
-        return this.toFixed(2).replace(/(\d)(?=(\d{3})+\b)/g, '$1 ');
+        return this.toFixed(0).replace(/(\d)(?=(\d{3})+\b)/g, '$1 ');
       }
       n = +mnt;
       console.log(n.toCurrencyString());
@@ -4053,6 +4468,7 @@ PLANNING DESTOCKEURS*/
       $scope.data.motifchoisit = null;
       $scope.data.quantite = null;
       $scope.data.prix = null;
+      $scope.data.commentaire = null;
       $scope.data.delaipaiement = null;
       $scope.data.montant = 0.0;
       $scope.data.idMotif = 0;
@@ -4084,6 +4500,8 @@ PLANNING DESTOCKEURS*/
       console.log(item.quantite);
       $scope.data.quantite = +item.quantite;
       $scope.data.prix = +item.prix;
+      $scope.data.commentaire = item.commentaire;
+
 
       for (var i = 0; i < $scope.data.detailsPDC.length; i++) {
         if (
@@ -4301,7 +4719,7 @@ PLANNING DESTOCKEURS*/
     });
     $scope.number = function (mnt) {
       Number.prototype.toCurrencyString = function () {
-        return this.toFixed(2).replace(/(\d)(?=(\d{3})+\b)/g, '$1 ');
+        return this.toFixed(0).replace(/(\d)(?=(\d{3})+\b)/g, '$1 ');
       }
       n = +mnt;
       console.log(n.toCurrencyString());
@@ -4515,7 +4933,8 @@ PLANNING DESTOCKEURS*/
             isCanceled: 0,
             idMotif: $scope.data.idMotif,
             detailsPDC: $scope.data.detailsPDC,
-            delaiPaiement: $scope.data.delaipaiement
+            delaiPaiement: $scope.data.delaipaiement,
+            commentaire: $scope.data.commentaire
           };
 
           console.log("---------------------Value to submit--------------------");
@@ -4875,7 +5294,7 @@ PLANNING DESTOCKEURS*/
 
     $scope.number = function (mnt) {
       Number.prototype.toCurrencyString = function () {
-        return this.toFixed(2).replace(/(\d)(?=(\d{3})+\b)/g, '$1 ');
+        return this.toFixed(0).replace(/(\d)(?=(\d{3})+\b)/g, '$1 ');
       }
       n = +mnt;
       console.log(n.toCurrencyString());
@@ -5262,7 +5681,7 @@ PLANNING DESTOCKEURS*/
 
     $scope.number = function (mnt) {
       Number.prototype.toCurrencyString = function () {
-        return this.toFixed(2).replace(/(\d)(?=(\d{3})+\b)/g, '$1 ');
+        return this.toFixed(0).replace(/(\d)(?=(\d{3})+\b)/g, '$1 ');
       }
       n = +mnt;
       console.log(n.toCurrencyString());
@@ -5835,7 +6254,7 @@ PLANNING DESTOCKEURS*/
     };
     $scope.number = function (mnt) {
       Number.prototype.toCurrencyString = function () {
-        return this.toFixed(2).replace(/(\d)(?=(\d{3})+\b)/g, '$1 ');
+        return this.toFixed(0).replace(/(\d)(?=(\d{3})+\b)/g, '$1 ');
       }
       n = +mnt;
       console.log(n.toCurrencyString());
@@ -6377,7 +6796,7 @@ PLANNING DESTOCKEURS*/
     };
     $scope.number = function (mnt) {
       Number.prototype.toCurrencyString = function () {
-        return this.toFixed(2).replace(/(\d)(?=(\d{3})+\b)/g, '$1 ');
+        return this.toFixed(0).replace(/(\d)(?=(\d{3})+\b)/g, '$1 ');
       }
       n = +mnt;
       console.log(n.toCurrencyString());
@@ -6993,7 +7412,7 @@ PLANNING DESTOCKEURS*/
       var codeClient = { codeCommerciale: $scope.data.user.code };
       $scope.number = function (mnt) {
         Number.prototype.toCurrencyString = function () {
-          return this.toFixed(2).replace(/(\d)(?=(\d{3})+\b)/g, '$1 ');
+          return this.toFixed(0).replace(/(\d)(?=(\d{3})+\b)/g, '$1 ');
         }
         n = +mnt;
         console.log(n.toCurrencyString());
@@ -7302,7 +7721,7 @@ PLANNING DESTOCKEURS*/
     checkQuantite,
     ApiModificationDetailPDS,
     ApiDeletDetailPDS,
-    $filter,
+
     ApiDeletPDS
   ) {
     $scope.data = {};
@@ -7362,7 +7781,7 @@ PLANNING DESTOCKEURS*/
 
     $scope.number = function (mnt) {
       Number.prototype.toCurrencyString = function () {
-        return this.toFixed(2).replace(/(\d)(?=(\d{3})+\b)/g, '$1 ');
+        return this.toFixed(0).replace(/(\d)(?=(\d{3})+\b)/g, '$1 ');
       }
       n = +mnt;
       console.log(n.toCurrencyString());
@@ -9625,7 +10044,7 @@ PLANNING DESTOCKEURS*/
               }
               else if (response.reponse == -10) {
                 var utilisateur = $scope.data.user.prenom + " " + $scope.data.user.nom + "/ "
-            
+
                 $ionicPopup.show({
                   title: 'Alert ',
                   template: 'Le solde de votre plafond ne vous permet pas de faire cette prise de stock, veuillez faire le point avec le(s) grossiste(s) pour pouvoir prendre à nouveau du stock.',
@@ -13969,6 +14388,39 @@ PLANNING DESTOCKEURS*/
 
   })
 
+
+  .factory('ApiDateGeolocalisationAgent', function ($http, urlPhp) {
+    return {
+      ListDateGeolocalisationAgent: function (parametres) {
+        var url = urlPhp.getUrl();
+        var user = localStorage.getItem('user');
+        console.log('-------------User-------');
+        console.log(user);
+        user = JSON.parse(user);
+        //console.log(values);
+
+        return $http.post(url + '/utilisateur/localisation.php', parametres);
+      }
+    }
+
+  })
+
+  .factory('ApiDernierPositionAgent', function ($http, urlPhp) {
+    return {
+      ListDernierPositionAgent: function (codeChefzone) {
+        var url = urlPhp.getUrl();
+        var user = localStorage.getItem('user');
+        console.log('-------------User-------');
+        console.log(user);
+        user = JSON.parse(user);
+        //console.log(values);
+
+        return $http.post(url + '/utilisateur/position.php', codeChefzone);
+      }
+    }
+
+  })
+
   .factory('ApiRechercheClient', function ($http, urlPhp) {
     return {
       ListRechercheClient: function (motRecherche) {
@@ -14002,7 +14454,7 @@ PLANNING DESTOCKEURS*/
     return {
       separateurMillier: function (mnt) {
         Number.prototype.toCurrencyString = function () {
-          return this.toFixed(2).replace(/(\d)(?=(\d{3})+\b)/g, '$1 ');
+          return this.toFixed(0).replace(/(\d)(?=(\d{3})+\b)/g, '$1 ');
         }
         n = +mnt;
         console.log(n.toCurrencyString());
@@ -14031,8 +14483,8 @@ PLANNING DESTOCKEURS*/
 
     return {
       getUrl: function () {
-       // return "http://test-test.h-tsoft.com/apiagroline";
-        return "http://test-test.h-tsoft.com/apiagrolineprod";
+        return "http://test-test.h-tsoft.com/apiagroline";
+        // return "http://test-test.h-tsoft.com/apiagrolineprod";
         //return "http://htsoftdemo.com/apiccbm";
         //return "http://192.168.1.34/CCBM-serveur";
         //  return "http://mob-test.yosard.com/webservice";
@@ -14094,6 +14546,52 @@ PLANNING DESTOCKEURS*/
       },
     };
   })
+
+  .factory("formatDate", function () {
+
+    //$scope.data.profile = sessionStorage.getItem("")
+    return {
+      formatDate: function (dateParams = null) {
+        var d = Date();
+        if (dateParams) {
+          d = dateParams;
+        }
+
+        var hours = parseInt(d.getHours());
+        if (hours < 10) {
+          hours = "0" + "" + hours;
+        }
+        var minute = parseInt(d.getMinutes());
+        if (minute < 10) {
+          minute = "0" + "" + minute;
+        }
+        var mounth = parseInt(d.getMonth()) + 1
+        if (mounth < 10) {
+          mounth = "0" + "" + mounth;
+        }
+        var day = parseInt(d.getDate())
+        if (day < 10) {
+          day = "0" + "" + day;
+        }
+        var second = parseInt(d.getSeconds())
+        if (second < 10) {
+          second = "0" + "" + second;
+        }
+        var dformat = [
+          d.getFullYear(),
+          mounth,
+          day
+        ].join('-') + ' ' +
+          [hours,
+            minute,
+            second].join(':');
+
+        console.log("date format: " + dformat)
+        return dformat;
+      },
+    };
+  })
+
   .factory("ProfilUser", function () {
     var profil = "limite";
     //$scope.data.profile = sessionStorage.getItem("")
