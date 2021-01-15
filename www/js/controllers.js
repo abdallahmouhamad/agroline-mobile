@@ -804,7 +804,7 @@ PLANNING DESTOCKEURS*/
       }
 
     }
-    $scope.selectAgent();
+    // $scope.selectAgent();
     $scope.localisationAgent = function () {
       if ($scope.data.datefilterDebut && $scope.data.datefilterFin) {
         console.log('-------------La date----------');
@@ -946,7 +946,7 @@ PLANNING DESTOCKEURS*/
               console.log(response);
               var locationsAgent = response[0];
               var nomAgents = response[0].nom;
-              console.log("nomAgents",nomAgents);
+              console.log("nomAgents", nomAgents);
               console.log('-----get objet----------');
               console.log("position", locationsAgent);
 
@@ -1185,12 +1185,12 @@ PLANNING DESTOCKEURS*/
             console.log(latLng1);
             console.log(latLng2);
             var mapOption1 = {
-              center:  latLng1,
+              center: latLng1,
               zoom: 12,
               mapTypeId: google.maps.MapTypeId.ROADMAP,
             };
             var mapOption2 = {
-              center:  latLng2,
+              center: latLng2,
               zoom: 12,
               mapTypeId: google.maps.MapTypeId.ROADMAP,
             };
@@ -1216,7 +1216,7 @@ PLANNING DESTOCKEURS*/
 
               $scope.map = new google.maps.Map(
                 document.getElementById("map2"),
-                mapOptions, mapOption1,mapOption2
+                mapOptions, mapOption1, mapOption2
               );
               //Wait until the map is loaded
               google.maps.event.addListenerOnce($scope.map, "idle", function () {
@@ -1260,16 +1260,16 @@ PLANNING DESTOCKEURS*/
 
                 });
 
-                google.maps.event.addListener(marker,  "click", function () {
+                google.maps.event.addListener(marker, "click", function () {
                   infoWindow.open($scope.map, marker);
-                 
+
                 });
 
-                google.maps.event.addListener(marker1,  "click", function () {
+                google.maps.event.addListener(marker1, "click", function () {
                   infoWindow1.open($scope.map, marker1);
                 });
 
-                google.maps.event.addListener(marker2,  "click", function () {
+                google.maps.event.addListener(marker2, "click", function () {
                   infoWindow2.open($scope.map, marker2);
                 });
               });
@@ -3271,8 +3271,8 @@ PLANNING DESTOCKEURS*/
     formatNewDate,
     ApiListDepartement
   ) {
-     date = formatNewDate.formatNewDate();
-     $scope.nomclient;
+    date = formatNewDate.formatNewDate();
+    $scope.nomclient;
     $scope.data = {};
     var user = JSON.parse(localStorage.getItem("user"));
     $scope.getPosition = function () {
@@ -3310,8 +3310,8 @@ PLANNING DESTOCKEURS*/
 
             var infoWindow = new google.maps.InfoWindow({
               content: "Ma position actuelle!"
-              + "<br/>Nom: " + $scope.nomclient
-              + "<br/>Date: " + date
+                + "<br/>Nom: " + $scope.nomclient
+                + "<br/>Date: " + date
             });
 
             google.maps.event.addListener(marker, "click", function () {
@@ -8204,100 +8204,130 @@ PLANNING DESTOCKEURS*/
     ApiAjoutPdsFromRecap,
     SendSms,
     $filter,
+    ApiPlanningAgent,
+    ApiListAgentChefZone,
     ApiAjoutPrc
 
   ) {
-    console.log('--------planning-------');
-    $scope.goToDetailsPlanning = function () {
-
-      $state.transitionTo(
-        "app.details-planning",
-        {},
-        {
-          reload: true,
-          inherit: true,
-          notify: true,
-        }
-      );
-    };
-    $scope.synchroPRC = function () {
+   
+    var user = JSON.parse(localStorage.getItem('user'));
+    $scope.data.client = JSON.parse(localStorage.getItem('clientEdit'));
+    $scope.data.sens = localStorage.getItem('sens');
+    $scope.data.listAgents = [];
+    $scope.data.AgentChoisit = null;
+    $scope.data.datefilterDebut;
+    $scope.data.datefilterFin;
+    $scope.data.listAgentChefZones = [];
+    $scope.data.AgentChefZonechoisit = null;
 
 
-      $ionicLoading.show({
-        content: "Loading",
-        animation: "fade-in",
-        showBackdrop: true,
-        maxWidth: 200,
-        showDelay: 0,
-        duration: 10000,
-      });
-      var compte = 0;
-      var totalItem = $scope.data.prcs.length;
-      for (var i = 0; i < $scope.data.prcs.length; i++) {
-        var values = {
-          codePRC: $scope.data.prcs[i].codePRC,
-          codeClient: $scope.data.prcs[i].codeClient,
-          dateAjout: $scope.data.prcs[i].dateAjout,
-          idModepaiement: $scope.data.prcs[i].idModepaiement,
-          codeCommerciale: $scope.data.prcs[i].codeCommerciale,
-          isLoaded: $scope.data.prcs[i].isLoaded,
-          isCanceled: $scope.data.prcs[i].isCanceled,
-          idMotif: $scope.data.prcs[i].idMotif,
-          detailsPRC: $scope.data.prcs[i].detailsPRC
-        };
-        console.log("---------------------Value to submit--------------------");
-        console.log(values);
-        ApiAjoutPrc.ajoutPrc(values).success(
-          function (response) {
-            console.log(response);
+    $scope.selectAgent = function () {
+      console.log('-----Liste Agent');
+      var user = JSON.parse(localStorage.getItem("user"));
+      console.log(user);
+      $scope.data.NomChef = user.nom;
+      console.log("NOM", $scope.data.NomChef);
+      if (user && user.code) {
+        var codeChef = { codeChefzone: user.code };
+        ApiListAgentChefZone.ListAgentChefZone(codeChef)
+          .success(function (reponse) {
 
-            if (response.reponse == 1) {
-              compte = compte + 1;
-              var searchPrc = $filter('filter')($scope.data.prcs, { codePRC: values.codePRC });
-              console.log('------PRC to delet');
-              console.log(searchPrc);
-              if (searchPrc && searchPrc.length === 1) {
-                var prcLocal = searchPrc[0];
-                console.log('------PRC to delet');
-                console.log(prcLocal);
-                $scope.data.prcstmp.splice(prcLocal, 1);
-
-                localStorage.setItem('prclocal', JSON.stringify($scope.data.prcstmp))
-
-                console.log(compte)
-                console.log($scope.data.prcs.length)
-
-                if (compte === totalItem) {
-                  $scope.data.prcs = [];
-                  $ionicLoading.hide();
-                  $state.transitionTo(
-                    "app.prcs",
-                    {},
-                    {
-                      reload: true,
-                      inherit: true,
-                      notify: true,
-                    }
-                  );
-
-                }
-              }
-
-            }
-
-
-          },
-          (error) => {
-            erreur = 0;
-            $ionicLoading.hide();
-          }
-        );
-
+            $scope.data.listAgentChefZones = reponse;
+            console.log("####", $scope.data.listAgentChefZones)
+          })
+         
       }
 
+    }
 
+    $scope.selectAgent();
 
+    $scope.selectPlanningAgent = function () {
+      console.log('-----Liste Planning Agent');
+
+      if ($scope.data.AgentChefZonechoisit && $scope.data.datefilterDebut && $scope.data.datefilterFin) {
+        console.log("choix ", $scope.data.AgentChefZonechoisit.codeAgent);
+        var parametres = {
+          codeAgent: $scope.data.AgentChefZonechoisit.codeAgent,
+          dateDebut: $scope.data.datefilterDebut,
+          dateFin: $scope.data.datefilterFin
+        }
+
+        console.log("parametres", parametres);
+        ApiPlanningAgent.ListPlanningAgent(parametres)
+          .success(function (reponse) {
+            console.log('-----Liste Agent Chef Zone');
+            $scope.data.listAgents = reponse;
+            console.log($scope.data.listAgents)
+          })  
+          $state.transitionTo(
+            "app.details-planning",
+            {},
+            {
+              reload: true,
+              inherit: true,
+              notify: true,
+            }
+          );
+     /* }else if($scope.data.AgentChefZonechoisit){
+        $ionicPopup.show({
+          title: "Alert",
+          template: "Veuillez choisir un agent.",
+          scope: $scope,
+          buttons: [
+            {
+              text: 'OK',
+              type: 'button-energized',
+              onTap: function (e) {
+                return true;
+              }
+            }
+          ]
+        })
+      }else if($scope.data.datefilterDebut && $scope.data.datefilterFin){
+        $ionicPopup.show({
+          title: "Alert",
+          template: "Veuillez choisir une periode.",
+          scope: $scope,
+          buttons: [
+            {
+              text: 'OK',
+              type: 'button-energized',
+              onTap: function (e) {
+                return true;
+              }
+            }
+          ]
+        })*/
+      }else{
+        $ionicPopup.show({
+          title: "Alert",
+          template: "Veuillez remplir tout le formulaire.",
+          scope: $scope,
+          buttons: [
+            {
+              text: 'OK',
+              type: 'button-energized',
+              onTap: function (e) {
+                return true;
+              }
+            }
+          ]
+        })
+      }
+
+    }
+    // $scope.initvar();
+
+   // $scope.selectPlanningAgent();
+
+    $scope.getOptAgent = function (option) {
+      return option;
     };
+    $scope.getOptAgentPlanning = function (option) {
+      return option;
+    };
+
   })
   /*=================planning===================*/
   .controller("detailsPlanningCtrl", function (
@@ -14383,6 +14413,22 @@ PLANNING DESTOCKEURS*/
         //console.log(values);
 
         return $http.post(url + '/utilisateur/liste.php', codeChefzone);
+      }
+    }
+
+  })
+
+  .factory('ApiPlanningAgent', function ($http, urlPhp) {
+    return {
+      ListPlanningAgent: function (parametres) {
+        var url = urlPhp.getUrl();
+        var user = localStorage.getItem('user');
+        console.log('-------------User-------');
+        console.log(user);
+        user = JSON.parse(user);
+        //console.log(values);
+
+        return $http.post(url + '/planning/liste.php', parametres);
       }
     }
 
