@@ -758,6 +758,7 @@ PLANNING DESTOCKEURS*/
     urlJava,
     ApiListAgentChefZone,
     $filter,
+    $ionicPopup,
     ApiDateGeolocalisationAgent,
     ApiDernierPositionAgent,
     formatNewDate,
@@ -804,8 +805,25 @@ PLANNING DESTOCKEURS*/
       }
 
     }
-    // $scope.selectAgent();
-    $scope.localisationAgent = function () {
+    $scope.selectAgent();
+
+    var mapPolyline;
+    var polyLine;
+    var polyOptions;
+
+    function addPoint(event) {
+ 
+      var path = polyLine.getPath();
+      path.push(event.latLng);
+  
+      var marker = new google.maps.Marker({
+          position: event.latLng,
+          map:mapPolyline,
+      });
+      
+      map.setCenter(event.latLng);
+  } 
+    $scope.localisationAgentByPolyline = function () {
       if ($scope.data.datefilterDebut && $scope.data.datefilterFin) {
         console.log('-------------La date----------');
         console.log("debut1:", $scope.data.datefilterDebut, "fin1:", $scope.data.datefilterFin);
@@ -816,91 +834,6 @@ PLANNING DESTOCKEURS*/
             codeAgent: $scope.data.agentchoisit.codeAgent,
             dateEnregistrement: $scope.data.datefilter
           }
-
-
-          /* if($scope.data.datefilterDebut !== " "){
-             return {
-             formatNewDate: function (dateParams = null) {
-               var d = $scope.data.datefilterDebut;
-               if (dateParams) {
-                 d = dateParams;
-               }
-       
-               var hours = parseInt(d.getHours());
-               if (hours < 10) {
-                 hours = "0" + "" + hours;
-               }
-               var minute = parseInt(d.getMinutes());
-               if (minute < 10) {
-                 minute = "0" + "" + minute;
-               }
-               var mounth = parseInt(d.getMonth()) + 1
-               if (mounth < 10) {
-                 mounth = "0" + "" + mounth;
-               }
-               var day = parseInt(d.getDate())
-               if (day < 10) {
-                 day = "0" + "" + day;
-               }
-               var second = parseInt(d.getSeconds())
-               if (second < 10) {
-                 second = "0" + "" + second;
-               }
-             $scope.data.datefilterDebut =[
-               d.getFullYear(),
-               mounth,
-               day
-             ].join('-') + ' ' +
-               [hours,
-                 minute,
-                 second].join(':');
-                 console.log("date debut: " + $scope.data.datefilterDebut);
-                 return $scope.data.datefilterDebut;
-               },
-             };
-           }
-          /* if($scope.data.datefilterFin !== " "){
-             return {
-               formatNewDate: function (dateParams = null) {
-                 var d = $scope.data.datefilterFin;
-                 console.log("d",d);
-                 if (dateParams) {
-                   d = dateParams;
-                 }
-         
-                 var hours = parseInt(d.getHours());
-                 if (hours < 10) {
-                   hours = "0" + "" + hours;
-                 }
-                 var minute = parseInt(d.getMinutes());
-                 if (minute < 10) {
-                   minute = "0" + "" + minute;
-                 }
-                 var mounth = parseInt(d.getMonth()) + 1
-                 if (mounth < 10) {
-                   mounth = "0" + "" + mounth;
-                 }
-                 var day = parseInt(d.getDate())
-                 if (day < 10) {
-                   day = "0" + "" + day;
-                 }
-                 var second = parseInt(d.getSeconds())
-                 if (second < 10) {
-                   second = "0" + "" + second;
-                 }
-               $scope.data.datefilterFin =[
-                 d.getFullYear(),
-                 mounth,
-                 day
-               ].join('-') + ' ' +
-                 [hours,
-                   minute,
-                   second].join(':');
-                   console.log("date fin: " + $scope.data.datefilterFin);
-                   return $scope.data.datefilterFin;
-                 },
-               };
-           }*/
           var parametres = {
             codeChefzone: user.code,
             codeAgent: $scope.data.agentchoisit.codeAgent,
@@ -931,7 +864,7 @@ PLANNING DESTOCKEURS*/
             var valFin2 = valFin1.substr(0, 19)
 
           }
-          $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+          $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 150, showDelay: 0, duration: 100 });
           if ($scope.data.datefilterDebut !== " " && $scope.data.datefilterFin !== " ") {
 
             $scope.data.datefilterDebut = valDebut2;
@@ -945,7 +878,195 @@ PLANNING DESTOCKEURS*/
               console.log('-----_Locations chefs zone----------');
               console.log(response);
               var locationsAgent = response[0];
-              var nomAgents = response[0].nom;
+              if (response[0] !== " ") {
+                var nomAgents = response[0].nom;
+              }
+
+              console.log("nomAgents", nomAgents);
+              console.log('-----get objet----------');
+              console.log("position", locationsAgent);
+
+              $ionicLoading.hide();
+
+              var options = {
+                timeout: 10000,
+                enableHighAccuracy: true
+              };
+
+              if (locationsAgent.localisations) {
+                console.log('-----_Locations chefs zone----------');
+                console.log(response);
+
+                var lat;
+                var long;
+
+                if (locationsAgent.localisations.length > 0) {
+                  lat = locationsAgent.localisations[0].latitude;
+                  long = locationsAgent.localisations[0].longitude;
+
+                } else {
+                  lat = 0;
+                  long = 0;
+                }
+
+                var latLngAgent = new google.maps.LatLng(lat, long);
+
+                var mapOptions = {
+                  center: latLngAgent,
+                  zoom: 12,
+                  mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+
+                $scope.map = new google.maps.Map(document.getElementById("map2"), mapOptions);
+
+                //Wait until the map is loaded
+              //  google.maps.event.addListenerOnce($scope.map, 'idle', function () {
+
+                  var marker = new google.maps.Marker({
+                    map: $scope.map,
+                    animation: google.maps.Animation.DROP,
+                    position: latLngAgent,
+                    icon: 'img/marker.png'
+                  });
+                  $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+
+                  if (locationsAgent.localisations && locationsAgent.localisations.length > 0) {
+                    var pointeur = locationsAgent.localisations;
+                    for(var i = 0; i < pointeur.length; i++){
+                   // locationsAgent.localisations.forEach(function (pv) {
+                      if (pointeur[i].latitude !== 0 && pointeur[i].longitude !== 0 && pointeur[i].latitude !== '' && pointeur[i].longitude !== '' && pointeur[i].latitude !== null && pointeur[i].longitude !== null) {
+                        var latLng=  new google.maps.LatLng(pointeur[i].latitude,pointeur[i].longitude);
+                        var coordonnees=[
+                        latitude=  pointeur[i].latitude,
+                         longitude= pointeur[i].longitude
+                        ]
+                       console.log("coordonnees:" , coordonnees);
+                        var mapOption = {
+                          zoom: 12,
+                          mapTypeId: google.maps.MapTypeId.ROADMAP,
+                          center: latLng 
+                      };
+                      mapPolyline = new google.maps.Map(document.getElementById('map2'), mapOption);
+                      polyOptions = {
+                        strokeColor: '#0026b3',
+                        strokeOpacity: 1.0,
+                        strokeWeight: 2,
+                        geodesic: true,
+                    }
+                    polyLine = new google.maps.Polyline(polyOptions);
+                    polyLine.setMap(mapPolyline);
+                    google.maps.event.addListener(mapPolyline, 'click', function(event) {
+
+                      addPoint(event);
+                  }
+                  );
+                       
+                       
+                       }
+
+
+                    }
+
+                  }
+
+
+                  $ionicLoading.hide();
+
+
+              //  });
+                //});
+              }
+
+
+            })
+        }
+
+      }
+
+    }
+
+  
+      $scope.initMapPolyline= function () {
+      const map = new google.maps.Map(document.getElementById("map2"), {
+        zoom: 3,
+        center: { lat: 0, lng: -180 },
+        mapTypeId: "terrain",
+      });
+      const flightPlanCoordinates = [
+        { lat: 37.772, lng: -122.214 },
+        { lat: 21.291, lng: -157.821 },
+        { lat: -18.142, lng: 178.431 },
+        { lat: -27.467, lng: 153.027 },
+      ];
+      const flightPath = new google.maps.Polyline({
+        path: flightPlanCoordinates,
+        geodesic: true,
+        strokeColor: "#FF0000",
+        strokeOpacity: 1.0,
+        strokeWeight: 2,
+      });
+      flightPath.setMap(map);
+    }
+   
+    $scope.localisationAgent = function () {
+      if ($scope.data.agentchoisit && $scope.data.datefilterDebut && $scope.data.datefilterFin) {
+        console.log('-------------La date----------');
+        console.log("debut1:", $scope.data.datefilterDebut, "fin1:", $scope.data.datefilterFin);
+        if ($scope.data.agentchoisit && user && user.code) {
+
+          var params = {
+            codeChefzone: user.code,
+            codeAgent: $scope.data.agentchoisit.codeAgent,
+            dateEnregistrement: $scope.data.datefilter
+          }
+          var parametres = {
+            codeChefzone: user.code,
+            codeAgent: $scope.data.agentchoisit.codeAgent,
+            dateDebut: $scope.data.datefilterDebut,
+            dateFin: $scope.data.datefilterFin
+          }
+          console.log("parametres", parametres)
+          if ($scope.data.datefilterDebut !== " ") {
+            console.log("Debut!");
+            const event = new Date($scope.data.datefilterDebut);
+
+            var valDebut = event.toISOString();
+
+            var valDebut1 = valDebut.replace('T', ' ');
+
+            var valDebut2 = valDebut1.substr(0, 19)
+
+          }
+
+          if ($scope.data.datefilterFin !== " ") {
+            console.log("Fin!");
+            const event = new Date($scope.data.datefilterFin);
+
+            var valFin = event.toISOString();
+
+            var valFin1 = valFin.replace('T', ' ');
+
+            var valFin2 = valFin1.substr(0, 19)
+
+          }
+          $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 150, showDelay: 0, duration: 100 });
+          if ($scope.data.datefilterDebut !== " " && $scope.data.datefilterFin !== " ") {
+
+            $scope.data.datefilterDebut = valDebut2;
+            $scope.data.datefilterFin = valFin2;
+          }
+          console.log("debut:", $scope.data.datefilterDebut, "fin:", $scope.data.datefilterFin);
+          console.log("parametres 2", parametres)
+          // ApiListLocationAgent.getListLocationAgent(params)
+          ApiDateGeolocalisationAgent.ListDateGeolocalisationAgent(parametres)
+            .success(function (response) {
+              console.log('-----_Locations chefs zone----------');
+              console.log(response);
+              var locationsAgent = response[0];
+              if (response[0] !== " ") {
+                var nomAgents = response[0].nom;
+              }
+
               console.log("nomAgents", nomAgents);
               console.log('-----get objet----------');
               console.log("position", locationsAgent);
@@ -1003,9 +1124,18 @@ PLANNING DESTOCKEURS*/
                           position: new google.maps.LatLng(pv.latitude, pv.longitude),
                           icon: 'img/marker.png'
                         });
+                        
+                      /*  const flightPath = new google.maps.Polyline({
+                          path: locationsAgent.localisations,
+                          geodesic: true,
+                          strokeColor: "#FF0000",
+                          strokeOpacity: 1.0,
+                          strokeWeight: 2,
+                        });
+                        flightPath.setMap(map);*/
 
                         var infoWindow = new google.maps.InfoWindow({
-                          content: " Position entre 2 dates " +
+                          content: " Position d'un Agent " +
                             "<br/>Nom: " + nomAgents +
                             "<br/> date: " + pv.dateEnregistrement
                           //  + "<br/>Adresse: " + pv.adresse 
@@ -1021,20 +1151,32 @@ PLANNING DESTOCKEURS*/
 
                       }
 
+
                     });
                   }
-
                   $ionicLoading.hide();
-
-
                 });
-                //});
               }
 
 
             })
         }
 
+      }else {
+        $ionicPopup.show({
+          title: "Alert",
+          template: "Veuillez remplir tout le formulaire.",
+          scope: $scope,
+          buttons: [
+            {
+              text: 'OK',
+              type: 'button-energized',
+              onTap: function (e) {
+                return true;
+              }
+            }
+          ]
+        })
       }
 
     }
@@ -1151,6 +1293,7 @@ PLANNING DESTOCKEURS*/
       /******************/
       if (user && user.code) {
         var codeChef = { codeChefzone: user.code };
+        $scope.data.NomChef = user.nom;
         console.log('---------Dernier Position Agent ----------');
         console.log(codeChef);
         ApiDernierPositionAgent.ListDernierPositionAgent(codeChef)
@@ -1165,7 +1308,7 @@ PLANNING DESTOCKEURS*/
             console.log($scope.data.dernierPositionAgent);
             var lat;
             var long;
-            var nom;
+            // var nom;
             for (var i = 0; i < $scope.data.dernierPositionAgent.length; i++) {
               if ($scope.data.dernierPositionAgent[i].latitude !== " " && $scope.data.dernierPositionAgent[i].longitude !== " ") {
                 $scope.data.positionAgents = $scope.data.dernierPositionAgent[i].latitude + "," + $scope.data.dernierPositionAgent[i].longitude;
@@ -1283,10 +1426,11 @@ PLANNING DESTOCKEURS*/
       /*****************/
 
     };
-
+   // $scope.initMapPolyline();
     $scope.listpays = function () {
 
       $scope.initMap();
+     
       // $scope.data.profil = ProfilUser.profilUser();
 
 
@@ -8209,7 +8353,7 @@ PLANNING DESTOCKEURS*/
     ApiAjoutPrc
 
   ) {
-   
+
     var user = JSON.parse(localStorage.getItem('user'));
     $scope.data.client = JSON.parse(localStorage.getItem('clientEdit'));
     $scope.data.sens = localStorage.getItem('sens');
@@ -8219,6 +8363,7 @@ PLANNING DESTOCKEURS*/
     $scope.data.datefilterFin;
     $scope.data.listAgentChefZones = [];
     $scope.data.AgentChefZonechoisit = null;
+    $scope.data.NomChef;
 
 
     $scope.selectAgent = function () {
@@ -8235,7 +8380,7 @@ PLANNING DESTOCKEURS*/
             $scope.data.listAgentChefZones = reponse;
             console.log("####", $scope.data.listAgentChefZones)
           })
-         
+
       }
 
     }
@@ -8259,47 +8404,47 @@ PLANNING DESTOCKEURS*/
             console.log('-----Liste Agent Chef Zone');
             $scope.data.listAgents = reponse;
             console.log($scope.data.listAgents)
-          })  
-          $state.transitionTo(
-            "app.details-planning",
-            {},
-            {
-              reload: true,
-              inherit: true,
-              notify: true,
-            }
-          );
-     /* }else if($scope.data.AgentChefZonechoisit){
-        $ionicPopup.show({
-          title: "Alert",
-          template: "Veuillez choisir un agent.",
-          scope: $scope,
-          buttons: [
-            {
-              text: 'OK',
-              type: 'button-energized',
-              onTap: function (e) {
-                return true;
-              }
-            }
-          ]
-        })
-      }else if($scope.data.datefilterDebut && $scope.data.datefilterFin){
-        $ionicPopup.show({
-          title: "Alert",
-          template: "Veuillez choisir une periode.",
-          scope: $scope,
-          buttons: [
-            {
-              text: 'OK',
-              type: 'button-energized',
-              onTap: function (e) {
-                return true;
-              }
-            }
-          ]
-        })*/
-      }else{
+          })
+        $state.transitionTo(
+          "app.details-planning",
+          {},
+          {
+            reload: true,
+            inherit: true,
+            notify: true,
+          }
+        );
+        /* }else if($scope.data.AgentChefZonechoisit){
+           $ionicPopup.show({
+             title: "Alert",
+             template: "Veuillez choisir un agent.",
+             scope: $scope,
+             buttons: [
+               {
+                 text: 'OK',
+                 type: 'button-energized',
+                 onTap: function (e) {
+                   return true;
+                 }
+               }
+             ]
+           })
+         }else if($scope.data.datefilterDebut && $scope.data.datefilterFin){
+           $ionicPopup.show({
+             title: "Alert",
+             template: "Veuillez choisir une periode.",
+             scope: $scope,
+             buttons: [
+               {
+                 text: 'OK',
+                 type: 'button-energized',
+                 onTap: function (e) {
+                   return true;
+                 }
+               }
+             ]
+           })*/
+      } else {
         $ionicPopup.show({
           title: "Alert",
           template: "Veuillez remplir tout le formulaire.",
@@ -8319,7 +8464,7 @@ PLANNING DESTOCKEURS*/
     }
     // $scope.initvar();
 
-   // $scope.selectPlanningAgent();
+    // $scope.selectPlanningAgent();
 
     $scope.getOptAgent = function (option) {
       return option;

@@ -13,7 +13,7 @@
     </style>
 
     <ion-content>
-      <!--Test-->
+      <!--Test   on-select="localisationAgent()" -->
       <div>
         <div class="item item-body">
           <button class="button button-block button-assertive"
@@ -21,7 +21,8 @@
             reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
             cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
             search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
-            ng-model="data.agentchoisit" on-select="localisationAgent()" options="data.listAgentChefZones"
+            ng-model="data.agentchoisit"
+             options="data.listAgentChefZones"
             modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" option-getter="getOptAgent(option)"
             modal-title="Selection" has-search="true">
             <label for="" ng-if="!data.agentchoisit">Choisir agent</label>
@@ -41,25 +42,30 @@
         <label class="item item-input ">
           
           <div class="row">
-            <div class="col">
-              <p>Date debut</p>
-              <input type="datetime-local"   id="datefilterDebut"  style="color:#0a9dc7;font-weight: bold;" class=" checkbox-assertive"
-                name="datefilterDebut" placeholder="yyyy-mm-dd hh:mm:ss"  ng-model="data.datefilterDebut">
-               
-            </div>
+
             <div class="col">
               <p>Date fin</p>
-              <input type="datetime-local" displayFormat="yyyy-mm-dd hh:mm:ss"  name="fecha" id="datefilterFin" style="color:#0a9dc7;font-weight: bold;" class=" checkbox-assertive"
-                name="datefilterFin" placeholder="yyyy-mm-dd hh:mm:ss"  ng-model="data.datefilterFin " >
-               
+              <input type="datetime-local" id="datefilterFin" style="color:#0a9dc7;font-weight: bold;" class="checkbox-assertive"
+                name="datefilterFin" placeholder="yyyy-mm-dd hh:mm:ss"  ng-model="data.datefilterFin" >
             </div>
+
+            <div class="col">
+              <p>Date debut</p>
+              <input type="datetime-local" id="datefilterDebut" style="color:#0a9dc7;font-weight: bold;" class="checkbox-assertive"
+                name="datefilterDebut" placeholder="yyyy-mm-dd hh:mm:ss"  ng-model="data.datefilterDebut"> 
+            </div>
+
+            
+
           </div>
+
         </label>
 
         <div class="row">
           <button ng-click="localisationAgent()" class="button button-block button-assertive footer-button"
             color="danger" type="submit" name="submit"><span style="color:white">Afficher</span></button>
         </div>
+       
       </div>
       <style>
         /*  onfocus="(this.type='date')"   onblur="(this.type='text')"Always set the map height explicitly to define the size of the div
