@@ -812,17 +812,17 @@ PLANNING DESTOCKEURS*/
     var polyOptions;
 
     function addPoint(event) {
- 
+
       var path = polyLine.getPath();
       path.push(event.latLng);
-  
+
       var marker = new google.maps.Marker({
-          position: event.latLng,
-          map:mapPolyline,
+        position: event.latLng,
+        map: mapPolyline,
       });
-      
+
       map.setCenter(event.latLng);
-  } 
+    }
     $scope.localisationAgentByPolyline = function () {
       if ($scope.data.datefilterDebut && $scope.data.datefilterFin) {
         console.log('-------------La date----------');
@@ -920,31 +920,31 @@ PLANNING DESTOCKEURS*/
                 $scope.map = new google.maps.Map(document.getElementById("map2"), mapOptions);
 
                 //Wait until the map is loaded
-              //  google.maps.event.addListenerOnce($scope.map, 'idle', function () {
+                //  google.maps.event.addListenerOnce($scope.map, 'idle', function () {
 
-                  var marker = new google.maps.Marker({
-                    map: $scope.map,
-                    animation: google.maps.Animation.DROP,
-                    position: latLngAgent,
-                    icon: 'img/marker.png'
-                  });
-                  $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+                var marker = new google.maps.Marker({
+                  map: $scope.map,
+                  animation: google.maps.Animation.DROP,
+                  position: latLngAgent,
+                  icon: 'img/marker.png'
+                });
+                $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
 
-                  if (locationsAgent.localisations && locationsAgent.localisations.length > 0) {
-                    var pointeur = locationsAgent.localisations;
-                    for(var i = 0; i < pointeur.length; i++){
-                   // locationsAgent.localisations.forEach(function (pv) {
-                      if (pointeur[i].latitude !== 0 && pointeur[i].longitude !== 0 && pointeur[i].latitude !== '' && pointeur[i].longitude !== '' && pointeur[i].latitude !== null && pointeur[i].longitude !== null) {
-                        var latLng=  new google.maps.LatLng(pointeur[i].latitude,pointeur[i].longitude);
-                        var coordonnees=[
-                        latitude=  pointeur[i].latitude,
-                         longitude= pointeur[i].longitude
-                        ]
-                       console.log("coordonnees:" , coordonnees);
-                        var mapOption = {
-                          zoom: 12,
-                          mapTypeId: google.maps.MapTypeId.ROADMAP,
-                          center: latLng 
+                if (locationsAgent.localisations && locationsAgent.localisations.length > 0) {
+                  var pointeur = locationsAgent.localisations;
+                  for (var i = 0; i < pointeur.length; i++) {
+                    // locationsAgent.localisations.forEach(function (pv) {
+                    if (pointeur[i].latitude !== 0 && pointeur[i].longitude !== 0 && pointeur[i].latitude !== '' && pointeur[i].longitude !== '' && pointeur[i].latitude !== null && pointeur[i].longitude !== null) {
+                      var latLng = new google.maps.LatLng(pointeur[i].latitude, pointeur[i].longitude);
+                      var coordonnees = [
+                        latitude = pointeur[i].latitude,
+                        longitude = pointeur[i].longitude
+                      ]
+                      console.log("coordonnees:", coordonnees);
+                      var mapOption = {
+                        zoom: 12,
+                        mapTypeId: google.maps.MapTypeId.ROADMAP,
+                        center: latLng
                       };
                       mapPolyline = new google.maps.Map(document.getElementById('map2'), mapOption);
                       polyOptions = {
@@ -952,28 +952,28 @@ PLANNING DESTOCKEURS*/
                         strokeOpacity: 1.0,
                         strokeWeight: 2,
                         geodesic: true,
-                    }
-                    polyLine = new google.maps.Polyline(polyOptions);
-                    polyLine.setMap(mapPolyline);
-                    google.maps.event.addListener(mapPolyline, 'click', function(event) {
+                      }
+                      polyLine = new google.maps.Polyline(polyOptions);
+                      polyLine.setMap(mapPolyline);
+                      google.maps.event.addListener(mapPolyline, 'click', function (event) {
 
-                      addPoint(event);
-                  }
-                  );
-                       
-                       
-                       }
+                        addPoint(event);
+                      }
+                      );
 
 
                     }
 
+
                   }
 
+                }
 
-                  $ionicLoading.hide();
+
+                $ionicLoading.hide();
 
 
-              //  });
+                //  });
                 //});
               }
 
@@ -985,8 +985,8 @@ PLANNING DESTOCKEURS*/
 
     }
 
-  
-      $scope.initMapPolyline= function () {
+
+    $scope.initMapPolyline = function () {
       const map = new google.maps.Map(document.getElementById("map2"), {
         zoom: 3,
         center: { lat: 0, lng: -180 },
@@ -1007,7 +1007,7 @@ PLANNING DESTOCKEURS*/
       });
       flightPath.setMap(map);
     }
-   
+
     $scope.localisationAgent = function () {
       if ($scope.data.agentchoisit && $scope.data.datefilterDebut && $scope.data.datefilterFin) {
         console.log('-------------La date----------');
@@ -1019,55 +1019,71 @@ PLANNING DESTOCKEURS*/
             codeAgent: $scope.data.agentchoisit.codeAgent,
             dateEnregistrement: $scope.data.datefilter
           }
+          /*  var parametres = {
+             codeChefzone: user.code,
+             codeAgent: $scope.data.agentchoisit.codeAgent,
+             dateDebut: $scope.data.datefilterDebut,
+             dateFin: $scope.data.datefilterFin
+           }*/
+          var parametres = {
+             codeChefzone: user.code,
+             codeAgent: $scope.data.agentchoisit.codeAgent,
+             dateDebut: formatNewDate.formatNewDate($scope.data.datefilterDebut),
+             dateFin: formatNewDate.formatNewDate($scope.data.datefilterFin)
+           }
+
+         /* var dateDebutTab = $scope.data.datefilterDebut.split('T');
+          var dateFinTab = $scope.data.datefilterFin.split('T');
+          var dateDebutSimple = dateDebutTab[0] + " " + dateDebutTab[1] + ":01";
+          var dateFinSimple = dateFinTab[0] + " " + dateFinTab[1] + ":01";
           var parametres = {
             codeChefzone: user.code,
             codeAgent: $scope.data.agentchoisit.codeAgent,
-            dateDebut: $scope.data.datefilterDebut,
-            dateFin: $scope.data.datefilterFin
-          }
+            dateDebut: dateDebutSimple,
+            dateFin: dateFinSimple
+          }*/
           console.log("parametres", parametres)
-          if ($scope.data.datefilterDebut !== " ") {
-            console.log("Debut!");
-            const event = new Date($scope.data.datefilterDebut);
 
-            var valDebut = event.toISOString();
-
-            var valDebut1 = valDebut.replace('T', ' ');
-
-            var valDebut2 = valDebut1.substr(0, 19)
-
-          }
-
-          if ($scope.data.datefilterFin !== " ") {
-            console.log("Fin!");
-            const event = new Date($scope.data.datefilterFin);
-
-            var valFin = event.toISOString();
-
-            var valFin1 = valFin.replace('T', ' ');
-
-            var valFin2 = valFin1.substr(0, 19)
-
-          }
+          /* if ($scope.data.datefilterDebut !== " ") {
+             console.log("Debut!");
+             const event = new Date($scope.data.datefilterDebut);
+ 
+             var valDebut = event.toISOString();
+ 
+             var valDebut1 = valDebut.replace('T', ' ');
+ 
+             var valDebut2 = valDebut1.substr(0, 19)
+ 
+           }
+ 
+           if ($scope.data.datefilterFin !== " ") {
+             console.log("Fin!");
+             const event = new Date($scope.data.datefilterFin);
+ 
+             var valFin = event.toISOString();
+ 
+             var valFin1 = valFin.replace('T', ' ');
+ 
+             var valFin2 = valFin1.substr(0, 19)
+ 
+           }*/
           $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 150, showDelay: 0, duration: 100 });
-          if ($scope.data.datefilterDebut !== " " && $scope.data.datefilterFin !== " ") {
-
-            $scope.data.datefilterDebut = valDebut2;
-            $scope.data.datefilterFin = valFin2;
-          }
+          /* if ($scope.data.datefilterDebut !== " " && $scope.data.datefilterFin !== " ") {
+ 
+             $scope.data.datefilterDebut = valDebut2;
+             $scope.data.datefilterFin = valFin2;
+           }*/
           console.log("debut:", $scope.data.datefilterDebut, "fin:", $scope.data.datefilterFin);
           console.log("parametres 2", parametres)
           // ApiListLocationAgent.getListLocationAgent(params)
-          ApiDateGeolocalisationAgent.ListDateGeolocalisationAgent(parametres)
+         ApiDateGeolocalisationAgent.ListDateGeolocalisationAgent(parametres)
             .success(function (response) {
               console.log('-----_Locations chefs zone----------');
               console.log(response);
               var locationsAgent = response[0];
-              if (response[0] !== " ") {
-                var nomAgents = response[0].nom;
-              }
+              console.log(locationsAgent);
+             
 
-              console.log("nomAgents", nomAgents);
               console.log('-----get objet----------');
               console.log("position", locationsAgent);
 
@@ -1096,23 +1112,25 @@ PLANNING DESTOCKEURS*/
 
                 var latLng = new google.maps.LatLng(lat, long);
 
-                var mapOptions = {
+                var mapOption = {
                   center: latLng,
                   zoom: 12,
                   mapTypeId: google.maps.MapTypeId.ROADMAP
                 };
 
-                $scope.map = new google.maps.Map(document.getElementById("map2"), mapOptions);
+                $scope.map = new google.maps.Map(document.getElementById("map2"), mapOption);
 
                 //Wait until the map is loaded
                 google.maps.event.addListenerOnce($scope.map, 'idle', function () {
 
-                  var marker = new google.maps.Marker({
+                  var marker1 = new google.maps.Marker({
                     map: $scope.map,
                     animation: google.maps.Animation.DROP,
                     position: latLng,
                     icon: 'img/marker.png'
                   });
+
+
                   $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
 
                   if (locationsAgent.localisations && locationsAgent.localisations.length > 0) {
@@ -1122,21 +1140,33 @@ PLANNING DESTOCKEURS*/
                           map: $scope.map,
                           animation: google.maps.Animation.DROP,
                           position: new google.maps.LatLng(pv.latitude, pv.longitude),
-                          icon: 'img/marker.png'
+                          icon: 'img/map-marker.png'
                         });
-                        
-                      /*  const flightPath = new google.maps.Polyline({
-                          path: locationsAgent.localisations,
+
+                     
+
+                       
+
+                        var coordonnes = [];
+                        var locAgents = locationsAgent.localisations;
+                        for (var i = 0; i < locAgents.length; i++) {
+                          coordonnes.push({ lat: +locAgents[i].latitude, lng: +locAgents[i].longitude });
+                         
+                        }
+
+                        const flightPath = new google.maps.Polyline({
+                          path: coordonnes,
                           geodesic: true,
                           strokeColor: "#FF0000",
                           strokeOpacity: 1.0,
                           strokeWeight: 2,
                         });
-                        flightPath.setMap(map);*/
+                        flightPath.setMap($scope.map);
+
 
                         var infoWindow = new google.maps.InfoWindow({
                           content: " Position d'un Agent " +
-                            "<br/>Nom: " + nomAgents +
+                            "<br/>Nom: " + $scope.data.agentchoisit.nom +
                             "<br/> date: " + pv.dateEnregistrement
                           //  + "<br/>Adresse: " + pv.adresse 
                           // + "<br/>heure d'arrivée: " + pv.heureArrivee 
@@ -1154,6 +1184,17 @@ PLANNING DESTOCKEURS*/
 
                     });
                   }
+
+                  var infoWindow1 = new google.maps.InfoWindow({
+                    content: "Ma position actuelle!" +
+                      "<br/>Nom: " + $scope.data.agentchoisit.nom
+                      + "<br/>Date: " + date
+                  });
+
+                  google.maps.event.addListener(marker1, "click", function () {
+                    infoWindow1.open($scope.map, marker1);
+
+                  });
                   $ionicLoading.hide();
                 });
               }
@@ -1162,7 +1203,7 @@ PLANNING DESTOCKEURS*/
             })
         }
 
-      }else {
+      } else {
         $ionicPopup.show({
           title: "Alert",
           template: "Veuillez remplir tout le formulaire.",
@@ -1426,11 +1467,11 @@ PLANNING DESTOCKEURS*/
       /*****************/
 
     };
-   // $scope.initMapPolyline();
+    // $scope.initMapPolyline();
     $scope.listpays = function () {
 
       $scope.initMap();
-     
+
       // $scope.data.profil = ProfilUser.profilUser();
 
 
@@ -8348,6 +8389,7 @@ PLANNING DESTOCKEURS*/
     ApiAjoutPdsFromRecap,
     SendSms,
     $filter,
+    formatNewDate,
     ApiPlanningAgent,
     ApiListAgentChefZone,
     ApiAjoutPrc
@@ -8394,8 +8436,10 @@ PLANNING DESTOCKEURS*/
         console.log("choix ", $scope.data.AgentChefZonechoisit.codeAgent);
         var parametres = {
           codeAgent: $scope.data.AgentChefZonechoisit.codeAgent,
-          dateDebut: $scope.data.datefilterDebut,
-          dateFin: $scope.data.datefilterFin
+         // dateDebut: formatNewDate.formatNewDate($scope.data.datefilterDebut),
+           //  dateFin: formatNewDate.formatNewDate($scope.data.datefilterFin)
+             dateDebut: $scope.data.datefilterDebut,
+             dateFin: $scope.data.datefilterFin
         }
 
         console.log("parametres", parametres);
