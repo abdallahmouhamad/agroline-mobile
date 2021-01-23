@@ -2733,6 +2733,7 @@ PLANNING DESTOCKEURS*/
         console.log(position.latitude);
         console.log(position.longitude);
       });
+     
     };
 
     $scope.stopTrackingPosition = function () {
@@ -3624,6 +3625,7 @@ PLANNING DESTOCKEURS*/
     date = formatNewDate.formatNewDate();
     $scope.nomclient;
    
+   
     $scope.data = {};
     var user = JSON.parse(localStorage.getItem("user"));
 
@@ -3634,7 +3636,7 @@ PLANNING DESTOCKEURS*/
 
       $window.navigator.geolocation.getCurrentPosition(function(position) {
         $scope.$apply(function() {
-         // $scope.lat = position.Coordinates.latitude;
+        //  $scope.lat = position.Coordinates.latitude;
          // $scope.lng = position.Coordinates.longitude;
     
           var geocoder = new google.maps.Geocoder();
@@ -3652,7 +3654,7 @@ PLANNING DESTOCKEURS*/
               }
             }
           })
-          console.log("adresse",scope.data.adresseUser);
+          console.log("adresse",$scope.data.adresseUser);
         })
       })
     };
@@ -3667,6 +3669,8 @@ PLANNING DESTOCKEURS*/
             position.coords.latitude,
             position.coords.longitude
           );
+          console.log("coords",position.coords);
+          
           $scope.getAdresse(latLng);
 
           var mapOptions = {
@@ -3709,7 +3713,7 @@ PLANNING DESTOCKEURS*/
       );
     };
 
-    $scope.getPosition();
+  //  $scope.getPosition();
     $scope.initvar = function () {
       $scope.data.user = JSON.parse(localStorage.getItem('user'));
       $scope.data.client = JSON.parse(localStorage.getItem('clientEdit'));
@@ -3907,9 +3911,12 @@ PLANNING DESTOCKEURS*/
     $scope.getOptAgent = function (option) {
       return option;
     };
+
+
     $scope.startTracking = function () {
 
       $scope.getCurrentPosition();
+     
 
 
     }
@@ -3932,7 +3939,7 @@ PLANNING DESTOCKEURS*/
         $scope.data.latitude = position.coords.latitude;
         $scope.data.longitude = position.coords.longitude;
         $scope.data.position = position.coords.latitude + "," + position.coords.longitude
-
+        $scope.getPosition();
 
       }, function (error) {
         $ionicLoading.hide();
