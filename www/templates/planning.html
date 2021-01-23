@@ -94,27 +94,37 @@
              
             </div>
 
-            <label class="item item-input ">
+            <label class="item item-input">
+              <span class="input-label">Debut</span>
+              <input type="text" onfocus="(this.type='date')" ng-model="data.datefilterDebut"  placeholder="yyyy-mm-dd">
+            </label>
+            <label class="item item-input">
+              <span class="input-label">Fin</span>
+              <input type="text" onfocus="(this.type='date')"  ng-model="data.datefilterFin"  placeholder="yyyy-mm-dd">
+            </label>
+
+           <!-- <label class="item item-input ">
           
               <div class="row">
                 <div class="col">
                   <p>Date debut</p>
-                  <input type="datetime"  placeholder="yyyy-mm-dd" id="datefilterDebut"  style="color:#0a9dc7;font-weight: bold;" class=" checkbox-assertive"
+                  <input type="date"  placeholder="yyyy-mm-dd" id="datefilterDebut"  style="color:#0a9dc7;font-weight: bold;" class=" checkbox-assertive"
                     name="datefilterDebut"  onfocus="(this.type='date')"   onblur="(this.type='text')"  ng-model="data.datefilterDebut">
                    
                 </div>
                 <div class="col">
                   <p>Date fin</p>
-                  <input type="datetime" placeholder="yyyy-mm-dd"  id="datefilterFin" style="color:#0a9dc7;font-weight: bold;" class=" checkbox-assertive"
+                  <input type="date" placeholder="yyyy-mm-dd"  id="datefilterFin" style="color:#0a9dc7;font-weight: bold;" class=" checkbox-assertive"
                     name="datefilterFin"  onfocus="(this.type='date')"   onblur="(this.type='text')"  ng-model="data.datefilterFin " >
                    
                 </div>
               </div>
-            </label>
+            </label>-->
           
       </div>
   
-  
+     
+     
   
       </ion-grid>
       </ion-content>

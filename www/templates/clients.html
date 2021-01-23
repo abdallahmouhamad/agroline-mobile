@@ -10,19 +10,19 @@
     </ion-header>
     <ion-content padding="true" class="has-header">
       <div class="row" style="align-content: center;">
-        <div class="col" >
+        <div class="col">
           <label class="item-input-wrapper" style=" width: 120%;height: 100%;">
             <i class="icon ion-ios-search placeholder-icon"></i>
-            <input type="text" ng-model="data.searchValue" placeholder="Taper un text" (ionInput) ="listenSearch()" style="background-color: rgb(252, 249, 249); width: 100%; height: 75%;">
-            
+            <input type="text" ng-model="data.searchValue" placeholder="Taper un text"
+              style="background-color: rgb(252, 249, 249); width: 100%; height: 75%;">
           </label>
-          
+
         </div>
-        <div class="col" >
-          <button  slot="end" ng-click="resetSearch()">
+        <div class="col">
+          <button slot="end" ng-click="resetSearch()">
             x
           </button>
-          <button  slot="end" ng-click="recherche()">
+          <button slot="end" ng-click="recherche()">
             Chercher
           </button>
         </div>
@@ -84,14 +84,21 @@
         .bg {
           background-color: #ef473a(4, 0, 255) !important;
         }
+
+        .map {
+          height: 150px !important;
+        }
       </style>
 
+      <div class="list" ng-repeat="cli in data.clients">
 
-       <div class="list" ng-repeat="cli in data.clients | filter:motcle">
-     <!-- <div class="list" ng-repeat="cli in data.ListRechercheClients | filter:motcle">-->
+        <!-- <div class="list" ng-repeat="cli in data.ListRechercheClients | filter:motcle">-->
         <a class="item item-thumbnail-left">
+
           <img ng-if="!cli.photo" src="./img/client.png">
           <img ng-if="cli.photo" src="http://test-test.h-tsoft.com/{{cli.photo}}">
+
+
           <div class="row">
             <div class="col">Raison sociale</div>
             <div class="col">
@@ -106,7 +113,7 @@
             </div>
           </div>
 
-          <div class="row" ng-if="cli.adresse !== 'NULL'">
+          <div class="row">
 
             <div class="col">Adresse</div>
             <div class="col">
@@ -114,7 +121,7 @@
             </div>
           </div>
 
-          <div class="row" ng-if="cli.marche !== 'NULL'">
+          <div class="row">
 
             <div class="col">Marche</div>
             <div class="col">
@@ -128,7 +135,7 @@
               <p>{{ cli.telephone }}</p>
             </div>
           </div>
-          <div class="row" ng-if="cli.telephone2 !== 'null' && cli.telephone2 !== '0' ">
+          <div class="row">
             <div class="col">Telephone 2</div>
             <div class="col">
               <p>{{ cli.telephone2 }}</p>
@@ -153,35 +160,49 @@
             </div>
           </div>
 
-          <!-- <div class="row">
+          <div class="row">
+            <div class="col">Point de vente</div>
+            <div class="col">
+              <p>{{ cli.typepointvente}}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">Coordonnees</div>
+            <div class="col">
+              <p>{{ cli.position}}</p>
+            </div>
+          </div>
+    
+
+      <!--   <div class="row">
             <div class="col">Zone</div>
             <div class="col"><p>{{ cli.zone }}</p></div>
           </div>-->
-        </a>
-        <div class="row content-div">
+      </a>
+      <div class="row content-div">
 
-          <div class="col">
-            <button class="button button-clear button-assertive" ng-click="goTocaClient(cli)" style="color: white;">
-              Chiffre d'affaire
-            </button>
-          </div>
-
-          <div class="col">
-            <button class="button button-clear button-assertive" style="color: white;">
-
-            </button>
-          </div>
-
-          <div class="col">
-
-            <button class="button button-clear button-assertive" ng-click="goToNewClient(cli, 'edit')"
-              style="color: white;">
-              Modifier
-            </button>
-          </div>
-
+        <div class="col">
+          <button class="button button-clear button-assertive" ng-click="goTocaClient(cli)" style="color: white;">
+            Chiffre d'affaire
+          </button>
         </div>
+
+        <div class="col">
+          <button class="button button-clear button-assertive" ng-click="goToNewCoordonnees(cli)" style="color: white;">
+            Map
+          </button>
+        </div>
+
+        <div class="col">
+
+          <button class="button button-clear button-assertive" ng-click="goToNewClient(cli, 'edit')"
+            style="color: white;">
+            Modifier
+          </button>
+        </div>
+
       </div>
+  </div>
   </div>
 
 

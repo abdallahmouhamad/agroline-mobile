@@ -100,7 +100,7 @@
                 search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
                 ng-model="data.localitechoisit" options="data.listlocalites" option-getter="getOptLocalite(option)"
                 modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
-                on-select="selectTypePointVente()" has-search="true">
+                 has-search="true">
                 <label for="" ng-if="!data.localitechoisit">Choisir localite</label>
                 <label for="" ng-if="data.localitechoisit">{{data.localitechoisit.libelle}}</label>
                 <div class="option">
@@ -165,6 +165,7 @@
                 ng-model="data.TypePointVentechoisit" options="data.listTypePointVentes"
                 option-getter="getOptTypePointVente(option)"
                 modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
+                on-select="selectTypePointVente()"
                 has-search="true">
                 <label for="" ng-if="!data.TypePointVentechoisit">Type point de vente</label>
                 <label for="" ng-if="data.TypePointVentechoisit">{{data.TypePointVentechoisit.libelle}}</label>
