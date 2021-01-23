@@ -417,10 +417,33 @@
               </div>
             </div>
             </div>
-
-          
-
           </div>
+
+          <div class="row">
+
+            <div class="col" ng-if="permission('PLANNING DESTOCKEURS')">
+              <div class="card cardHome" style="background-color: #28a54c; color: white; ">
+                <div class="item item-text-wrap">
+                  <p style="text-align: center"><img src="./img/plannings.jpg" style="width:45%; height: 1%;"></p>
+                </div>
+                <p style="color: white;text-align: center;margin-top: 10px">
+                  <a href="#/app/planning" style="color: white;text-decoration:none;">&nbsp;Planning</a>
+                </p>
+              </div>
+            </div>
+  
+            <div class="col" ng-if="permission('CONSULTATION SOLDE')">
+              <div class="card cardHome" style="background-color: #28a54c; color: white">
+                <div class="item item-text-wrap">
+                  <p style="text-align: center"><img src="./img/soldes.jpg" style="width:45%; height: 40%;"></p>
+                </div>
+                <p style="color: white;text-align: center;margin-top: 10px">
+                  <a href="#/app/consultationSole" style="background-color: #28a54c;color: white;text-decoration:none;">&nbsp;C. solde</a>
+                </p>
+              </div>
+            </div>
+  
+            </div>
           <div class="row">
 
             <div class="col" ng-click="goToPdc()" ng-if="permission('PRISE DE COMMANDE')">
@@ -510,31 +533,7 @@
           </div>
 
 
-          <div class="row">
-
-            <div class="col" ng-if="permission('PLANNING DESTOCKEURS')">
-              <div class="card cardHome" style="background-color: #28a54c; color: white; ">
-                <div class="item item-text-wrap">
-                  <p style="text-align: center"><img src="./img/plannings.jpg" style="width:45%; height: 1%;"></p>
-                </div>
-                <p style="color: white;text-align: center;margin-top: 10px">
-                  <a href="#/app/planning" style="color: white;text-decoration:none;">&nbsp;Planning</a>
-                </p>
-              </div>
-            </div>
-  
-            <div class="col" ng-if="permission('CONSULTATION SOLDE')">
-              <div class="card cardHome" style="background-color: #28a54c; color: white">
-                <div class="item item-text-wrap">
-                  <p style="text-align: center"><img src="./img/soldes.jpg" style="width:45%; height: 40%;"></p>
-                </div>
-                <p style="color: white;text-align: center;margin-top: 10px">
-                  <a href="#/app/consultationSole" style="background-color: #28a54c;color: white;text-decoration:none;">&nbsp;C. solde</a>
-                </p>
-              </div>
-            </div>
-  
-            </div>
+       
 
         </ion-grid>
 

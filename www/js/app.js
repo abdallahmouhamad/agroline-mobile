@@ -420,6 +420,17 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
         }
       }
     })
+
+    .state('app.coordonnees', {
+      url: '/coordonnees',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/coordonnees.html',
+          controller: 'CoordonneesCtrl'
+
+        }
+      }
+    })
     .state('app.addcompte', {
       url: '/addcompte',
       views: {
