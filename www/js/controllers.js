@@ -3826,7 +3826,7 @@ PLANNING DESTOCKEURS*/
     ApiListTypePointVente.listTypePointVente().success(function (reponse) {
       console.log('-----List Type Point de Vente');
       $scope.data.listTypePointVentes = reponse;
-      var filerTypePointVente = $scope.data.sens == 'edit' && $scope.data.client.typePointVente ? $filter('filter')($scope.data.listTypePointVentes, { libelle: $scope.data.client.typePointVente }) : [];
+      var filerTypePointVente = $scope.data.sens == 'edit' && $scope.data.client.typepointvente ? $filter('filter')($scope.data.listTypePointVentes, { libelle: $scope.data.client.typepointvente }) : [];
       $scope.data.TypePointVentechoisit = filerTypePointVente && filerTypePointVente.length > 0 ? filerTypePointVente[0] : null;
       console.log(reponse)
     });
