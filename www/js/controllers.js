@@ -3648,9 +3648,10 @@ PLANNING DESTOCKEURS*/
             if (status == google.maps.GeocoderStatus.OK) {
               if (data[0] != null) {
                 $scope.data.adresseUser = data[0].formatted_address;
-                alert("address is: " + data[0].formatted_address);
+               // alert("address is: " + data[0].formatted_address);
               } else {
-                alert("No address available");
+                $scope.data.adresseUser = 'Adresse introuvable';
+               // alert("No address available");
               }
             }
           })
