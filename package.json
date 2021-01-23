@@ -5,6 +5,7 @@
   "devDependencies": {
     "@ionic/v1-toolkit": "1.0.22",
     "angular-translate": "^2.18.1",
+    "cordova-plugin-add-swift-support": "^2.0.2",
     "cordova-plugin-background-fetch": "git+https://github.com/christocracy/cordova-plugin-background-fetch.git",
     "cordova-plugin-background-mode": "^0.7.3",
     "cordova-plugin-badge": "^0.8.8",
@@ -14,6 +15,7 @@
     "cordova-plugin-ionic-webview": "^5.0.0",
     "cordova-plugin-local-notification": "git+https://github.com/katzer/cordova-plugin-local-notifications.git",
     "cordova-plugin-mauron85-background-geolocation": "^3.0.1",
+    "cordova-plugin-nativegeocoder": "^3.4.1",
     "cordova-plugin-printer": "git+https://github.com/katzer/cordova-plugin-printer.git",
     "cordova-plugin-sms": "^1.0.5",
     "cordova-sms-plugin": "git+https://github.com/cordova-sms/cordova-sms-plugin.git",
@@ -31,6 +33,7 @@
     "@ionic-native/android-permissions": "^5.0.0",
     "@ionic-native/camera": "^5.5.1",
     "@ionic-native/local-notifications": "^4.18.0",
+    "@ionic-native/native-geocoder": "^5.31.1",
     "autonumeric": "^4.6.0",
     "cache": "^2.1.0",
     "clean": "^4.0.2",
@@ -92,7 +95,8 @@
       "cordova-plugin-background-fetch": {},
       "cordova-plugin-local-notification": {
         "ANDROID_SUPPORT_V4_VERSION": "26.+"
-      }
+      },
+      "cordova-plugin-nativegeocoder": {}
     },
     "platforms": [
       "android"
