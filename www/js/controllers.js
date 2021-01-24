@@ -4067,7 +4067,7 @@ PLANNING DESTOCKEURS*/
         // && $scope.data.grossistechoisit
         // && $scope.data.position
         && $scope.data.adresse
-        //  && $scope.data.telephone
+        //  && $scope.data.telephone2
 
 
 
@@ -4133,17 +4133,20 @@ PLANNING DESTOCKEURS*/
           values.marche = " ";
 
         }
-        if (!values.position) {
-          values.position = " ";
-
-        }
+        
         if (!values.telephone2) {
           values.telephone2 = " ";
 
+        }else{
+          values.telephone2 = "" + values.telephone2;
         }
 
         if (!values.adresseGoogle) {
           values.adresseGoogle = " ";
+
+        }
+        if (!values.position) {
+          values.position = " ";
 
         }
 
@@ -4167,7 +4170,7 @@ PLANNING DESTOCKEURS*/
          }*/
 
 
-        /* for (var i = 0; i < $scope.data.listdepartements.length; i++) {
+         /*  for (var i = 0; i < $scope.data.listdepartements.length; i++) {
             if (values.idDepartement != " ") {
              // values.idDepartement = parseInt($scope.data.listdepartements[i].idDepartement);
               values.idDepartement = + $scope.data.listdepartements[i].idDepartement;
@@ -4178,14 +4181,14 @@ PLANNING DESTOCKEURS*/
   
           for (var i = 0; i < $scope.data.listlocalites.length; i++) {
             if (values.idLocalite != " ") {
-              values.idLocalite = parseInt($scope.data.listlocalites[i].idLocalite);
-             // values.idLocalite = +$scope.data.listlocalites[i].idLocalite;
+              //values.idLocalite = parseInt($scope.data.listlocalites[i].idLocalite);
+              values.idLocalite = + $scope.data.listlocalites[i].idLocalite;
             } else {
               console.log(values.idLocalite)
             }
           }
   
-          for (var i = 0; i < $scope.data.listTypePointVentes.length; i++) {
+        for (var i = 0; i < $scope.data.listTypePointVentes.length; i++) {
             if (values.idTypepointvente != " ") {
               values.idTypepointvente = parseInt($scope.data.listTypePointVentes[i].idTypepointvente);
              // values.idTypepointvente = +$scope.data.listTypePointVentes[i].idTypepointvente;
@@ -4194,6 +4197,9 @@ PLANNING DESTOCKEURS*/
               console.log(values.idTypepoinvente)
             }
           }*/
+
+          values.idDepartement= +$scope.data.departementchoisit.idDepartement ;
+          values.idLocalite= +$scope.data.localitechoisit.idLocalite;
         console.log('----------CLient object----------');
         console.log(values);
         console.log("1", values.idTypepointvente);
