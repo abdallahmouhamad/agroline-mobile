@@ -167,12 +167,18 @@
               <p>{{ cli.typepointvente}}</p>
             </div>
           </div>
-          <div class="row">
+          <div class="row" >
             <div class="col">Coordonnees</div>
             <div class="col">
               <p>{{ cli.position}}</p>
             </div>
+            <div class="col" ng-if="cli.position == ' ' || cli.position == '0,0' || cli.position == '0 0 ' || cli.position == 'null'">
+              <button  class="button button-clear button-assertive" >
+                <span class="badge badge-danger" style="background-color: #ef473a !important; color: #ef473a; width: 1%; height: 1%;">0</span>
+              </button>
+            </div>
           </div>
+          
     
 
       <!--   <div class="row">

@@ -233,7 +233,7 @@
                 ng-model="data.grossistechoisit" options="data.listgrossistes" option-getter="getOptZone(option)"
                 modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
                 has-search="true">
-                <label for="" ng-if="!data.grossistechoisit">Choisir une Grossiste</label>
+                <label for="" ng-if="!data.grossistechoisit">Choisir un Grossiste</label>
                 <label for="" ng-if="data.grossistechoisit">{{data.grossistechoisit.nom}}</label>
                 <div class="option">
                   <h2> {{option.nom}}</h2>
