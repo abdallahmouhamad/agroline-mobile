@@ -788,7 +788,6 @@ PLANNING DESTOCKEURS*/
       $cordovaGeolocation.getCurrentPosition(options).then(
         function (position) {
          // var latLng = new google.maps.LatLng(14.738554, -17.433542);
-
           // $scope.position = position.coords.latitude + "," + position.coords.longitude
 
           var mapOptions = {
@@ -851,6 +850,7 @@ PLANNING DESTOCKEURS*/
     $ionicPopup,
     ApiDateGeolocalisationAgent,
     ApiDernierPositionAgent,
+    
     formatNewDate,
     formatDate,
     ApiListLocationAgent,
@@ -1103,7 +1103,7 @@ PLANNING DESTOCKEURS*/
         console.log('-------------La date----------');
         console.log("debut1:", $scope.data.datefilterDebut, "fin1:", $scope.data.datefilterFin);
         if ($scope.data.agentchoisit && user && user.code) {
-
+         
           var params = {
             codeChefzone: user.code,
             codeAgent: $scope.data.agentchoisit.codeAgent,
@@ -1119,9 +1119,10 @@ PLANNING DESTOCKEURS*/
             codeChefzone: user.code,
             codeAgent: $scope.data.agentchoisit.codeAgent,
             dateDebut: formatNewDate.formatNewDate($scope.data.datefilterDebut),
-            dateFin: formatNewDate.formatNewDate($scope.data.datefilterFin)
+            dateFin: formatNewDate.formatNewDate($scope.data.datefilterFin),
+           
           }
-
+         
           /* var dateDebutTab = $scope.data.datefilterDebut.split('T');
            var dateFinTab = $scope.data.datefilterFin.split('T');
            var dateDebutSimple = dateDebutTab[0] + " " + dateDebutTab[1] + ":01";
@@ -1255,7 +1256,7 @@ PLANNING DESTOCKEURS*/
 
 
                         var infoWindow = new google.maps.InfoWindow({
-                          content: " Position d'un Agent " +
+                          content: " Position Agent " +
                             "<br/>Nom: " + $scope.data.agentchoisit.nom +
                             "<br/> date: " + pv.dateEnregistrement
                           //  + "<br/>Adresse: " + pv.adresse 
@@ -1437,14 +1438,18 @@ PLANNING DESTOCKEURS*/
             console.log('--------- Liste Dernier Position Agent ------------');
             console.log("res:", response);
             console.log($scope.data.dernierPositionAgent);
-            var lat;
-            var long;
+
+            var lat1;
+            var long1;
+
+            var lat2;
+            var long2;
             // var nom;
             for (var i = 0; i < $scope.data.dernierPositionAgent.length; i++) {
               if ($scope.data.dernierPositionAgent[i].latitude !== " " && $scope.data.dernierPositionAgent[i].longitude !== " ") {
                 $scope.data.positionAgents = $scope.data.dernierPositionAgent[i].latitude + "," + $scope.data.dernierPositionAgent[i].longitude;
-                lat = $scope.data.dernierPositionAgent[1].latitude;
-                long = $scope.data.dernierPositionAgent[1].longitude;
+                lat1 = $scope.data.dernierPositionAgent[1].latitude;
+                long1 = $scope.data.dernierPositionAgent[1].longitude;
                 nomAgent = $scope.data.dernierPositionAgent[1].nom;
                 dateEnregistrement = $scope.data.dernierPositionAgent[1].dateEnregistrement;
 
@@ -1454,7 +1459,7 @@ PLANNING DESTOCKEURS*/
                 dateEnregistrement2 = $scope.data.dernierPositionAgent[2].dateEnregistrement;
               }
             };
-            var latLng1 = new google.maps.LatLng(lat, long);
+            var latLng1 = new google.maps.LatLng(lat1, long1);
             var latLng2 = new google.maps.LatLng(lat2, long2);
             console.log(latLng1);
             console.log(latLng2);
@@ -2572,7 +2577,7 @@ PLANNING DESTOCKEURS*/
           // 4
           //onImageSuccess(imageData);
           $scope.photo = "data:image/jpeg;base64," + imageData;
-          $scope.getRxcui($scope.photo, "photo");
+         // $scope.getRxcui($scope.photo, "photo");
           $scope.img = imageData;
           $ionicLoading.hide();
         },
@@ -3207,7 +3212,8 @@ PLANNING DESTOCKEURS*/
 
       var mot = { motRecherche: $scope.data.searchValue };
       console.log("mot", mot)
-      if (mot) {
+      if ($scope.data.searchValue) {
+        if (mot) {
         ApiRechercheClient.ListRechercheClient(mot)
           .success(function (reponse) {
             sessionStorage.setItem("reponse.position", "");
@@ -3228,6 +3234,7 @@ PLANNING DESTOCKEURS*/
             }
           })
       }
+    }
     }
     $scope.resetSearch = function () {
       $scope.data.clients = $scope.data.clientTempon;
@@ -4062,7 +4069,7 @@ PLANNING DESTOCKEURS*/
         $scope.data.regionchoisit
         // && $scope.data.departementchoisit
         //  && $scope.data.localitechoisitchoisit
-        //  && $scope.data.TypePointVentechoisit
+         && $scope.data.TypePointVentechoisit
         // && $scope.data.marche
         // && $scope.data.modepaiementchoisit
         // && $scope.data.grossistechoisit
@@ -14939,8 +14946,8 @@ PLANNING DESTOCKEURS*/
 
     return {
       getUrl: function () {
-        return "http://test-test.h-tsoft.com/apiagroline";
-        // return "http://test-test.h-tsoft.com/apiagrolineprod";
+       // return "http://test-test.h-tsoft.com/apiagroline";
+        return "http://test-test.h-tsoft.com/apiagrolineprod";
         //return "http://htsoftdemo.com/apiccbm";
         //return "http://192.168.1.34/CCBM-serveur";
         //  return "http://mob-test.yosard.com/webservice";
