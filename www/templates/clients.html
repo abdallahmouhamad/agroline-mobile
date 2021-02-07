@@ -166,6 +166,12 @@
               <p>{{ cli.typepointvente}}</p>
             </div>
           </div>
+          <div class="row">
+            <div class="col">Adresse Google</div>
+            <div class="col">
+              <p>{{data.adresseUser}}</p>
+            </div>
+          </div>
           <div class="row" >
             <div class="col">Coordonnees</div>
             <div class="col">
@@ -188,22 +194,28 @@
       <div class="row content-div">
 
         <div class="col">
-          <button class="button button-clear button-assertive" ng-click="goTocaClient(cli)" style="color: white;">
+          <button class="button button-clear button-assertive"  style="color: white; ">
+           <button style="position: absolute;   border: none;cursor: pointer; height: 10%; width: 80px;" ng-click="goTocaClient(cli)">
             Chiffre d'affaire
           </button>
+          </button>
         </div>
 
         <div class="col">
-          <button class="button button-clear button-assertive" ng-click="goToNewCoordonnees(cli)" style="color: white;">
+          <button class="button button-clear button-assertive"  style="color: white;">
+           <button  style="position: absolute; border: none; cursor: pointer; height: 10%; width: 80px;" ng-click="goToNewCoordonnees(cli)">
             Map
+          </button>
           </button>
         </div>
 
         <div class="col">
 
-          <button class="button button-clear button-assertive" ng-click="goToNewClient(cli, 'edit')"
+          <button class="button button-clear button-assertive" 
             style="color: white;">
+            <button  style="position: absolute; border: none; cursor: pointer; height: 10%; width: 80px;" ng-click="goToNewClient(cli, 'edit')">
             Modifier
+          </button>
           </button>
         </div>
 

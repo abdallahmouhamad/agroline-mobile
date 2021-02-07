@@ -5711,7 +5711,7 @@ ion-tabs.tabs-striped.tabs-color-active-dark .tab-item.tab-item-active, ion-tabs
   display: block;
   margin: -1px;
   padding: 16px;
-  border-width: 1px;
+  border-width: 1.5px;
   border-style: solid;
   font-size: 16px; }
   .item h2 {
