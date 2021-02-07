@@ -3124,7 +3124,8 @@ PLANNING DESTOCKEURS*/
     $window,
     $ionicPopup,
     ApiListDepartement,
-    ApiListLocalite
+    ApiListLocalite,
+    ApiAjoutClient
 
   ) {
     $scope.data = {};
@@ -3299,6 +3300,73 @@ PLANNING DESTOCKEURS*/
         showDelay: 0,
         duration: 10000,
       });
+
+      $scope.getAdresseGoogleNew = function (cli) {
+        var options = { timeout: 10000, enableHighAccuracy: true };
+
+        navigator.geolocation.getCurrentPosition(function(position){
+                    var lat = 0;
+          var lng = 0;
+          if(cli.position && cli.position !=='' && cli.position !==',' && cli.position !==' '){
+            coords = null;
+             coords = cli.position.split(',');
+             if(coords && coords.length > 0){
+               lat = +coords[0];
+               lng = +coords[1];
+              }
+          }else{
+            lat = position.coords.latitude;
+            lng = position.coords.longitude;
+          }
+          
+          
+        console.log(cli.position)
+        console.log(lat,lng)
+        var latlng = new google.maps.LatLng(lat,lng);
+
+           var geocoder = new google.maps.Geocoder();
+           var request = {
+             latLng: latlng
+           };
+           $ionicLoading.show({
+            template: 'Localisation en cours...'
+          });
+           geocoder.geocode(request, function (data, status) {
+            $ionicLoading.hide();
+             if (status == google.maps.GeocoderStatus.OK) {
+               if (data[0] != null) {
+                cli.adresseGoogle = data[0].formatted_address;
+                $ionicLoading.show({
+                  template: 'Synchronisation en cours...'
+                });
+                console.log(cli)
+                var user = localStorage.getItem("user");
+                $scope.data.user = JSON.parse(user);
+               
+                cli.codeCommerciale = $scope.data.user.code
+                cli.idDepartement   = +cli.idDepartement
+                cli.idLocalite      = +cli.idLocalite
+                console.log(cli)
+                ApiAjoutClient.ajoutClient(cli, false).success(function (response) {
+                  $ionicLoading.hide();
+                  if (response.reponse === 1) {
+                    
+                  }else{
+                    console.log(response);
+                  }
+                }, error=>{
+                  $ionicLoading.hide();
+                });
+               } else {
+                cli.adresseGoogle = 'Adresse introuvable';
+               }
+             }
+             $ionicLoading.hide();
+           })
+      
+        })
+      
+     };
 
       $scope.getAdresseGoogle = function (latlng) {
         $scope.data.adresseUser;

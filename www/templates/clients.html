@@ -96,20 +96,27 @@
         <!-- <div class="list" ng-repeat="cli in data.ListRechercheClients | filter:motcle">-->
         <a class="item item-thumbnail-left">
 
-          <img ng-if="!cli.photo" src="./img/client.png">
-          <img ng-if="cli.photo" src="http://test-test.h-tsoft.com/{{cli.photo}}">
+          <img ng-if="!cli.photo" src="./img/client.png" style="width:10%; height: 10%;">
+          <img ng-if="cli.photo" src="http://test-test.h-tsoft.com/{{cli.photo}}" style="width:10%; height: 10%;">
+          <div class="row" >
+            <div class="col">Coordonnees</div>
+            <div class="col" >
+              <p ng-if="cli.position && cli.position!=='' && cli.position!==',' && cli.position!==' '" style="white-space: pre-line;">{{ cli.position}}</p>
+              <span ng-if="!cli.position || cli.position=='' || cli.position==',' || cli.position==' '" class="badge badge-danger" style="background-color:  #ef473a !important;color: white;">Pas de coords.</span>            
+            </div>
+          </div>
 
           <div class="row">
             <div class="col">Raison sociale</div>
             <div class="col">
-              <p>{{ cli.nom }}</majuscule>
+              <p style="white-space: pre-line;">{{ cli.nom }}</majuscule>
               </p>
             </div>
           </div>
           <div class="row">
             <div class="col">Code</div>
             <div class="col">
-              <p>{{ cli.codeClient }}</p>
+              <p style="white-space: pre-line;">{{ cli.codeClient }}</p>
             </div>
           </div>
 
@@ -117,7 +124,7 @@
 
             <div class="col">Adresse</div>
             <div class="col">
-              <p>{{ cli.adresse }}</p>
+              <p style="white-space: pre-line;">{{ cli.adresse }}</p>
             </div>
           </div>
 
@@ -125,71 +132,60 @@
 
             <div class="col">Marche</div>
             <div class="col">
-              <p>{{ cli.marche }}</p>
+              <p style="white-space: pre-line;">{{ cli.marche }}</p>
             </div>
           </div>
 
           <div class="row">
             <div class="col">Telephone 1</div>
             <div class="col">
-              <p>{{ cli.telephone }}</p>
+              <p style="white-space: pre-line;">{{ cli.telephone }}</p>
             </div>
           </div>
           <div class="row">
             <div class="col">Telephone 2</div>
             <div class="col">
-              <p>{{ cli.telephone2 }}</p>
+              <p style="white-space: pre-line;">{{ cli.telephone2 }}</p>
             </div>
           </div>
           <div class="row">
             <div class="col">Région</div>
             <div class="col">
-              <p>{{ cli.region }}</p>
+              <p style="white-space: pre-line;">{{ cli.region }}</p>
             </div>
           </div>
           <div class="row">
             <div class="col">Departement</div>
             <div class="col">
-              <p>{{ cli.departement }}</p>
+              <p style="white-space: pre-line;">{{ cli.departement }}</p>
             </div>
           </div>
           <div class="row">
             <div class="col">Localité</div>
             <div class="col">
-              <p>{{ cli.localite}}</p>
+              <p style="white-space: pre-line;">{{ cli.localite}}</p>
             </div>
           </div>
 
           <div class="row">
             <div class="col">Point de vente</div>
             <div class="col">
-              <p>{{ cli.typepointvente}}</p>
+              <p style="white-space: pre-line;">{{ cli.typepointvente}}</p>
             </div>
           </div>
+        
           <div class="row">
-            <div class="col">Adresse Google</div>
-            <div class="col">
-              <p>{{data.adresseUser}}</p>
-            </div>
+              <div class="col">
+                <button slot="end" ng-click="getAdresseGoogleNew(cli)">
+                  @ Google
+                  <i class="icon ion-refresh"></i>
+                </button>
+              </div>
+              <div class="col">
+                <p text-wrap style="white-space: pre-line;">{{cli.adresseGoogle}}</p>
+              </div>
           </div>
-          <div class="row" >
-            <div class="col">Coordonnees</div>
-            <div class="col">
-              <p>{{ cli.position}}</p>
-            </div>
-            <div class="col" ng-if="cli.position == ' ' || cli.position == '0,0' || cli.position == '0 0 ' || cli.position == 'null'">
-              <button  class="button button-clear button-assertive" >
-                <span class="badge badge-danger" style="background-color: #ef473a !important; color: #ef473a; width: 1%; height: 1%;">0</span>
-              </button>
-            </div>
-          </div>
-          
-    
-
-      <!--   <div class="row">
-            <div class="col">Zone</div>
-            <div class="col"><p>{{ cli.zone }}</p></div>
-          </div>-->
+         
       </a>
       <div class="row content-div">
 
