@@ -47,6 +47,8 @@
             .map {
               height: 250px !important;
             }
+
+            
           </style>
 
 
@@ -61,7 +63,8 @@
                 ng-model="data.regionchoisit" options="data.listregions" option-getter="getOptRegion(option)"
                 modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
                 on-select="selectDepartementByRegion()" has-search="true">
-                <label for="" ng-if="!data.regionchoisit">Choisir une Region</label>
+                <label for="" ng-if="!data.regionchoisit">Choisir une Region<span style="color:crimson">
+                    *</span></label>
                 <label for="" ng-if="data.regionchoisit">{{data.regionchoisit.libelle}}</label>
                 <div class="option">
                   <h2> {{option.libelle}}</h2>
@@ -81,7 +84,8 @@
                 option-getter="getOptDepartement(option)"
                 modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
                 on-select="selectLocaliteByDepartement()" has-search="true">
-                <label for="" ng-if="!data.departementchoisit">Choisir un dept</label>
+                <label for="" ng-if="!data.departementchoisit">Choisir un dept<span style="color:crimson">
+                    *</span></label>
                 <label for="" ng-if="data.departementchoisit">{{data.departementchoisit.libelle}}</label>
                 <div class="option">
                   <h2> {{option.libelle}}</h2>
@@ -100,8 +104,9 @@
                 search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
                 ng-model="data.localitechoisit" options="data.listlocalites" option-getter="getOptLocalite(option)"
                 modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
-                 has-search="true">
-                <label for="" ng-if="!data.localitechoisit">Choisir localite</label>
+                has-search="true">
+                <label for="" ng-if="!data.localitechoisit">Choisir localite<span style="color:crimson">
+                    *</span></label>
                 <label for="" ng-if="data.localitechoisit">{{data.localitechoisit.libelle}}</label>
                 <div class="option">
                   <h2> {{option.libelle}}</h2>
@@ -165,9 +170,9 @@
                 ng-model="data.TypePointVentechoisit" options="data.listTypePointVentes"
                 option-getter="getOptTypePointVente(option)"
                 modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
-                on-select="selectTypePointVente()"
-                has-search="true">
-                <label for="" ng-if="!data.TypePointVentechoisit">Type point de vente</label>
+                on-select="selectTypePointVente()" has-search="true">
+                <label for="" ng-if="!data.TypePointVentechoisit">Type point de vente<span style="color:crimson">
+                    *</span></label>
                 <label for="" ng-if="data.TypePointVentechoisit">{{data.TypePointVentechoisit.libelle}}</label>
                 <div class="option">
                   <h2> {{option.libelle}}</h2>
@@ -181,8 +186,9 @@
             <div class="col">
               <div class="list">
                 <label class="item item-input">
-                  <input style="text-transform: uppercase" type="text" id="nom" ng-model="data.nom"
-                    placeholder="Raison sociale"></majuscule>
+
+                  <input class="obligatoire" style="text-transform: uppercase" type="text" id="nom" ng-model="data.nom"
+                    placeholder="Raison sociale *"></majuscule>
                 </label>
               </div>
             </div>
@@ -191,7 +197,8 @@
             <div class="col">
               <div class="list">
                 <label class="item item-input">
-                  <input type="text" id="adresse" ng-model="data.adresse" placeholder="Adresse client">
+
+                  <input type="text" id="adresse" ng-model="data.adresse" placeholder=" Adresse client *">
                 </label>
               </div>
             </div>
@@ -205,7 +212,8 @@
             <div class="col">
               <div class="list">
                 <label class="item item-input">
-                  <input type="number" id="telephne" ng-model="data.telephone" placeholder="Telephone client">
+
+                  <input type="number" id="telephone" ng-model="data.telephone" placeholder="Telephone client *">
                 </label>
               </div>
             </div>
@@ -276,7 +284,7 @@
 
           </div> startTracking -->
 
-          
+
           <div class="row">
 
             <div class="col text-left" style="padding: 10px;">
@@ -302,7 +310,7 @@
 
           <div class="row">
             <div class="col text-center">
-             Adresse: {{data.adresseUser}}
+              Adresse: {{data.adresseUser}}
             </div>
           </div>
 
@@ -320,7 +328,7 @@
 
           <div class="row list map" id="map" data-tap-disabled="true"></div>
 
-          </div>
+    </div>
 
 
     </div>

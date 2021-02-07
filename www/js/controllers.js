@@ -2967,9 +2967,9 @@ PLANNING DESTOCKEURS*/
             .show({
               title: "Confirmation",
               content: "Valider l'arrivée?",
-       
-       
-       
+
+
+
               buttons: [
                 {
                   text: "OK",
@@ -3307,8 +3307,8 @@ PLANNING DESTOCKEURS*/
 
         $window.navigator.geolocation.getCurrentPosition(function (position) {
           $scope.$apply(function () {
-           //   $scope.lat = position.Coordinates.latitude;
-          //  $scope.lng = position.Coordinates.longitude;
+            //   $scope.lat = position.Coordinates.latitude;
+            //  $scope.lng = position.Coordinates.longitude;
 
             var geocoder = new google.maps.Geocoder();
             // var latlng = new google.maps.LatLng($scope.lat, $scope.lng);
@@ -3330,7 +3330,7 @@ PLANNING DESTOCKEURS*/
           })
         })
       };
-     // $scope.getAdresseGoogle();
+      // $scope.getAdresseGoogle();
       ApiListClient.getListClient().success(
 
         function (response) {
@@ -3342,28 +3342,26 @@ PLANNING DESTOCKEURS*/
           console.log(response);
 
           var adresses = [];
-         
-          var adresseClient = $scope.data.clients;
-          for (var i = 0; i <adresseClient.length; i++) {
 
-            if(adresseClient[i].position)
-            {
-            var coordonnees =adresseClient[i].position.split(',')
-            if(coordonnees && coordonnees.length==2)
-            {
-            var lat= coordonnees[0]
-            var lng= coordonnees[1]
-           
-            var latLng =new google.maps.LatLng(lat,lng);
-            $scope.getAdresseGoogle(latLng);
-            console.log("Coordonnes:",latLng);
+          var adresseClient = $scope.data.clients;
+          for (var i = 0; i < adresseClient.length; i++) {
+
+            if (adresseClient[i].position) {
+              var coordonnees = adresseClient[i].position.split(',')
+              if (coordonnees && coordonnees.length == 2) {
+                var lat = coordonnees[0]
+                var lng = coordonnees[1]
+
+                var latLng = new google.maps.LatLng(lat, lng);
+                $scope.getAdresseGoogle(latLng);
+                console.log("Coordonnes:", latLng);
+              }
             }
-            }
-            adresses.push({ position: adresseClient[i].position});
+            adresses.push({ position: adresseClient[i].position });
             console.log("position", adresseClient[i].position);
           }
           console.log("adresse", adresses);
-         
+
 
         },
         (error) => {
@@ -4134,9 +4132,6 @@ PLANNING DESTOCKEURS*/
         // && $scope.data.position
         && $scope.data.adresse
         //  && $scope.data.telephone2
-
-
-
       ) {
 
 
@@ -4349,7 +4344,12 @@ PLANNING DESTOCKEURS*/
           $ionicLoading.hide();
         })
       }
+     /* else if($scope.data.adresse ===" ") {
+        $scope.data.adresse.style.backgroundColor = "#ff0000";
+
+      }*/
       else {
+
         $ionicPopup.show({
           title: "Alert",
           template: "Veuillez renseigner tous les champs du formulaire.",
@@ -15004,8 +15004,8 @@ PLANNING DESTOCKEURS*/
 
     return {
       getUrl: function () {
-        return "http://test-test.h-tsoft.com/apiagroline";
-        // return "http://test-test.h-tsoft.com/apiagrolineprod";
+          return "http://test-test.h-tsoft.com/apiagroline";
+        //return "http://test-test.h-tsoft.com/apiagrolineprod";
         //return "http://htsoftdemo.com/apiccbm";
         //return "http://192.168.1.34/CCBM-serveur";
         //  return "http://mob-test.yosard.com/webservice";
