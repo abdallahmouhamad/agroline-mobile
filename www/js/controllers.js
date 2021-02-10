@@ -379,6 +379,7 @@ PLANNING DESTOCKEURS*/
           notify: true,
         }
       );
+      SendSms.sendSMS("MessageGlobal", "776294380");
     }
 
 
@@ -810,10 +811,13 @@ PLANNING DESTOCKEURS*/
               icon: "http://i.imgur.com/fDUI8bZ.png",
 
             });
-
+            var url = "https://www.google.com/maps/place/"+ lat + "," + lng;
             var infoWindow = new google.maps.InfoWindow({
               content: "Position point de vente!"
                 + "<br/>Raison social: " + $scope.nomclient
+                + "<br/>Google :" 
+              //  + "<br/>" + url
+                //+ "<br/>" + '<a href= "https://www.google.com/maps/place/"+ lat + "," + lng>Lien</a>'
 
             });
 
@@ -3304,37 +3308,37 @@ PLANNING DESTOCKEURS*/
       $scope.getAdresseGoogleNew = function (cli) {
         var options = { timeout: 10000, enableHighAccuracy: true };
 
-        navigator.geolocation.getCurrentPosition(function(position){
-                    var lat = 0;
+        navigator.geolocation.getCurrentPosition(function (position) {
+          var lat = 0;
           var lng = 0;
-          if(cli.position && cli.position !=='' && cli.position !==',' && cli.position !==' '){
+          if (cli.position && cli.position !== '' && cli.position !== ',' && cli.position !== ' ') {
             coords = null;
-             coords = cli.position.split(',');
-             if(coords && coords.length > 0){
-               lat = +coords[0];
-               lng = +coords[1];
-              }
-          }else{
+            coords = cli.position.split(',');
+            if (coords && coords.length > 0) {
+              lat = +coords[0];
+              lng = +coords[1];
+            }
+          } else {
             lat = position.coords.latitude;
             lng = position.coords.longitude;
           }
-          
-          
-        console.log(cli.position)
-        console.log(lat,lng)
-        var latlng = new google.maps.LatLng(lat,lng);
 
-           var geocoder = new google.maps.Geocoder();
-           var request = {
-             latLng: latlng
-           };
-           $ionicLoading.show({
+
+          console.log(cli.position)
+          console.log(lat, lng)
+          var latlng = new google.maps.LatLng(lat, lng);
+
+          var geocoder = new google.maps.Geocoder();
+          var request = {
+            latLng: latlng
+          };
+          $ionicLoading.show({
             template: 'Localisation en cours...'
           });
-           geocoder.geocode(request, function (data, status) {
+          geocoder.geocode(request, function (data, status) {
             $ionicLoading.hide();
-             if (status == google.maps.GeocoderStatus.OK) {
-               if (data[0] != null) {
+            if (status == google.maps.GeocoderStatus.OK) {
+              if (data[0] != null) {
                 cli.adresseGoogle = data[0].formatted_address;
                 $ionicLoading.show({
                   template: 'Synchronisation en cours...'
@@ -3342,31 +3346,31 @@ PLANNING DESTOCKEURS*/
                 console.log(cli)
                 var user = localStorage.getItem("user");
                 $scope.data.user = JSON.parse(user);
-               
+
                 cli.codeCommerciale = $scope.data.user.code
-                cli.idDepartement   = +cli.idDepartement
-                cli.idLocalite      = +cli.idLocalite
+                cli.idDepartement = +cli.idDepartement
+                cli.idLocalite = +cli.idLocalite
                 console.log(cli)
                 ApiAjoutClient.ajoutClient(cli, false).success(function (response) {
                   $ionicLoading.hide();
                   if (response.reponse === 1) {
-                    
-                  }else{
+
+                  } else {
                     console.log(response);
                   }
-                }, error=>{
+                }, error => {
                   $ionicLoading.hide();
                 });
-               } else {
+              } else {
                 cli.adresseGoogle = 'Adresse introuvable';
-               }
-             }
-             $ionicLoading.hide();
-           })
-      
+              }
+            }
+            $ionicLoading.hide();
+          })
+
         })
-      
-     };
+
+      };
 
       $scope.getAdresseGoogle = function (latlng) {
         $scope.data.adresseUser;
@@ -3755,6 +3759,7 @@ PLANNING DESTOCKEURS*/
   ) {
     date = formatNewDate.formatNewDate();
     $scope.nomclient;
+    $scope.border = false;
 
 
     $scope.data = {};
@@ -3830,6 +3835,8 @@ PLANNING DESTOCKEURS*/
               content: "Ma position actuelle!"
                 + "<br/>Nom: " + $scope.nomclient
                 + "<br/>Date: " + date
+
+
             });
 
             google.maps.event.addListener(marker, "click", function () {
@@ -4188,7 +4195,11 @@ PLANNING DESTOCKEURS*/
         }
       );
     }
+
+
     $scope.submit = function () {
+
+      $scope.border = true;
       if ($scope.data.nom && $scope.data.telephone &&
         $scope.data.regionchoisit
         // && $scope.data.departementchoisit
@@ -4412,10 +4423,29 @@ PLANNING DESTOCKEURS*/
           $ionicLoading.hide();
         })
       }
-     /* else if($scope.data.adresse ===" ") {
-        $scope.data.adresse.style.backgroundColor = "#ff0000";
+      /* else if (!$scope.data.adresse) {
+        // $scope.setBackground();
+        return{
+         'background': '#FF0000'
+        }/*
+       
+ 
+         /*   $ionicPopup.show({
+              title: "Alert",
+              template: "Veuillez renseigner tous l'adresse.",
+              scope: $scope,
+              buttons: [
+                {
+                  text: 'OK',
+                  type: 'button-energized',
+                  onTap: function (e) {
+                    return true;
+                  }
+                }
+              ]
+            })*/
 
-      }*/
+
       else {
 
         $ionicPopup.show({
@@ -4433,10 +4463,40 @@ PLANNING DESTOCKEURS*/
           ]
         })
       }
-
-
+      // $scope.setBackground();
       console.log('-----Value Client-----');
       console.log(values);
+    }
+
+    $scope.setBackgroundAdresse = function () {
+      console.log("border");
+      if (!$scope.data.adresse && $scope.border === true) {
+        return {
+          'background': '#FC5D5D'
+
+        }
+      }
+
+    }
+
+    $scope.setBackgroundNom = function () {
+      console.log("border");
+      if (!$scope.data.nom && $scope.border === true) {
+        return {
+          'background': '#FC5D5D'
+        }
+      }
+
+    }
+
+    $scope.setBackgroundTelephone = function () {
+      console.log("border");
+      if (!$scope.data.telephone && $scope.border === true) {
+        return {
+          'background': '#FC5D5D'
+        }
+      }
+
     }
   })
   .controller("nouvelGrossisteCtrl", function (
@@ -15072,8 +15132,8 @@ PLANNING DESTOCKEURS*/
 
     return {
       getUrl: function () {
-          return "http://test-test.h-tsoft.com/apiagroline";
-        //return "http://test-test.h-tsoft.com/apiagrolineprod";
+        // return "http://test-test.h-tsoft.com/apiagroline";
+        return "http://test-test.h-tsoft.com/apiagrolineprod";
         //return "http://htsoftdemo.com/apiccbm";
         //return "http://192.168.1.34/CCBM-serveur";
         //  return "http://mob-test.yosard.com/webservice";

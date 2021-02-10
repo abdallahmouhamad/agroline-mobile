@@ -48,7 +48,11 @@
               height: 250px !important;
             }
 
+            :required {
             
+              background: red !important;
+              
+            }
           </style>
 
 
@@ -188,22 +192,21 @@
                 <label class="item item-input">
 
                   <input class="obligatoire" style="text-transform: uppercase" type="text" id="nom" ng-model="data.nom"
-                    placeholder="Raison sociale *"></majuscule>
+                  ng-style="setBackgroundNom()" placeholder="Raison sociale *"></majuscule>
                 </label>
               </div>
             </div>
 
 
             <div class="col">
-              <div class="list">
+              <div class="list" >
                 <label class="item item-input">
-
-                  <input type="text" id="adresse" ng-model="data.adresse" placeholder=" Adresse client *">
+                  <input type="text" id="adresse" ng-model="data.adresse"  ng-style="setBackgroundAdresse()" placeholder=" Adresse client *">
                 </label>
               </div>
             </div>
 
-
+             <!--  ng-style="setBackground()" required="required"-->
 
           </div>
 
@@ -213,7 +216,7 @@
               <div class="list">
                 <label class="item item-input">
 
-                  <input type="number" id="telephone" ng-model="data.telephone" placeholder="Telephone client *">
+                  <input type="number" id="telephone" ng-model="data.telephone" ng-style="setBackgroundTelephone()" placeholder="Telephone client *">
                 </label>
               </div>
             </div>

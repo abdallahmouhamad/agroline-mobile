@@ -44,6 +44,7 @@ map {
     -webkit-animation-name: clignote;
     -webkit-animation-duration: 1s;
     -webkit-animation-iteration-count:infinite;
+    
     }
     .animated.modal.bounceIn.ng-leave {
       -webkit-animation-name:bounceOut;
