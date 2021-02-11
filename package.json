@@ -5,11 +5,13 @@
   "devDependencies": {
     "@ionic/v1-toolkit": "1.0.22",
     "angular-translate": "^2.18.1",
+    "cordova-plugin-actionsheet": "^2.3.3",
     "cordova-plugin-add-swift-support": "^2.0.2",
     "cordova-plugin-background-fetch": "git+https://github.com/christocracy/cordova-plugin-background-fetch.git",
     "cordova-plugin-background-mode": "^0.7.3",
     "cordova-plugin-badge": "^0.8.8",
     "cordova-plugin-camera": "^4.1.0",
+    "cordova-plugin-dialogs": "^2.0.2",
     "cordova-plugin-geolocation": "^4.0.2",
     "cordova-plugin-inappbrowser": "^4.1.0",
     "cordova-plugin-ionic-webview": "^5.0.0",
@@ -23,7 +25,8 @@
     "gulp-clean-css": "^3.7.0",
     "gulp-rename": "^1.2.0",
     "gulp-sass": "3.1.0",
-    "jetifier": "^1.6.6"
+    "jetifier": "^1.6.6",
+    "uk.co.workingedge.phonegap.plugin.launchnavigator": "^5.0.5"
   },
   "dependencies": {
     "@capacitor/android": "2.4.2",
@@ -32,6 +35,7 @@
     "@google/maps": "^0.5.5",
     "@ionic-native/android-permissions": "^5.0.0",
     "@ionic-native/camera": "^5.5.1",
+    "@ionic-native/launch-navigator": "^5.31.1",
     "@ionic-native/local-notifications": "^4.18.0",
     "@ionic-native/native-geocoder": "^5.31.1",
     "autonumeric": "^4.6.0",
@@ -96,7 +100,11 @@
       "cordova-plugin-local-notification": {
         "ANDROID_SUPPORT_V4_VERSION": "26.+"
       },
-      "cordova-plugin-nativegeocoder": {}
+      "cordova-plugin-nativegeocoder": {},
+      "uk.co.workingedge.phonegap.plugin.launchnavigator": {
+        "GOOGLE_API_KEY_FOR_ANDROID": "{AIzaSyBqrBIcbvCDXbvL382KN5jCY8yjh_6zyU8}",
+        "OKHTTP_VERSION": "1.2.3"
+      }
     },
     "platforms": [
       "android"

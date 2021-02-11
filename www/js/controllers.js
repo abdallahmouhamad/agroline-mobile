@@ -758,9 +758,12 @@ PLANNING DESTOCKEURS*/
     $translate,
     ProfilUser,
     urlJava,
+   //launchnavigator,
+   $injector,
     ApiListAgentChefZone,
     $filter,
     $ionicPopup,
+    $compile,
     ApiDateGeolocalisationAgent,
     ApiDernierPositionAgent,
     formatNewDate,
@@ -780,7 +783,17 @@ PLANNING DESTOCKEURS*/
         var latLng = new google.maps.LatLng(lat, lng);
       }
     }
+    $scope.clickTest = function() {
+      console.log("coords",lat, lng);
+     // launchnavigator.navigate([lat, lng]);
+     document.addEventListener("deviceready", function(){
+      launchnavigator.navigate([50.279306, -5.163158], {
+        start: "50.342847, -4.749904"
+    });
+  }, false);
 
+    
+    };
     var user = JSON.parse(localStorage.getItem("user"));
     $scope.getPosition = function () {
       $scope.nomclient = position.nom;
@@ -802,6 +815,21 @@ PLANNING DESTOCKEURS*/
             mapOptions
           );
 
+         /* launchnavigator.isAppAvailable(launchnavigator.APP.GOOGLE_MAPS, function(isAvailable){
+            var app;
+            if(isAvailable){
+                app = launchnavigator.APP.GOOGLE_MAPS;
+            }else{
+                console.warn("Google Maps not available - falling back to user selection");
+                app = launchnavigator.APP.USER_SELECT;
+            }
+           
+            document.addEventListener("deviceready", function(){
+              launchnavigator.navigate("London, UK", {
+                app: app});
+          }, false);
+        });*/
+       
           google.maps.event.addListenerOnce($scope.map, "idle", function () {
             var marker = new google.maps.Marker({
               map: $scope.map,
@@ -811,11 +839,15 @@ PLANNING DESTOCKEURS*/
               icon: "http://i.imgur.com/fDUI8bZ.png",
 
             });
-            var url = "https://www.google.com/maps/place/"+ lat + "," + lng;
+            var contentString = '<div><button ng-click="clickTest()">itineraire !</button></div>';
+            var compiled = $compile(contentString)($scope);
+           // var url = "https://www.google.com/maps/place/"+ lat + "," + lng;
             var infoWindow = new google.maps.InfoWindow({
-              content: "Position point de vente!"
+              content:  compiled[0] + "Position point de vente!"
                 + "<br/>Raison social: " + $scope.nomclient
-                + "<br/>Google :" 
+               + "<br/>"
+                + "<br/>" +contentString
+               
               //  + "<br/>" + url
                 //+ "<br/>" + '<a href= "https://www.google.com/maps/place/"+ lat + "," + lng>Lien</a>'
 
@@ -824,15 +856,28 @@ PLANNING DESTOCKEURS*/
             google.maps.event.addListener(marker, "click", function () {
               infoWindow.open($scope.map, marker);
             });
+
+           
+
+            
           });
+          
         },
         function (error) {
           console.log("Could not get location");
         }
       );
     };
+   
+
+ /* document.addEventListener("deviceready", function(){
+    launchnavigator.navigate([50.279306, -5.163158], {
+      start: "50.342847, -4.749904"
+  });
+}, false);*/
 
     $scope.getPosition();
+    $scope.clickTest();
 
   })
 

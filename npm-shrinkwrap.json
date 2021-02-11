@@ -59,6 +59,21 @@
                 "@types/cordova": "^0.0.34"
             }
         },
+        "@ionic-native/launch-navigator": {
+            "version": "5.31.1",
+            "resolved": "https://registry.npmjs.org/@ionic-native/launch-navigator/-/launch-navigator-5.31.1.tgz",
+            "integrity": "sha512-WlvLdoMCkn3cPn3uVXIEWiYNzhgoasDF8ZGCqOl6NM7O+wR6VGHYUcXCUG6YS7mfus85784c3WEYHD4kSuFbnQ==",
+            "requires": {
+                "@types/cordova": "^0.0.34"
+            },
+            "dependencies": {
+                "@types/cordova": {
+                    "version": "0.0.34",
+                    "resolved": "https://registry.npmjs.org/@types/cordova/-/cordova-0.0.34.tgz",
+                    "integrity": "sha1-6nrd907Ow9dimCegw54smt3HPQQ="
+                }
+            }
+        },
         "@ionic-native/local-notifications": {
             "version": "4.20.0",
             "resolved": "https://registry.npmjs.org/@ionic-native/local-notifications/-/local-notifications-4.20.0.tgz",
@@ -3269,6 +3284,12 @@
                 }
             }
         },
+        "cordova-plugin-actionsheet": {
+            "version": "2.3.3",
+            "resolved": "https://registry.npmjs.org/cordova-plugin-actionsheet/-/cordova-plugin-actionsheet-2.3.3.tgz",
+            "integrity": "sha1-6SYbLQBKjaQHOI1g31NMFWxS/xE=",
+            "dev": true
+        },
         "cordova-plugin-add-swift-support": {
             "version": "2.0.2",
             "resolved": "https://registry.npmjs.org/cordova-plugin-add-swift-support/-/cordova-plugin-add-swift-support-2.0.2.tgz",
@@ -3320,6 +3341,12 @@
             "version": "2.0.3",
             "resolved": "https://registry.npmjs.org/cordova-plugin-device/-/cordova-plugin-device-2.0.3.tgz",
             "integrity": "sha512-Jb3V72btxf3XHpkPQsGdyc8N6tVBYn1vsxSFj43fIz9vonJDUThYPCJJHqk6PX6N4dJw6I4FjxkpfCR4LDYMlw=="
+        },
+        "cordova-plugin-dialogs": {
+            "version": "2.0.2",
+            "resolved": "https://registry.npmjs.org/cordova-plugin-dialogs/-/cordova-plugin-dialogs-2.0.2.tgz",
+            "integrity": "sha512-FUHI6eEVeoz2VkxbF0P56QlUQLGzXcvw3i4xuXyM9gEct6Y+FA3Xzgl2pJTZcTg5wRqLWzN08kgNoHPkom15pw==",
+            "dev": true
         },
         "cordova-plugin-geolocation": {
             "version": "4.1.0",
@@ -11068,6 +11095,12 @@
             "requires": {
                 "is-typedarray": "^1.0.0"
             }
+        },
+        "uk.co.workingedge.phonegap.plugin.launchnavigator": {
+            "version": "5.0.5",
+            "resolved": "https://registry.npmjs.org/uk.co.workingedge.phonegap.plugin.launchnavigator/-/uk.co.workingedge.phonegap.plugin.launchnavigator-5.0.5.tgz",
+            "integrity": "sha512-mKsqU1TnrZsAQB8CLW+YHr+Mx3YAB0ELW8kF0qjMLIzm8J5mz1UqbuvzXwOzYLLNlGpkTs1DF2B6gZlGd6mYRA==",
+            "dev": true
         },
         "unc-path-regex": {
             "version": "0.1.2",
