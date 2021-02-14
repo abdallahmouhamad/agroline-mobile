@@ -124,9 +124,9 @@
           
             has-search="true">
             <label for="" ng-if="!data.AgentChefZonechoisit">Choisir un Agent</label>
-            <label for="" ng-if="data.AgentChefZonechoisit">{{data.AgentChefZonechoisit.nom}}</label>
+            <label for="" ng-if="data.AgentChefZonechoisit">{{data.AgentChefZonechoisit.prenom}} {{data.AgentChefZonechoisit.nom}}</label>
             <div class="option">
-                <h2> {{option.nom}}</h2>
+                <h2>{{option.prenom}} {{option.nom}}</h2>
             </div>
         </button>
     </div>
