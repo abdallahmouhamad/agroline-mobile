@@ -9009,6 +9009,12 @@ PLANNING DESTOCKEURS*/
     $scope.data.listAgentChefZones = [];
     $scope.data.AgentChefZonechoisit = null;
     $scope.data.NomChef;
+    $scope.data.telephone= user.telephone;
+    $scope.data.adresse;
+    $scope.data.agent = user.prenom;
+    
+
+
 
 
     $scope.selectAgent = function () {
@@ -9109,9 +9115,63 @@ PLANNING DESTOCKEURS*/
       }
 
     }
-    // $scope.initvar();
 
-    // $scope.selectPlanningAgent();
+    $scope.myPlanningAgent = function () {
+      console.log('-----Mon Planning Agent');
+      var user = JSON.parse(localStorage.getItem("user"));
+      console.log(user);
+      $scope.data.telephone =user.telephone;
+      $scope.data.adresse =user.adresse;
+      $scope.data.agent =user.prenom;
+      $scope.data.code =user.code;
+      console.log(user.code);
+
+      if ($scope.data.datefilterDebut && $scope.data.datefilterFin) {
+       
+        var parametres = {
+          codeAgent: $scope.data.code,
+          dateDebut: $scope.data.datefilterDebut,
+          dateFin: $scope.data.datefilterFin
+        }
+
+        console.log("parametres", parametres);
+        ApiPlanningAgent.ListPlanningAgent(parametres)
+          .success(function (reponse) {
+            console.log('-----Liste Agent Chef Zone');
+            $scope.data.listAgents = reponse;
+            console.log($scope.data.listAgents)
+          })
+        $state.transitionTo(
+          "app.details-monplanning",
+          {},
+          {
+            reload: true,
+            inherit: true,
+            notify: true,
+          }
+        );
+       
+      } else {
+        $ionicPopup.show({
+          title: "Alert",
+          template: "Veuillez remplir tout le formulaire.",
+          scope: $scope,
+          buttons: [
+            {
+              text: 'OK',
+              type: 'button-energized',
+              onTap: function (e) {
+                return true;
+              }
+            }
+          ]
+        })
+      }
+
+    }
+
+    // $scope.initvar();
+    //  $scope.myPlanningAgent();
 
     $scope.getOptAgent = function (option) {
       return option;
@@ -9142,6 +9202,28 @@ PLANNING DESTOCKEURS*/
 
   ) {
     console.log('-------- details planning-------');
+
+  })
+  .controller("detailsMonPlanningCtrl", function (
+    $scope,
+    $state,
+    $ionicLoading,
+    ApiListPrc,
+    ApiDetailPrc,
+    ApiAjoutPrc,
+    ApiListClient,
+    ApiListMotif,
+    ApiListArticle,
+    $ionicPopup,
+    CodeGenere,
+    ApiListGrossiste,
+    ApiAjoutPdsFromRecap,
+    SendSms,
+    $filter,
+    ApiAjoutPrc
+
+  ) {
+    console.log('-------- details mon planning-------');
 
   })
 

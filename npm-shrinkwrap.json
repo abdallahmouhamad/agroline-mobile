@@ -6978,7 +6978,8 @@
         "interpret": {
             "version": "1.4.0",
             "resolved": "https://registry.npmjs.org/interpret/-/interpret-1.4.0.tgz",
-            "integrity": "sha512-agE4QfB2Lkp9uICn7BAqoscw4SZP9kTE2hxiFI3jBPmXJfdqiahTbUuKGsMoN2GtqL9AxhYioAcVvgsb1HvRbA=="
+            "integrity": "sha512-agE4QfB2Lkp9uICn7BAqoscw4SZP9kTE2hxiFI3jBPmXJfdqiahTbUuKGsMoN2GtqL9AxhYioAcVvgsb1HvRbA==",
+            "dev": true
         },
         "invert-kv": {
             "version": "1.0.0",
@@ -9117,15 +9118,6 @@
             "resolved": "https://registry.npmjs.org/performance-now/-/performance-now-2.1.0.tgz",
             "integrity": "sha1-Ywn04OX6kT7BxpMHrjZLSzd8nns="
         },
-        "phonegap-plugin-barcodescanner": {
-            "version": "8.1.0",
-            "resolved": "https://registry.npmjs.org/phonegap-plugin-barcodescanner/-/phonegap-plugin-barcodescanner-8.1.0.tgz",
-            "integrity": "sha512-WQCDCoH9EQ9WEn2bce+B95jbNJduilAn2Vtske8KfcYAeGu7bdFqRD7zGCLCQao62VwoEwlX0cUvbQ/am12Jwg==",
-            "requires": {
-                "nopt": "^4.0.1",
-                "shelljs": "^0.8.3"
-            }
-        },
         "picomatch": {
             "version": "2.2.2",
             "resolved": "https://registry.npmjs.org/picomatch/-/picomatch-2.2.2.tgz",
@@ -9643,6 +9635,7 @@
             "version": "0.6.2",
             "resolved": "https://registry.npmjs.org/rechoir/-/rechoir-0.6.2.tgz",
             "integrity": "sha1-hSBLVNuoLVdC4oyWdW70OvUOM4Q=",
+            "dev": true,
             "requires": {
                 "resolve": "^1.1.6"
             }
@@ -10131,16 +10124,6 @@
             "version": "3.0.0",
             "resolved": "https://registry.npmjs.org/shebang-regex/-/shebang-regex-3.0.0.tgz",
             "integrity": "sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A=="
-        },
-        "shelljs": {
-            "version": "0.8.4",
-            "resolved": "https://registry.npmjs.org/shelljs/-/shelljs-0.8.4.tgz",
-            "integrity": "sha512-7gk3UZ9kOfPLIAbslLzyWeGiEqx9e3rxwZM0KE6EL8GlGwjym9Mrlx5/p33bWTu9YG6vcS4MBxYZDHYr5lr8BQ==",
-            "requires": {
-                "glob": "^7.0.0",
-                "interpret": "^1.0.0",
-                "rechoir": "^0.6.2"
-            }
         },
         "sigmund": {
             "version": "1.0.1",
@@ -11095,12 +11078,6 @@
             "requires": {
                 "is-typedarray": "^1.0.0"
             }
-        },
-        "uk.co.workingedge.phonegap.plugin.launchnavigator": {
-            "version": "5.0.5",
-            "resolved": "https://registry.npmjs.org/uk.co.workingedge.phonegap.plugin.launchnavigator/-/uk.co.workingedge.phonegap.plugin.launchnavigator-5.0.5.tgz",
-            "integrity": "sha512-mKsqU1TnrZsAQB8CLW+YHr+Mx3YAB0ELW8kF0qjMLIzm8J5mz1UqbuvzXwOzYLLNlGpkTs1DF2B6gZlGd6mYRA==",
-            "dev": true
         },
         "unc-path-regex": {
             "version": "0.1.2",

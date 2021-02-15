@@ -350,12 +350,32 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
       }
     })
 
+    .state('app.monplanning', {
+      url: '/monplanning',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/monplanning.html',
+          controller: 'PlanningCtrl'
+        }
+      }
+    })
+
     .state('app.details-planning', {
       url: '/details-planning',
       views: {
         'menuContent': {
           templateUrl: 'templates/details-planning.html',
           controller: 'detailsPlanningCtrl'
+        }
+      }
+    })
+
+    .state('app.details-monplanning', {
+      url: '/details-monplanning',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/details-monplanning.html',
+          controller: 'detailsMonPlanningCtrl'
         }
       }
     })

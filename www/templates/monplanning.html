@@ -1,0 +1,102 @@
+<ion-view view-title=" Mon Planning " cache-view="false">
+    <ion-pane>
+        <div ng-app="starter">
+
+            <ion-content>
+                <ion-grid>
+                    <style type="text/css">
+                        input[readonly] {
+                            background-color: transparent !important;
+                            cursor: not-allowed;
+                        }
+
+                        .small_button {
+                            width: 50% !important;
+                            height: 50px !important;
+                            margin-left: 5px;
+                        }
+
+                        .footer-button {
+                            margin-bottom: 10px;
+                            height: 50px !important;
+                        }
+
+                        .ml {
+                            margin-left: 5px;
+                        }
+
+                        .header {
+
+                            margin-top: 5px;
+                            margin-bottom: 10px;
+                        }
+
+                        .content-div {
+                            background: grey !important;
+                        }
+
+                        .content-div-row {
+                            text-align: center !important;
+                            border: 3px grey dashed !important;
+                        }
+
+                        .edit {
+                            background: red !important;
+                        }
+
+                        .map {
+                            height: 200px !important;
+                        }
+                    </style>
+
+
+
+
+                    <div>
+                       
+                        <div class="card list" style="height: 30%;">
+                            <a class="item item-icon-left" >
+                                <i class="icon ion-person"></i>
+                                Agent : {{ data.agent }}
+                            </a>
+
+                            <a class="item item-icon-left" >
+                                <i class="icon ion-android-call"></i>
+                                Téléphone : {{ data.telephone }}
+                            </a>
+                           
+
+
+                        </div>
+                    </div> 
+                    <div>
+                        <h2>historique</h2>
+                        <label class="item item-input">
+                            <span class="input-label">Debut</span>
+                            <input type="text" onfocus="(this.type='date')" ng-model="data.datefilterDebut"
+                                placeholder="yyyy-mm-dd">
+                        </label>
+                        <label class="item item-input">
+                            <span class="input-label">Fin</span>
+                            <input type="text" onfocus="(this.type='date')" ng-model="data.datefilterFin"
+                                placeholder="yyyy-mm-dd">
+                        </label>
+                    </div>
+
+
+        </div>
+
+
+
+
+        </ion-grid>
+        </ion-content>
+
+
+        </div>
+        <div class="bar bar-footer footer-button">
+            <button ng-click="myPlanningAgent()" class="button button-block button-assertive footer-button"
+                color="danger"><span style="color:white">Valider</span></button>
+        </div>
+    </ion-pane>
+</ion-view>

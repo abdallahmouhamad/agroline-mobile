@@ -25,8 +25,7 @@
     "gulp-clean-css": "^3.7.0",
     "gulp-rename": "^1.2.0",
     "gulp-sass": "3.1.0",
-    "jetifier": "^1.6.6",
-    "uk.co.workingedge.phonegap.plugin.launchnavigator": "^5.0.5"
+    "jetifier": "^1.6.6"
   },
   "dependencies": {
     "@capacitor/android": "2.4.2",
@@ -56,8 +55,7 @@
     "https": "1.0.0",
     "ionic": "^5.4.16",
     "ionic-img-viewer": "^2.9.0",
-    "node-sass": "^4.11.0",
-    "phonegap-plugin-barcodescanner": "^8.0.1"
+    "node-sass": "^4.11.0"
   },
   "cordova": {
     "plugins": {
@@ -84,7 +82,9 @@
       },
       "cordova-plugin-inappbrowser": {},
       "cordova-plugin-sms": {},
-      "cordova.plugins.diagnostic": {},
+      "cordova.plugins.diagnostic": {
+        "ANDROIDX_VERSION": "1.+"
+      },
       "cordova-plugin-background-mode": {},
       "cordova-plugin-mauron85-background-geolocation": {
         "GOOGLE_PLAY_SERVICES_VERSION": "11+",
@@ -100,11 +100,7 @@
       "cordova-plugin-local-notification": {
         "ANDROID_SUPPORT_V4_VERSION": "26.+"
       },
-      "cordova-plugin-nativegeocoder": {},
-      "uk.co.workingedge.phonegap.plugin.launchnavigator": {
-        "GOOGLE_API_KEY_FOR_ANDROID": "{AIzaSyBqrBIcbvCDXbvL382KN5jCY8yjh_6zyU8}",
-        "OKHTTP_VERSION": "1.2.3"
-      }
+      "cordova-plugin-nativegeocoder": {}
     },
     "platforms": [
       "android"
