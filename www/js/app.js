@@ -359,6 +359,24 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
         }
       }
     })
+    .state('app.planninguser', {
+      url: '/planninguser',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/planninguser.html',
+          controller: 'PlanningUserCtrl'
+        }
+      }
+    })
+    .state('app.details-planninguser', {
+      url: '/details-planninguser',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/details-planninguser.html',
+          controller: 'detailsPlanningUserCtrl'
+        }
+      }
+    })
 
     .state('app.details-planning', {
       url: '/details-planning',

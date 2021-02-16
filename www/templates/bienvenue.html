@@ -223,14 +223,14 @@
 
           <!-- <br>-->
           <ion-slide-box show-pager="true" does-continue="true">
-            <ion-slide >
-              
+            <ion-slide>
+
               <div class="row">
 
                 <div class="col">
                   <div class="card">
                     <div class="item item-text-wrap" style="background-color: #ef473a; color: white">
-                     
+
                       <p style="color: white"><i class="ion-earth"></i>
                         &nbsp;<a href="#/app/articles" style="color: white;text-decoration:none;">&nbsp;Mes articles</a>
                       </p>
@@ -239,40 +239,41 @@
                     </div>
                   </div>
                 </div>
-                
-                <div class="col" ng-if="permission('STOCK')" >
-                
-                  <div class="card" >
-                    <div class="item item-text-wrap"   style="background-color:#ef473a; color: white" >
+
+                <div class="col" ng-if="permission('STOCK')">
+
+                  <div class="card">
+                    <div class="item item-text-wrap" style="background-color:#ef473a; color: white">
                       <div class="itemheader">
-                          <p style="color: white"><i class="ion-cube"></i>
-                           &nbsp;<a href="#/app/stocks" style="color: white;text-decoration:none;" >&nbsp;Mon Stock</a>
-                         </p>
-                         <p style="text-align: end;color: white"><i class="ion-chevron-right"></i></p>
+                        <p style="color: white"><i class="ion-cube"></i>
+                          &nbsp;<a href="#/app/stocks" style="color: white;text-decoration:none;">&nbsp;Mon Stock</a>
+                        </p>
+                        <p style="text-align: end;color: white"><i class="ion-chevron-right"></i></p>
+                      </div>
                     </div>
                   </div>
-                  </div>
-              
+
                 </div>
 
-           
-  
+
+
               </div>
             </ion-slide>
-          
-          
+
+
             <ion-slide>
 
               <div class="row">
 
                 <div class="col">
-                  <div class="card" >
-                    <div class="item item-text-wrap" style="background-color: #ef473a; color: white" >
+                  <div class="card">
+                    <div class="item item-text-wrap" style="background-color: #ef473a; color: white">
                       <p style="color: white"><i class="ion-earth"></i>
-                        &nbsp;<a href="#/app/stockgrossistes" style="color: white;text-decoration:none;" >&nbsp;St. Grossiste</a>
+                        &nbsp;<a href="#/app/stockgrossistes" style="color: white;text-decoration:none;">&nbsp;St.
+                          Grossiste</a>
                       </p>
                       <p style="text-align: end;color: white"><i class="ion-chevron-right"></i></p>
-  
+
                     </div>
                   </div>
                 </div>
@@ -290,7 +291,7 @@
                   </div>
                 </div>
 
-               <!-- <div class="col" >
+                <!-- <div class="col" >
                   <div class="card" >
                     <div class="item item-text-wrap" style="background-color: #ef473a; color: white">
                       <p style="text-align: center;color: white"></p>
@@ -317,27 +318,35 @@
 
             </ion-slide>
 
+           
+
+
 
             <ion-slide>
 
               <div class="row">
 
-                <div class="col">
-                  <div class="card" >
-                    <div class="item item-text-wrap" style="background-color: #ef473a; color: white" >
+                <div class="col" ng-if="permission('PLANNING PERSONNEL')">
+                  <div class="card">
+                    <div class="item item-text-wrap" style="background-color: #ef473a; color: white">
                       <p style="color: white"><i class="ion-earth"></i>
-                        &nbsp;<a href="#/app/monplanning" style="color: white;text-decoration:none;" >&nbsp;Mon Planning</a>
+                        &nbsp;<a href="#/app/monplanning" style="color: white;text-decoration:none;">&nbsp;Mon
+                          Planning</a>
                       </p>
                       <p style="text-align: end;color: white"><i class="ion-chevron-right"></i></p>
-  
+
                     </div>
                   </div>
+                </div>
+
+                <div class="col">
+
                 </div>
               </div>
 
             </ion-slide>
-       
-           <!-- <ion-slide>
+
+            <!-- <ion-slide>
               <div class="row">
                 <div class="col" ng-if="permission('PLANNING DESTOCKEURS')">
                   <div class="card" >
@@ -408,7 +417,7 @@
             </div>
           </div>
 
-          <div class="row" >
+          <div class="row">
 
             <div class="col" ng-click="goToClient()" ng-if="permission('CLIENT')">
               <div class="card cardHome" style="background-color: #1EAC4E; color: white">
@@ -421,21 +430,21 @@
               </div>
             </div>
 
-            <div class="col"  ng-click="goToPrc()" ng-if="permission('PREPARATION DE COMMANDE')">
-            <div class="bgsize">
-              <div class="card cardHome" style="background-color:#1EAC4E; color: white;">
-                <div class="item item-text-wrap" >
-                  <div class="itemBody">
-                  <p style="text-align: center"><img src="./img/visite.png"
-                      style="width:30%; height: 20%;margin-bottom: 8%"></p>
+            <div class="col" ng-click="goToPrc()" ng-if="permission('PREPARATION DE COMMANDE')">
+              <div class="bgsize">
+                <div class="card cardHome" style="background-color:#1EAC4E; color: white;">
+                  <div class="item item-text-wrap">
+                    <div class="itemBody">
+                      <p style="text-align: center"><img src="./img/visite.png"
+                          style="width:30%; height: 20%;margin-bottom: 8%"></p>
                     </div>
-                </div>
-                <p style="color: white;text-align: center;margin-top: 10px">
-                  <a style="color: white;text-decoration:none;">&nbsp;Prépa. de Commande</a>
-                </p>
+                  </div>
+                  <p style="color: white;text-align: center;margin-top: 10px">
+                    <a style="color: white;text-decoration:none;">&nbsp;Prépa. de Commande</a>
+                  </p>
 
+                </div>
               </div>
-            </div>
             </div>
           </div>
 
@@ -451,78 +460,99 @@
                 </p>
               </div>
             </div>
-  
+
             <div class="col" ng-if="permission('CONSULTATION SOLDE')">
               <div class="card cardHome" style="background-color: #28a54c; color: white">
                 <div class="item item-text-wrap">
                   <p style="text-align: center"><img src="./img/soldes.jpg" style="width:45%; height: 40%;"></p>
                 </div>
                 <p style="color: white;text-align: center;margin-top: 10px">
-                  <a href="#/app/consultationSole" style="background-color: #28a54c;color: white;text-decoration:none;">&nbsp;C. solde</a>
+                  <a href="#/app/consultationSole"
+                    style="background-color: #28a54c;color: white;text-decoration:none;">&nbsp;C. solde</a>
                 </p>
               </div>
             </div>
-  
+
+          </div>
+
+          <div class="row">
+
+            <div class="col" ng-if="permission('PLANNING UTILISATEURS')">
+              <div class="card cardHome" style="background-color: #28a54c; color: white; ">
+                <div class="item item-text-wrap">
+                  <p style="text-align: center"><img src="./img/plannings.jpg" style="width:45%; height: 1%;"></p>
+                </div>
+                <p style="color: white;text-align: center;margin-top: 10px">
+                  <a href="#/app/planninguser" style="color: white;text-decoration:none;">&nbsp;Planning utilisateur</a>
+                </p>
+              </div>
             </div>
+
+
+          </div>
+
           <div class="row">
 
             <div class="col" ng-click="goToPdc()" ng-if="permission('PRISE DE COMMANDE')">
               <div class="card cardHome" style="background-color: #1EAC4E; color: white">
                 <div class="item item-text-wrap">
-                  <p style="text-align: center"><img src="./img/prise_de_commandes.jpg" style="width:50%; height: 3%;"></p>
+                  <p style="text-align: center"><img src="./img/prise_de_commandes.jpg" style="width:50%; height: 3%;">
+                  </p>
                 </div>
                 <p style="color: white;text-align: center;margin-top: 10px;">
-                  <a  style="color: white;text-decoration:none;">&nbsp;Prise de commande</a>
+                  <a style="color: white;text-decoration:none;">&nbsp;Prise de commande</a>
                 </p>
               </div>
             </div>
 
-            <div class="col"  ng-click="goToPds()"  ng-if="permission('RECUPERATION DE MARCHANDISES')">
-              
+            <div class="col" ng-click="goToPds()" ng-if="permission('RECUPERATION DE MARCHANDISES')">
+
               <div class="card cardHome" style="background-color: #1EAC4E; color: white">
-               
+
                 <div class="item item-text-wrap">
                   <p style="text-align: center"><img src="./img/marchandise.png" style="width:50%; height: 3%;"></p>
-                 <!-- <p style="text-align: center;color: #e30000;font-size: large;">2</p>--> 
-                  <span ng-if="data.prcs && data.prcs.length > 0" class="badge badge-danger" style="background-color:  #ef473a !important;color: white;">{{data.prcs.length}}</span>
+                  <!-- <p style="text-align: center;color: #e30000;font-size: large;">2</p>-->
+                  <span ng-if="data.prcs && data.prcs.length > 0" class="badge badge-danger"
+                    style="background-color:  #ef473a !important;color: white;">{{data.prcs.length}}</span>
                 </div>
                 <p style="color: white;text-align: center;margin-top: 10px;">
                   <a style="color: white;text-decoration:none;">Récup. marchandises</a>
                 </p>
-              
-            </div>
-            </div>
 
-            
-          
-          </div>
-
-         <div class="row">
-
-          <div class="col"  ng-click="goToFacture()" ng-if="permission('FACTURATION')">
-            <div class="card cardHome" style="background-color: #28a54c; color: white">
-              <div class="item item-text-wrap">
-                <p style="text-align: center"><img src="./img/prc.jpg" style="width:50%; height: 5%;"></p>
-                <span ng-if="data.factures && data.factures.length > 0" class="badge badge-danger" style="background-color: #e30000 !important;color: white;">{{data.factures.length}}</span>
               </div>
-              <p style="color: white;text-align: center;margin-top: 10px">
-                <a style="color: white;text-decoration:none;">&nbsp;Factures</a>
-              </p>
             </div>
+
+
+
           </div>
 
-          <div class="col" ng-click="goToDechargement()" ng-if="permission('DECHARGEMENT')">
-            <div class="card cardHome" style="background-color: #28a54c; color: white">
-              <div class="item item-text-wrap">
-                <p style="text-align: center"><img src="./img/dechargement.png" style="width:45%; height: 5%;"></p>
+          <div class="row">
+
+            <div class="col" ng-click="goToFacture()" ng-if="permission('FACTURATION')">
+              <div class="card cardHome" style="background-color: #28a54c; color: white">
+                <div class="item item-text-wrap">
+                  <p style="text-align: center"><img src="./img/prc.jpg" style="width:50%; height: 5%;"></p>
+                  <span ng-if="data.factures && data.factures.length > 0" class="badge badge-danger"
+                    style="background-color: #e30000 !important;color: white;">{{data.factures.length}}</span>
+                </div>
+                <p style="color: white;text-align: center;margin-top: 10px">
+                  <a style="color: white;text-decoration:none;">&nbsp;Factures</a>
+                </p>
               </div>
-              <p style="color: white;text-align: center;margin-top: 10px">
-                <a href="#/app/dechargements" style="color: white;text-decoration:none;">&nbsp;Déchargement</a>
-              </p>
             </div>
-          </div>
 
-          
+            <div class="col" ng-click="goToDechargement()" ng-if="permission('DECHARGEMENT')">
+              <div class="card cardHome" style="background-color: #28a54c; color: white">
+                <div class="item item-text-wrap">
+                  <p style="text-align: center"><img src="./img/dechargement.png" style="width:45%; height: 5%;"></p>
+                </div>
+                <p style="color: white;text-align: center;margin-top: 10px">
+                  <a href="#/app/dechargements" style="color: white;text-decoration:none;">&nbsp;Déchargement</a>
+                </p>
+              </div>
+            </div>
+
+
 
           </div>
 
@@ -549,11 +579,11 @@
                 </p>
               </div>
             </div>
-  
+
           </div>
 
 
-       
+
 
         </ion-grid>
 

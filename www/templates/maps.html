@@ -26,10 +26,10 @@
             modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" option-getter="getOptAgent(option)"
             modal-title="Selection" has-search="true">
             <label for="" ng-if="!data.agentchoisit">Choisir agent</label>
-            <label for="" ng-if="data.agentchoisit">{{data.agentchoisit.nom}}</label>
+            <label for="" ng-if="data.agentchoisit">{{data.agentchoisit.prenom}} {{data.agentchoisit.nom}}</label>
 
             <div class="option">
-              <h2>{{option.nom}}</h2>
+              <h2>{{option.prenom}} {{option.nom}}</h2>
 
             </div>
 
