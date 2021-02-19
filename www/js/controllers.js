@@ -797,6 +797,7 @@ PLANNING DESTOCKEURS*/
     var user = JSON.parse(localStorage.getItem("user"));
     $scope.getPosition = function () {
       $scope.nomclient = position.nom;
+      $scope.prenomclient = position.prenom;
       var options = { timeout: 10000, enableHighAccuracy: true };
 
       $cordovaGeolocation.getCurrentPosition(options).then(
@@ -843,7 +844,7 @@ PLANNING DESTOCKEURS*/
             var compiled = $compile(contentString)($scope);
             // var url = "https://www.google.com/maps/place/"+ lat + "," + lng;
             var infoWindow = new google.maps.InfoWindow({
-              content: compiled[0] + "Position point de vente!"
+              content:"Position point de vente!"
                 + "<br/>Raison social: " + $scope.nomclient
                 + "<br/>"
                 + "<br/>" + contentString
@@ -1500,11 +1501,13 @@ PLANNING DESTOCKEURS*/
                 lat1 = $scope.data.dernierPositionAgent[1].latitude;
                 long1 = $scope.data.dernierPositionAgent[1].longitude;
                 nomAgent = $scope.data.dernierPositionAgent[1].nom;
+                prenomAgent = $scope.data.dernierPositionAgent[1].prenom;
                 dateEnregistrement = $scope.data.dernierPositionAgent[1].dateEnregistrement;
 
                 lat2 = $scope.data.dernierPositionAgent[0].latitude;
                 long2 = $scope.data.dernierPositionAgent[0].longitude;
                 nomAgent2 = $scope.data.dernierPositionAgent[0].nom;
+                prenomAgent2 = $scope.data.dernierPositionAgent[0].prenom;
                 dateEnregistrement2 = $scope.data.dernierPositionAgent[0].dateEnregistrement;
               }
             };
@@ -1576,14 +1579,14 @@ PLANNING DESTOCKEURS*/
 
                 var infoWindow1 = new google.maps.InfoWindow({
                   content: "Ma Derniere position! "
-                    + "<br/>Nom: " + nomAgent
+                    + "<br/>Nom: "+ prenomAgent +" " +  nomAgent
                     + "<br/>Date: " + dateEnregistrement
 
                 });
 
                 var infoWindow2 = new google.maps.InfoWindow({
                   content: "Ma Derniere position! "
-                    + "<br/>Nom: " + nomAgent2
+                    + "<br/>Nom: " +prenomAgent2 + " " + nomAgent2
                     + "<br/>Date: " + dateEnregistrement2
 
                 });
@@ -15622,7 +15625,7 @@ PLANNING DESTOCKEURS*/
 
     return {
       getUrl: function () {
-        //  return "http://test-test.h-tsoft.com/apiagroline";
+         // return "http://test-test.h-tsoft.com/apiagroline";
         return "http://test-test.h-tsoft.com/apiagrolineprod";
         //return "http://htsoftdemo.com/apiccbm";
         //return "http://192.168.1.34/CCBM-serveur";
