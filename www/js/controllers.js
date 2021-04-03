@@ -3651,7 +3651,7 @@ PLANNING DESTOCKEURS*/
                 }
               }
             })
-            console.log("adresse", $scope.data.adresseUser);
+           
           })
         })
       };
@@ -3679,13 +3679,13 @@ PLANNING DESTOCKEURS*/
 
                 var latLng = new google.maps.LatLng(lat, lng);
                 $scope.getAdresseGoogle(latLng);
-                console.log("Coordonnes:", latLng);
+               
               }
             }
             adresses.push({ position: adresseClient[i].position });
-            console.log("position", adresseClient[i].position);
+           
           }
-          console.log("adresse", adresses);
+          
 
 
         },
@@ -4171,7 +4171,7 @@ PLANNING DESTOCKEURS*/
     }
 
     $scope.selectTypePointVente = function () {
-      var typePointVente = { idTypepointvente: $scope.data.listTypePointVentes.idTypepointvente }
+      var typePointVente = { idTypepointvente: $scope.data.TypePointVentechoisit.idTypepointvente }
       console.log(typePointVente);
       ApiListTypePointVente.listTypePointVente()
         .success(function (reponse) {
@@ -4722,7 +4722,7 @@ PLANNING DESTOCKEURS*/
     }
 
     $scope.setBackgroundAdresse = function () {
-      console.log("border");
+      
       if (!$scope.data.adresse && $scope.border === true) {
         return {
           'background': '#FC5D5D'
@@ -4733,7 +4733,7 @@ PLANNING DESTOCKEURS*/
     }
 
     $scope.setBackgroundNom = function () {
-      console.log("border");
+    
       if (!$scope.data.nom && $scope.border === true) {
         return {
           'background': '#FC5D5D'
@@ -4743,7 +4743,7 @@ PLANNING DESTOCKEURS*/
     }
 
     $scope.setBackgroundTelephone = function () {
-      console.log("border");
+     
       if (!$scope.data.telephone && $scope.border === true) {
         return {
           'background': '#FC5D5D'
@@ -9105,22 +9105,25 @@ PLANNING DESTOCKEURS*/
     $scope.selectPlanningAgent = function () {
       console.log('-----Liste Planning Agent');
 
-      if ($scope.data.AgentChefZonechoisit && $scope.data.datefilterDebut && $scope.data.datefilterFin) {
+      if ($scope.data.AgentChefZonechoisit 
+        && $scope.data.datefilterDebut && $scope.data.datefilterFin
+        ) {
         console.log("choix ", $scope.data.AgentChefZonechoisit.codeAgent);
         var parametres = {
           codeAgent: $scope.data.AgentChefZonechoisit.codeAgent,
           // dateDebut: formatNewDate.formatNewDate($scope.data.datefilterDebut),
           //  dateFin: formatNewDate.formatNewDate($scope.data.datefilterFin)
           dateDebut: $scope.data.datefilterDebut,
-          dateFin: $scope.data.datefilterFin
+          dateFin: $scope.data.datefilterFin,
+       //   currentWeek: 1
         }
-
+        currentWeek =1;
         console.log("parametres", parametres);
         ApiPlanningAgent.ListPlanningAgent(parametres)
           .success(function (reponse) {
             console.log('-----Liste Agent Chef Zone');
             $scope.data.listAgents = reponse;
-            console.log($scope.data.listAgents)
+            console.log("",$scope.data.listAgents)
           })
         $state.transitionTo(
           "app.details-planning",
@@ -9190,12 +9193,15 @@ PLANNING DESTOCKEURS*/
       $scope.data.code = user.code;
       console.log(user.code);
 
-      if ($scope.data.datefilterDebut && $scope.data.datefilterFin) {
+      if ( $scope.data.code 
+        //$scope.data.datefilterDebut && $scope.data.datefilterFin
+        ) {
 
         var parametres = {
-          codeAgent: $scope.data.code,
-          dateDebut: $scope.data.datefilterDebut,
-          dateFin: $scope.data.datefilterFin
+          // dateDebut: $scope.data.datefilterDebut,
+         // dateFin: $scope.data.datefilterFin
+         codeAgent: $scope.data.code,
+         currentWeek: 1
         }
 
         console.log("parametres", parametres);
@@ -9218,7 +9224,7 @@ PLANNING DESTOCKEURS*/
       } else {
         $ionicPopup.show({
           title: "Alert",
-          template: "Veuillez remplir tout le formulaire.",
+          template: "Veuillez choisir un agent.",
           scope: $scope,
           buttons: [
             {
@@ -9233,6 +9239,8 @@ PLANNING DESTOCKEURS*/
       }
 
     }
+
+    
 
     // $scope.initvar();
     //  $scope.myPlanningAgent();
@@ -9426,10 +9434,80 @@ PLANNING DESTOCKEURS*/
     ApiAjoutPdsFromRecap,
     SendSms,
     $filter,
-    ApiAjoutPrc
+    ApiAjoutPrc,
+    ApiPlanningAgent
 
   ) {
     console.log('-------- details mon planning-------');
+
+    $scope.myPlanningAgentEntreDate = function () {
+      console.log('-----Mon Planning Agent');
+      var user = JSON.parse(localStorage.getItem("user"));
+      console.log(user);
+      $scope.data.telephone = user.telephone;
+      $scope.data.adresse = user.adresse;
+      $scope.data.agent = user.prenom;
+      $scope.data.code = user.code;
+      console.log(user.code);
+
+      if ( $scope.data.code 
+        //$scope.data.datefilterDebut && $scope.data.datefilterFin
+        ) {
+
+        var parametres = {
+           dateDebut: $scope.data.datefilterDebut,
+          dateFin: $scope.data.datefilterFin,
+         codeAgent: $scope.data.code,
+         //currentWeek: 1
+        }
+
+        console.log("parametres", parametres);
+        ApiPlanningAgent.ListPlanningAgent(parametres)
+          .success(function (reponse) {
+            console.log('-----Liste Agent Chef Zone');
+            $scope.data.listAgents = reponse;
+            console.log($scope.data.listAgents)
+          })
+        $state.transitionTo(
+          "app.details-dateplanning",
+          {},
+          {
+            reload: true,
+            inherit: true,
+            notify: true,
+          }
+        );
+
+      } 
+
+    }
+
+  })
+
+
+  .controller("detailsDatePlanningCtrl", function (
+    $scope,
+    $state,
+    $ionicLoading,
+    ApiListPrc,
+    ApiDetailPrc,
+    ApiAjoutPrc,
+    ApiListClient,
+    ApiListMotif,
+    ApiListArticle,
+    $ionicPopup,
+    CodeGenere,
+    ApiListGrossiste,
+    ApiAjoutPdsFromRecap,
+    SendSms,
+    $filter,
+    ApiAjoutPrc,
+    ApiPlanningAgent
+
+  ) {
+    console.log('-------- details mon planning-------');
+
+   
 
   })
 
@@ -10486,6 +10564,7 @@ PLANNING DESTOCKEURS*/
             for (var i = 0; i < $scope.data.recapPrc[j].details.length; i++) {
               console.log('Je rentre ici i');
               $scope.data.detail = {
+                
                 codeDetail: null,
                 codePRC: null,
                 codePDS: $scope.data.codePDS,
@@ -15625,8 +15704,8 @@ PLANNING DESTOCKEURS*/
 
     return {
       getUrl: function () {
-          return "http://test-test.h-tsoft.com/apiagroline";
-       // return "http://test-test.h-tsoft.com/apiagrolineprod";
+    //return "http://test-test.h-tsoft.com/apiagroline";
+       return "http://test-test.h-tsoft.com/apiagrolineprod";
         //return "http://htsoftdemo.com/apiccbm";
         //return "http://192.168.1.34/CCBM-serveur";
         //  return "http://mob-test.yosard.com/webservice";

@@ -397,6 +397,15 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
         }
       }
     })
+    .state('app.details-dateplanning', {
+      url: '/details-dateplanning',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/details-dateplanning.html',
+          controller: 'detailsDatePlanningCtrl'
+        }
+      }
+    })
 
     .state('app.consultationSole', {
       url: '/consultationSole',

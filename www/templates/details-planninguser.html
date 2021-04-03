@@ -70,32 +70,32 @@
   
   
         <div class="row header list content-div">
-            <div class="col" style="text-align: center;">Période</div>
-            <div class="col" style="text-align: center;">Action</div>
-            <div class="col" style="text-align: center;">Zone</div>
             <div class="col" style="text-align: center;">Date</div>
+            <div class="col" style="text-align: center;">Période</div>
+            <div class="col" style="text-align: center;">Zone</div>
+            <div class="col" style="text-align: center;">Action</div>
      
           
         </div>
   
         <div class="row list"  ng-repeat="d in data.listUsers | filter:motcle">
   
-            <div class="col content-div-row"  >
-              {{d.periode}}
+            <div class="col content-div-row"  style="width: 20%;">
+              {{d.datePlanning}}
             </div>
   
            
   
-            <div class="col content-div-row" >{{d.action}}</div>
+            <div class="col content-div-row" style="width: 20%;">{{d.periode}}</div>
   
           
   
   
-            <div class="col content-div-row" >{{d.zone}}</div>
+            <div class="col content-div-row" style="width: 20%;">{{d.zone}}</div>
             
           
   
-            <div class="col content-div-row" >{{d.datePlanning}}</div>
+            <div class="col content-div-row" style="width: 20%;" >{{d.action}}</div>
           
         
   

@@ -57,6 +57,16 @@
           <ion-item menu-close href="#/app/bienvenue" style="color: rgb(7, 7, 7);">
             <i class="icon ion-home" style="color:#1EAC4E;"></i> &nbsp;{{ 'menu_acceuil' | translate }}
           </ion-item>
+
+          <ion-item ng-if="permission('PLANNING PERSONNEL')" menu-close href="#/app/monplanning" style="color: rgb(7, 7, 7);">
+            <i class="icon ion-ios-list" style="color:#1EAC4E;"></i>&nbsp;Mon Planning
+          </ion-item>
+
+          <ion-item  menu-close href="#/app/stockgrossistes" style="color: rgb(7, 7, 7);">
+            <i class="icon ion-ios-list" style="color:#1EAC4E;"></i>&nbsp;St.
+            Grossiste
+          </ion-item>
+
           <ion-item ng-if="permission('PREPARATION DE COMMANDE')" menu-close href="#/app/prcs" style="color: rgb(7, 7, 7);">
             <i class="icon ion-ios-list" style="color:#1EAC4E;"></i>&nbsp;PRCS
           </ion-item>
