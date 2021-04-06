@@ -9079,6 +9079,55 @@ PLANNING DESTOCKEURS*/
 
 
 
+    $scope.myPlanningCurrentWeek = function () {
+      console.log('-----Mon Planning Agent');
+      var user = JSON.parse(localStorage.getItem("user"));
+      console.log(user);
+      $scope.data.telephone = user.telephone;
+      $scope.data.adresse = user.adresse;
+      $scope.data.agent = user.prenom;
+      $scope.data.code = user.code;
+      console.log(user.code);
+
+      if ( $scope.data.code 
+        //$scope.data.datefilterDebut && $scope.data.datefilterFin
+        ) {
+
+        var parametres = {
+          // dateDebut: $scope.data.datefilterDebut,
+         // dateFin: $scope.data.datefilterFin
+         codeAgent: $scope.data.code,
+         currentWeek: 1
+        }
+
+        console.log("parametres", parametres);
+        ApiPlanningAgent.ListPlanningAgent(parametres)
+          .success(function (reponse) {
+            console.log('-----Liste Agent Chef Zone');
+            $scope.data.listAgents = reponse;
+            console.log($scope.data.listAgents)
+          })
+
+      } else {
+        $ionicPopup.show({
+          title: "Alert",
+          template: "Veuillez choisir un agent.",
+          scope: $scope,
+          buttons: [
+            {
+              text: 'OK',
+              type: 'button-energized',
+              onTap: function (e) {
+                return true;
+              }
+            }
+          ]
+        })
+      }
+
+    }
+
+    
 
 
     $scope.selectAgent = function () {
@@ -9101,6 +9150,7 @@ PLANNING DESTOCKEURS*/
     }
 
     $scope.selectAgent();
+    $scope.myPlanningCurrentWeek();
 
     $scope.selectPlanningAgent = function () {
       console.log('-----Liste Planning Agent');

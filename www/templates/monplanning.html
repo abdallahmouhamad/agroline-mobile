@@ -52,10 +52,54 @@
 
 
 
-                   <br><br>
+                    <br><br>
                     <div>
-                        <h3 style="text-align: center;  color: #28a54c">Details Planning...</h3>
-                        <!-- <label class="item item-input">
+                        <h3 style="text-align: center;  color: #28a54c">Semaine en cours...</h3>
+
+
+                        <div ng-if="data.listAgents.length > 0">
+
+                            <div class="row header list content-div">
+                                <div class="col" style="text-align: center;">Date</div>
+                                <div class="col" style="text-align: center;">Période</div>
+                                <div class="col" style="text-align: center;">Zone</div>
+                                <div class="col" style="text-align: center;">Action</div>
+
+
+                            </div>
+
+                            <div class="row list" ng-repeat="d in data.listAgents | filter:motcle">
+
+                                <div class="col content-div-row" style="width: 20%;">
+                                    {{d.datePlanning}}
+                                </div>
+
+
+
+                                <div class="col content-div-row" style="width: 20%;">{{d.periode}}</div>
+
+
+
+
+                                <div class="col content-div-row" style="width: 20%;">{{d.zone}}</div>
+
+
+
+                                <div class="col content-div-row" style="width: 20%;">{{d.action}}</div>
+
+
+
+
+                            </div>
+
+                        </div>
+                    </div>
+
+
+        </div>
+
+
+        <!-- <label class="item item-input">
                             <span class="input-label">Debut</span>
                             <input type="text" onfocus="(this.type='date')" ng-model="data.datefilterDebut"
                                 placeholder="yyyy-mm-dd">
@@ -65,13 +109,6 @@
                             <input type="text" onfocus="(this.type='date')" ng-model="data.datefilterFin"
                                 placeholder="yyyy-mm-dd">
                         </label> -->
-                    </div>
-
-
-        </div>
-
-
-
 
         </ion-grid>
         </ion-content>
@@ -80,7 +117,7 @@
         </div>
         <div class="bar bar-footer footer-button">
             <button ng-click="myPlanningAgent()" class="button button-block button-assertive footer-button"
-                color="danger"><span style="color:white">Valider</span></button>
+                color="danger"><span style="color:white">Choisir</span></button>
         </div>
     </ion-pane>
 </ion-view>
