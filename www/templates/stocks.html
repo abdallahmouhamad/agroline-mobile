@@ -2,7 +2,8 @@
   <div ng-app="starter">
 
     <ion-content padding="true" class="has-header">
-      <ul class="list" ng-repeat="stock in data.listStock | filter:motcle">
+     
+      <ul class="list" ng-repeat="stock in data.listStock | filter:motcle" ng-click="showPopUp(stock)">
 
         <li>
           <div class="list card">
@@ -27,12 +28,13 @@
                   {{ stock.quantite }}
                 </div>
               </div>
+              
               <!--<h2>Code :{{ stock.codeArticle }}</h2>
               <p>Quantité: {{ stock.quantite }}</p>-->
             </div>
 
             <div class="item item-body">
-              <p>
+              <p style="white-space: pre-line;">
                 {{ stock.libelle }}
               </p>
               
@@ -40,7 +42,7 @@
 
           </div>
         </li>
-    </ul>
+      </ul>
 
 
     </ion-content>

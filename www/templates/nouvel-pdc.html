@@ -136,7 +136,7 @@
   
         <div class="row title" style="margin-top: 10px;">
   
-          <div class="col" style="font-size: 130%;">Ajouter les details du PDC</div>
+          <!-- <div class="col" style="font-size: 130%;">Ajouter les details du PDC</div> -->
     
   
         </div>
@@ -162,6 +162,7 @@
             cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
             search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
             ng-model="data.artcilechoisit" options="data.listarticles" option-getter="getOptArticle(option)"
+        
             modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
             has-search="true">
             Article
@@ -179,8 +180,7 @@
                 </div>
   
               </div>
-  
-             
+
   
             </div>
   
@@ -223,7 +223,7 @@
           <div class="list">
             <label class="item item-input" style="margin-top: 7px;">
               <span class="input-label">Prix</span>
-              <input type="number" ng-model="data.prix" placeholder="0">
+              <input type="number" ng-model="data.prix = data.artcilechoisit.prix" placeholder="0">
             </label>
           </div>
   
@@ -329,13 +329,13 @@
 
         <i class="icon ion-trash-a" ></i>
 
-        </div>
+    </div>
 
-        <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'" ng-click="deletObject(d)">
+    <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'" ng-click="deletObject(d)">
 
             <i class="icon ion-trash-a"></i>
 
-        </div>
+    </div>
   
      
     </div>

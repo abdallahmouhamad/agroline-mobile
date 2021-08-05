@@ -1,4 +1,4 @@
-<ion-view view-title="Nouvelle Recuperation.M" cache-view="false">
+<ion-view view-title="Ajout Déstockage grossiste" cache-view="false">
   <ion-pane>
     <div ng-app="starter">
 
@@ -56,7 +56,7 @@
               line-height: 100px !important;
             }
           </style>
-          <div ng-if="code == 'initiale'">
+          <div >
             <div class="row">
               <div class="col">
                 <button class="button button-block button-assertive"
@@ -74,6 +74,17 @@
                     <h2> {{option.nom}}</h2>
                   </div>
                 </button>
+              </div>
+
+              <div class="col">
+
+                <div class="list">
+                  <label class="item item-input" style="margin-top: 7px;">
+                    <!-- <span class="input-label">numéro Fiche</span> -->
+                    <input type="text" id="numFiche" ng-model="data.numFiche" placeholder="numéro Fiche...">
+                  </label>
+                </div>
+                
               </div>
             </div>
 
@@ -95,6 +106,7 @@
                     cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
                     search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
                     ng-model="data.artcilechoisit" options="data.listarticles" option-getter="getOptArticle(option)"
+                    (on-select)="selectArticle()"
                     modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
                     has-search="true">
                     Article
@@ -653,7 +665,7 @@
 
           </div>
 
-          <div ng-if="code == 'attente' && data.annulation == false">
+        <div ng-if="code == 'attentesdk' && data.annulation == false">
             <div class="list">
               <label class="item item-input">
                 <span class="input-label">Code de validation</span>
@@ -695,8 +707,7 @@
 
 
     </div>
-    <div class="bar bar-footer footer-button" ng-if="code == 'initiale'">
-
+    <div class="bar bar-footer footer-button">
 
       <!-- <div class="col mt" ng-if="sens !== 'local'" >
         <button  ng-click="sauvegarder()" class="button button-block button-assertive footer-button" color="danger" type="submit"

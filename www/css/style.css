@@ -14,6 +14,12 @@ map {
   text-overflow: inherit;
   white-space: normal;
 }
+.popup-container .popup {
+    width: 400px;
+ }
+ .back-button {
+    z-index: 1;
+  }
 
 .login-form .item-input {
   margin-top: 24px;

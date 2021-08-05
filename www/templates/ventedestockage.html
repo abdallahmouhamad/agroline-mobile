@@ -1,0 +1,71 @@
+<ion-view title="Vente/Destockage" cache-view="false" >
+    <div ng-app="starter">
+  
+      <ion-content padding="true" class="has-header">
+        <style type="text/css">
+          input[readonly] {
+            background-color: transparent !important;
+            cursor: not-allowed;
+          }
+          .small_button{
+              width: 50% !important;
+              height: 50px !important;
+              margin-left: 5px;
+          }
+          .footer-button {
+            margin-bottom: 10px;
+            height: 50px !important;
+          }
+          .ml{
+            margin-left: 5px;
+          }
+          .header {
+  
+            margin-top: 5px;
+            margin-bottom: 10px;
+          }
+          .content-div {
+            background: #1EAC4E !important;
+          }
+          .content-div-row {
+            text-align: center !important;
+            border: 3px grey dashed !important;
+          }
+          .bg {
+              background-color: #ef473a(4, 0, 255) !important;
+            }
+  
+        </style>
+      
+
+      <ion-list class="listItem">
+
+       
+        <ion-item ng-click="goToPds()" ng-if="permission('RECUPERATION DE MARCHANDISES')" menu-close  style="color: rgb(7, 7, 7)">
+          <i class="icon ion-ios-list" style="color:#1EAC4E;"></i>&nbsp;Déstockage grossiste
+        </ion-item>
+
+        <ion-item ng-click="goToFacture()" ng-if="permission('FACTURATION')" menu-close  style="color: rgb(7, 7, 7)">
+            <i class="icon ion-ios-list" style="color:#1EAC4E;"></i>&nbsp;Vente client
+          </ion-item>
+
+        <ion-item ng-click="goToRecouvrementListe()"  menu-close  style="color: rgb(7, 7, 7)">
+          <i class="icon ion-ios-list" style="color:#1EAC4E;"></i>&nbsp;Recouvrement client
+        </ion-item>
+
+        <ion-item ng-click="goToDechargement()" menu-close  style="color: rgb(7, 7, 7)">
+            <i class="icon ion-ios-list" style="color:#1EAC4E;"></i>&nbsp;Retour produit vers grossiste
+          </ion-item>
+
+          <ion-item ng-click="goToPaiementGrossiste()" menu-close style="color: rgb(7, 7, 7)">
+            <i class="icon ion-ios-list" style="color:#1EAC4E;"></i>&nbsp;Paiement grossiste
+          </ion-item>
+
+
+      </ion-list>
+  
+      </ion-content>
+     
+    </div>
+    </ion-view>
+  

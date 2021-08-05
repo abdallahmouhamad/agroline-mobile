@@ -1,4 +1,4 @@
-<ion-view title="Récupération marchandises" cache-view="false">
+<ion-view title="Déstockage grossiste" cache-view="false">
   <div ng-app="starter">
 
     <ion-content padding="true" class="has-header ion-content">
@@ -214,10 +214,13 @@
   </ion-content>
 
   </div>
+  <button class="button button-float bg" ng-click="goToNewPds('nouvelle')" >
+    <i class="icon ion-plus"></i>
+  </button>
 
-  <div class="row bar bar-footer ft">
+  <!-- <div class="row bar bar-footer ft">
     <div class="col mt">
-      <button ng-click="goToNewPds('nouvelle')" class="button button-block button-assertive footer-button" type="submit"
+      <button ng-click="goToNewPds('nouvelle')"  class="button button-block button-assertive footer-button" type="submit"
         name="submit"><span style="color:white">Demande sans PRC</span></button>
     </div>
 
@@ -225,6 +228,6 @@
       <button ng-click="goToNewPds('recap')" class="button button-block button-assertive footer-button" type="submit"
         name="submit"><span style="color:white">Demande avec PRC</span></button>
     </div>
-  </div>
+  </div> -->
 
 </ion-view>

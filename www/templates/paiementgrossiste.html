@@ -1,0 +1,124 @@
+<ion-view view-title="Paiement grossiste" cache-view="false">
+  <ion-pane>
+    <div ng-app="starter">
+
+      <ion-content>
+
+        <style type="text/css">
+          input[readonly] {
+            background-color: transparent !important;
+            cursor: not-allowed;
+          }
+
+          .small_button {
+            width: 50% !important;
+            height: 50px !important;
+            margin-left: 5px;
+          }
+
+          .footer-button {
+            margin-bottom: 10px;
+            height: 50px !important;
+          }
+
+          .ml {
+            margin-left: 5px;
+          }
+
+          .header {
+
+            margin-top: 5px;
+            margin-bottom: 10px;
+          }
+
+          .content-div {
+            background: grey !important;
+          }
+
+          .content-div-row {
+            text-align: center !important;
+            border: 3px grey dashed !important;
+          }
+
+          .edit {
+            background: red !important;
+          }
+
+          .map {
+            height: 200px !important;
+          }
+
+          table {
+            width: 300px;
+            color: white;
+          }
+
+          table,
+          th,
+          td {
+            border: solid 1px white;
+            border-collapse: collapse;
+            padding: 2px 3px;
+            text-align: center;
+            color: white;
+            margin-left: 10px;
+          }
+        </style>
+
+        <div class="row">
+          <div class="col">
+            <button class="button button-block button-assertive"
+              cancel-button="{{ 'fichevisite_select_pv_return' | translate }}"
+              reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
+              cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
+              search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
+              ng-model="data.grossistechoisit" options="data.listgrossistedestock" option-getter="getOptGrossiste(option)"
+              modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
+              ng-change="initRecapPRC();" has-search="true">
+
+              <label for="" ng-if="!data.grossistechoisit">Choisir un Grossiste</label>
+              <label for="" ng-if="data.grossistechoisit">{{data.grossistechoisit.nom}}</label>
+              <div class="option">
+                <h2> {{option.nom}}</h2>
+              </div>
+            </button>
+          </div>
+
+        
+        </div>
+
+        <div class="row">
+          <div class="col">
+
+            <div class="list">
+              <label class="item item-input" style="margin-top: 7px;">
+                <!-- <span class="input-label">numéro Fiche</span> -->
+                <input type="text" id="numFiche" ng-model="data.numFiche" placeholder="numéro Fiche...">
+              </label>
+            </div>
+            
+          </div>
+          
+          <div class="col">
+
+            <div class="list">
+              <label class="item item-input" style="margin-top: 7px;">
+                <input type="number" id="sommeverse" ng-model="data.sommeverse" placeholder="Somme versée...">
+              </label>
+            </div>
+            
+          </div>
+        </div>
+
+
+        
+      </ion-content>
+
+
+    </div>
+    <div class="bar bar-footer footer-button">
+      <button ng-click="submit()" class="button button-block button-assertive footer-button" type="submit"
+        name="submit"><span style="color:white">Valider</span></button>
+    </div>
+  </ion-pane>
+</ion-view>

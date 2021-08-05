@@ -122,13 +122,10 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
       templateUrl: 'templates/tabs.html',
       controller: 'AppCtrl'
     })
-
-
-
     .state('app.accueil', {
       url: '/accueil',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/accueil.html',
           controller: 'DashCtrl'
         }
@@ -138,7 +135,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.profile', {
       url: '/profile',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/profile.html',
           //    controller: 'ProfileCtrl'
 
@@ -149,7 +146,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.compte', {
       url: '/compte',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/compte.html',
           controller: 'AppCtrl'
         }
@@ -160,7 +157,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.stocks', {
       url: '/stocks',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/stocks.html',
           controller: 'StockCtrl'
 
@@ -171,7 +168,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.clients', {
       url: '/clients',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/clients.html',
           controller: 'ClientCtrl'
         }
@@ -180,7 +177,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.articles', {
       url: '/articles',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/articles.html',
           controller: 'ArticleCtrl'
         }
@@ -189,7 +186,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.prospects', {
       url: '/prospects',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/prospects.html',
           controller: 'ProspectsCtrl'
 
@@ -199,7 +196,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.mesprospects', {
       url: '/mesprospects',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/mesprospects.html',
           controller: 'MesprospectsCtrl'
         }
@@ -208,7 +205,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.prcs', {
       url: '/prcs',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/prcs.html',
           controller: 'PrcCtrl'
         }
@@ -217,7 +214,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.details-prc', {
       url: '/details-prc',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/details-prc.html',
           controller: 'DetailPrcCtrl'
         }
@@ -226,7 +223,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.nouvel-prc', {
       url: '/nouvel-prc',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/nouvel-prc.html',
           controller: 'NewPrcCtrl'
         }
@@ -237,7 +234,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.pdcs', {
       url: '/pdcs',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/pdcs.html',
           controller: 'PdcCtrl'
         }
@@ -246,7 +243,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.details-pdc', {
       url: '/details-pdc',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/details-pdc.html',
           controller: 'DetailPdcCtrl'
         }
@@ -255,7 +252,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.nouvel-pdc', {
       url: '/nouvel-pdc',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/nouvel-pdc.html',
           controller: 'NewPdcCtrl'
         }
@@ -265,7 +262,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.pds', {
       url: '/pds',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/pds.html',
           controller: 'PdsCtrl'
         }
@@ -274,7 +271,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.details-pds', {
       url: '/details-pds',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/details-pds.html',
           controller: 'DetailPdsCtrl'
         }
@@ -284,7 +281,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.nouvel-pds', {
       url: '/nouvel-pds',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/nouvel-pds.html',
           controller: 'AddPdsCtrl'
         }
@@ -294,7 +291,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.recapitulatif-pds-prc', {
       url: '/recapitulatif-pds-prc',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/recapitulatif-pds-prc.html',
           controller: 'RecapPdsPrcCtrl'
         }
@@ -304,7 +301,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.facturations', {
       url: '/facturations',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/facturations.html',
           controller: 'FacturationsCtrl'
         }
@@ -314,7 +311,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.facturation', {
       url: '/facturation',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/facturation.html',
           controller: 'FacturationCtrl'
         }
@@ -323,7 +320,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.details-facture', {
       url: '/details-facture',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/details-facture.html',
           controller: 'DetailsFactureCtrl'
         }
@@ -333,7 +330,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.details-encaissement', {
       url: '/details-encaissement',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/details-encaissement.html',
           controller: 'DetailsEncaissementCtrl'
         }
@@ -343,7 +340,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.planning', {
       url: '/planning',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/planning.html',
           controller: 'PlanningCtrl'
         }
@@ -353,7 +350,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.monplanning', {
       url: '/monplanning',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/monplanning.html',
           controller: 'PlanningCtrl'
         }
@@ -362,7 +359,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.planninguser', {
       url: '/planninguser',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/planninguser.html',
           controller: 'PlanningUserCtrl'
         }
@@ -371,7 +368,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.details-planninguser', {
       url: '/details-planninguser',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/details-planninguser.html',
           controller: 'detailsPlanningUserCtrl'
         }
@@ -381,7 +378,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.details-planning', {
       url: '/details-planning',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/details-planning.html',
           controller: 'detailsPlanningCtrl'
         }
@@ -391,7 +388,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.details-monplanning', {
       url: '/details-monplanning',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/details-monplanning.html',
           controller: 'detailsMonPlanningCtrl'
         }
@@ -400,7 +397,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.details-dateplanning', {
       url: '/details-dateplanning',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/details-dateplanning.html',
           controller: 'detailsDatePlanningCtrl'
         }
@@ -410,7 +407,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.consultationSole', {
       url: '/consultationSole',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/consultationSole.html',
           controller: 'ConsultationSoleCtrl'
         }
@@ -420,7 +417,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.details-soleGrossiste', {
       url: '/details-soleGrossiste',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/details-soleGrossiste.html',
           controller: 'detailsSoleGrossisteCtrl'
         }
@@ -430,7 +427,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.details-soleAgent', {
       url: '/details-soleAgent',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/details-soleAgent.html',
           controller: 'detailsSoleAgentCtrl'
         }
@@ -440,7 +437,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.envoi', {
       url: '/envoi',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/envoi.html',
           controller: 'EnvoiCtrl'
         }
@@ -450,7 +447,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.recuperation', {
       url: '/recuperation',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/recuperation.html',
           controller: 'RecuperationCtrl'
         }
@@ -460,7 +457,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.maps', {
       url: '/maps',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/maps.html',
           controller: 'MapCtrl'
 
@@ -471,7 +468,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.coordonnees', {
       url: '/coordonnees',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/coordonnees.html',
           controller: 'CoordonneesCtrl'
 
@@ -481,7 +478,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.addcompte', {
       url: '/addcompte',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/addcompte.html',
           controller: 'AddcompteCtrl'
 
@@ -492,7 +489,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.logout', {
       url: '/logout',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/accueil.html',
           controller: 'LogoutCtrl'
 
@@ -503,7 +500,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.signup', {
       url: '/signup',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/signup.html',
           controller: 'SignupCtrl'
 
@@ -513,7 +510,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.bienvenue', {
       url: '/bienvenue',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/bienvenue.html',
         }
       }
@@ -522,19 +519,32 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.dechargements', {
       url: '/dechargements',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/dechargements.html',
           controller: 'dechargementsCtrl'
         }
       }
     })
 
+ 
+
     .state('app.dechargement', {
       url: '/dechargement',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/dechargement.html',
           controller: 'DechargementCtrl'
+        }
+      }
+    })
+
+
+    .state('app.paiements', {
+      url: '/paiements',
+      views: {
+        'appContent': {
+          templateUrl: 'templates/paiements.html',
+          controller: 'PaiementsCtrl'
         }
       }
     })
@@ -542,7 +552,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.details-dechargement', {
       url: '/details-dechargement',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/details-dechargement.html',
           controller: 'DetailDechargementCtrl'
         }
@@ -552,7 +562,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.versements', {
       url: '/versements',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/versements.html',
           controller: 'versementsCtrl'
         }
@@ -562,7 +572,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.versement', {
       url: '/versement',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/versement.html',
           controller: 'versementCtrl'
         }
@@ -572,7 +582,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.details-versement', {
       url: '/details-versement',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/details-versement.html',
           controller: 'DetailsVersementCtrl'
         }
@@ -581,7 +591,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.nouvel-client', {
       url: '/nouvel-client',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/nouvel-client.html',
           controller: 'AddClientCtrl'
         }
@@ -590,7 +600,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.caclient', {
       url: '/caclient',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/caclient.html',
           controller: 'CaClientCtrl'
         }
@@ -600,7 +610,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.inventaires', {
       url: '/inventaires',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/inventaires.html',
           controller: 'InventaireCtrl'
         }
@@ -609,7 +619,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.details-inventaire', {
       url: '/details-inventaire',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/details-inventaire.html',
           controller: 'DetailsInventaireCtrl'
         }
@@ -618,7 +628,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.nouvel-inventaire', {
       url: '/nouvel-inventaire',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/nouvel-inventaire.html',
           controller: 'AddInventaireCtrl'
         }
@@ -627,7 +637,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.login1', {
       url: '/login1',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/login1.html',
           controller: 'LoginCtrl'
         }
@@ -636,7 +646,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     .state('app.nouvel-grossiste', {
       url: '/nouvel-grossiste',
       views: {
-        'menuContent': {
+        'appContent': {
           templateUrl: 'templates/nouvel-grossiste.html',
           controller: 'nouvelGrossisteCtrl'
         }
@@ -649,7 +659,101 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
               controller: 'AccountCtrl'
           }
       }
-  });
+  })
+  .state('app.paiementgrossiste', {
+    url: '/paiementgrossiste',
+    views: {
+      'appContent': {
+        templateUrl: 'templates/paiementgrossiste.html',
+        controller: 'PaiementGrossisteCtrl'
+      }
+    }
+  })
+  .state('app.recouvrementclient', {
+    url: '/recouvrementclient',
+    views: {
+      'appContent': {
+        templateUrl: 'templates/recouvrementclient.html',
+        controller: 'RecouvrementClientCtrl'
+      }
+    }
+  })
+  .state('app.recouvrement', {
+    url: '/recouvrement',
+    views: {
+      'appContent': {
+        templateUrl: 'templates/recouvrement.html',
+        controller: 'recouvrementCtrl'
+      }
+    }
+  })
+  .state('app.ventedestockage', {
+    url: '/ventedestockage',
+    views: {
+      'appContent': {
+        templateUrl: 'templates/ventedestockage.html',
+      }
+    }
+  })
+  .state('app.pointfinancier', {
+    url: '/pointfinancier',
+    views: {
+      'appContent': {
+        templateUrl: 'templates/pointfinancier.html'
+      }
+    }
+  })
+
+  .state('app.duaugrossiste', {
+    url: '/duaugrossiste',
+    views: {
+      'appContent': {
+        templateUrl: 'templates/duaugrossiste.html',
+        controller: 'DuaugrossisteCtrl'
+      }
+    }
+  })
+
+  .state('app.enportefeuille', {
+    url: '/enportefeuille',
+    views: {
+      'appContent': {
+        templateUrl: 'templates/enportefeuille.html',
+        controller: 'EnportefeuilleCtrl'
+      }
+    }
+  })
+  .state('app.valeurcamion', {
+    url: '/valeurcamion',
+    views: {
+      'appContent': {
+        templateUrl: 'templates/valeurcamion.html',
+        controller: 'ValeurcamionCtrl'
+      }
+    }
+  })
+
+  .state('app.creditclient', {
+    url: '/creditclient',
+    views: {
+      'appContent': {
+        templateUrl: 'templates/creditclient.html',
+        controller: 'CreditclientCtrl'
+      }
+    }
+  })
+  .state('app.ventedujour', {
+    url: '/ventedujour',
+    views: {
+      'appContent': {
+        templateUrl: 'templates/ventedujour.html',
+        controller: 'VentedujourCtrl'
+      }
+    }
+  })
+  
+  ;
+
   // if none of the above states are matched, use this as the fallback
   if (localStorage.getItem('loggedin_id')==null || localStorage.getItem('loggedin_password')==null || localStorage.getItem('loggedin_id')=='null' || localStorage.getItem('loggedin_password')=='null') {
    localStorage.setItem('isconn', false)

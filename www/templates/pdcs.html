@@ -81,30 +81,32 @@
               <div class="col">Date ajout</div>
               <div class="col"><p>{{ pdc.dateAjout | date :  "dd.MM.y" }}</p></div>
             </div>
+            <div class="row content-div">
   
+              <div class="col"  ng-click="goToFact(pdc)" ng-if="pdc.isLoaded!=='0'">
+                  <!-- <button class="button button-clear button-assertive" style="color: white;">
+                    Faire facture
+                  </button> -->
+              </div>
+    
+              <div class="col" ng-click="goToDetailPdc(pdc)" >
+                <button class="button button-clear button-assertive" style="color: white;">
+                  Details pdc
+                </button>
+              </div>
+    
+              <div class="col"  ng-click="editDetail(pdc, 'sup')" ng-if="pdc.clientchoisit" >
+                <button class="button button-clear button-assertive" style="color: white;" >
+                  Supprimer
+                </button>
+              </div>
+    
           </div>
   
-          <div class="row content-div">
+          </div>
+
   
-            <div class="col"  ng-click="goToFact(pdc)" ng-if="pdc.isLoaded!=='0'">
-                <button class="button button-clear button-assertive" style="color: white;">
-                  Faire facture
-                </button>
-            </div>
-  
-            <div class="col" ng-click="goToDetailPdc(pdc)" >
-              <button class="button button-clear button-assertive" style="color: white;">
-                Details pdc
-              </button>
-            </div>
-  
-            <div class="col"  ng-click="editDetail(pdc, 'sup')" ng-if="pdc.clientchoisit" >
-              <button class="button button-clear button-assertive" style="color: white;" >
-                Supprimer
-              </button>
-            </div>
-  
-        </div>
+        
   
   
       </div>

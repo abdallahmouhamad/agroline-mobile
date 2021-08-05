@@ -5,6 +5,7 @@
   "devDependencies": {
     "@ionic/v1-toolkit": "1.0.22",
     "angular-translate": "^2.18.1",
+    "cordova-android": "^7.1.0",
     "cordova-plugin-actionsheet": "^2.3.3",
     "cordova-plugin-add-swift-support": "^2.0.2",
     "cordova-plugin-background-fetch": "git+https://github.com/christocracy/cordova-plugin-background-fetch.git",

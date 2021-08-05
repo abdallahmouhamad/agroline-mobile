@@ -1,4 +1,4 @@
-<ion-view title="Factures" cache-view="false" >
+<ion-view title="Ventes client" cache-view="false" >
   <div ng-app="starter">
 
     <ion-content padding="true" class="has-header">
@@ -54,6 +54,16 @@
           </div>
 
           <div class="row">
+            <div class="col">Localité</div>
+            <div class="col"><p>{{ fact.localite }}</p></div>
+          </div>
+
+          <div class="row">
+            <div class="col">Marché</div>
+            <div class="col"><p>{{ fact.marche }}</p></div>
+          </div>
+
+          <div class="row">
             <div class="col">Telephone</div>
             <div class="col"><p>{{ fact.telephone }}</p></div>
           </div>
@@ -82,26 +92,27 @@
       
        
 
-        <div class="col" >
-
-        <button  class="button button-clear button-assertive" style="color: white;">
-       
+        <div class="col"  ng-click="testPrint(fact)">
+          <button class="button button-clear button-assertive" style="color: white;">
+            Voir facture
          </button>
        </div>
 
-       <div class="col" ng-if="fact.montantRestant > 0" >
+       <!-- <div class="col" ng-if="fact.montantRestant > 0" >
           <button ng-click="goToEncaissementFact()" class="button button-clear button-assertive" style="color: white;">
             <span class="badge badge-danger" style="background-color: #ef473a !important; color: #ef473a;">0</span>
           </button>
-       </div>
+       </div> -->
 
       </div>
 
-  </div>
+ 
+ 
+    </div>
 
     </ion-content>
    <button class="button button-float bg" ng-click="goToNewFact()">
       <i class="icon ion-plus"></i>
     </button>
   </div>
-  </ion-view>
+</ion-view>

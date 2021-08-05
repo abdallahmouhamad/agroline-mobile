@@ -1,4 +1,4 @@
-<ion-view title="Déchargement" cache-view="false">
+<ion-view title="Retour produit vers grossiste" cache-view="false">
     <div ng-app="starter">
   
       <ion-content padding="true" class="has-header">
@@ -42,12 +42,17 @@
   
             <div class="row">
               <div class="col">Code</div>
-              <div class="col"><p>{{ dchgmnt.codePDS }}</p></div>
+              <div class="col"><p>{{ dchgmnt.codeDechargement }}</p></div>
             </div>
 
             <div class="row">
               <div class="col">Grossite</div>
               <div class="col"><p>{{ dchgmnt.grossiste }}</p></div>
+            </div>
+
+            <div class="row">
+              <div class="col">Numéro fiche</div>
+              <div class="col"><p>{{ dchgmnt.numFiche }}</p></div>
             </div>
            
            
@@ -60,21 +65,24 @@
 
         <div class="row content-div">
   
-          <div class="col">
+          
   
-          </div>
-  
-          <div class="col"  ng-click="goToDetailsDechargement(dchgmnt.codePDS)" >
+          <div class="col"  ng-click="goToDetailsDechargement(dchgmnt.codeDechargement)" >
             <button class="button button-clear button-assertive" style="color: white;">
               Details
             </button>
         </div>
+
+        <div class="col">
+  
+        </div>
   
   
-        <div class="col" ng-click="goToDechargement(dchgmnt.codePDS)">
+        <div class="col" >
+          <!-- ng-click="goToDechargement(dchgmnt.codePDS)"
             <button class="button button-clear button-assertive" style="color: white;">
                 Decharger
-            </button>
+            </button> -->
           </div>
   
       </div>
@@ -82,6 +90,10 @@
       </div>
   
       </ion-content>
+
+      <button class="button button-float bg" ng-click="goToDechargement()">
+        <i class="icon ion-plus"></i>
+      </button>
     </div>
     </ion-view>
   

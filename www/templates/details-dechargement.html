@@ -1,4 +1,4 @@
-<ion-view title="Detail dechargement" cache-view="false">
+<ion-view title="Details retour produit" cache-view="false">
   <div ng-app="starter">
 
     <ion-content padding="true" class="has-header">
@@ -45,14 +45,19 @@
 
           <a class="item item-icon-left">
             <i class="icon ion-location"></i>
-            Grossiste : {{ data.detailsDechargement.grossiste }}
+            Grossiste : {{ data.detailsDechargement[0].grossiste }}
           </a>
 
+          <a class="item item-icon-left">
+            <i class="icon ion-location"></i>
+            Numéro fiche : {{ data.detailsDechargement[0].numFiche }}
+          </a>
 
           <a class="item item-icon-left">
             <i class="icon ion-calendar"></i>
-            Date : {{data.detailsDechargement.dateAjout | date :  "dd.MM.y"}}
+            Date : {{data.detailsDechargement[0].dateAjout | date :  "dd.MM.y"}}
           </a>
+
         </div>
   
 
@@ -60,7 +65,8 @@
         <div class="row header list content-div">
         
             <div class="col" style="text-align: center;">Libelle</div>
-            <div class="col" style="text-align: center;">Quantité</div>
+            <div class="col" style="text-align: center;">Qte rendue</div>
+            <div class="col" style="text-align: center;">Prix</div>
            
           </div>
 
@@ -69,7 +75,7 @@
   
 
 
-          <div class="row list" ng-repeat="d in data.detailsDechargement.details | filter:motcle" style="margin-bottom: 50px;">
+          <div class="row list" ng-repeat="d in data.detailsDechargement[0].details | filter:motcle" style="margin-bottom: 50px;">
             
 
              <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" ng-click="showPopUp(d.article, 1, d.codeArticle)">
@@ -80,9 +86,13 @@
                {{d.codeArticle}}
              </div>
 
-             <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{d.quantite}}</div>
+             <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{d.quantiteRendue}}</div>
 
-             <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.quantite}}</div>
+             <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.quantiteRendue}}</div>
+
+             <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{d.prix}}</div>
+
+             <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.prix}}</div>
         </div>
 
         

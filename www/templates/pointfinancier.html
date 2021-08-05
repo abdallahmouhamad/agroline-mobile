@@ -1,0 +1,66 @@
+<ion-view title="Point financier" cache-view="false" >
+    <div ng-app="starter">
+  
+      <ion-content padding="true" class="has-header">
+        <style type="text/css">
+          input[readonly] {
+            background-color: transparent !important;
+            cursor: not-allowed;
+          }
+          .small_button{
+              width: 50% !important;
+              height: 50px !important;
+              margin-left: 5px;
+          }
+          .footer-button {
+            margin-bottom: 10px;
+            height: 50px !important;
+          }
+          .ml{
+            margin-left: 5px;
+          }
+          .header {
+  
+            margin-top: 5px;
+            margin-bottom: 10px;
+          }
+          .content-div {
+            background: #1EAC4E !important;
+          }
+          .content-div-row {
+            text-align: center !important;
+            border: 3px grey dashed !important;
+          }
+          .bg {
+              background-color: #ef473a(4, 0, 255) !important;
+            }
+  
+        </style>
+      
+
+      <ion-list class="listItem">
+       
+        <ion-item ng-click="goToDuaugrossiste()"  menu-close  style="color: rgb(7, 7, 7)">
+          <i class="icon ion-ios-list" style="color:#1EAC4E;"></i>&nbsp;Dû au grossiste
+        </ion-item>
+
+        <ion-item ng-click="goToEnportefeuille()" menu-close  style="color: rgb(7, 7, 7)">
+            <i class="icon ion-ios-list" style="color:#1EAC4E;"></i>&nbsp;En portefeuille
+          </ion-item>
+
+        <ion-item ng-click="goToValeurcamion()"  menu-close  style="color: rgb(7, 7, 7)">
+          <i class="icon ion-ios-list" style="color:#1EAC4E;"></i>&nbsp;Valeur marchandise camion
+        </ion-item>
+
+        <ion-item ng-click="goToCreditclient()" menu-close  style="color: rgb(7, 7, 7)">
+            <i class="icon ion-ios-list" style="color:#1EAC4E;"></i>&nbsp;Crédit chez les clients
+
+          </ion-item>
+
+      </ion-list>
+  
+      </ion-content>
+     
+    </div>
+    </ion-view>
+  

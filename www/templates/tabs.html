@@ -6,8 +6,8 @@
 <ion-side-menus enable-menu-with-back-views="true">
   <ion-side-menu-content>
     <ion-nav-bar class="bar-assertive">
-      <ion-nav-back-button style="margin-right: 30px;">
-      </ion-nav-back-button>
+      
+      
 
       <ion-nav-buttons side="left">
         <button class="button button-icon button-clear ion-navicon" style="margin-right: 30px;" menu-toggle="left"
@@ -15,20 +15,26 @@
         </button>
       </ion-nav-buttons>
 
-
     </ion-nav-bar>
-    <ion-nav-view name="menuContent"></ion-nav-view>
+    <ion-nav-view name="appContent"></ion-nav-view>
   </ion-side-menu-content>
 
   <ion-side-menu side="left">
-    <ion-header-bar class="bar-assertive">
+    <ion-header-bar class="bar-assertive" style="height: 100px !important;">
       <h1 class="title">AGROLINE</h1>
-      <a id="buttonright" ng-click="majStat()" class="button button-icon button-clear ion-settings"
+
+      <div class="item item-avatar item-borderless" style="background-color: #1EAC4E;">
+        <img src="./img/agroline.png" style="background:black; width: 40px; height: 40px;">
+        <h2 style="margin-top: 15px !important;color: white;">{{data.user.prenom}} {{data.user.nom}}</h2>
+        <p>{{data.user.profil}}</p>
+      </div>
+    
+      <!-- <a id="buttonright" ng-click="majStat()" class="button button-icon button-clear ion-settings"
         ng-style="buttonleft">
-      </a>
+      </a> -->
     </ion-header-bar>
 
-    <ion-content class="backlineair">
+    <ion-content class="backlineair" style="margin-top: 50px !important;">
       <ion-grid>
 
         <style type="text/css">
@@ -39,21 +45,18 @@
             max-width: 100%;
             height: auto;
             display: block;
-
-
-
-
           }
 
           .listItem {
             line-height: 30px;
-           
+          
           }
           
         </style>
 
         <ion-list class="listItem">
 
+      
           <ion-item menu-close href="#/app/bienvenue" style="color: rgb(7, 7, 7);">
             <i class="icon ion-home" style="color:#1EAC4E;"></i> &nbsp;{{ 'menu_acceuil' | translate }}
           </ion-item>
@@ -62,22 +65,30 @@
             <i class="icon ion-ios-list" style="color:#1EAC4E;"></i>&nbsp;Mon Planning
           </ion-item>
 
-          <ion-item  menu-close href="#/app/stockgrossistes" style="color: rgb(7, 7, 7);">
-            <i class="icon ion-ios-list" style="color:#1EAC4E;"></i>&nbsp;St.
-            Grossiste
-          </ion-item>
+          <!-- <ion-item  menu-close href="#/app/ventedujour" style="color: rgb(7, 7, 7);">
+            <i class="icon ion-ios-list" style="color:#1EAC4E;"></i>&nbsp;
+            Ventes du jour
+          </ion-item> -->
 
-          <ion-item ng-if="permission('PREPARATION DE COMMANDE')" menu-close href="#/app/prcs" style="color: rgb(7, 7, 7);">
+          <!-- <ion-item ng-if="permission('PREPARATION DE COMMANDE')" menu-close href="#/app/prcs" style="color: rgb(7, 7, 7);">
             <i class="icon ion-ios-list" style="color:#1EAC4E;"></i>&nbsp;PRCS
-          </ion-item>
+          </ion-item> -->
 
-          <ion-item ng-if="permission('RECUPERATION DE MARCHANDISES')" menu-close href="#/app/pds" style="color: rgb(7, 7, 7)">
-            <i class="icon ion-ios-list" style="color:#1EAC4E;"></i>&nbsp;PDS
-          </ion-item>
+          <!-- <ion-item ng-if="permission('RECUPERATION DE MARCHANDISES')" menu-close href="#/app/pds" style="color: rgb(7, 7, 7)">
+            <i class="icon ion-ios-list" style="color:#1EAC4E;"></i>&nbsp;Déstockage grossiste
+          </ion-item> -->
 
-          <ion-item ng-if="permission('FACTURATION')" menu-close href="#/app/facturations" style="color: rgb(7, 7, 7)">
-            <i class="icon ion-ios-list" style="color:#1EAC4E;"></i>&nbsp;Facture
-          </ion-item>
+          <!-- <ion-item ng-if="permission('FACTURATION')" menu-close href="#/app/facturations" style="color: rgb(7, 7, 7)">
+            <i class="icon ion-ios-list" style="color:#1EAC4E;"></i>&nbsp;Vente client
+          </ion-item> -->
+
+          <!-- <ion-item menu-close href="#/app/paiementgrossiste" style="color: rgb(7, 7, 7)">
+            <i class="icon ion-ios-list" style="color:#1EAC4E;"></i>&nbsp;Paiement gorssiste
+          </ion-item> -->
+
+          <!-- <ion-item  menu-close href="#/app/recouvrementclient" style="color: rgb(7, 7, 7)">
+            <i class="icon ion-ios-list" style="color:#1EAC4E;"></i>&nbsp;Recouvrement client
+          </ion-item> -->
 
           <!--<ion-item  menu-close href="#/app/prospects">
           <i class="icon ion-plus"></i> &nbsp;Nouvelle visite
