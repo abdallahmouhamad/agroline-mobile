@@ -1,0 +1,161 @@
+
+  <ion-view title="Details Taux" cache-view="false">
+    <div ng-app="starter">
+  
+      <ion-content padding="true" class="has-header">
+        <style type="text/css">
+          input[readonly] {
+            background-color: transparent !important;
+            cursor: not-allowed;
+          }
+          .small_button{
+              width: 50% !important;
+              height: 50px !important;
+              margin-left: 5px;
+          }
+          .footer-button {
+            margin-bottom: 10px;
+            height: 50px !important;
+          }
+          .ml{
+            margin-left: 5px;
+          }
+          .header {
+  
+            margin-top: 5px;
+            margin-bottom: 10px;
+          }
+          .content-div {
+            background: grey !important;
+          }
+          .content-div-row {
+            text-align: center !important;
+            border: 3px grey dashed !important;
+          }
+          .edit {
+             background: red !important;
+          }
+          .map {
+            height: 200px !important;
+          }
+  
+        </style>
+
+<div class="row"  ng-if="data.sens == 'sup'" >
+  <div class="col">
+    <button class="button button-block button-assertive"
+      cancel-button="{{ 'fichevisite_select_pv_return' | translate }}"
+      reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
+      cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
+      search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
+      ng-model="data.motifchoisit" options="data.listmotifs" option-getter="getOptMotif(option)"
+      modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
+      has-search="true">
+      <div ng-if="!data.motifchoisit">Motif de supression</div>
+      <div ng-if="data.motifchoisit">{{ data.motifchoisit.libelle }}</div>
+
+      <div class="option">
+        <h2> {{option.libelle}}</h2>
+      </div>
+    </button>
+  </div>
+
+  
+
+</div>
+<div class="row"  ng-if="data.sens == 'sup'" >
+  <div class="col mt">
+    <button ng-click="validerDeletInventaire()" class="button button-block button-assertive footer-button" color="danger" type="submit"
+    name="submit"><span style="color:white">Valider</span></button>
+  </div>
+  <div class="col mt">
+    <button ng-click="anullerDeletInventaire()" class="button button-block button-assertive footer-button" color="danger" type="submit"
+    name="submit"><span style="color:white">Annuler</span></button>
+  </div>
+</div>
+      
+        <div class="card list" >
+
+            <a class="item item-icon-left" >
+                <i class="icon ion-person"></i>
+                Code : FTP-8-0002
+              </a>
+
+            <a class="item item-icon-left" >
+                <i class="icon ion-person"></i>
+                Raison Social : Moussa Diallo
+              </a>
+
+              <a class="item item-icon-left" >
+                <i class="icon ion-location"></i>
+                Adresse : Fass
+              </a>
+              
+              
+        </div>
+  
+
+  
+        <div class="row"  style="margin-top: 10px;">
+  
+          <div class="col" style="font-size: 130%;">Details Taux de Présence</div>
+  
+       </div>
+  
+  
+          <div class="row header list content-div">
+            <div class="col" style="text-align: center;">Raison Sociale</div>
+            <div class="col" style="text-align: center;">Adresse</div>
+            <div class="col" style="text-align: center;" ng-if="data.detailsPDS.local == true">Editer</div>
+            <div class="col" style="text-align: center;" ng-if="data.detailsPDS.local == true">Supprimer</div>
+          </div>
+  
+          <div class="row list"  ng-repeat="d in data.detailsInventaire.details | filter:motcle">
+  
+            <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" ng-click="showPopUp(d.article, 1, d.codeArticle)">
+              {{d.codeArticle}}
+            </div>
+  
+            <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'" ng-click="showPopUp(d.article, 1, d.codeArticle)">
+              {{d.codeArticle}}
+            </div>
+  
+            <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{d.quantite}}</div>
+  
+            <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.quantite}}</div>
+  
+           
+  
+  
+            <div class="col content-div-row" ng-if="d.idMotif !== 'edit' && data.detailsPDS.local == true" ng-click="editDetail(d, 'edit')">
+  
+              <i class="icon ion-edit" ></i>
+  
+           </div>
+  
+           <div class="col content-div-row edit" ng-if="d.idMotif === 'edit' && data.detailsPDS.local == true" ng-click="editDetail(d, 'edit')">
+  
+              <i class="icon ion-edit"></i>
+  
+           </div>
+  
+           <div class="col content-div-row" ng-if="d.idMotif !== 'edit' && data.detailsPDS.local == true" ng-click="editDetail(d, 'sup')">
+  
+            <i class="icon ion-trash-a" ></i>
+  
+            </div>
+  
+            <div class="col content-div-row edit" ng-if="d.idMotif === 'edit' && data.detailsPDS.local == true" ng-click="editDetail(d, 'sup')">
+  
+                <i class="icon ion-trash-a"></i>
+  
+            </div>
+  
+          </div>
+        
+  
+      </ion-content>
+  
+    </div>
+    </ion-view>
+  

@@ -580,13 +580,48 @@
             </div>
 
 
+           
+
+          </div>
+<!-- taux de presence -->
+<div class="row">
+
+  <div class="col" ng-click="goToTauxDePresences()">
+    <div class="card cardHome" style="background-color: #28a54c; color: white">
+      <div class="item item-text-wrap">
+        <p style="text-align: center"><img src="./img/taux.png" style="width:50%; height: 10%;"></p>
+      </div>
+      <p style="color: white;text-align: center;margin-top: 10px">
+        <a href="#/app/tauxdepresence" style="color: white;text-decoration:none;">Taux de présence</a>
+      </p>
+    </div>
+  </div>
+
+ 
+
+
+
+</div>
+
+          <div class="row">
+
+            <div class="col" ng-click="goToVentedujour()">
+              <div class="card cardHome" style="background-color: #28a54c; color: white">
+                <div class="item item-text-wrap">
+                  <p style="text-align: center"><img src="./img/vente.jpg" style="width:50%; height: 10%;"></p>
+                </div>
+                <p style="color: white;text-align: center;margin-top: 10px">
+                  <a href="#/app/ventedujour" style="color: white;text-decoration:none;">Vente du jour</a>
+                </p>
+              </div>
+            </div>
             <div class="col" ng-click="goToModulepointfinancier()" ng-if="permission('PREPARATION DE COMMANDE')">
               <div class="bgsize">
-                <div class="card cardHome" style="background-color:#1EAC4E; color: white;">
+                <div class="card cardHome" style="background-color:#1EAC4E; color: white; ">
                   <div class="item item-text-wrap">
                     <div class="itemBody">
-                      <p style="text-align: center"><img src="./img/prc.jpg"
-                          style="width:30%; height: 20%;margin-bottom: 8%"></p>
+                      <p style="text-align: center"><img src="./img/fcfas.png"
+                          style="width:30%; height: 30%;margin-bottom: 18%"></p>
                     </div>
                   </div>
                   <p style="color: white;text-align: center;margin-top: 10px">
@@ -594,27 +629,6 @@
                   </p>
 
                 </div>
-              </div>
-            </div>
-
-          </div>
-
-
-          <div class="row">
-
-            <div class="col" ng-click="goToVentedujour()">
-              <div class="card cardHome" style="background-color: #28a54c; color: white">
-                <div class="item item-text-wrap">
-                  <p style="text-align: center"><img src="./img/versement.png" style="width:50%; height: 10%;"></p>
-                </div>
-                <p style="color: white;text-align: center;margin-top: 10px">
-                  <a href="#/app/ventedujour" style="color: white;text-decoration:none;">Vente du jour</a>
-                </p>
-              </div>
-            </div>
-            <div class="col" >
-              <div class="card cardHome" style="background-color: white; color: white">
-               
               </div>
             </div>
 

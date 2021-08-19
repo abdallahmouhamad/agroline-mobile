@@ -3568,7 +3568,7 @@
             "integrity": "sha512-vJd56gLaSgQnB/4+uUjyVwVAii5TszBPAgjVkGvM8658cP5rjiNFAWmoOYkjeSe1I6dJk+MGrh/GbPkn0a+2OA=="
         },
         "cordova-plugin-background-fetch": {
-            "version": "git+https://github.com/christocracy/cordova-plugin-background-fetch.git#d4050a00ca3944d4d0863a9db6237f0c4fbf41c8",
+            "version": "git+https://github.com/christocracy/cordova-plugin-background-fetch.git#57b2ec1dfda351ec36a096f49a82eaf8501d0f15",
             "from": "git+https://github.com/christocracy/cordova-plugin-background-fetch.git",
             "dev": true
         },
@@ -3838,7 +3838,7 @@
             }
         },
         "cordova-sms-plugin": {
-            "version": "git+https://github.com/cordova-sms/cordova-sms-plugin.git#77e8591cbcca5d771f3821b13ef0440c62bd7efa",
+            "version": "git+https://github.com/cordova-sms/cordova-sms-plugin.git#bcc7ac45b8de44cd0546ff55fc705fd97c963257",
             "from": "git+https://github.com/cordova-sms/cordova-sms-plugin.git",
             "dev": true
         },

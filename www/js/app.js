@@ -751,6 +751,35 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
       }
     }
   })
+
+  .state('app.tauxdepresences', {
+    url: '/tauxdepresences',
+    views: {
+      'appContent': {
+        templateUrl: 'templates/tauxdepresences.html',
+        controller: 'TauxdepresencesCtrl'
+      }
+    }
+  })
+  .state('app.detailstaux', {
+    url: '/detailstaux',
+    views: {
+      'appContent': {
+        templateUrl: 'templates/detailstaux.html',
+        controller: 'TauxdepresencesCtrl'
+      }
+    }
+  })
+
+  .state('app.tauxpresence', {
+    url: '/tauxpresence',
+    views: {
+      'appContent': {
+        templateUrl: 'templates/tauxpresence.html',
+        controller: 'TauxpresenceCtrl'
+      }
+    }
+  })
   
   ;
 
