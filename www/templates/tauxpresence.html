@@ -128,7 +128,7 @@
                         <label class="item item-input">
 
                             <input type="number" id="telephone" ng-model="data.telephone"
-                                placeholder="Telephone client *">
+                                placeholder="Telephone *">
                         </label>
                     </div>
                 </div>
@@ -137,7 +137,7 @@
                 <div class="col">
                     <div class="list">
                         <label class="item item-input">
-                            <input type="text" id="adresse" ng-model="data.adresse" placeholder=" Adresse client *">
+                            <input type="text" id="adresse" ng-model="data.adresse" placeholder=" Adresse *">
                         </label>
                     </div>
                 </div>
@@ -174,7 +174,13 @@
                                         article :</label> {{option.code}}<br />
                                     <label
                                         style="font-weight: bold;font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">Libelle
-                                        article :</label> {{option.libelle}}
+                                        article :</label> {{option.libelle}}<br />
+                                    <label
+                                        style="font-weight: bold;font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">Poids
+                                        article :</label> {{option.poids}}<br />
+                                    <label
+                                        style="font-weight: bold;font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">Poids
+                                        article :</label> {{option.categorie}}
                                 </div>
 
                             </div>
@@ -203,27 +209,27 @@
             </div>
 
 
-
-            <div class="row">
-
-               
-
-                <div class="col">
-                    <input type="checkbox" id="present" name="present" ng-model="data.present" checked>
-                    <label for="present">Présent</label>
-                </div>
-                
-                <div class="col">
-                    <input type="checkbox" id="ouvert" name="ouvert" ng-model="data.ouvert" checked>
-                    <label for="ouvert">Ouvert</label>
-                </div>
-            </div>
-
             <div class="row">
 
                 <div class="col">{{ data.artcilechoisit.libelle }}</div>
                 <div class="col" ng-if="edit == true">{{ data.motifchoisit.libelle }}</div>
             </div>
+            <div class="row" >
+
+               
+
+                <div class="col" >
+                    <input type="checkbox" id="present" name="present" ng-model="data.present" checked>
+                    <label for="present">Présent</label>
+                </div>
+                
+                <div class="col"  ng-if="data.artcilechoisit.categorie === 'TOMATE' ">
+                    <input type="checkbox" id="ouvert" name="ouvert" ng-model="data.ouvert" checked>
+                    <label for="ouvert">Ouvert</label>
+                </div>
+            </div>
+
+         
 
             <div class="row" ng-if="edit == true">
                 <div class="col" ng-if="action == 'edit'">
@@ -247,10 +253,9 @@
     <p>
     <div class="row header list">
         <div class="col" style="text-align: center;">Article</div>
-        <!-- <div class="col" style="text-align: center;">Quantité</div>
-          <div class="col" style="text-align: center;">PU</div>
-          <div class="col" style="text-align: center;">M.Total</div> -->
-        <div class="col" style="text-align: center;">Editer</div>
+        <div class="col" style="text-align: center;">Present</div>
+          <div class="col" style="text-align: center;">Ouvert</div>
+        
         <div class="col" style="text-align: center;">Supprimer</div>
     </div>
 
@@ -266,16 +271,28 @@
         </div>
 
        
+        <div class="col content-div-row" ng-if="d.idMotif !== 'edit' && d.present === 1" >
 
-        <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" ng-click="editDetail(d, 'edit')">
-
-            <i class="icon ion-edit"></i>
+          Oui
 
         </div>
 
-        <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'" ng-click="editDetail(d, 'edit')">
+        <div class="col content-div-row" ng-if="d.idMotif !== 'edit' && d.present !== 0" >
 
-            <i class="icon ion-edit"></i>
+            Non
+
+        </div>
+     
+
+        <div class="col content-div-row" ng-if="d.idMotif !== 'edit' && d.ouvert === 1"  >
+
+          Oui
+
+        </div>
+
+        <div class="col content-div-row" ng-if="d.idMotif !== 'edit' && d.ouvert !== 0"  >
+
+          Non
 
         </div>
 

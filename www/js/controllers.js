@@ -15875,9 +15875,9 @@ PLANNING DESTOCKEURS*/
     console.log($scope.data.user);
 
     var codeAgent = {
-      codeAgent:$scope.data.user.code
+      codeAgent: $scope.data.user.code
     }
-    
+
     $scope.listTauxPresence = function () {
       ApiListTauxClient.getListTauxClient(codeAgent).success(function (response) {
 
@@ -15896,33 +15896,33 @@ PLANNING DESTOCKEURS*/
         }
 
       );
-      }
-      $scope.listTauxPresence();
-      $scope.goToNewTaux = function () {
-        localStorage.setItem('prc', null);
-        $state.transitionTo(
-          "app.tauxpresence",
-          {},
-          {
-            reload: true,
-            inherit: true,
-            notify: true,
-          }
-        );
-      };
-      $scope.goToDetailTaux = function () {
-        localStorage.setItem('prc', null);
-        $state.transitionTo(
-          "app.detailstaux",
-          {},
-          {
-            reload: true,
-            inherit: true,
-            notify: true,
-          }
-        );
-      };
-    })
+    }
+    $scope.listTauxPresence();
+    $scope.goToNewTaux = function () {
+      localStorage.setItem('prc', null);
+      $state.transitionTo(
+        "app.tauxpresence",
+        {},
+        {
+          reload: true,
+          inherit: true,
+          notify: true,
+        }
+      );
+    };
+    $scope.goToDetailTaux = function () {
+      localStorage.setItem('prc', null);
+      $state.transitionTo(
+        "app.detailstaux",
+        {},
+        {
+          reload: true,
+          inherit: true,
+          notify: true,
+        }
+      );
+    };
+  })
 
   //  Taux  presence controller
   .controller('TauxpresenceCtrl', function (
@@ -15947,38 +15947,114 @@ PLANNING DESTOCKEURS*/
     $scope.data.listarticles = [];
     $scope.data.artcilechoisit = null;
 
+    $scope.data.recupcodearticles = [];
+
     $scope.data.listtauxclients = [];
     $scope.data.clientchoisit = null;
 
     $scope.data.listoperations = [];
     $scope.data.operationchoisit = null;
-
-
+    $scope.data.bol = false;
     var user = localStorage.getItem("user");
     $scope.data.user = JSON.parse(user);
     var client = localStorage.getItem("client");
     $scope.data.client = JSON.parse(client);
 
+    $scope.showPopUp = function (libelle, etat, code = "") {
+      $ionicPopup.show({
+        title: etat == 1 ? "Code: " + code : "",
+        template:
+          etat == 1
+            ? libelle
+            : '<img src="http://test-test.h-tsoft.com/{{libelle}}">',
+        scope: $scope,
+        buttons: [
+          {
+            text: "Ok",
+            type: "button-assertive",
+          },
+        ],
+      });
+    };
+
+    $scope.initvar = function () {
+      $scope.data.listarticles = [];
+      $scope.data.pdcs = [];
+      $scope.edit = false;
+      $scope.data.detailPdc = {};
+      $scope.data.codePdc = sessionStorage.getItem("codePdc");
+      $scope.data.listclients = [];
+      $scope.data.listmotifs = [];
+      $scope.data.grossistes = [];
+      $scope.data.clientchoisit = null;
+      $scope.data.artcilechoisit = null;
+      $scope.data.grossistechoisit = null;
+      $scope.data.dateAjout = formatNewDate.formatNewDate(),
+        $scope.data.listmodereglements = null;
+      $scope.data.modereglementchoisit = null;
+      $scope.data.motifchoisit = null;
+      $scope.data.quantite = null;
+      $scope.data.prix = null;
+      $scope.data.commentaire = null;
+      $scope.data.delaipaiement = null;
+      $scope.data.montant = 0.0;
+      $scope.data.idMotif = 0;
+      $scope.data.ouvert = 0;
+      $scope.data.present = 0;
+      $scope.data.idModepaiement = 0;
+      var user = localStorage.getItem("user");
+      $scope.data.user = JSON.parse(user);
+      $scope.data.codePDC = "PDC-" + $scope.data.user.code + "-" + CodeGenere.getCodeGenere();
+
+      $scope.data.detailsPDC = [];
+      $scope.isLoaded = false;
+      $scope.isCanceled = false;
+
+      var codeClient = { codeCommerciale: $scope.data.user.code };
+    };
+
+    $scope.initvar();
 
     $scope.ajouter = function () {
       var searchArticle = $filter('filter')($scope.data.detailsPDC, { codeArticle: $scope.data.artcilechoisit.code })
       if (!searchArticle || searchArticle.length <= 0) {
         if ($scope.data.artcilechoisit
           // && $scope.data.quantite && $scope.data.prix && $scope.data.quantite > 0 && $scope.data.prix > 0
-          ) {
+        ) {
           //   $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
           var mt = $scope.data.prix * $scope.data.quantite;
+
+          console.log("present -", $scope.data.present);
+          console.log("ouvert -", $scope.data.ouvert);
+
+          if ($scope.data.present === true) {
+            $scope.data.present = 1;
+          } else {
+            $scope.data.present = 0;
+          }
+
+          if ($scope.data.present === true) {
+            $scope.data.ouvert = 1;
+
+          } else {
+            $scope.data.ouvert = 0;
+          }
           $scope.data.detailsPDC.push({
             index: $scope.data.detailsPDC.length + 1,
             codeDetail: "DPDC-" + $scope.data.user.code + "-" + CodeGenere.getCodeGenere(),
+
             codeArticle: $scope.data.artcilechoisit.code,
+            // categorie: $scope.data.artcilechoisit.categorie,
             quantite: $scope.data.quantite,
             prix: $scope.data.prix,
-
             isCanceled: false,
             artcilechoisit: $scope.data.artcilechoisit,
             idMotif: 0,
-            montant: mt
+            montant: mt,
+            present: $scope.data.present,
+            ouvert: $scope.data.ouvert
+
+
           });
           $scope.data.montant = $scope.data.montant + mt;
 
@@ -16002,15 +16078,23 @@ PLANNING DESTOCKEURS*/
             }
             return c;
           }
-          console.log($scope.data.detailsPDC);
-          console.log(localStorage.setItem("codeArticle", $scope.data.detailsPDC.codeArticle));
+          // console.log("code article",$scope.data.detailsPDC.codeArticle);
 
+          console.log($scope.data.detailsPDC);
+          console.log("present", $scope.data.detailsPDC.present);
+          console.log("ouvert", $scope.data.detailsPDC.ouvert);
+
+
+          console.log("present _", $scope.data.present);
+          console.log("ouvert _", $scope.data.ouvert);
+          $scope.data.recupcodearticles = $scope.data.detailsPDC;
           if ($scope.data.artcilechoisit && $scope.data.quantite && $scope.data.prix && $scope.data.quantite > 0 && $scope.data.prix > 0) {
 
             for (var j = 0; j < $scope.data.detailsPDC.details.length; j++) {
-
               console.log($scope.data.detailsPDC.details[j].prix);
               console.log($scope.data.detailsPDC.details[j].montant);
+              console.log($scope.data.detailsPDC.details[j].present);
+              console.log($scope.data.detailsPDC.details[j].ouvert);
               console.log($scope.numStr($scope.data.detailsPDC.details[j].prix, '.'));
               console.log($scope.numStr($scope.data.detailsPDC.details[j].montant, '.'));
             }
@@ -16018,7 +16102,7 @@ PLANNING DESTOCKEURS*/
         } else {
           $ionicPopup.show({
             title: "Infos",
-            template: "Veuillez ajouter un article avec sa quantité et son prix",
+            template: "Veuillez ajouter un article ",
             scope: $scope,
             buttons: [
               {
@@ -16046,42 +16130,6 @@ PLANNING DESTOCKEURS*/
 
     };
 
-    $scope.initvar = function () {
-      $scope.data.listarticles = [];
-      $scope.data.pdcs = [];
-      $scope.edit = false;
-      $scope.data.detailPdc = {};
-      $scope.data.codePdc = sessionStorage.getItem("codePdc");
-      $scope.data.listclients = [];
-      $scope.data.listmotifs = [];
-      $scope.data.grossistes = [];
-      $scope.data.clientchoisit = null;
-      $scope.data.artcilechoisit = null;
-      $scope.data.grossistechoisit = null;
-      $scope.data.dateAjout = formatNewDate.formatNewDate(),
-
-        $scope.data.listmodereglements = null;
-      $scope.data.modereglementchoisit = null;
-      $scope.data.motifchoisit = null;
-      $scope.data.quantite = null;
-      $scope.data.prix = null;
-      $scope.data.commentaire = null;
-      $scope.data.delaipaiement = null;
-      $scope.data.montant = 0.0;
-      $scope.data.idMotif = 0;
-      $scope.data.idModepaiement = 0;
-      var user = localStorage.getItem("user");
-      $scope.data.user = JSON.parse(user);
-      $scope.data.codePDC = "PDC-" + $scope.data.user.code + "-" + CodeGenere.getCodeGenere();
-
-      $scope.data.detailsPDC = [];
-      $scope.isLoaded = false;
-      $scope.isCanceled = false;
-
-      var codeClient = { codeCommerciale: $scope.data.user.code };
-    };
-
-    $scope.initvar();
     ApiListClient.getListClient().success(function (response) {
 
       $ionicLoading.hide();
@@ -16341,7 +16389,8 @@ PLANNING DESTOCKEURS*/
     );
 
     $scope.selectArticle = function () {
-      ApiListArticle.getListArticle().success(function (response) {
+      // ApiListArticle.getListArticle().success(function (response) {
+      ApiListTauxArticle.getListTauxArticle().success(function (response) {
         $ionicLoading.hide();
         if (response) {
           $scope.data.listarticles = response;
@@ -16382,127 +16431,69 @@ PLANNING DESTOCKEURS*/
       return option;
     };
     $scope.selectArticle();
-      $scope.initvar = function () {
+    $scope.initvar = function () {
       $scope.data.client = JSON.parse(localStorage.getItem('clientEdit'));
       $scope.data.listarticles = [];
       $scope.data.artcilechoisit = null;
-  
+
       $scope.data.listtauxclients = [];
       $scope.data.clientchoisit = null;
-  
+
+      $scope.data.listAjoutTauxPresence = [];
+
       $scope.data.listoperations = [];
       $scope.data.operationchoisit = null;
       $scope.data.codeClient = $scope.data.clientchoisit && $scope.data.clientchoisit.codeClient ? $scope.data.clientchoisit.codeClient : null;
-
+      $scope.data.presents = null;
+      $scope.data.ouverts = null;
     }
-// valider taux de presence
+    // valider taux de presence
     $scope.submit = function () {
 
       if ($scope.data.clientchoisit && $scope.data.operationchoisit
         // && $scope.data.raisonSociale && $scope.data.adresse
-       // && $scope.data.telephone
+        // && $scope.data.telephone
       ) {
         var codeTauxpresence = $scope.data.user ? $scope.data.codeTauxpresence : "FTP-" + $scope.data.user.code + "-" + CodeGenere.getCodeGenere();
-  
-       
 
-        var values = {
-          codeTauxPresence: $scope.data.codeTauxPresence,
-          codeClient: $scope.data.codeClient,
-         // dateAjout: formatNewDate.formatNewDate(),
-          raisonSociale: $scope.data.raisonSociale,
-          adresse: $scope.data.adresse,
-          telephone: $scope.data.telephone,
-          codeCommerciale: $scope.data.user.code,
-          position: $scope.data.position,
-           codes :[{
-            codeArticle:$scope.data.codeArticle,
-            present:$scope.data.present,
-            ouvert:$scope.data.ouvert
-          }]
-        };
+        for (var j = 0; j < $scope.data.recupcodearticles.length; j++) {
+          $scope.data.codeRecupArticle = $scope.data.detailsPDC[j].codeArticle;
+         
+          var values = {
+            codeTauxPresence: "FTP-" + $scope.data.user.code + "-" + CodeGenere.getCodeGenere(),
 
-        $ionicLoading.show({
-          template: 'Traitement en cours...'
-        });
-        $ionicLoading.hide();
-        console.log('---------- ajout taux de presence----------');
-        console.log(values);
-      //   ApiAddTauxPresence.getAddTauxPresence(values).success(function (response) {
-      //     $ionicLoading.hide();
-      //     console.log(response)
-      //     sessionStorage.setItem("values.position", "");
-      //     if (response.reponse === 1) {
-      //       $ionicPopup.show({
-      //         title: "Infos",
-      //         template: "Reussi",
-      //         scope: $scope,
-      //         buttons: [
-      //           {
-      //             text: 'OK',
-      //             type: 'button-energized',
-      //             onTap: function (e) {
-      //               return true;
-      //             }
-      //           }
-      //         ]
-      //       }).then(function (result) {
-  
-      //         $state.transitionTo(
-      //           "app.tauxdepresences",
-      //           {},
-      //           {
-      //             reload: true,
-      //             inherit: true,
-      //             notify: true,
-      //           }
-      //         );
-  
-      //       });
-      //     } else {
-  
-      //       $ionicPopup.show({
-      //         title: "Alert",
-      //         template: "" + response.reponse,
-      //         scope: $scope,
-      //         buttons: [
-      //           {
-      //             text: 'OK',
-      //             type: 'button-energized',
-      //             onTap: function (e) {
-      //               return true;
-      //             }
-      //           }
-      //         ]
-      //       }).then(function (result) {
-  
-           
-  
-      //       });
-  
-      //     }
-      //   }, err => {
-      //     $ionicPopup.show({
-      //       title: "Infos",
-      //       template: "Erreur d'insertion",
-      //       scope: $scope,
-      //       buttons: [
-      //         {
-      //           text: 'OK',
-      //           type: 'button-energized',
-      //           onTap: function (e) {
-      //             return true;
-      //           }
-      //         }
-      //       ]
-      //     })
-      //     console.log(err);
-      //     $ionicLoading.hide();
-      //   })
-       
-  
-    }else {
-  
+            codeClient: $scope.data.clientchoisit.codeClient,
+            // dateAjout: formatNewDate.formatNewDate(),
+            raisonSociale: $scope.data.raisonSociale,
+            adresse: $scope.data.adresse,
+            telephone: $scope.data.telephone,
+            codeCommerciale: $scope.data.user.code,
+            position: $scope.data.clientchoisit.position,
+            codes: [{
+              codeArticle: $scope.data.codeRecupArticle,
+              present: $scope.data.present,
+              ouvert: $scope.data.ouvert
+            }]
+          };
+
+          $ionicLoading.show({
+            template: 'Traitement en cours...'
+          });
+          $ionicLoading.hide();
+          console.log('---------- ajout taux de presence----------');
+
+          console.log(values);
+          ApiAddTauxPresence.getAddTauxPresence(values).success(function (response) {
+            $ionicLoading.hide();
+            console.log(response)
+            $scope.data.listAjoutTauxPresence = response;
+            console.log("ajout taux", $scope.data.listAjoutTauxPresence)
+
+          });
+
+        }
+      }
+      else {
         $ionicPopup.show({
           title: "Alert",
           template: "Veuillez renseigner tous les champs du formulaire.",
@@ -16518,10 +16509,8 @@ PLANNING DESTOCKEURS*/
           ]
         })
       }
-    
-      console.log(values);
-    }
-    $scope.initvar();
+      
+    };
   })
   .controller('recouvrementCtrl', function (
     $scope, $state, $ionicLoading,
@@ -16954,13 +16943,15 @@ PLANNING DESTOCKEURS*/
   })
   .factory("ApiAddTauxPresence", function ($http, urlPhp) {
     return {
-      getAddTauxPresence: function (parametre) {
+      getAddTauxPresence: function (values) {
         var url = urlPhp.getUrl();
         var user = localStorage.getItem("user");
         user = JSON.parse(user);
         // console.log(user);
         //  var params = {codeUtilisateur:user.code}
-        return $http.get(url + "/tauxpresence/ajout.php", parametre);
+        return $http.post(url + "/tauxpresence/ajout.php", values
+
+        );
       },
     };
   })
@@ -17965,7 +17956,7 @@ PLANNING DESTOCKEURS*/
 
     return {
       getUrl: function () {
-       // return "http://test-test.h-tsoft.com/apiagroline";
+        // return "http://test-test.h-tsoft.com/apiagroline";
         return "http://test-test.h-tsoft.com/apiagrolineprod";
         //return "http://htsoftdemo.com/apiccbm";
         //return "http://192.168.1.34/CCBM-serveur";
