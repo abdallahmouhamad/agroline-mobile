@@ -15948,14 +15948,9 @@ PLANNING DESTOCKEURS*/
     var user = localStorage.getItem("user");
     $scope.data.user = JSON.parse(user);
 
-    $scope.initvar = function () {
-
-      $scope.data.user = JSON.parse(localStorage.getItem('user'));
-      $scope.data.detailsfactues = [];
-
-    }
+   
     var  codeTauxpresence = {
-      codeTauxpresence: $scope.data.codeTaux
+      codeTauxpresence: $scope.codeTauxpresence
     }
     console.log(" id taux de presence",  codeTauxpresence)
 
@@ -15972,8 +15967,8 @@ PLANNING DESTOCKEURS*/
       );
     };
     $scope.detailslistTauxPresence = function () {
-      ApiDetailsTauxPresences.getDetailsTauxPresences(codeTauxpresence).success(function (response) {
-
+      ApiDetailsTauxPresences.getDetailsTauxPresences(codeTauxpresence)
+      .success(function (response) {
         $ionicLoading.hide();
         if (response) {
           $scope.data.detaillisttauxpresences = response;
@@ -15992,7 +15987,6 @@ PLANNING DESTOCKEURS*/
 
       );
     }
-    $scope.initvar();
     $scope.detailslistTauxPresence();
     
     $scope.goToNewTaux = function () {
@@ -17057,7 +17051,7 @@ PLANNING DESTOCKEURS*/
         user = JSON.parse(user);
         // console.log(user);
         //  var params = {codeUtilisateur:user.code}
-        return $http.get(url + "/tauxpresence/details.php");
+        return $http.post(url + "/tauxpresence/details.php");
       },
     };
   })
