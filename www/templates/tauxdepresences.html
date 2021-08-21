@@ -36,13 +36,14 @@
             }
   
         </style>
-        <div class="list" >
+          <div class="list" ng-repeat="d in data.listtauxpresences">
+
           <a class="item item-thumbnail-left">
             <img src="./img/prc.jpg">
   
             <div class="row">
               <div class="col">Code Taux</div>
-              <div class="col"><p>FTP-8-0002</p></div>
+              <div class="col"><p>{{ d.codeTauxpresence }}</p></div>
             </div>
             <!-- <div class="row">
             <div class="col">Code client</div>
@@ -50,12 +51,12 @@
           </div> -->
 
           <div class="row">
-            <div class="col">Raison Social</div>
-            <div class="col"><p>MOUSSA DIALLO</p></div>
+            <div class="col">Client</div>
+            <div class="col"><p>{{ d.client }}</p></div>
           </div>
             <div class="row">
-              <div class="col">Adresse</div>
-              <div class="col"><p>Fass</p></div>
+              <div class="col">Date</div>
+              <div class="col"><p>{{ d.dateAjout }}</p></div>
             </div>
             <!-- <div class="row">
               <div class="col">Code Commercial</div>
@@ -75,7 +76,7 @@
         <div class="row content-div">
   
          
-          <div class="col" ng-click="goToDetailTaux()">
+          <div class="col" ng-click="goToDetailTaux(d.codeTauxpresence)">
             <button class="button button-clear button-assertive" style="color: white;">
               Details
             </button>

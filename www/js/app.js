@@ -766,7 +766,7 @@ angular.module('starter', ['ionic', 'ionic-modal-select', 'starter.controllers',
     views: {
       'appContent': {
         templateUrl: 'templates/detailstaux.html',
-        controller: 'TauxdepresencesCtrl'
+        controller: 'DetailTauxdepresencesCtrl'
       }
     }
   })

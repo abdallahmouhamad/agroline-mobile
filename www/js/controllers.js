@@ -15862,11 +15862,11 @@ PLANNING DESTOCKEURS*/
     SendSms, ApiAjoutFacturation, ApiRecapPdsPrc,
     formatNewDate, ApiRecapFactPrc,
     SeparateurMillier,
-    ApiListTauxClient,
+    ApiListTauxPresences,
     ApiListGrossisteDestocke, $filter, ApiListventejour) {
     console.log('contoller TauxdepresencesCtrl');
 
-    $scope.data.listtauxclients = [];
+    $scope.data.listtauxpresences = [];
     $scope.data.clientchoisit = null;
 
     var user = localStorage.getItem("user");
@@ -15877,15 +15877,16 @@ PLANNING DESTOCKEURS*/
     var codeAgent = {
       codeAgent: $scope.data.user.code
     }
+    console.log(" code taux de presence", codeAgent)
 
     $scope.listTauxPresence = function () {
-      ApiListTauxClient.getListTauxClient(codeAgent).success(function (response) {
+      ApiListTauxPresences.getListTauxPresences(codeAgent).success(function (response) {
 
         $ionicLoading.hide();
         if (response) {
-          $scope.data.listtauxclients = response;
+          $scope.data.listtauxpresences = response;
 
-          console.log(" liste taux de presence", $scope.data.listtauxclients)
+          console.log(" liste taux de presence", $scope.data.listtauxpresences)
           // localStorage.setItem("clients", JSON.stringify($scope.data.listclients));
           // console.log(JSON.parse(localStorage.getItem("clients")))
         }
@@ -15910,8 +15911,9 @@ PLANNING DESTOCKEURS*/
         }
       );
     };
-    $scope.goToDetailTaux = function () {
-      localStorage.setItem('prc', null);
+ 
+    $scope.goToDetailsTaux = function (codeTauxpresence) {
+      localStorage.setItem('codeTauxpresence', codeTauxpresence)
       $state.transitionTo(
         "app.detailstaux",
         {},
@@ -15923,6 +15925,95 @@ PLANNING DESTOCKEURS*/
       );
     };
   })
+
+
+  .controller('DetailTauxdepresencesCtrl', function (
+    $scope, $state, $ionicLoading,
+    ApiListPrc, ApiDetailPrc, ApiAjoutPrc,
+    ApiListClient, ApiListMotif,
+    ApiListArticle, $ionicPopup,
+    CodeGenere, ApiListGrossiste,
+    ApiRecapDchmnt, ApiValiderDchmnt,
+    SendSms, ApiAjoutFacturation, ApiRecapPdsPrc,
+    formatNewDate, ApiRecapFactPrc,
+    SeparateurMillier,
+    ApiListTauxPresences,
+    ApiDetailsTauxPresences,
+    ApiListGrossisteDestocke, $filter, ApiListventejour) {
+    console.log('details TauxdepresencesCtrl');
+
+    $scope.data.detaillisttauxpresences = [];
+    $scope.data.clientchoisit = null;
+    $scope.codeTauxpresence = localStorage.getItem("codeTauxpresence");
+    var user = localStorage.getItem("user");
+    $scope.data.user = JSON.parse(user);
+
+    $scope.initvar = function () {
+
+      $scope.data.user = JSON.parse(localStorage.getItem('user'));
+      $scope.data.detailsfactues = [];
+
+    }
+    var  codeTauxpresence = {
+      codeTauxpresence: $scope.data.codeTaux
+    }
+    console.log(" id taux de presence",  codeTauxpresence)
+
+    $scope.goToDetailsTaux = function (codeTauxpresence) {
+      localStorage.setItem('codeTauxpresence', codeTauxpresence)
+      $state.transitionTo(
+        "app.detailstaux",
+        {},
+        {
+          reload: true,
+          inherit: true,
+          notify: true,
+        }
+      );
+    };
+    $scope.detailslistTauxPresence = function () {
+      ApiDetailsTauxPresences.getDetailsTauxPresences(codeTauxpresence).success(function (response) {
+
+        $ionicLoading.hide();
+        if (response) {
+          $scope.data.detaillisttauxpresences = response;
+
+          console.log(" liste taux de presence", $scope.data.detaillisttauxpresences)
+          console.log(response);
+
+          console.log('----------------------details----------------------');
+
+        }
+      },
+        (error) => {
+          console.log(error);
+          $ionicLoading.hide();
+        }
+
+      );
+    }
+    $scope.initvar();
+    $scope.detailslistTauxPresence();
+    
+    $scope.goToNewTaux = function () {
+      localStorage.setItem('prc', null);
+      $state.transitionTo(
+        "app.tauxpresence",
+        {},
+        {
+          reload: true,
+          inherit: true,
+          notify: true,
+        }
+      );
+    };
+ 
+
+  
+  })
+
+ 
+  //  Taux  presence controller
 
   //  Taux  presence controller
   .controller('TauxpresenceCtrl', function (
@@ -15936,7 +16027,7 @@ PLANNING DESTOCKEURS*/
     formatNewDate, ApiRecapFactPrc,
     SeparateurMillier,
     ApiListAgentChefZone,
-    ApiListTauxClient,
+   
     ApiListArticle,
     ApiAddTauxPresence,
     ApiListTauxOperation,
@@ -16011,6 +16102,8 @@ PLANNING DESTOCKEURS*/
       $scope.isCanceled = false;
 
       var codeClient = { codeCommerciale: $scope.data.user.code };
+      var tauxpresence = localStorage.getItem('codeTauxpresence')
+
     };
 
     $scope.initvar();
@@ -16033,7 +16126,7 @@ PLANNING DESTOCKEURS*/
             $scope.data.present = 0;
           }
 
-          if ($scope.data.present === true) {
+          if ($scope.data.ouvert === true) {
             $scope.data.ouvert = 1;
 
           } else {
@@ -16460,34 +16553,61 @@ PLANNING DESTOCKEURS*/
           $scope.data.codeRecupArticle = $scope.data.detailsPDC[j].codeArticle;
          
           var values = {
-            codeTauxPresence: "FTP-" + $scope.data.user.code + "-" + CodeGenere.getCodeGenere(),
-
+            codeTauxpresence: "FTP-" + $scope.data.user.code + "-" + CodeGenere.getCodeGenere(),
             codeClient: $scope.data.clientchoisit.codeClient,
-            // dateAjout: formatNewDate.formatNewDate(),
+            idOperation: $scope.data.operationchoisit.idOperation,
             raisonSociale: $scope.data.raisonSociale,
             adresse: $scope.data.adresse,
-            telephone: $scope.data.telephone,
+            telephone:""+ $scope.data.telephone,
             codeCommerciale: $scope.data.user.code,
             position: $scope.data.clientchoisit.position,
-            codes: [{
+            details: [{
               codeArticle: $scope.data.codeRecupArticle,
               present: $scope.data.present,
               ouvert: $scope.data.ouvert
             }]
           };
 
-          $ionicLoading.show({
-            template: 'Traitement en cours...'
-          });
-          $ionicLoading.hide();
+           $ionicLoading.show({
+             template: 'Traitement en cours...'
+           });
+           $ionicLoading.hide();
           console.log('---------- ajout taux de presence----------');
 
           console.log(values);
-          ApiAddTauxPresence.getAddTauxPresence(values).success(function (response) {
+          ApiAddTauxPresence.getAddTauxPresence(values)
+          .success(function (response) {
+            console.log('---------- ajout taux de presence----------');
+
             $ionicLoading.hide();
-            console.log(response)
+            console.log(response);
             $scope.data.listAjoutTauxPresence = response;
-            console.log("ajout taux", $scope.data.listAjoutTauxPresence)
+            console.log("ajout taux", $scope.data.listAjoutTauxPresence);
+            var codeTauxPresence = localStorage.setItem('response.codeTauxpresence',codeTauxpresence)
+            if (response.reponse == 1) {
+             
+              $ionicPopup.show({
+                title: "Infos",
+                template: "réussi",
+                scope: $scope,
+                buttons: [
+                  {
+                    text: "Ok",
+                    type: "button-positive",
+                  },
+                ],
+              }).then(function (result) {
+                $state.transitionTo(
+                  "app.tauxdepresences",
+                  {},
+                  {
+                    reload: true,
+                    inherit: true,
+                    notify: true,
+                  }
+                );
+              });
+            }
 
           });
 
@@ -16929,9 +17049,9 @@ PLANNING DESTOCKEURS*/
       },
     };
   })
-  .factory("ApiDetailsTauxPresence", function ($http, urlPhp) {
+  .factory("ApiDetailsTauxPresences", function ($http, urlPhp) {
     return {
-      getDetailsTauxPresence: function () {
+      getDetailsTauxPresences: function () {
         var url = urlPhp.getUrl();
         var user = localStorage.getItem("user");
         user = JSON.parse(user);
@@ -16949,9 +17069,7 @@ PLANNING DESTOCKEURS*/
         user = JSON.parse(user);
         // console.log(user);
         //  var params = {codeUtilisateur:user.code}
-        return $http.post(url + "/tauxpresence/ajout.php", values
-
-        );
+        return $http.post(url + "/tauxpresence/ajout.php", values);
       },
     };
   })
@@ -16967,9 +17085,9 @@ PLANNING DESTOCKEURS*/
       },
     };
   })
-  .factory("ApiListTauxClient", function ($http, urlPhp) {
+  .factory("ApiListTauxPresences", function ($http, urlPhp) {
     return {
-      getListTauxClient: function (codeAgent) {
+      getListTauxPresences: function (codeAgent) {
         var url = urlPhp.getUrl();
         var user = localStorage.getItem("user");
         user = JSON.parse(user);

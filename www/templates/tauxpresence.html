@@ -219,12 +219,12 @@
                
 
                 <div class="col" >
-                    <input type="checkbox" id="present" name="present" ng-model="data.present" checked>
+                    <input type="checkbox"  name="present" ng-model="data.present" checked>
                     <label for="present">Présent</label>
                 </div>
                 
                 <div class="col"  ng-if="data.artcilechoisit.categorie === 'TOMATE' ">
-                    <input type="checkbox" id="ouvert" name="ouvert" ng-model="data.ouvert" checked>
+                    <input type="checkbox"  name="ouvert" ng-model="data.ouvert" checked>
                     <label for="ouvert">Ouvert</label>
                 </div>
             </div>
@@ -277,7 +277,7 @@
 
         </div>
 
-        <div class="col content-div-row" ng-if="d.idMotif !== 'edit' && d.present !== 0" >
+        <div class="col content-div-row" ng-if="d.idMotif !== 'edit' && d.present === 0 && d.present !== 1" >
 
             Non
 
@@ -290,7 +290,7 @@
 
         </div>
 
-        <div class="col content-div-row" ng-if="d.idMotif !== 'edit' && d.ouvert !== 0"  >
+        <div class="col content-div-row" ng-if="d.idMotif !== 'edit' && d.ouvert === 0  && d.ouvert !== 1"  >
 
           Non
 
