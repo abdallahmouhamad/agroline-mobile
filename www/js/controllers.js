@@ -15863,7 +15863,7 @@ PLANNING DESTOCKEURS*/
     formatNewDate, ApiRecapFactPrc,
     SeparateurMillier,
     ApiListTauxPresences,
-    ApiListGrossisteDestocke, $filter, ApiListventejour) {
+    ApiListGrossisteDestocke, $filter, ApiListventejour,ApiDetailsTauxPresences) {
     console.log('contoller TauxdepresencesCtrl');
 
     $scope.data.listtauxpresences = [];
@@ -15900,7 +15900,7 @@ PLANNING DESTOCKEURS*/
     }
     $scope.listTauxPresence();
     $scope.goToNewTaux = function () {
-      localStorage.setItem('prc', null);
+      localStorage.setItem('detailstauxpresence', null)
       $state.transitionTo(
         "app.tauxpresence",
         {},
@@ -15923,6 +15923,40 @@ PLANNING DESTOCKEURS*/
           notify: true,
         }
       );
+    };
+    $scope.goToModifTaux = function (codeTauxpresence) {
+      var  codeTauxpresence = {
+        codeTauxpresence: codeTauxpresence
+      }
+      $ionicLoading.show({
+        template: 'En cours...'
+      });
+      ApiDetailsTauxPresences.getDetailsTauxPresences(codeTauxpresence)
+        .success(function (response) {
+          $ionicLoading.hide();
+          if (response) {
+            if(response.details){
+              localStorage.setItem('detailstauxpresence', JSON.stringify(response))
+              $state.transitionTo(
+                "app.tauxpresence",
+                {},
+                {
+                  reload: true,
+                  inherit: true,
+                  notify: true,
+                }
+              );
+              
+            }
+          }
+        },
+          (error) => {
+            console.log(error);
+            $ionicLoading.hide();
+          }
+  
+        );
+      
     };
   })
 
@@ -15966,18 +16000,163 @@ PLANNING DESTOCKEURS*/
         }
       );
     };
+    $scope.editDetail = function (item, action) {
+      $scope.edit       = true;
+      $scope.action     = action;
+      item.idMotif      = "edit";
+      $scope.itemEdit   = item;
+
+      for (var i = 0; i < $scope.details.details.length; i++) {
+        if (
+          $scope.details.details[i].idMotif !== "edit" &&
+          $scope.details.details[i].codeArticle !==
+          $scope.itemEdit.codeArticle
+        ) {
+          $scope.details.details[i].idMotif = null;
+        }
+      }
+
+    };
+  
+    $scope.annulerEdit = function () {
+      $scope.edit = false;
+      $scope.data.artcilechoisit = null;
+      $scope.data.quantite = null;
+      $scope.data.prix = null;
+      for (var i = 0; i < $scope.details.details.length; i++) {
+        if (
+          $scope.details.details[i].idMotif === "edit" &&
+          $scope.details.details[i].codeArticle ===
+          $scope.itemEdit.codeArticle
+        ) {
+          $scope.details.details[i].idMotif = null;
+          break;
+        }
+      }
+    }
+    $scope.valideEdit = function () {
+      var details  = [];
+        for (var i = 0; i < $scope.details.details[i].length; i++) {
+          var detail = {
+              codeArticle :$scope.details.details[i].codeArticle,
+              }
+          if ($scope.details.details[i].idMotif === "edit" && $scope.details.details[i].codeArticle === $scope.itemEdit.codeArticle
+          ) {
+            if($scope.itemEdit.present == true){
+              detail['present'] = 1;
+            }else{
+              detail['present']  = 0;
+            }
+            if($scope.itemEdit.ouvert == true){
+              detail['ouvert'] = 1;
+            }else{
+              detail['ouvert']  = 0;
+            }
+
+          }else{
+            detail['present'] = $scope.details.details[i].present;
+            detail['ouvert']  = $scope.details.details[i].ouvert;
+          }
+          details.push(detail);
+        }
+
+
+          var ligneDetailTosend = {
+            codeTauxpresence  :$scope.details.codeTauxpresence,
+            codeClient        :$scope.details.codeClient,
+            idOperation       :$scope.details.idOperation,
+            raisonSociale     :$scope.details.raisonSociale,
+            adresse           :$scope.details.adresse,
+            telephone         :$scope.details.telephone,
+            codeCommerciale   :$scope.data.user.code,
+            // position          :$scope.details.,
+            details           :detail
+          }        
+              $ionicLoading.show({
+                content: "Loading",
+                animation: "fade-in",
+                showBackdrop: true,
+                maxWidth: 200,
+                showDelay: 0,
+                duration: 10000,
+              });
+
+              ApiModificationDetailPDS.modificationDetailPDS(ligneDetailTosend)
+                .success(
+                  function (response) {
+
+                    $ionicLoading.hide();
+                    if (response.reponse == 1) {
+
+                      $scope.data.detailsPDS.details[i].idMotif =
+                        $scope.data.motifchoisit.idMotif;
+                      $scope.data.detailsPDS.details[i].quantite = $scope.data.quantite;
+                      $scope.data.detailsPDS.details[i].codeArticle = $scope.data.artcilechoisit.code;
+                      $scope.data.detailsPDS.details[i].article = $scope.data.artcilechoisit.libelle;
+
+                      var pds = JSON.parse(localStorage.getItem('pdslocal'));
+
+                      var searchPds = $filter('filter')(pds, { codePDS: $scope.data.detailsPDS.codePDS });
+                      if (searchPds && searchPds.length === 1) {
+                        var pdsLocal = searchPds[0];
+                        pds.splice(pdsLocal, 1);
+                        pds.push($scope.data.detailsPDS);
+
+                        localStorage.setItem('pdslocal', JSON.stringify(pds))
+                      }
+
+
+
+                      $scope.edit = false;
+                      $scope.data.motifchoisit = null;
+
+                      $ionicPopup.show({
+                        title: "Information",
+                        template: 'réussi',
+                        scope: $scope,
+                        buttons: [
+                          {
+                            text: "Ok",
+                            type: "button-assertive",
+                          },
+                        ],
+                      });
+                    } else {
+                      if (response.reponse == -83) {
+                        $ionicPopup.show({
+                          title: "Information",
+                          template: 'Pds deja validee',
+                          scope: $scope,
+                          buttons: [
+                            {
+                              text: "Ok",
+                              type: "button-assertive",
+                            },
+                          ],
+                        });
+                      }
+                    }
+
+                  }, (error) => {
+                    $ionicLoading.hide();
+                    $scope.Erreur(errorMessage);
+                  }
+                )
+      
+    };
     $scope.detailslistTauxPresence = function () {
       ApiDetailsTauxPresences.getDetailsTauxPresences(codeTauxpresence)
       .success(function (response) {
         $ionicLoading.hide();
         if (response) {
           $scope.data.detaillisttauxpresences = response;
+          if(response.details){
+            $scope.details = response;
+          }
 
-          console.log(" liste taux de presence", $scope.data.detaillisttauxpresences)
-          console.log(response);
-
-          console.log('----------------------details----------------------');
-
+         // console.log(" liste taux de presence", $scope.data.detaillisttauxpresences)
+         console.log('----------------------details----------------------');
+         console.log(response);
         }
       },
         (error) => {
@@ -16025,7 +16204,7 @@ PLANNING DESTOCKEURS*/
     ApiListArticle,
     ApiAddTauxPresence,
     ApiListTauxOperation,
-    ApiListGrossisteDestocke, $filter, ApiListventejour) {
+    ApiListGrossisteDestocke, $filter, ApiListventejour,ApiDetailsTauxPresences) {
     console.log('contoller Tauxpresence');
 
     $scope.data.recuperationarticle = {};
@@ -16040,10 +16219,7 @@ PLANNING DESTOCKEURS*/
     $scope.data.listoperations = [];
     $scope.data.operationchoisit = null;
     $scope.data.bol = false;
-    var user = localStorage.getItem("user");
-    $scope.data.user = JSON.parse(user);
-    var client = localStorage.getItem("client");
-    $scope.data.client = JSON.parse(client);
+  
 
     $scope.showPopUp = function (libelle, etat, code = "") {
       $ionicPopup.show({
@@ -16060,6 +16236,50 @@ PLANNING DESTOCKEURS*/
           },
         ],
       });
+    };
+
+    $scope.editDetail = function (item, action) {
+      $scope.edit       = true;
+      $scope.action     = action;
+      item.idMotif      = "edit";
+      $scope.itemEdit   = item;
+
+      for (var i = 0; i < $scope.data.detailsPDC.length; i++) {
+        if (
+          $scope.data.detailsPDC[i].idMotif !== "edit" &&
+          $scope.data.detailsPDC[i].codeArticle !==
+          $scope.itemEdit.codeArticle
+        ) {
+          $scope.data.detailsPDC[i].idMotif = null;
+        }
+      }
+
+    };
+  
+    $scope.annulerEdit = function () {
+      $scope.edit = false;
+      $scope.data.artcilechoisit = null;
+      $scope.data.quantite = null;
+      $scope.data.prix = null;
+      for (var i = 0; i < $scope.data.detailsPDC.length; i++) {
+        if (
+          $scope.data.detailsPDC[i].idMotif === "edit" &&
+          $scope.data.detailsPDC[i].codeArticle ===
+          $scope.itemEdit.codeArticle
+        ) {
+          $scope.data.detailsPDC[i].idMotif = null;
+          break;
+        }
+      }
+      $scope.itemEdit = null;
+    }
+
+    $scope.deletObject = function (item) {
+      let index = $scope.data.detailsPDC.indexOf(item);
+
+      if (index > -1) {
+        $scope.data.detailsPDC.splice(index, 1);
+      }
     };
 
     $scope.initvar = function () {
@@ -16095,8 +16315,20 @@ PLANNING DESTOCKEURS*/
       $scope.isLoaded = false;
       $scope.isCanceled = false;
 
-      var codeClient = { codeCommerciale: $scope.data.user.code };
-      var tauxpresence = localStorage.getItem('codeTauxpresence')
+    $scope.data.telephone = null;
+    $scope.data.adresse = null;
+    $scope.data.raisonSociale = null;
+    
+    var details    = localStorage.getItem("detailstauxpresence");
+    $scope.details = JSON.parse(details)
+
+    if($scope.details){
+      console.log('Il est la');
+        $scope.codeTauxpresence     = $scope.details.codeTauxpresence;
+        $scope.data.telephone       = $scope.details.telephone;
+        $scope.data.adresse         = $scope.details.adresse;
+        $scope.data.raisonSociale   = $scope.details.raisonSociale;  
+    }
 
     };
 
@@ -16104,6 +16336,7 @@ PLANNING DESTOCKEURS*/
 
     $scope.ajouter = function () {
       var searchArticle = $filter('filter')($scope.data.detailsPDC, { codeArticle: $scope.data.artcilechoisit.code })
+      console.log(searchArticle)
       if (!searchArticle || searchArticle.length <= 0) {
         if ($scope.data.artcilechoisit
           // && $scope.data.quantite && $scope.data.prix && $scope.data.quantite > 0 && $scope.data.prix > 0
@@ -16128,20 +16361,10 @@ PLANNING DESTOCKEURS*/
           }
           $scope.data.detailsPDC.push({
             index: $scope.data.detailsPDC.length + 1,
-            codeDetail: "DPDC-" + $scope.data.user.code + "-" + CodeGenere.getCodeGenere(),
-
             codeArticle: $scope.data.artcilechoisit.code,
-            // categorie: $scope.data.artcilechoisit.categorie,
-            quantite: $scope.data.quantite,
-            prix: $scope.data.prix,
-            isCanceled: false,
             artcilechoisit: $scope.data.artcilechoisit,
-            idMotif: 0,
-            montant: mt,
             present: $scope.data.present,
             ouvert: $scope.data.ouvert
-
-
           });
           $scope.data.montant = $scope.data.montant + mt;
 
@@ -16222,11 +16445,14 @@ PLANNING DESTOCKEURS*/
       $ionicLoading.hide();
       if (response) {
         $scope.data.listtauxclients = response;
-        console.log("clients", $scope.data.listtauxclients)
-        // console.log("clients", $scope.data.clientchoisit.codeClient)
+        if($scope.details && $scope.details.codeClient){
+          var searchClient = $filter('filter')($scope.data.listtauxclients, { codeClient: $scope.details.codeClient })
+          if(searchClient && searchClient.length == 1){
+            $scope.data.clientchoisit  =searchClient[0]; 
+          }
 
-        // localStorage.setItem("clients", JSON.stringify($scope.data.listclients));
-        // console.log(JSON.parse(localStorage.getItem("clients")))
+        }
+        console.log("clients", $scope.data.listtauxclients)
       }
     },
       (error) => {
@@ -16237,33 +16463,7 @@ PLANNING DESTOCKEURS*/
 
 
 
-    $scope.editDetail = function (item, action) {
-      $scope.edit = true;
-      $scope.action = action;
-      item.idMotif = "edit";
-
-      $scope.data.artcilechoisit = {};
-      console.log("--------------Artcile---------------");
-      console.log(item);
-      $scope.data.artcilechoisit = item.artcilechoisit
-      //   $scope.data.artcilechoisit.code = item.codeArticle
-      console.log("--------------Quantite---------------");
-      console.log(item.quantite);
-      $scope.data.quantite = +item.quantite;
-      $scope.data.prix = +item.prix;
-      $scope.data.commentaire = item.commentaire;
-
-
-      for (var i = 0; i < $scope.data.detailsPDC.length; i++) {
-        if (
-          $scope.data.detailsPDC[i].idMotif === "edit" &&
-          $scope.data.detailsPDC[i].codeArticle !== item.codeArticle
-        ) {
-          $scope.data.detailsPDC[i].idMotif = 0;
-        }
-      }
-      $scope.itemEdit = item;
-    };
+    
     $scope.valideEdit = function () {
       if ($scope.data.motifchoisit && $scope.data.motifchoisit.idMotif !== "") {
         for (var i = 0; i < $scope.data.detailsPDC.length; i++) {
@@ -16464,9 +16664,13 @@ PLANNING DESTOCKEURS*/
       $ionicLoading.hide();
       if (response) {
         $scope.data.listoperations = response;
-        console.log("Operation", $scope.data.listoperations)
-        // localStorage.setItem("operation", JSON.stringify($scope.data.listOperations));
-        // console.log(JSON.parse(localStorage.getItem("Operations")))
+        console.log('Ops', $scope.data.listoperations)
+        if($scope.details && $scope.details.idOperation){
+          var searchOp = $filter('filter')($scope.data.listoperations, { idOperation: $scope.details.idOperation })
+          if(searchOp && searchOp.length == 1){
+            $scope.data.operationchoisit  =searchOp[0]; 
+          }
+        }
       }
     },
       (error) => {
@@ -16481,10 +16685,34 @@ PLANNING DESTOCKEURS*/
         $ionicLoading.hide();
         if (response) {
           $scope.data.listarticles = response;
-          console.log("articles", $scope.data.listarticles)
           $scope.data.recuperationarticle = $scope.data.listarticles;
-          console.log("recup", $scope.data.recuperationarticle);
-
+       
+          if($scope.details && $scope.details.details){
+            
+            for(var i=0;i<$scope.details.details.length;i++){
+              $scope.data.artcilechoisit = null;
+              $scope.data.present        = null;
+              $scope.data.ouvert         = null;
+              for(var j=0;j<$scope.data.listarticles.length;j++){
+                  if($scope.data.listarticles[j].code == $scope.details.details[i].codeArticle){
+                    $scope.data.artcilechoisit  = $scope.data.listarticles[j];
+                      break;
+                  }
+              }
+              //var searchArt = $filter('filter')($scope.data.listarticles, { code: $scope.details.details[i].codeArticle })
+             // if(searchArt && searchArt.length == 1){
+               // $scope.data.artcilechoisit  =searchArt[0];
+                if($scope.details.details[i].present == 1){
+                  $scope.data.present = true;
+                }
+                if($scope.details.details[i].ouvert == 1){
+                  $scope.data.ouvert = true;
+                } 
+                $scope.ajouter();
+            //  }
+            }
+            
+          }
 
         }
       },
@@ -16541,43 +16769,46 @@ PLANNING DESTOCKEURS*/
         // && $scope.data.raisonSociale && $scope.data.adresse
         // && $scope.data.telephone
       ) {
-        var codeTauxpresence = $scope.data.user ? $scope.data.codeTauxpresence : "FTP-" + $scope.data.user.code + "-" + CodeGenere.getCodeGenere();
+        // var codeTauxpresence = $scope.data.user ? $scope.data.codeTauxpresence : "FTP-" + $scope.data.user.code + "-" + CodeGenere.getCodeGenere();
+        var details = [];
+        for (var j = 0; j < $scope.data.detailsPDC.length; j++) {
+            details.push(
+            {
+              codeArticle: $scope.data.detailsPDC[j].codeArticle,
+              present: $scope.data.detailsPDC[j].present,
+              ouvert: $scope.data.detailsPDC[j].ouvert
+            }
+          )
+        }
+        var code  = "";
+        var modif = false;
+        if(!$scope.details){
+          code  = "FTP-" + $scope.data.user.code + "-" + CodeGenere.getCodeGenere();
+        }else{
+          modif  = true;
+          code  = $scope.details.codeTauxpresence;
+        }
 
-        for (var j = 0; j < $scope.data.recupcodearticles.length; j++) {
-          $scope.data.codeRecupArticle = $scope.data.detailsPDC[j].codeArticle;
-         
-          var values = {
-            codeTauxpresence: "FTP-" + $scope.data.user.code + "-" + CodeGenere.getCodeGenere(),
-            codeClient: $scope.data.clientchoisit.codeClient,
-            idOperation: $scope.data.operationchoisit.idOperation,
-            raisonSociale: $scope.data.raisonSociale,
-            adresse: $scope.data.adresse,
-            telephone:""+ $scope.data.telephone,
-            codeCommerciale: $scope.data.user.code,
-            position: $scope.data.clientchoisit.position,
-            details: [{
-              codeArticle: $scope.data.codeRecupArticle,
-              present: $scope.data.present,
-              ouvert: $scope.data.ouvert
-            }]
-          };
-
-           $ionicLoading.show({
-             template: 'Traitement en cours...'
-           });
-           $ionicLoading.hide();
-          console.log('---------- ajout taux de presence----------');
-
-          console.log(values);
-          ApiAddTauxPresence.getAddTauxPresence(values)
+        var values = {
+          codeTauxpresence      : code,
+          codeClient            : $scope.data.clientchoisit.codeClient,
+          idOperation           : $scope.data.operationchoisit.idOperation,
+          raisonSociale         : $scope.data.raisonSociale,
+          adresse               : $scope.data.adresse,
+          telephone             :""+ $scope.data.telephone,
+          codeCommerciale       : $scope.data.user.code,
+          position              : $scope.data.clientchoisit.position,
+          details               : details
+        };
+        console.log(values)
+        console.log(modif)
+        $ionicLoading.show({
+          template: 'Traitement en cours...'
+        });
+        ApiAddTauxPresence.getAddTauxPresence(values, modif)
           .success(function (response) {
-            console.log('---------- ajout taux de presence----------');
-
             $ionicLoading.hide();
-            console.log(response);
-            $scope.data.listAjoutTauxPresence = response;
-            console.log("ajout taux", $scope.data.listAjoutTauxPresence);
-            var codeTauxPresence = localStorage.setItem('response.codeTauxpresence',codeTauxpresence)
+            console.log(response.reponse)
             if (response.reponse == 1) {
              
               $ionicPopup.show({
@@ -16601,11 +16832,23 @@ PLANNING DESTOCKEURS*/
                   }
                 );
               });
+            }else{
+              $ionicPopup.show({
+                title: "Erreur",
+                template: "" + response.reponse,
+                scope: $scope,
+                buttons: [
+                  {
+                    text: "Ok",
+                    type: "button-positive",
+                  },
+                ],
+              }).then(function (result) {
+                
+              });
             }
 
           });
-
-        }
       }
       else {
         $ionicPopup.show({
@@ -17045,25 +17288,27 @@ PLANNING DESTOCKEURS*/
   })
   .factory("ApiDetailsTauxPresences", function ($http, urlPhp) {
     return {
-      getDetailsTauxPresences: function () {
+      getDetailsTauxPresences: function (values) {
         var url = urlPhp.getUrl();
         var user = localStorage.getItem("user");
         user = JSON.parse(user);
-        // console.log(user);
+         console.log('----Detail taux presence----');
         //  var params = {codeUtilisateur:user.code}
-        return $http.post(url + "/tauxpresence/details.php");
+        return $http.post(url + "/tauxpresence/details.php", values);
       },
     };
   })
   .factory("ApiAddTauxPresence", function ($http, urlPhp) {
     return {
-      getAddTauxPresence: function (values) {
+      getAddTauxPresence: function (values, modif = false) {
         var url = urlPhp.getUrl();
         var user = localStorage.getItem("user");
         user = JSON.parse(user);
         // console.log(user);
         //  var params = {codeUtilisateur:user.code}
-        return $http.post(url + "/tauxpresence/ajout.php", values);
+        var urlTaux = modif == true ? '/tauxpresence/modifier.php' : '/tauxpresence/ajout.php'
+        console.log('Url taux', urlTaux);
+        return $http.post(url + urlTaux, values);
       },
     };
   })

@@ -41,58 +41,66 @@
   
         </style>
 
-<div class="row"  ng-if="data.sens == 'sup'" >
-  <div class="col">
-    <button class="button button-block button-assertive"
-      cancel-button="{{ 'fichevisite_select_pv_return' | translate }}"
-      reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
-      cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
-      search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
-      ng-model="data.motifchoisit" options="data.listmotifs" option-getter="getOptMotif(option)"
-      modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
-      has-search="true">
-      <div ng-if="!data.motifchoisit">Motif de supression</div>
-      <div ng-if="data.motifchoisit">{{ data.motifchoisit.libelle }}</div>
-
-      <div class="option">
-        <h2> {{option.libelle}}</h2>
-      </div>
-    </button>
-  </div>
-
-  
-
-</div>
-<div class="row"  ng-if="data.sens == 'sup'" >
-  <div class="col mt">
-    <button ng-click="validerDeletInventaire()" class="button button-block button-assertive footer-button" color="danger" type="submit"
-    name="submit"><span style="color:white">Valider</span></button>
-  </div>
-  <div class="col mt">
-    <button ng-click="anullerDeletInventaire()" class="button button-block button-assertive footer-button" color="danger" type="submit"
-    name="submit"><span style="color:white">Annuler</span></button>
-  </div>
-</div>
       
         <div class="card list"  >
 
             <a class="item item-icon-left" >
                 <i class="icon ion-person"></i>
-                Code : {{codeTauxpresence}}
-              </a>
+                Client : {{details.client}}
+            </a>
 
-            <!-- <a class="item item-icon-left" >
-                <i class="icon ion-person"></i>
-                Raison Social : Moussa Diallo
-              </a>
-
-              <a class="item item-icon-left" >
-                <i class="icon ion-location"></i>
-                Adresse : Fass
-              </a> -->
+            <a class="item item-icon-left" >
+              <i class="icon ion-location"></i>
+              Adresse : {{details.adresse}}
+            </a>
+            <a class="item item-icon-left" >
+              <i class="icon ion-asterisk"></i>
+              Opération : {{details.operation}}
+            </a>
+            <a class="item item-icon-left" >
+              <i class="icon ion-person"></i>
+              Raison sociale : {{details.raisonSociale}}
+            </a>
+            <a class="item item-icon-left" >
+              <i class="icon ion-android-call"></i>
+              Téléphone : {{details.telephone}}
+            </a>
               
               
         </div>
+
+
+      <div class="row" ng-if="itemEdit">
+          <div class="col">Code    : {{ itemEdit.codeArticle }}</div>
+          <div class="col">Libelle : {{ itemEdit.libelle }}</div>
+      </div>
+
+      <div class="row" >
+
+          <div class="col" ng-if="edit == true">
+              <input type="checkbox"  name="present" ng-model="itemEdit.present" checked>
+              <label for="present">Présent</label>
+          </div>
+          
+          <div class="col"  ng-if="itemEdit.categorie === 'TOMATE' ">
+              <input type="checkbox"  name="ouvert" ng-model="itemEdit.ouvert" checked>
+              <label for="ouvert">Ouvert</label>
+          </div>
+      </div>
+
+   
+
+      <div class="row" ng-if="edit == true">
+          <div class="col" ng-if="action == 'edit'">
+              <button ng-click="valideEdit()" class="button button-block button-assertive footer-button"
+                  color="danger" type="submit" name="submit"><span style="color:white">Modifier</span></button>
+          </div>
+          <div class="col">
+              <button ng-click="annulerEdit()" class="button button-block button-assertive footer-button"
+                  color="danger" type="submit" name="submit"><span style="color:white">Annuler</span></button>
+          </div>
+
+      </div>
   
 
   
@@ -103,55 +111,75 @@
        </div>
   
   
-          <div class="row header list content-div">
-            <div class="col" style="text-align: center;">Raison Sociale</div>
-            <div class="col" style="text-align: center;">Adresse</div>
-            <div class="col" style="text-align: center;" ng-if="data.detailsPDS.local == true">Editer</div>
-            <div class="col" style="text-align: center;" ng-if="data.detailsPDS.local == true">Supprimer</div>
-          </div>
-  
-          <div class="row list"  ng-repeat="d in data.detailsInventaire.details | filter:motcle">
-  
-            <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" ng-click="showPopUp(d.article, 1, d.codeArticle)">
-              {{d.codeArticle}}
-            </div>
-  
-            <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'" ng-click="showPopUp(d.article, 1, d.codeArticle)">
-              {{d.codeArticle}}
-            </div>
-  
-            <div class="col content-div-row" ng-if="d.idMotif !== 'edit'">{{d.quantite}}</div>
-  
-            <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'">{{d.quantite}}</div>
-  
-           
-  
-  
-            <div class="col content-div-row" ng-if="d.idMotif !== 'edit' && data.detailsPDS.local == true" ng-click="editDetail(d, 'edit')">
-  
-              <i class="icon ion-edit" ></i>
-  
-           </div>
-  
-           <div class="col content-div-row edit" ng-if="d.idMotif === 'edit' && data.detailsPDS.local == true" ng-click="editDetail(d, 'edit')">
-  
-              <i class="icon ion-edit"></i>
-  
-           </div>
-  
-           <div class="col content-div-row" ng-if="d.idMotif !== 'edit' && data.detailsPDS.local == true" ng-click="editDetail(d, 'sup')">
-  
-            <i class="icon ion-trash-a" ></i>
-  
-            </div>
-  
-            <div class="col content-div-row edit" ng-if="d.idMotif === 'edit' && data.detailsPDS.local == true" ng-click="editDetail(d, 'sup')">
-  
-                <i class="icon ion-trash-a"></i>
-  
-            </div>
-  
-          </div>
+      <div class="row header list">
+        <div class="col" style="text-align: center;">Article</div>
+        <div class="col" style="text-align: center;">Present</div>
+        <div class="col" style="text-align: center;">Ouvert</div>
+        <!-- <div class="col" style="text-align: center;">Edit</div> -->
+        <!-- <div class="col" style="text-align: center;">Sup.</div> -->
+
+      </div>
+
+    <div class="row list" ng-repeat="d in details.details | filter:motcle">
+
+        <div class="col content-div-row" ng-if="d.idMotif !== 'edit'"
+            ng-click="showPopUp(d.libelle, 1, d.codeArticle)">
+            {{d.codeArticle}}
+        </div>
+        <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'"
+            ng-click="showPopUp(d.libelle, 1, d.codeArticle)">
+            {{d.codeArticle}}
+        </div>
+
+       
+        <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" >
+
+          <span ng-if="d.present === 1">Oui</span>
+          <span ng-if="d.present !== 1">Non</span>
+
+        </div>
+
+        <div class="col content-div-row edit" ng-if="d.idMotif == 'edit'" >
+
+          <span ng-if="d.present === 1">Oui</span>
+          <span ng-if="d.present !== 1">Non</span>
+
+        </div>
+     
+
+        <div class="col content-div-row" ng-if="d.idMotif !== 'edit'"  >
+
+          <span ng-if="d.ouvert === 1">Oui</span>
+          <span ng-if="d.ouvert !== 1">Non</span>
+
+        </div>
+
+        <div class="col content-div-row edit" ng-if="d.idMotif == 'edit'"  >
+
+          <span ng-if="d.ouvert === 1">Oui</span>
+          <span ng-if="d.ouvert !== 1">Non</span>
+
+        </div>
+
+
+        <!-- <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" ng-click="editDetail(d, 'edit')">
+          <i class="icon ion-edit" ></i>
+       </div>
+
+       <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'" ng-click="editDetail(d, 'edit')">
+          <i class="icon ion-edit"></i>
+       </div> -->
+
+       <!-- <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" ng-click="editDetail(d, 'sup')">
+        <i class="icon ion-trash-a" ></i>
+      </div>
+
+      <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'" ng-click="editDetail(d, 'sup')">
+            <i class="icon ion-trash-a"></i>
+      </div> -->
+
+
+    </div>
         
   
       </ion-content>
