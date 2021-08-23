@@ -149,7 +149,7 @@
 
             </div>
 
-            <div class="row">
+            <!-- <div class="row">
 
                 <div class="col">
                     <button class="button button-block button-assertive"
@@ -160,7 +160,6 @@
                         ng-model="data.artcilechoisit" options="data.listarticles" option-getter="getOptArticle(option)"
                         modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
                         has-search="true">
-                        <!-- Article -->
                         <label>Article</label>
 
                         <div class="option">
@@ -195,14 +194,14 @@
                 </div>
                 
             </div>
+ -->
 
-
-            <div class="row">
+            <!-- <div class="row">
 
                 <div class="col">{{ data.artcilechoisit.libelle }}</div>
                 <div class="col" ng-if="edit == true">{{ data.motifchoisit.libelle }}</div>
-            </div>
-            <div class="row" >
+            </div> -->
+            <!-- <div class="row" >
 
                 <div class="col" >
                     <input type="checkbox"  name="present" ng-model="data.present" checked>
@@ -213,7 +212,7 @@
                     <input type="checkbox"  name="ouvert" ng-model="data.ouvert" checked>
                     <label for="ouvert">Ouvert</label>
                 </div>
-            </div>
+            </div> -->
 
          
 
@@ -229,62 +228,104 @@
 
             </div>
 
-            <div class="row" ng-if="edit == false">
-                <button ng-click="ajouter()" class="button button-block button-assertive footer-button" color="danger"
-                    type="submit" name="submit"><span style="color:white">Ajouter detail</span></button>
-            </div>
 
     
 
     <p>
     <div class="row header list">
-        <div class="col" style="text-align: center;">Article</div>
-        <div class="col" style="text-align: center;">Present</div>
-          <div class="col" style="text-align: center;">Ouvert</div>
+        <div class="col" style="text-align: center;">Article/libelle</div>
+        <div class="col" style="text-align: center;">Action</div>
           <div class="col" style="text-align: center;">Edit</div>
-        <div class="col" style="text-align: center;">Supprimer</div>
     </div>
 
     <div class="row list" ng-repeat="d in data.detailsPDC | filter:motcle">
 
-        <div class="col content-div-row" ng-if="d.idMotif !== 'edit'"
+        <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" ng-model="data.artcilechoisit"
             ng-click="showPopUp(d.artcilechoisit.libelle, 1, d.artcilechoisit.code)">
-            {{d.artcilechoisit.code}}
+            {{d.code}} {{d.libelle}} /{{d.categorie}}
         </div>
-        <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'"
+        <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'" ng-model="data.artcilechoisit"
             ng-click="showPopUp(d.artcilechoisit.libelle, 1, d.artcilechoisit.code)">
-            {{d.artcilechoisit.code}}
+            {{d.code}}{{d.libelle}}/ {{d.categorie}}
         </div>
 
        
         <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" >
 
-            <span ng-if="d.present === 1">Oui</span>
-            <span ng-if="d.present !== 1">Non</span>
+            <!-- <span ng-if="d.present === 1">Oui</span>
+            <span ng-if="d.present !== 1">Non</span> -->
+            <div class="row" >
+
+                <div class="col" >
+                    <input type="checkbox"  name="present" ng-model="d.present" checked>
+                    <label for="present">Présent</label>
+                </div>
+                
+                <div class="col"  checked ng-if="d.categorie === 'TOMATE'" >
+                    <input type="checkbox"  name="ouvert" ng-model="d.ouvert" checked>
+                    <label for="ouvert">Ouvert</label>
+                </div>
+            </div>
   
           </div>
   
           <div class="col content-div-row edit" ng-if="d.idMotif == 'edit'" >
   
-            <span ng-if="d.present === 1">Oui</span>
-            <span ng-if="d.present !== 1">Non</span>
+            <!-- <span ng-if="d.present === 1">Oui</span>
+            <span ng-if="d.present !== 1">Non</span> -->
+            <div class="row" >
+
+                <div class="col" >
+                    <input type="checkbox"  name="present" ng-model="d.present" checked>
+                    <label for="present">Présent</label>
+                </div>
+                
+                <div class="col" ng-if="d.categorie === 'TOMATE'">
+                    <input type="checkbox"  name="ouvert" ng-model="d.ouvert" checked >
+                    <label for="ouvert">Ouvert</label>
+                </div>
+            </div>
   
           </div>
        
   
-          <div class="col content-div-row" ng-if="d.idMotif !== 'edit'"  >
+          <!-- <div class="col content-div-row" ng-if="d.idMotif !== 'edit'"  >
   
-            <span ng-if="d.ouvert === 1">Oui</span>
-            <span ng-if="d.ouvert !== 1">Non</span>
+             <span ng-if="d.ouvert === 1">Oui</span>
+            <span ng-if="d.ouvert !== 1">Non</span> 
+            <div class="row" >
+
+                <div class="col" >
+                    <input type="checkbox"  name="present" ng-model="data.present" checked>
+                    <label for="present">Présent</label>
+                </div>
+                
+                <div class="col"  ng-if="data.artcilechoisit.categorie === 'TOMATE' ">
+                    <input type="checkbox"  name="ouvert" ng-model="data.ouvert" checked>
+                    <label for="ouvert">Ouvert</label>
+                </div>
+            </div>
   
-          </div>
+          </div> -->
   
-          <div class="col content-div-row edit" ng-if="d.idMotif == 'edit'"  >
+          <!-- <div class="col content-div-row edit" ng-if="d.idMotif == 'edit'"  >
   
-            <span ng-if="d.ouvert === 1">Oui</span>
-            <span ng-if="d.ouvert !== 1">Non</span>
+           <span ng-if="d.ouvert === 1">Oui</span>
+            <span ng-if="d.ouvert !== 1">Non</span> 
+            <div class="row" >
+
+                <div class="col" >
+                    <input type="checkbox"  name="present" ng-model="data.present" checked>
+                    <label for="present">Présent</label>
+                </div>
+                
+                <div class="col"  ng-if="data.artcilechoisit.categorie === 'TOMATE' ">
+                    <input type="checkbox"  name="ouvert" ng-model="data.ouvert" checked>
+                    <label for="ouvert">Ouvert</label>
+                </div>
+            </div>
   
-          </div>
+          </div> -->
 
         <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" ng-click="editDetail(d, 'edit')">
             <i class="icon ion-edit" ></i>
@@ -294,17 +335,9 @@
             <i class="icon ion-edit"></i>
          </div>
 
-        <div class="col content-div-row" ng-if="d.idMotif !== 'edit'" ng-click="deletObject(d)">
+      
 
-            <i class="icon ion-trash-a"></i>
-
-        </div>
-
-        <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'" ng-click="deletObject(d)">
-
-            <i class="icon ion-trash-a"></i>
-
-        </div>
+      
 
 
     </div>

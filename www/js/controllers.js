@@ -16368,12 +16368,12 @@ PLANNING DESTOCKEURS*/
           });
           $scope.data.montant = $scope.data.montant + mt;
 
-          // $ionicLoading.hide();
           $scope.data.artcilechoisit = null;
           $scope.data.motifchoisit = null;
           $scope.data.quantite = null;
           $scope.data.prix = null;
           console.log("----------------------Detail-------------------");
+
           $scope.numStr = function (a, b) {
             a = '' + a;
             b = b || ' ';
@@ -16390,7 +16390,7 @@ PLANNING DESTOCKEURS*/
           }
           // console.log("code article",$scope.data.detailsPDC.codeArticle);
 
-          console.log($scope.data.detailsPDC);
+          //console.log($scope.data.detailsPDC);
           console.log("present", $scope.data.detailsPDC.present);
           console.log("ouvert", $scope.data.detailsPDC.ouvert);
 
@@ -16439,7 +16439,7 @@ PLANNING DESTOCKEURS*/
 
 
     };
-
+   
     ApiListClient.getListClient().success(function (response) {
 
       $ionicLoading.hide();
@@ -16684,35 +16684,38 @@ PLANNING DESTOCKEURS*/
       ApiListTauxArticle.getListTauxArticle().success(function (response) {
         $ionicLoading.hide();
         if (response) {
-          $scope.data.listarticles = response;
-          $scope.data.recuperationarticle = $scope.data.listarticles;
-       
-          if($scope.details && $scope.details.details){
+          
+         // $scope.data.detailsPDC = response;
+         // $scope.data.recuperationarticle = $scope.data.listarticles;
+     //  console.log($scope.data.recuperationarticle);
+          if($scope.details && $scope.details.details)
+          {
+            $scope.data.detailsPDC = $scope.details.details;
+
+            //  for(var i=0;i<$scope.details.details.length;i++){
+            //    $scope.data.artcilechoisit = null;
+            //    $scope.data.present        = null;
+            //    $scope.data.ouvert         = null;
+            //    for(var j=0;j<$scope.data.detailsPDC.length;j++){
+            //        if($scope.data.detailsPDC[j].code == $scope.details.details[i].codeArticle){
+            //         $scope.data.artcilechoisit  = $scope.data.detailsPDC[j];
+            //           break;
+            //       }
+            //    }
             
-            for(var i=0;i<$scope.details.details.length;i++){
-              $scope.data.artcilechoisit = null;
-              $scope.data.present        = null;
-              $scope.data.ouvert         = null;
-              for(var j=0;j<$scope.data.listarticles.length;j++){
-                  if($scope.data.listarticles[j].code == $scope.details.details[i].codeArticle){
-                    $scope.data.artcilechoisit  = $scope.data.listarticles[j];
-                      break;
-                  }
-              }
-              //var searchArt = $filter('filter')($scope.data.listarticles, { code: $scope.details.details[i].codeArticle })
-             // if(searchArt && searchArt.length == 1){
-               // $scope.data.artcilechoisit  =searchArt[0];
-                if($scope.details.details[i].present == 1){
-                  $scope.data.present = true;
-                }
-                if($scope.details.details[i].ouvert == 1){
-                  $scope.data.ouvert = true;
-                } 
-                $scope.ajouter();
-            //  }
+            //      if($scope.details.details[i].present == 1){
+            //        $scope.data.present = true;
+            //      }
+            //      if($scope.details.details[i].ouvert == 1){
+            //        $scope.data.ouvert = true;
+            //      } 
+            //      $scope.ajouter();
+           
+            // }
+            
+          }else{
+            $scope.data.detailsPDC = response;
             }
-            
-          }
 
         }
       },
@@ -16749,6 +16752,7 @@ PLANNING DESTOCKEURS*/
     $scope.initvar = function () {
       $scope.data.client = JSON.parse(localStorage.getItem('clientEdit'));
       $scope.data.listarticles = [];
+      $scope.data.detailsPDC = [];
       $scope.data.artcilechoisit = null;
 
       $scope.data.listtauxclients = [];
@@ -16772,20 +16776,30 @@ PLANNING DESTOCKEURS*/
         // var codeTauxpresence = $scope.data.user ? $scope.data.codeTauxpresence : "FTP-" + $scope.data.user.code + "-" + CodeGenere.getCodeGenere();
         var details = [];
         for (var j = 0; j < $scope.data.detailsPDC.length; j++) {
+          if($scope.data.detailsPDC[j].present == true){
+            $scope.data.detailsPDC[j].present
+          }
+          if($scope.data.detailsPDC[j].ouvert == true){
+            $scope.data.detailsPDC[j].ouvert
+          }
+
             details.push(
             {
-              codeArticle: $scope.data.detailsPDC[j].codeArticle,
+              codeArticle: $scope.data.detailsPDC[j].code ? $scope.data.detailsPDC[j].code : $scope.data.detailsPDC[j].codeArticle,
               present: $scope.data.detailsPDC[j].present,
               ouvert: $scope.data.detailsPDC[j].ouvert
             }
           )
         }
         var code  = "";
-        var modif = false;
+        var modif = 0;
+        //var modif = false;
+
         if(!$scope.details){
           code  = "FTP-" + $scope.data.user.code + "-" + CodeGenere.getCodeGenere();
         }else{
-          modif  = true;
+         // modif  = true;
+          modif  = 1;
           code  = $scope.details.codeTauxpresence;
         }
 
@@ -16800,8 +16814,22 @@ PLANNING DESTOCKEURS*/
           position              : $scope.data.clientchoisit.position,
           details               : details
         };
-        console.log(values)
-        console.log(modif)
+
+        for (var j = 0; j < values.details.length; j++) {
+          if( values.details[j].present == true){
+            values.details[j].present = 1;
+          }else{
+            values.details[j].present = 0;
+          }
+          if( values.details[j].ouvert == true){
+            values.details[j].ouvert = 1;
+            
+          }else{
+            values.details[j].ouvert = 0;
+          }
+        }
+        console.log("values",values)
+        console.log("modif",modif)
         $ionicLoading.show({
           template: 'Traitement en cours...'
         });
@@ -17300,13 +17328,13 @@ PLANNING DESTOCKEURS*/
   })
   .factory("ApiAddTauxPresence", function ($http, urlPhp) {
     return {
-      getAddTauxPresence: function (values, modif = false) {
+      getAddTauxPresence: function (values, modif = 0) {
         var url = urlPhp.getUrl();
         var user = localStorage.getItem("user");
         user = JSON.parse(user);
         // console.log(user);
         //  var params = {codeUtilisateur:user.code}
-        var urlTaux = modif == true ? '/tauxpresence/modifier.php' : '/tauxpresence/ajout.php'
+        var urlTaux = modif == 1 ? '/tauxpresence/modifier.php' : '/tauxpresence/ajout.php'
         console.log('Url taux', urlTaux);
         return $http.post(url + urlTaux, values);
       },
@@ -18313,8 +18341,8 @@ PLANNING DESTOCKEURS*/
 
     return {
       getUrl: function () {
-        // return "http://test-test.h-tsoft.com/apiagroline";
-        return "http://test-test.h-tsoft.com/apiagrolineprod";
+         return "http://test-test.h-tsoft.com/apiagroline";
+       // return "http://test-test.h-tsoft.com/apiagrolineprod";
         //return "http://htsoftdemo.com/apiccbm";
         //return "http://192.168.1.34/CCBM-serveur";
         //  return "http://mob-test.yosard.com/webservice";
