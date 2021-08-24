@@ -16680,7 +16680,28 @@ PLANNING DESTOCKEURS*/
     );
 
     $scope.selectArticle = function () {
-      // ApiListArticle.getListArticle().success(function (response) {
+      if($scope.details && $scope.details.details)
+          {
+            console.log('details',$scope.details.details);
+            var details = [];
+            for(var i=0; i<$scope.details.details.length;i++){
+              details.push(
+                {
+                  code        :$scope.details.details[i].codeArticle,
+                  libelle     :$scope.details.details[i].libelle,
+                  categorie   :$scope.details.details[i].categorie,
+                  present     :$scope.details.details[i].present == 1 ? true : false,
+                  ouvert      :$scope.details.details[i].ouvert  == 1 ? true : false
+                }
+              );
+            }
+
+            if(details){
+              $scope.data.detailsPDC = details;
+            }
+            
+          }else{
+            // ApiListArticle.getListArticle().success(function (response) {
       ApiListTauxArticle.getListTauxArticle().success(function (response) {
         $ionicLoading.hide();
         if (response) {
@@ -16688,10 +16709,8 @@ PLANNING DESTOCKEURS*/
          // $scope.data.detailsPDC = response;
          // $scope.data.recuperationarticle = $scope.data.listarticles;
      //  console.log($scope.data.recuperationarticle);
-          if($scope.details && $scope.details.details)
-          {
-            $scope.data.detailsPDC = $scope.details.details;
-
+         $scope.data.detailsPDC = response;
+            
             //  for(var i=0;i<$scope.details.details.length;i++){
             //    $scope.data.artcilechoisit = null;
             //    $scope.data.present        = null;
@@ -16712,11 +16731,7 @@ PLANNING DESTOCKEURS*/
             //      $scope.ajouter();
            
             // }
-            
-          }else{
-            $scope.data.detailsPDC = response;
-            }
-
+             
         }
       },
         (error) => {
@@ -16724,6 +16739,8 @@ PLANNING DESTOCKEURS*/
           $ionicLoading.hide();
         }
       );
+          }
+      
     }
 
     $scope.goToNewTaux = function () {
