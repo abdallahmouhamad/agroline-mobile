@@ -3702,18 +3702,18 @@ PLANNING DESTOCKEURS*/
     $scope.recherche = function () {
 
       console.log('-----recherche-----');
-      ApiListClient.getListClient().success(
-        function (response) {
-          $ionicLoading.hide();
-          if (response) {
-            $scope.data.client = response;
-          }
-          console.log("....", $scope.data.client);
-        },
-        (error) => {
-          $ionicLoading.hide();
-        }
-      );
+      // ApiListClient.getListClient().success(
+      //   function (response) {
+      //     $ionicLoading.hide();
+      //     if (response) {
+      //       $scope.data.client = response;
+      //     }
+      //     console.log("....", $scope.data.client);
+      //   },
+      //   (error) => {
+      //     $ionicLoading.hide();
+      //   }
+      // );
 
       var mot = { motRecherche: $scope.data.searchValue };
       console.log("mot", mot)
@@ -3742,6 +3742,7 @@ PLANNING DESTOCKEURS*/
       }
     }
     $scope.resetSearch = function () {
+      $scope.data.searchValue = null;
       $scope.data.clients = $scope.data.clientTempon;
     }
 
@@ -3789,123 +3790,121 @@ PLANNING DESTOCKEURS*/
     };
     //Init variables of controller
 
+    $scope.getAdresseGoogleNew = function (cli) {
+      var options = { timeout: 10000, enableHighAccuracy: true };
+
+      navigator.geolocation.getCurrentPosition(function (position) {
+        var lat = 0;
+        var lng = 0;
+        if (cli.position && cli.position !== '' && cli.position !== ',' && cli.position !== ' ') {
+          coords = null;
+          coords = cli.position.split(',');
+          if (coords && coords.length > 0) {
+            lat = +coords[0];
+            lng = +coords[1];
+          }
+        } else {
+          lat = position.coords.latitude;
+          lng = position.coords.longitude;
+        }
+
+
+        console.log(cli.position)
+        console.log(lat, lng)
+        var latlng = new google.maps.LatLng(lat, lng);
+
+        var geocoder = new google.maps.Geocoder();
+        var request = {
+          latLng: latlng
+        };
+        $ionicLoading.show({
+          template: 'Localisation en cours...'
+        });
+        geocoder.geocode(request, function (data, status) {
+          $ionicLoading.hide();
+          if (status == google.maps.GeocoderStatus.OK) {
+            if (data[0] != null) {
+              cli.adresseGoogle = data[0].formatted_address;
+              $ionicLoading.show({
+                template: 'Synchronisation en cours...'
+              });
+              console.log(cli)
+              var user = localStorage.getItem("user");
+              $scope.data.user = JSON.parse(user);
+
+              cli.codeCommerciale = $scope.data.user.code
+              cli.idDepartement = +cli.idDepartement
+              cli.idLocalite = +cli.idLocalite
+              console.log(cli)
+              ApiAjoutClient.ajoutClient(cli, false).success(function (response) {
+                $ionicLoading.hide();
+                if (response.reponse === 1) {
+
+                } else {
+                  console.log(response);
+                }
+              }, error => {
+                $ionicLoading.hide();
+              });
+            } else {
+              cli.adresseGoogle = 'Adresse introuvable';
+            }
+          }
+          $ionicLoading.hide();
+        })
+
+      })
+
+    };
+
+    $scope.getAdresseGoogle = function (latlng) {
+      $scope.data.adresseUser;
+      // $scope.nomclient = user.nom;
+      var options = { timeout: 10000, enableHighAccuracy: true };
+
+      $window.navigator.geolocation.getCurrentPosition(function (position) {
+        $scope.$apply(function () {
+          //   $scope.lat = position.Coordinates.latitude;
+          //  $scope.lng = position.Coordinates.longitude;
+
+          var geocoder = new google.maps.Geocoder();
+          // var latlng = new google.maps.LatLng($scope.lat, $scope.lng);
+          var request = {
+            latLng: latlng
+          };
+          geocoder.geocode(request, function (data, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+              if (data[0] != null) {
+                $scope.data.adresseUser = data[0].formatted_address;
+                // alert("address is: " + data[0].formatted_address);
+              } else {
+                $scope.data.adresseUser = 'Adresse introuvable';
+                // alert("No address available");
+              }
+            }
+          })
+
+        })
+      })
+    };
+
     $scope.listClients = function () {
 
-      console.log("This is stock module");
+      // console.log("This is stock module");
+
       $ionicLoading.show({
         content: "Loading",
         animation: "fade-in",
         showBackdrop: true,
         maxWidth: 200,
-        showDelay: 0,
-        duration: 10000,
       });
-
-      $scope.getAdresseGoogleNew = function (cli) {
-        var options = { timeout: 10000, enableHighAccuracy: true };
-
-        navigator.geolocation.getCurrentPosition(function (position) {
-          var lat = 0;
-          var lng = 0;
-          if (cli.position && cli.position !== '' && cli.position !== ',' && cli.position !== ' ') {
-            coords = null;
-            coords = cli.position.split(',');
-            if (coords && coords.length > 0) {
-              lat = +coords[0];
-              lng = +coords[1];
-            }
-          } else {
-            lat = position.coords.latitude;
-            lng = position.coords.longitude;
-          }
-
-
-          console.log(cli.position)
-          console.log(lat, lng)
-          var latlng = new google.maps.LatLng(lat, lng);
-
-          var geocoder = new google.maps.Geocoder();
-          var request = {
-            latLng: latlng
-          };
-          $ionicLoading.show({
-            template: 'Localisation en cours...'
-          });
-          geocoder.geocode(request, function (data, status) {
-            $ionicLoading.hide();
-            if (status == google.maps.GeocoderStatus.OK) {
-              if (data[0] != null) {
-                cli.adresseGoogle = data[0].formatted_address;
-                $ionicLoading.show({
-                  template: 'Synchronisation en cours...'
-                });
-                console.log(cli)
-                var user = localStorage.getItem("user");
-                $scope.data.user = JSON.parse(user);
-
-                cli.codeCommerciale = $scope.data.user.code
-                cli.idDepartement = +cli.idDepartement
-                cli.idLocalite = +cli.idLocalite
-                console.log(cli)
-                ApiAjoutClient.ajoutClient(cli, false).success(function (response) {
-                  $ionicLoading.hide();
-                  if (response.reponse === 1) {
-
-                  } else {
-                    console.log(response);
-                  }
-                }, error => {
-                  $ionicLoading.hide();
-                });
-              } else {
-                cli.adresseGoogle = 'Adresse introuvable';
-              }
-            }
-            $ionicLoading.hide();
-          })
-
-        })
-
-      };
-
-      $scope.getAdresseGoogle = function (latlng) {
-        $scope.data.adresseUser;
-        // $scope.nomclient = user.nom;
-        var options = { timeout: 10000, enableHighAccuracy: true };
-
-        $window.navigator.geolocation.getCurrentPosition(function (position) {
-          $scope.$apply(function () {
-            //   $scope.lat = position.Coordinates.latitude;
-            //  $scope.lng = position.Coordinates.longitude;
-
-            var geocoder = new google.maps.Geocoder();
-            // var latlng = new google.maps.LatLng($scope.lat, $scope.lng);
-            var request = {
-              latLng: latlng
-            };
-            geocoder.geocode(request, function (data, status) {
-              if (status == google.maps.GeocoderStatus.OK) {
-                if (data[0] != null) {
-                  $scope.data.adresseUser = data[0].formatted_address;
-                  // alert("address is: " + data[0].formatted_address);
-                } else {
-                  $scope.data.adresseUser = 'Adresse introuvable';
-                  // alert("No address available");
-                }
-              }
-            })
-
-          })
-        })
-      };
       // $scope.getAdresseGoogle();
-      ApiListClient.getListClient().success(
-
-        function (response) {
+      ApiListClient.getListClient().success(function (response) {
           $ionicLoading.hide();
           if (response) {
 
             $scope.data.clients = response;
+            $scope.data.client  = response;
           }
           console.log(response);
 
@@ -3921,16 +3920,13 @@ PLANNING DESTOCKEURS*/
                 var lng = coordonnees[1]
 
                 var latLng = new google.maps.LatLng(lat, lng);
-                $scope.getAdresseGoogle(latLng);
+                //$scope.getAdresseGoogle(latLng);
 
               }
             }
             adresses.push({ position: adresseClient[i].position });
 
           }
-
-
-
         },
         (error) => {
           $ionicLoading.hide();
