@@ -1,115 +1,134 @@
-<ion-view title="Liste Paiement" cache-view="false" >
-    <div ng-app="starter">
-  
-      <ion-content padding="true" class="has-header">
-        <style type="text/css">
-          input[readonly] {
-            background-color: transparent !important;
-            cursor: not-allowed;
-          }
-          .small_button{
-              width: 50% !important;
-              height: 50px !important;
-              margin-left: 5px;
-          }
-          .footer-button {
-            margin-bottom: 10px;
-            height: 50px !important;
-          }
-          .ml{
-            margin-left: 5px;
-          }
-          .header {
-  
-            margin-top: 5px;
-            margin-bottom: 10px;
-          }
-          .content-div {
-            background: #1EAC4E !important;
-          }
-          .content-div-row {
-            text-align: center !important;
-            border: 3px grey dashed !important;
-          }
-          .bg {
-              background-color: #ef473a(4, 0, 255) !important;
-            }
-  
-        </style>
-        <div class="list" ng-repeat="fact in data.paiements | filter:motcle">
-          <a class="item item-thumbnail-left">
-            <img src="./img/prc.jpg">
-  
-            <div class="row">
-              <div class="col">Code</div>
-              <div class="col"><p>{{ fact.codeVersement }}</p></div>
-            </div>
-            
-            <div class="row">
-              <div class="col">Grossiste</div>
-              <div class="col"><p>{{ fact.grossiste }}</p></div>
-            </div>
-  
-            <div class="row">
-              <div class="col">Telephone</div>
-              <div class="col"><p>{{ fact.telephone }}</p></div>
-            </div>
+<ion-view title="Liste Paiement" cache-view="false">
+  <div ng-app="starter">
 
-            <div class="row">
-                <div class="col">Telephone2</div>
-                <div class="col"><p>{{ fact.telephone2 }}</p></div>
-              </div>
-  
-            <div class="row">
-              <div class="col">Montant</div>
-              <div class="col"><p>{{ number(fact.montant) }}</p></div>
-            </div>
+    <ion-content padding="true" class="has-header">
+      <style type="text/css">
+        input[readonly] {
+          background-color: transparent !important;
+          cursor: not-allowed;
+        }
 
-            <div class="row">
-                <div class="col">Numéro fiche</div>
-                <div class="col"><p>{{ fact.numFiche }}</p></div>
-              </div>
-  
-            <div class="row">
-              <div class="col">Date ajout</div>
-              <div class="col"><p>{{ fact.dateAjout | date :  "dd.MM.y" }}</p></div>
+        .small_button {
+          width: 50% !important;
+          height: 50px !important;
+          margin-left: 5px;
+        }
+
+        .footer-button {
+          margin-bottom: 10px;
+          height: 50px !important;
+        }
+
+        .ml {
+          margin-left: 5px;
+        }
+
+        .header {
+
+          margin-top: 5px;
+          margin-bottom: 10px;
+        }
+
+        .content-div {
+          background: #1EAC4E !important;
+        }
+
+        .content-div-row {
+          text-align: center !important;
+          border: 3px grey dashed !important;
+        }
+
+        .bg {
+          background-color: #ef473a(4, 0, 255) !important;
+        }
+      </style>
+      <div class="list" ng-repeat="fact in data.paiements | filter:motcle">
+        <a class="item item-thumbnail-left">
+          <img src="./img/prc.jpg">
+
+          <div class="row">
+            <div class="col">Code</div>
+            <div class="col">
+              <p>{{ fact.codeVersement }}</p>
             </div>
-  
-          </a>
-  
-         
+          </div>
+
+          <div class="row">
+            <div class="col">Grossiste</div>
+            <div class="col">
+              <p>{{ fact.grossiste }}</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">Telephone</div>
+            <div class="col">
+              <p>{{ fact.telephone }}</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">Telephone2</div>
+            <div class="col">
+              <p>{{ fact.telephone2 }}</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">Montant</div>
+            <div class="col">
+              <p>{{ number(fact.montant) }}</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">Numéro fiche</div>
+            <div class="col">
+              <p>{{ fact.numFiche }}</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">Date ajout</div>
+            <div class="col">
+              <p>{{ fact.dateAjout | date : "dd.MM.y" }}</p>
+            </div>
+          </div>
+
+        </a>
+
+
         <div class="row content-div">
-  
-         
+
+
           <!-- <div class="col" ng-click="goToDetailFact(fact.codeFacture)">
             <button class="button button-clear button-assertive" style="color: white;">
               Details
             </button>
           </div> -->
-        
-         
-  
-          <div class="col"  >
+
+
+
+          <div class="col">
             <!-- ng-click="goToRecouvrement(fact.codeFacture)"
             <button class="button button-clear button-assertive" style="color: white;">
               Recouvrement
            </button> -->
-         </div>
-  
-         <!-- <div class="col" ng-if="fact.montantRestant > 0" >
+          </div>
+
+          <!-- <div class="col" ng-if="fact.montantRestant > 0" >
             <button ng-click="goToEncaissementFact()" class="button button-clear button-assertive" style="color: white;">
               <span class="badge badge-danger" style="background-color: #ef473a !important; color: #ef473a;">0</span>
             </button>
          </div> -->
-  
+
         </div>
-  
-    </div>
-  
-      </ion-content>
-     <button class="button button-float bg" ng-click="goToNewPaiement()">
-        <i class="icon ion-plus"></i>
-      </button>
-    </div>
-    </ion-view>
-  
+
+      </div>
+
+    </ion-content>
+    <button class="button button-float bg" ng-click="goToNewPaiement()">
+      <i class="icon ion-plus"></i>
+    </button>
+  </div>
+</ion-view>
