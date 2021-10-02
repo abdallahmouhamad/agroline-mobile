@@ -298,7 +298,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -310,7 +310,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -322,7 +322,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -334,7 +334,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -346,7 +346,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -358,7 +358,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -370,7 +370,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -382,7 +382,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -394,7 +394,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -406,7 +406,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -419,7 +419,7 @@ PLANNING DESTOCKEURS*/
       //   {},
       //   {
       //     reload: true,
-      //     inherit: true,
+      //     inherit: false,
       //     notify: true,
       //   }
       // );
@@ -432,7 +432,7 @@ PLANNING DESTOCKEURS*/
       //   {},
       //   {
       //     reload: true,
-      //     inherit: true,
+      //     inherit: false,
       //     notify: true,
       //   }
       // );
@@ -446,7 +446,7 @@ PLANNING DESTOCKEURS*/
       //   {},
       //   {
       //     reload: true,
-      //     inherit: true,
+      //     inherit: false,
       //     notify: true,
       //   }
       // );
@@ -459,7 +459,7 @@ PLANNING DESTOCKEURS*/
       //   {},
       //   {
       //     reload: true,
-      //     inherit: true,
+      //     inherit: false,
       //     notify: true,
       //   }
       // );
@@ -472,7 +472,7 @@ PLANNING DESTOCKEURS*/
       //   {},
       //   {
       //     reload: true,
-      //     inherit: true,
+      //     inherit: false,
       //     notify: true,
       //   }
       // );
@@ -487,7 +487,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -499,7 +499,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -511,7 +511,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -778,7 +778,7 @@ PLANNING DESTOCKEURS*/
               {},
               {
                 reload: true,
-                inherit: true,
+                inherit: false,
                 notify: true,
               }
             );
@@ -2471,7 +2471,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -3702,18 +3702,18 @@ PLANNING DESTOCKEURS*/
     $scope.recherche = function () {
 
       console.log('-----recherche-----');
-      ApiListClient.getListClient().success(
-        function (response) {
-          $ionicLoading.hide();
-          if (response) {
-            $scope.data.client = response;
-          }
-          console.log("....", $scope.data.client);
-        },
-        (error) => {
-          $ionicLoading.hide();
-        }
-      );
+      // ApiListClient.getListClient().success(
+      //   function (response) {
+      //     $ionicLoading.hide();
+      //     if (response) {
+      //       $scope.data.client = response;
+      //     }
+      //     console.log("....", $scope.data.client);
+      //   },
+      //   (error) => {
+      //     $ionicLoading.hide();
+      //   }
+      // );
 
       var mot = { motRecherche: $scope.data.searchValue };
       console.log("mot", mot)
@@ -3742,6 +3742,7 @@ PLANNING DESTOCKEURS*/
       }
     }
     $scope.resetSearch = function () {
+      $scope.data.searchValue = null;
       $scope.data.clients = $scope.data.clientTempon;
     }
 
@@ -3789,123 +3790,121 @@ PLANNING DESTOCKEURS*/
     };
     //Init variables of controller
 
+    $scope.getAdresseGoogleNew = function (cli) {
+      var options = { timeout: 10000, enableHighAccuracy: true };
+
+      navigator.geolocation.getCurrentPosition(function (position) {
+        var lat = 0;
+        var lng = 0;
+        if (cli.position && cli.position !== '' && cli.position !== ',' && cli.position !== ' ') {
+          coords = null;
+          coords = cli.position.split(',');
+          if (coords && coords.length > 0) {
+            lat = +coords[0];
+            lng = +coords[1];
+          }
+        } else {
+          lat = position.coords.latitude;
+          lng = position.coords.longitude;
+        }
+
+
+        console.log(cli.position)
+        console.log(lat, lng)
+        var latlng = new google.maps.LatLng(lat, lng);
+
+        var geocoder = new google.maps.Geocoder();
+        var request = {
+          latLng: latlng
+        };
+        $ionicLoading.show({
+          template: 'Localisation en cours...'
+        });
+        geocoder.geocode(request, function (data, status) {
+          $ionicLoading.hide();
+          if (status == google.maps.GeocoderStatus.OK) {
+            if (data[0] != null) {
+              cli.adresseGoogle = data[0].formatted_address;
+              $ionicLoading.show({
+                template: 'Synchronisation en cours...'
+              });
+              console.log(cli)
+              var user = localStorage.getItem("user");
+              $scope.data.user = JSON.parse(user);
+
+              cli.codeCommerciale = $scope.data.user.code
+              cli.idDepartement = +cli.idDepartement
+              cli.idLocalite = +cli.idLocalite
+              console.log(cli)
+              ApiAjoutClient.ajoutClient(cli, false).success(function (response) {
+                $ionicLoading.hide();
+                if (response.reponse === 1) {
+
+                } else {
+                  console.log(response);
+                }
+              }, error => {
+                $ionicLoading.hide();
+              });
+            } else {
+              cli.adresseGoogle = 'Adresse introuvable';
+            }
+          }
+          $ionicLoading.hide();
+        })
+
+      })
+
+    };
+
+    $scope.getAdresseGoogle = function (latlng) {
+      $scope.data.adresseUser;
+      // $scope.nomclient = user.nom;
+      var options = { timeout: 10000, enableHighAccuracy: true };
+
+      $window.navigator.geolocation.getCurrentPosition(function (position) {
+        $scope.$apply(function () {
+          //   $scope.lat = position.Coordinates.latitude;
+          //  $scope.lng = position.Coordinates.longitude;
+
+          var geocoder = new google.maps.Geocoder();
+          // var latlng = new google.maps.LatLng($scope.lat, $scope.lng);
+          var request = {
+            latLng: latlng
+          };
+          geocoder.geocode(request, function (data, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+              if (data[0] != null) {
+                $scope.data.adresseUser = data[0].formatted_address;
+                // alert("address is: " + data[0].formatted_address);
+              } else {
+                $scope.data.adresseUser = 'Adresse introuvable';
+                // alert("No address available");
+              }
+            }
+          })
+
+        })
+      })
+    };
+
     $scope.listClients = function () {
 
-      console.log("This is stock module");
+      // console.log("This is stock module");
+
       $ionicLoading.show({
         content: "Loading",
         animation: "fade-in",
         showBackdrop: true,
         maxWidth: 200,
-        showDelay: 0,
-        duration: 10000,
       });
-
-      $scope.getAdresseGoogleNew = function (cli) {
-        var options = { timeout: 10000, enableHighAccuracy: true };
-
-        navigator.geolocation.getCurrentPosition(function (position) {
-          var lat = 0;
-          var lng = 0;
-          if (cli.position && cli.position !== '' && cli.position !== ',' && cli.position !== ' ') {
-            coords = null;
-            coords = cli.position.split(',');
-            if (coords && coords.length > 0) {
-              lat = +coords[0];
-              lng = +coords[1];
-            }
-          } else {
-            lat = position.coords.latitude;
-            lng = position.coords.longitude;
-          }
-
-
-          console.log(cli.position)
-          console.log(lat, lng)
-          var latlng = new google.maps.LatLng(lat, lng);
-
-          var geocoder = new google.maps.Geocoder();
-          var request = {
-            latLng: latlng
-          };
-          $ionicLoading.show({
-            template: 'Localisation en cours...'
-          });
-          geocoder.geocode(request, function (data, status) {
-            $ionicLoading.hide();
-            if (status == google.maps.GeocoderStatus.OK) {
-              if (data[0] != null) {
-                cli.adresseGoogle = data[0].formatted_address;
-                $ionicLoading.show({
-                  template: 'Synchronisation en cours...'
-                });
-                console.log(cli)
-                var user = localStorage.getItem("user");
-                $scope.data.user = JSON.parse(user);
-
-                cli.codeCommerciale = $scope.data.user.code
-                cli.idDepartement = +cli.idDepartement
-                cli.idLocalite = +cli.idLocalite
-                console.log(cli)
-                ApiAjoutClient.ajoutClient(cli, false).success(function (response) {
-                  $ionicLoading.hide();
-                  if (response.reponse === 1) {
-
-                  } else {
-                    console.log(response);
-                  }
-                }, error => {
-                  $ionicLoading.hide();
-                });
-              } else {
-                cli.adresseGoogle = 'Adresse introuvable';
-              }
-            }
-            $ionicLoading.hide();
-          })
-
-        })
-
-      };
-
-      $scope.getAdresseGoogle = function (latlng) {
-        $scope.data.adresseUser;
-        // $scope.nomclient = user.nom;
-        var options = { timeout: 10000, enableHighAccuracy: true };
-
-        $window.navigator.geolocation.getCurrentPosition(function (position) {
-          $scope.$apply(function () {
-            //   $scope.lat = position.Coordinates.latitude;
-            //  $scope.lng = position.Coordinates.longitude;
-
-            var geocoder = new google.maps.Geocoder();
-            // var latlng = new google.maps.LatLng($scope.lat, $scope.lng);
-            var request = {
-              latLng: latlng
-            };
-            geocoder.geocode(request, function (data, status) {
-              if (status == google.maps.GeocoderStatus.OK) {
-                if (data[0] != null) {
-                  $scope.data.adresseUser = data[0].formatted_address;
-                  // alert("address is: " + data[0].formatted_address);
-                } else {
-                  $scope.data.adresseUser = 'Adresse introuvable';
-                  // alert("No address available");
-                }
-              }
-            })
-
-          })
-        })
-      };
       // $scope.getAdresseGoogle();
-      ApiListClient.getListClient().success(
-
-        function (response) {
+      ApiListClient.getListClient().success(function (response) {
           $ionicLoading.hide();
           if (response) {
 
             $scope.data.clients = response;
+            $scope.data.client  = response;
           }
           console.log(response);
 
@@ -3921,16 +3920,13 @@ PLANNING DESTOCKEURS*/
                 var lng = coordonnees[1]
 
                 var latLng = new google.maps.LatLng(lat, lng);
-                $scope.getAdresseGoogle(latLng);
+                //$scope.getAdresseGoogle(latLng);
 
               }
             }
             adresses.push({ position: adresseClient[i].position });
 
           }
-
-
-
         },
         (error) => {
           $ionicLoading.hide();
@@ -3971,7 +3967,7 @@ PLANNING DESTOCKEURS*/
                 {},
                 {
                   reload: true,
-                  inherit: true,
+                  inherit: false,
                   notify: true,
                 }
               );
@@ -3993,7 +3989,7 @@ PLANNING DESTOCKEURS*/
           {},
           {
             reload: true,
-            inherit: true,
+            inherit: false,
             notify: true,
           }
         );
@@ -4019,7 +4015,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -4032,7 +4028,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -4124,7 +4120,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -4156,7 +4152,7 @@ PLANNING DESTOCKEURS*/
               {},
               {
                 reload: true,
-                inherit: true,
+                inherit: false,
                 notify: true,
               }
             );
@@ -4170,7 +4166,7 @@ PLANNING DESTOCKEURS*/
           {},
           {
             reload: true,
-            inherit: true,
+            inherit: false,
             notify: true,
           }
         );
@@ -4196,7 +4192,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -4686,7 +4682,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -4864,7 +4860,7 @@ PLANNING DESTOCKEURS*/
                 {},
                 {
                   reload: true,
-                  inherit: true,
+                  inherit: false,
                   notify: true,
                 }
               );
@@ -4892,7 +4888,7 @@ PLANNING DESTOCKEURS*/
                  {},
                  {
                    reload: true,
-                   inherit: true,
+                   inherit: false,
                    notify: true,
                  }
                );*/
@@ -5080,7 +5076,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -5462,7 +5458,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -5475,7 +5471,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -5488,7 +5484,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -5501,7 +5497,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -6079,7 +6075,7 @@ PLANNING DESTOCKEURS*/
                 {},
                 {
                   reload: true,
-                  inherit: true,
+                  inherit: false,
                   notify: true,
                 }
               );
@@ -6151,7 +6147,7 @@ PLANNING DESTOCKEURS*/
                         {},
                         {
                           reload: true,
-                          inherit: true,
+                          inherit: false,
                           notify: true,
                         }
                       );
@@ -6676,7 +6672,7 @@ PLANNING DESTOCKEURS*/
 
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -6689,7 +6685,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -6702,7 +6698,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -6715,7 +6711,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -7057,7 +7053,7 @@ PLANNING DESTOCKEURS*/
                     {},
                     {
                       reload: true,
-                      inherit: true,
+                      inherit: false,
                       notify: true,
                     }
                   );
@@ -7119,7 +7115,7 @@ PLANNING DESTOCKEURS*/
                             {},
                             {
                               reload: true,
-                              inherit: true,
+                              inherit: false,
                               notify: true,
                             }
                           );
@@ -8443,7 +8439,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -8753,7 +8749,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -8768,7 +8764,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -8787,7 +8783,7 @@ PLANNING DESTOCKEURS*/
           {},
           {
             reload: true,
-            inherit: true,
+            inherit: false,
             notify: true,
           }
         );
@@ -8799,7 +8795,7 @@ PLANNING DESTOCKEURS*/
           {},
           {
             reload: true,
-            inherit: true,
+            inherit: false,
             notify: true,
           }
         );
@@ -8932,7 +8928,7 @@ PLANNING DESTOCKEURS*/
                   {},
                   {
                     reload: true,
-                    inherit: true,
+                    inherit: false,
                     notify: true,
                   }
                 );
@@ -9458,7 +9454,7 @@ PLANNING DESTOCKEURS*/
           {},
           {
             reload: true,
-            inherit: true,
+            inherit: false,
             notify: true,
           }
         );
@@ -9544,7 +9540,7 @@ PLANNING DESTOCKEURS*/
           {},
           {
             reload: true,
-            inherit: true,
+            inherit: false,
             notify: true,
           }
         );
@@ -9692,7 +9688,7 @@ PLANNING DESTOCKEURS*/
           {},
           {
             reload: true,
-            inherit: true,
+            inherit: false,
             notify: true,
           }
         );
@@ -9801,7 +9797,7 @@ PLANNING DESTOCKEURS*/
           {},
           {
             reload: true,
-            inherit: true,
+            inherit: false,
             notify: true,
           }
         );
@@ -10111,7 +10107,7 @@ PLANNING DESTOCKEURS*/
           {},
           {
             reload: true,
-            inherit: true,
+            inherit: false,
             notify: true,
           }
         );
@@ -10140,7 +10136,7 @@ PLANNING DESTOCKEURS*/
           {},
           {
             reload: true,
-            inherit: true,
+            inherit: false,
             notify: true,
           }
         );
@@ -10216,7 +10212,7 @@ PLANNING DESTOCKEURS*/
                     {},
                     {
                       reload: true,
-                      inherit: true,
+                      inherit: false,
                       notify: true,
                     }
                   );
@@ -10332,7 +10328,7 @@ PLANNING DESTOCKEURS*/
                     {},
                     {
                       reload: true,
-                      inherit: true,
+                      inherit: false,
                       notify: true,
                     }
                   );
@@ -11038,7 +11034,7 @@ PLANNING DESTOCKEURS*/
                     {},
                     {
                       reload: true,
-                      inherit: true,
+                      inherit: false,
                       notify: true,
                     }
                   );
@@ -11352,7 +11348,7 @@ PLANNING DESTOCKEURS*/
           {},
           {
             reload: true,
-            inherit: true,
+            inherit: false,
             notify: true,
           }
         );
@@ -11559,7 +11555,7 @@ PLANNING DESTOCKEURS*/
                 {},
                 {
                   reload: true,
-                  inherit: true,
+                  inherit: false,
                   notify: true,
                 }
               );
@@ -11730,11 +11726,33 @@ PLANNING DESTOCKEURS*/
     $ionicPopup,
     ApiRecapPdsPrc,
     ApiListFacturation,
-    SeparateurMillier
+    SeparateurMillier,
+    ApiRechercheVente
+    
   ) {
     console.log("Facture");
 
     $scope.data = {};
+
+    $scope.resetSearch = function () {
+      $scope.data.searchValue = null;
+      $scope.data.facturations = $scope.data.facturationTempon;
+    }
+    $scope.recherche = function () {
+
+      console.log('-----recherche-----');
+      
+      if ($scope.data.searchValue) {
+        ApiRechercheVente.getVenteSearch($scope.data.searchValue)
+            .success(function (reponse) {
+              console.log(reponse)
+              if(reponse){
+                $scope.data.facturations = reponse;
+              }
+              
+            })
+      }
+    }
 
 
     $scope.testPrint = function (fact) {
@@ -11822,7 +11840,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -11845,12 +11863,10 @@ PLANNING DESTOCKEURS*/
           function (response) {
             $ionicLoading.hide();
             if (response) {
-              $scope.data.facturations = response;
+              $scope.data.facturations      = response;
+              $scope.data.facturationTempon = response;
             }
-            console.log(
-              "-----------------------Facturation----------------------"
-            );
-            console.log(response);
+            
           },
           (error) => {
             $ionicLoading.hide();
@@ -11868,7 +11884,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -11881,7 +11897,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -12014,7 +12030,7 @@ PLANNING DESTOCKEURS*/
                     {},
                     {
                       reload: true,
-                      inherit: true,
+                      inherit: false,
                       notify: true,
                     }
                   );
@@ -12509,7 +12525,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -13434,7 +13450,7 @@ PLANNING DESTOCKEURS*/
                         {},
                         {
                           reload: true,
-                          inherit: true,
+                          inherit: false,
                           notify: true,
                         }
                       );
@@ -13851,7 +13867,7 @@ PLANNING DESTOCKEURS*/
       localStorage.setItem('codePDS', codePDS);
       $state.transitionTo('app.dechargement', {}, {
         reload: true,
-        inherit: true,
+        inherit: false,
         notify: true
       });
     }
@@ -13935,7 +13951,7 @@ PLANNING DESTOCKEURS*/
 
                 $state.transitionTo('app.dechargements', {}, {
                   reload: true,
-                  inherit: true,
+                  inherit: false,
                   notify: true
                 });
               }
@@ -13962,7 +13978,7 @@ PLANNING DESTOCKEURS*/
                 $scope.annulerVersement();
                 $state.transitionTo('app.dechargements', {}, {
                   reload: true,
-                  inherit: true,
+                  inherit: false,
                   notify: true
                 });
               }
@@ -13971,7 +13987,7 @@ PLANNING DESTOCKEURS*/
 
                 $state.transitionTo('app.dechargements', {}, {
                   reload: true,
-                  inherit: true,
+                  inherit: false,
                   notify: true
                 });
               }
@@ -14073,7 +14089,7 @@ PLANNING DESTOCKEURS*/
                     {},
                     {
                       reload: true,
-                      inherit: true,
+                      inherit: false,
                       notify: true,
                     }
                   );
@@ -14377,7 +14393,7 @@ PLANNING DESTOCKEURS*/
       localStorage.setItem('codeDechargement', codeDechargement);
       $state.transitionTo('app.details-dechargement', {}, {
         reload: true,
-        inherit: true,
+        inherit: false,
         notify: true
       });
     }
@@ -14387,7 +14403,7 @@ PLANNING DESTOCKEURS*/
       localStorage.setItem('codePDS', codePDS);
       $state.transitionTo('app.dechargement', {}, {
         reload: true,
-        inherit: true,
+        inherit: false,
         notify: true
       });
     }
@@ -14421,7 +14437,7 @@ PLANNING DESTOCKEURS*/
 
       $state.transitionTo('app.paiementgrossiste', {}, {
         reload: true,
-        inherit: true,
+        inherit: false,
         notify: true
       });
     }
@@ -14488,7 +14504,7 @@ PLANNING DESTOCKEURS*/
       localStorage.setItem('codeDechargement', codeDechargement);
       $state.transitionTo('app.details-dechargement', {}, {
         reload: true,
-        inherit: true,
+        inherit: false,
         notify: true
       });
     }
@@ -14498,7 +14514,7 @@ PLANNING DESTOCKEURS*/
       //  localStorage.setItem('codePDS', codePDS);
       $state.transitionTo('app.dechargement', {}, {
         reload: true,
-        inherit: true,
+        inherit: false,
         notify: true
       });
     }
@@ -14548,7 +14564,7 @@ PLANNING DESTOCKEURS*/
       localStorage.setItem('codePdsVersement', vers.codePDS);
       $state.transitionTo('app.details-versement', {}, {
         reload: true,
-        inherit: true,
+        inherit: false,
         notify: true
       });
     }
@@ -14686,7 +14702,7 @@ PLANNING DESTOCKEURS*/
                     }
                     $state.transitionTo('app.versements', {}, {
                       reload: true,
-                      inherit: true,
+                      inherit: false,
                       notify: true
                     });
                   }
@@ -14748,7 +14764,7 @@ PLANNING DESTOCKEURS*/
       localStorage.setItem('versement', vers);
       $state.transitionTo('app.details-versement', {}, {
         reload: true,
-        inherit: true,
+        inherit: false,
         notify: true
       });
     }
@@ -14791,7 +14807,7 @@ PLANNING DESTOCKEURS*/
 
               $state.transitionTo('app.versements', {}, {
                 reload: true,
-                inherit: true,
+                inherit: false,
                 notify: true
               });
             }
@@ -14823,7 +14839,7 @@ PLANNING DESTOCKEURS*/
 
                 $state.transitionTo('app.versements', {}, {
                   reload: true,
-                  inherit: true,
+                  inherit: false,
                   notify: true
                 });
               }
@@ -14849,7 +14865,7 @@ PLANNING DESTOCKEURS*/
 
                 $state.transitionTo('app.dechargements', {}, {
                   reload: true,
-                  inherit: true,
+                  inherit: false,
                   notify: true
                 });
               }
@@ -15022,7 +15038,7 @@ PLANNING DESTOCKEURS*/
     $scope.goToNewInventaire = function () {
       $state.transitionTo('app.nouvel-inventaire', {}, {
         reload: true,
-        inherit: true,
+        inherit: false,
         notify: true
       });
     }
@@ -15036,7 +15052,7 @@ PLANNING DESTOCKEURS*/
       localStorage.setItem('codeInventaire', inv.codeInventaire);
       $state.transitionTo('app.details-inventaire', {}, {
         reload: true,
-        inherit: true,
+        inherit: false,
         notify: true
       });
     }
@@ -15095,7 +15111,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -15149,7 +15165,7 @@ PLANNING DESTOCKEURS*/
                   {},
                   {
                     reload: true,
-                    inherit: true,
+                    inherit: false,
                     notify: true,
                   }
                 );
@@ -15172,7 +15188,7 @@ PLANNING DESTOCKEURS*/
       localStorage.setItem('codePdsVersement', inv.codePDS);
       $state.transitionTo('app.details-versement', {}, {
         reload: true,
-        inherit: true,
+        inherit: false,
         notify: true
       });
     }
@@ -15475,7 +15491,7 @@ PLANNING DESTOCKEURS*/
               {},
               {
                 reload: true,
-                inherit: true,
+                inherit: false,
                 notify: true,
               }
             );
@@ -15506,7 +15522,7 @@ PLANNING DESTOCKEURS*/
       localStorage.setItem('codePdsVersement', inv.codePDS);
       $state.transitionTo('app.details-versement', {}, {
         reload: true,
-        inherit: true,
+        inherit: false,
         notify: true
       });
     }
@@ -15628,7 +15644,7 @@ PLANNING DESTOCKEURS*/
                     {},
                     {
                       reload: true,
-                      inherit: true,
+                      inherit: false,
                       notify: true,
                     }
                   );
@@ -15765,7 +15781,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -15813,8 +15829,9 @@ PLANNING DESTOCKEURS*/
 
     ApiListcreditclient.getListecreditclient().success(function (response) {
       if (response) {
-        console.log('Valeur camion', response)
+        console.log('Credit client', response)
         $scope.data.listcreditclient = response;
+
       }
     })
 
@@ -15906,7 +15923,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -15919,7 +15936,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -15942,7 +15959,7 @@ PLANNING DESTOCKEURS*/
                 {},
                 {
                   reload: true,
-                  inherit: true,
+                  inherit: false,
                   notify: true,
                 }
               );
@@ -16012,7 +16029,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -16194,7 +16211,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -16773,7 +16790,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -16902,7 +16919,7 @@ PLANNING DESTOCKEURS*/
                   {},
                   {
                     reload: true,
-                    inherit: true,
+                    inherit: false,
                     notify: true,
                   }
                 );
@@ -16965,7 +16982,7 @@ PLANNING DESTOCKEURS*/
         {},
         {
           reload: true,
-          inherit: true,
+          inherit: false,
           notify: true,
         }
       );
@@ -17107,7 +17124,7 @@ PLANNING DESTOCKEURS*/
                     {},
                     {
                       reload: true,
-                      inherit: true,
+                      inherit: false,
                       notify: true,
                     }
                   );
@@ -17276,6 +17293,18 @@ PLANNING DESTOCKEURS*/
         return $http.post(url + "/utilisateur/stock.php", params);
       },
     };
+  })
+  .factory('ApiRechercheVente', function ($http, urlPhp) {
+    return {
+      getVenteSearch: function (motsearch) {
+        var url = urlPhp.getUrl();
+        var user = localStorage.getItem('user');
+        user = JSON.parse(user);
+        // console.log(user);
+          var params = {codeCommerciale:user.code, motRecherche: motsearch}
+        return $http.post(url + '/facture/recherche.php', params);
+      }
+    }
   })
   .factory("ApiListLocationAgent", function ($http, urlPhp) {
     return {
@@ -18388,8 +18417,13 @@ PLANNING DESTOCKEURS*/
 
     return {
       getUrl: function () {
+<<<<<<< HEAD
          return "http://test-test.h-tsoft.com/apiagroline";
       //  return "http://test-test.h-tsoft.com/apiagrolineprod";
+=======
+        //return "http://test-test.h-tsoft.com/apiagroline";
+        return "http://test-test.h-tsoft.com/apiagrolineprod";
+>>>>>>> bb06e902533684486146e7182a06efc093a67285
         //return "http://htsoftdemo.com/apiccbm";
         //return "http://192.168.1.34/CCBM-serveur";
         //  return "http://mob-test.yosard.com/webservice";
@@ -18615,7 +18649,7 @@ PLANNING DESTOCKEURS*/
                   {},
                   {
                     reload: true,
-                    inherit: true,
+                    inherit: false,
                     notify: true,
                   }
                 );

@@ -169,17 +169,21 @@
           </div>
           <!-- taux de presence -->
           <div class="row">
-            <div class="col" ng-click="goToTauxDePresences()">
+            <div class="col" ng-click="goToTauxDePresences()" ng-if="permission('RELEVE TAUX DE PRESENCE')">
               <div class="card cardHome" style="background-color: #28a54c; color: white">
                 <div class="item item-text-wrap">
                   <p style="text-align: center"><img src="./img/taux.png" style="width:30%; height: 10%;"></p>
                 </div>
                 <p style="color: white;text-align: center;margin-top: 10px">
+<<<<<<< HEAD
                   <a href="#/app/tauxdepresences" style="color: white;text-decoration:none;">Taux de présence</a>
+=======
+                  <a style="color: white;text-decoration:none;">Taux de présence</a>
+>>>>>>> bb06e902533684486146e7182a06efc093a67285
                 </p>
               </div>
             </div>
-            <div class="col" ng-click="goToTauxDePresences()">
+            <div class="col">
              
             </div>
           </div>
