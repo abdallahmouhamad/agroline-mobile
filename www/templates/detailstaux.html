@@ -124,11 +124,11 @@
 
         <div class="col content-div-row" ng-if="d.idMotif !== 'edit'"
             ng-click="showPopUp(d.libelle, 1, d.codeArticle)">
-            {{d.codeArticle}}
+            {{d.codeArticle}} {{d.categorie}} {{d.libelle}} {{d.poids}}
         </div>
         <div class="col content-div-row edit" ng-if="d.idMotif === 'edit'"
             ng-click="showPopUp(d.libelle, 1, d.codeArticle)">
-            {{d.codeArticle}}
+            {{d.codeArticle}} {{d.categorie}} {{d.libelle}} {{d.poids}}
         </div>
 
        

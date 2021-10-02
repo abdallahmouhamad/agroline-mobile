@@ -15988,6 +15988,23 @@ PLANNING DESTOCKEURS*/
     }
     console.log(" id taux de presence",  codeTauxpresence)
 
+    $scope.showPopUp = function (libelle, etat, code = "") {
+      $ionicPopup.show({
+        title: etat == 1 ? "Code: " + code : "",
+        template:
+          etat == 1
+            ? libelle
+            : '<img src="http://test-test.h-tsoft.com/{{libelle}}">',
+        scope: $scope,
+        buttons: [
+          {
+            text: "Ok",
+            type: "button-assertive",
+          },
+        ],
+      });
+    };
+
     $scope.goToDetailsTaux = function (codeTauxpresence) {
       localStorage.setItem('codeTauxpresence', codeTauxpresence)
       $state.transitionTo(
@@ -16145,6 +16162,8 @@ PLANNING DESTOCKEURS*/
       
     };
     $scope.detailslistTauxPresence = function () {
+      $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
+
       ApiDetailsTauxPresences.getDetailsTauxPresences(codeTauxpresence)
       .success(function (response) {
         $ionicLoading.hide();
@@ -16221,22 +16240,24 @@ PLANNING DESTOCKEURS*/
     $scope.data.bol = false;
   
 
-    $scope.showPopUp = function (libelle, etat, code = "") {
-      $ionicPopup.show({
-        title: etat == 1 ? "Code: " + code : "",
-        template:
-          etat == 1
-            ? libelle
-            : '<img src="http://test-test.h-tsoft.com/{{libelle}}">',
-        scope: $scope,
-        buttons: [
-          {
-            text: "Ok",
-            type: "button-assertive",
-          },
-        ],
-      });
-    };
+    // $scope.showPopUp = function (libelle, etat, code = "") {
+      
+    //   $ionicPopup.show({
+    //     title: etat == 1 ? "Code: " + code : "",
+    //     template:
+    //       etat == 1
+    //         ? libelle
+    //         : '<img src="http://test-test.h-tsoft.com/{{libelle}}">',
+            
+    //     scope: $scope,
+    //     buttons: [
+    //       {
+    //         text: "Ok",
+    //         type: "button-assertive",
+    //       },
+    //     ],
+    //   });
+    // };
 
     $scope.editDetail = function (item, action) {
       $scope.edit       = true;
@@ -16690,6 +16711,7 @@ PLANNING DESTOCKEURS*/
                   code        :$scope.details.details[i].codeArticle,
                   libelle     :$scope.details.details[i].libelle,
                   categorie   :$scope.details.details[i].categorie,
+                  poids   :$scope.details.details[i].poids,
                   present     :$scope.details.details[i].present == 1 ? true : false,
                   ouvert      :$scope.details.details[i].ouvert  == 1 ? true : false
                 }
@@ -16710,6 +16732,7 @@ PLANNING DESTOCKEURS*/
          // $scope.data.recuperationarticle = $scope.data.listarticles;
      //  console.log($scope.data.recuperationarticle);
          $scope.data.detailsPDC = response;
+         console.log("recup",$scope.data.detailsPDC);
             
             //  for(var i=0;i<$scope.details.details.length;i++){
             //    $scope.data.artcilechoisit = null;
@@ -16787,8 +16810,8 @@ PLANNING DESTOCKEURS*/
     $scope.submit = function () {
 
       if ($scope.data.clientchoisit && $scope.data.operationchoisit
-        // && $scope.data.raisonSociale && $scope.data.adresse
-        // && $scope.data.telephone
+         && $scope.data.raisonSociale && $scope.data.adresse
+         && $scope.data.telephone
       ) {
         // var codeTauxpresence = $scope.data.user ? $scope.data.codeTauxpresence : "FTP-" + $scope.data.user.code + "-" + CodeGenere.getCodeGenere();
         var details = [];
@@ -16843,6 +16866,13 @@ PLANNING DESTOCKEURS*/
             
           }else{
             values.details[j].ouvert = 0;
+          }
+
+          if( values.details[j].codeArticle !== 0){
+            values.details[j].codeArticle = "" + values.details[j].codeArticle;
+            
+          }else{
+            values.details[j].codeArticle =values.details[j].codeArticle;
           }
         }
         console.log("values",values)
@@ -18359,7 +18389,7 @@ PLANNING DESTOCKEURS*/
     return {
       getUrl: function () {
          return "http://test-test.h-tsoft.com/apiagroline";
-       // return "http://test-test.h-tsoft.com/apiagrolineprod";
+      //  return "http://test-test.h-tsoft.com/apiagrolineprod";
         //return "http://htsoftdemo.com/apiccbm";
         //return "http://192.168.1.34/CCBM-serveur";
         //  return "http://mob-test.yosard.com/webservice";
