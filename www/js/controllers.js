@@ -227,7 +227,6 @@ PLANNING DESTOCKEURS*/
 
 
             localStorage.setItem("stocks", JSON.stringify($scope.data.listStock));
-            console.log(JSON.parse(localStorage.getItem("stocks")))
           }
 
           console.log(response);
@@ -954,6 +953,10 @@ PLANNING DESTOCKEURS*/
     $scope.getPosition = function () {
       $scope.nomclient = position.nom;
       $scope.prenomclient = position.prenom;
+      $scope.positionClient = position.position;
+      $scope.adresse = position.adresse;
+
+
       var options = { timeout: 10000, enableHighAccuracy: true };
 
       $cordovaGeolocation.getCurrentPosition(options).then(
@@ -996,17 +999,17 @@ PLANNING DESTOCKEURS*/
               icon: "http://i.imgur.com/fDUI8bZ.png",
 
             });
-            var contentString = '<div><button ng-click="clickTest()">itineraire !</button></div>';
+            var contentString = '<div><button ng-click="clickTest()"><a href= "https://www.google.com/maps/dir//@{{$scope.positionClient}}z">Lien Google</a></button></div>';
             var compiled = $compile(contentString)($scope);
             // var url = "https://www.google.com/maps/place/"+ lat + "," + lng;
             var infoWindow = new google.maps.InfoWindow({
-              content: "Position point de vente!"
+              content: "Point de vente!"
                 + "<br/>Raison social: " + $scope.nomclient
+                + "<br/>Adresse:"+ $scope.adresse
                 + "<br/>"
                 + "<br/>" + contentString
 
               //  + "<br/>" + url
-              //+ "<br/>" + '<a href= "https://www.google.com/maps/place/"+ lat + "," + lng>Lien</a>'
 
             });
 
@@ -3587,12 +3590,17 @@ PLANNING DESTOCKEURS*/
       showDelay: 0,
       duration: 10000,
     });
+    console.log("liststock 1" );
+
     ApiListStock.getListStock().success(
+     
+
       function (response) {
+        console.log("liststock 2" );
         $ionicLoading.hide();
         if (response) {
           $scope.data.listStock = response;
-
+          console.log("liststock", $scope.data.listStock);
           for (var i = 0; i < $scope.data.listStock.length; i++) {
             if ($scope.data.listStock.quantite != " ") {
               $scope.data.listStock.quantite = parseInt($scope.data.listStock[i].quantite);
@@ -3601,7 +3609,6 @@ PLANNING DESTOCKEURS*/
             }
           }
           localStorage.setItem("stocks", JSON.stringify($scope.data.listStock));
-          console.log(JSON.parse(localStorage.getItem("stocks")))
 
         }
         console.log(response);
@@ -3646,7 +3653,7 @@ PLANNING DESTOCKEURS*/
     var clientca = localStorage.getItem('clientca')
     $scope.clientCa = clientca ? JSON.parse(clientca) : null;
     var user = JSON.parse(localStorage.getItem("user"));
-
+   
     $scope.getPosition = function () {
       $scope.nomclient = user.nom;
       var options = { timeout: 10000, enableHighAccuracy: true };
@@ -3784,12 +3791,38 @@ PLANNING DESTOCKEURS*/
 
     $scope.initvar = function () {
       $scope.data.clients = [];
+      $scope.data.positionclients= [];
       $scope.listClients();
       // $scope.selectDepartementByRegion();
       //  $scope.selectLocaliteByDepartement();
     };
     //Init variables of controller
+    $scope.goTogoogle= function (cli) {
+      $scope.listClients();
+      ApiListClient.getListClient().success(
+        function (response) {
+          $ionicLoading.hide();
+          if (response) {
+            $scope.data.positionclients = response;
+          }
+          console.log(response);
+        },
+        (error) => {
+          $ionicLoading.hide();
+        }
+      );
+      console.log("cli.position",cli.position);
+      $state.transitionTo(
+        "http://www.google.com/maps/place/{{cli.position}}",
+        {},
+        {
+          reload: true,
+          inherit: false,
+          notify: true,
+        }
+      );
 
+    }
     $scope.getAdresseGoogleNew = function (cli) {
       var options = { timeout: 10000, enableHighAccuracy: true };
 
@@ -3900,34 +3933,34 @@ PLANNING DESTOCKEURS*/
       });
       // $scope.getAdresseGoogle();
       ApiListClient.getListClient().success(function (response) {
-          $ionicLoading.hide();
-          if (response) {
+        $ionicLoading.hide();
+        if (response) {
 
-            $scope.data.clients = response;
-            $scope.data.client  = response;
-          }
-          console.log(response);
+          $scope.data.clients = response;
+          $scope.data.client = response;
+        }
+        console.log(response);
 
-          var adresses = [];
+        var adresses = [];
 
-          var adresseClient = $scope.data.clients;
-          for (var i = 0; i < adresseClient.length; i++) {
+        var adresseClient = $scope.data.clients;
+        for (var i = 0; i < adresseClient.length; i++) {
 
-            if (adresseClient[i].position) {
-              var coordonnees = adresseClient[i].position.split(',')
-              if (coordonnees && coordonnees.length == 2) {
-                var lat = coordonnees[0]
-                var lng = coordonnees[1]
+          if (adresseClient[i].position) {
+            var coordonnees = adresseClient[i].position.split(',')
+            if (coordonnees && coordonnees.length == 2) {
+              var lat = coordonnees[0]
+              var lng = coordonnees[1]
 
-                var latLng = new google.maps.LatLng(lat, lng);
-                //$scope.getAdresseGoogle(latLng);
+              var latLng = new google.maps.LatLng(lat, lng);
+              //$scope.getAdresseGoogle(latLng);
 
-              }
             }
-            adresses.push({ position: adresseClient[i].position });
-
           }
-        },
+          adresses.push({ position: adresseClient[i].position });
+
+        }
+      },
         (error) => {
           $ionicLoading.hide();
         }
@@ -3939,10 +3972,9 @@ PLANNING DESTOCKEURS*/
 
     $scope.goToNewClient = function (item = null, sens) {
       localStorage.setItem('sens', sens)
-
+      //  var sens = JSON.parse(localStorage.getItem("sens"));
+      console.log("sens", sens);
       if (sens == 'edit') {
-
-
         var codeClient = {
           codeClient: item.codeClient,
           idTypepointvente: item.idTypepointvente,
@@ -4234,6 +4266,7 @@ PLANNING DESTOCKEURS*/
     ApiListRegions,
     ApiListVilles,
     ApiListMarches,
+    ApiListMarches,
     ApiListZones,
     ApiListLocalite,
     ApiListTypePointVente,
@@ -4287,7 +4320,7 @@ PLANNING DESTOCKEURS*/
         })
       })
     };
-    //  $scope.getAdresse();
+    // $scope.getAdresse();
     $scope.getPosition = function () {
       $scope.nomclient = user.nom;
       var options = { timeout: 10500, enableHighAccuracy: true };
@@ -4344,7 +4377,7 @@ PLANNING DESTOCKEURS*/
       );
     };
 
-    //  $scope.getPosition();
+    // $scope.getPosition();
     $scope.initvar = function () {
       $scope.data.user = JSON.parse(localStorage.getItem('user'));
       $scope.data.client = JSON.parse(localStorage.getItem('clientEdit'));
@@ -4471,14 +4504,14 @@ PLANNING DESTOCKEURS*/
       console.log(response);
 
     });
-    /*ApiListMarches.getListMarches().success(function (response) {
+    ApiListMarches.getListMarches().success(function (response) {
       console.log('-----List marches');
       $scope.data.listmarches = response;
       var filerMarche = $scope.data.sens == 'edit' && $scope.data.client.marche ? $filter('filter')($scope.data.listmarches, { libelle: $scope.data.client.marche }) : [];
       $scope.data.marchechoisit = filerMarche && filerMarche.length > 0 ? filerMarche[0] : null;
       console.log(response);
 
-    });*/
+    });
     /*ApiListZones.getListZones().success(function (response) {
       console.log('-----List zone');
       $scope.data.listzones = response;
@@ -11076,10 +11109,50 @@ PLANNING DESTOCKEURS*/
     });
 
     $scope.ajouter = function () {
-      if ($scope.data.quantite && $scope.data.prix && $scope.data.artcilechoisit) {
+      var errorInput = '';
+
+      // if ($scope.data.quantite >= 3000) {
+
+      //   $ionicPopup.show({
+      //     title: 'Alert ',
+      //     template: 'Desolé! Cette quantité dépasse la limite.',
+      //     scope: $scope,
+      //     buttons: [
+      //       {
+      //         text: 'OK',
+      //         type: 'button-positive'
+      //       }
+      //     ]
+      //   });
+      // }
+
+      // if ($scope.data.prix <= 1000) {
+      //   $ionicPopup.show({
+      //     title: 'Alert ',
+      //     template: 'Desolé! Cet article ne vaut pas ce prix.',
+      //     scope: $scope,
+      //     buttons: [
+      //       {
+      //         text: 'OK',
+      //         type: 'button-positive'
+      //       }
+      //     ]
+      //   });
+
+      // }
+
+      errorInput = $scope.data.quantite >= 3000 ? 'Desolé! Cette quantité dépasse la limite.' : errorInput;
+      errorInput = $scope.data.prix <= 1000 ? 'Desolé! Cet article ne vaut pas ce prix.' : errorInput;
+      errorInput = !$scope.data.artcilechoisit ? 'Desolé! Veuillez ajouter un article.' : errorInput;
+      errorInput = !$scope.data.quantite ? 'Desolé! Veuillez ajouter une quantité.' : errorInput;
+      errorInput = !$scope.data.prix ? 'Desolé! Veuillez ajouter un prix.' : errorInput;
+
+      if (errorInput == '') {
         var searchArt = $scope.data.detailsPDS && $scope.data.detailsPDS.length > 0
           ? $filter('filter')($scope.data.detailsPDS, { codeArticle: $scope.data.artcilechoisit.code })
           : [];
+
+
         if (searchArt && searchArt.length > 0) {
           $ionicPopup.show({
             title: 'Alert ',
@@ -11114,10 +11187,14 @@ PLANNING DESTOCKEURS*/
           $scope.data.motifchoisit = null;
         }
 
+
+
+
+
       } else {
         $ionicPopup.show({
           title: 'Alert ',
-          template: 'Desolé! Veuillez ajouter un article avec quantité et prix unitaire.',
+          template: errorInput,
           scope: $scope,
           buttons: [
             {
@@ -11126,8 +11203,8 @@ PLANNING DESTOCKEURS*/
             }
           ]
         });
-      }
 
+      }
     };
     $scope.getOptGrossiste = function (option) {
       return option;
@@ -11728,7 +11805,7 @@ PLANNING DESTOCKEURS*/
     ApiListFacturation,
     SeparateurMillier,
     ApiRechercheVente
-    
+
   ) {
     console.log("Facture");
 
@@ -11741,16 +11818,16 @@ PLANNING DESTOCKEURS*/
     $scope.recherche = function () {
 
       console.log('-----recherche-----');
-      
+
       if ($scope.data.searchValue) {
         ApiRechercheVente.getVenteSearch($scope.data.searchValue)
-            .success(function (reponse) {
-              console.log(reponse)
-              if(reponse){
-                $scope.data.facturations = reponse;
-              }
-              
-            })
+          .success(function (reponse) {
+            console.log(reponse)
+            if (reponse) {
+              $scope.data.facturations = reponse;
+            }
+
+          })
       }
     }
 
@@ -11863,10 +11940,10 @@ PLANNING DESTOCKEURS*/
           function (response) {
             $ionicLoading.hide();
             if (response) {
-              $scope.data.facturations      = response;
+              $scope.data.facturations = response;
               $scope.data.facturationTempon = response;
             }
-            
+
           },
           (error) => {
             $ionicLoading.hide();
@@ -13038,7 +13115,7 @@ PLANNING DESTOCKEURS*/
 
             $scope.data.listarticles = response;
 
-            console.log(response);
+            console.log("article en stock",response);
           },
           (error) => {
             console.log(error);
@@ -13281,9 +13358,6 @@ PLANNING DESTOCKEURS*/
       var errorInput = '';
       $scope.initFact();
 
-
-
-
       $scope.data.fact.idMotif = $scope.data.motifchoisit
         ? $scope.data.motifchoisit.idMotif
         : 0;
@@ -13291,6 +13365,7 @@ PLANNING DESTOCKEURS*/
       $scope.data.fact.position = $scope.position ? $scope.position : '0.0, 0.0';
 
       errorInput = !$scope.data.fact.position ? 'Veillez activez votre position svp.' : errorInput
+      errorInput = $scope.data.fact.prix > prix ? 'Le prix de la vente supérieur au prix du destockage  .' : errorInput
 
 
       if ($scope.data.clientchoisit) {
@@ -15880,7 +15955,7 @@ PLANNING DESTOCKEURS*/
     formatNewDate, ApiRecapFactPrc,
     SeparateurMillier,
     ApiListTauxPresences,
-    ApiListGrossisteDestocke, $filter, ApiListventejour,ApiDetailsTauxPresences) {
+    ApiListGrossisteDestocke, $filter, ApiListventejour, ApiDetailsTauxPresences) {
     console.log('contoller TauxdepresencesCtrl');
 
     $scope.data.listtauxpresences = [];
@@ -15928,7 +16003,7 @@ PLANNING DESTOCKEURS*/
         }
       );
     };
- 
+
     $scope.goToDetailsTaux = function (codeTauxpresence) {
       localStorage.setItem('codeTauxpresence', codeTauxpresence)
       $state.transitionTo(
@@ -15942,7 +16017,7 @@ PLANNING DESTOCKEURS*/
       );
     };
     $scope.goToModifTaux = function (codeTauxpresence) {
-      var  codeTauxpresence = {
+      var codeTauxpresence = {
         codeTauxpresence: codeTauxpresence
       }
       $ionicLoading.show({
@@ -15952,7 +16027,7 @@ PLANNING DESTOCKEURS*/
         .success(function (response) {
           $ionicLoading.hide();
           if (response) {
-            if(response.details){
+            if (response.details) {
               localStorage.setItem('detailstauxpresence', JSON.stringify(response))
               $state.transitionTo(
                 "app.tauxpresence",
@@ -15963,7 +16038,7 @@ PLANNING DESTOCKEURS*/
                   notify: true,
                 }
               );
-              
+
             }
           }
         },
@@ -15971,9 +16046,9 @@ PLANNING DESTOCKEURS*/
             console.log(error);
             $ionicLoading.hide();
           }
-  
+
         );
-      
+
     };
   })
 
@@ -15999,11 +16074,11 @@ PLANNING DESTOCKEURS*/
     var user = localStorage.getItem("user");
     $scope.data.user = JSON.parse(user);
 
-   
-    var  codeTauxpresence = {
+
+    var codeTauxpresence = {
       codeTauxpresence: $scope.codeTauxpresence
     }
-    console.log(" id taux de presence",  codeTauxpresence)
+    console.log(" id taux de presence", codeTauxpresence)
 
     $scope.showPopUp = function (libelle, etat, code = "") {
       $ionicPopup.show({
@@ -16035,10 +16110,10 @@ PLANNING DESTOCKEURS*/
       );
     };
     $scope.editDetail = function (item, action) {
-      $scope.edit       = true;
-      $scope.action     = action;
-      item.idMotif      = "edit";
-      $scope.itemEdit   = item;
+      $scope.edit = true;
+      $scope.action = action;
+      item.idMotif = "edit";
+      $scope.itemEdit = item;
 
       for (var i = 0; i < $scope.details.details.length; i++) {
         if (
@@ -16051,7 +16126,7 @@ PLANNING DESTOCKEURS*/
       }
 
     };
-  
+
     $scope.annulerEdit = function () {
       $scope.edit = false;
       $scope.data.artcilechoisit = null;
@@ -16069,141 +16144,141 @@ PLANNING DESTOCKEURS*/
       }
     }
     $scope.valideEdit = function () {
-      var details  = [];
-        for (var i = 0; i < $scope.details.details[i].length; i++) {
-          var detail = {
-              codeArticle :$scope.details.details[i].codeArticle,
-              }
-          if ($scope.details.details[i].idMotif === "edit" && $scope.details.details[i].codeArticle === $scope.itemEdit.codeArticle
-          ) {
-            if($scope.itemEdit.present == true){
-              detail['present'] = 1;
-            }else{
-              detail['present']  = 0;
-            }
-            if($scope.itemEdit.ouvert == true){
-              detail['ouvert'] = 1;
-            }else{
-              detail['ouvert']  = 0;
-            }
-
-          }else{
-            detail['present'] = $scope.details.details[i].present;
-            detail['ouvert']  = $scope.details.details[i].ouvert;
-          }
-          details.push(detail);
+      var details = [];
+      for (var i = 0; i < $scope.details.details[i].length; i++) {
+        var detail = {
+          codeArticle: $scope.details.details[i].codeArticle,
         }
+        if ($scope.details.details[i].idMotif === "edit" && $scope.details.details[i].codeArticle === $scope.itemEdit.codeArticle
+        ) {
+          if ($scope.itemEdit.present == true) {
+            detail['present'] = 1;
+          } else {
+            detail['present'] = 0;
+          }
+          if ($scope.itemEdit.ouvert == true) {
+            detail['ouvert'] = 1;
+          } else {
+            detail['ouvert'] = 0;
+          }
+
+        } else {
+          detail['present'] = $scope.details.details[i].present;
+          detail['ouvert'] = $scope.details.details[i].ouvert;
+        }
+        details.push(detail);
+      }
 
 
-          var ligneDetailTosend = {
-            codeTauxpresence  :$scope.details.codeTauxpresence,
-            codeClient        :$scope.details.codeClient,
-            idOperation       :$scope.details.idOperation,
-            raisonSociale     :$scope.details.raisonSociale,
-            adresse           :$scope.details.adresse,
-            telephone         :$scope.details.telephone,
-            codeCommerciale   :$scope.data.user.code,
-            // position          :$scope.details.,
-            details           :detail
-          }        
-              $ionicLoading.show({
-                content: "Loading",
-                animation: "fade-in",
-                showBackdrop: true,
-                maxWidth: 200,
-                showDelay: 0,
-                duration: 10000,
+      var ligneDetailTosend = {
+        codeTauxpresence: $scope.details.codeTauxpresence,
+        codeClient: $scope.details.codeClient,
+        idOperation: $scope.details.idOperation,
+        raisonSociale: $scope.details.raisonSociale,
+        adresse: $scope.details.adresse,
+        telephone: $scope.details.telephone,
+        codeCommerciale: $scope.data.user.code,
+        // position          :$scope.details.,
+        details: detail
+      }
+      $ionicLoading.show({
+        content: "Loading",
+        animation: "fade-in",
+        showBackdrop: true,
+        maxWidth: 200,
+        showDelay: 0,
+        duration: 10000,
+      });
+
+      ApiModificationDetailPDS.modificationDetailPDS(ligneDetailTosend)
+        .success(
+          function (response) {
+
+            $ionicLoading.hide();
+            if (response.reponse == 1) {
+
+              $scope.data.detailsPDS.details[i].idMotif =
+                $scope.data.motifchoisit.idMotif;
+              $scope.data.detailsPDS.details[i].quantite = $scope.data.quantite;
+              $scope.data.detailsPDS.details[i].codeArticle = $scope.data.artcilechoisit.code;
+              $scope.data.detailsPDS.details[i].article = $scope.data.artcilechoisit.libelle;
+
+              var pds = JSON.parse(localStorage.getItem('pdslocal'));
+
+              var searchPds = $filter('filter')(pds, { codePDS: $scope.data.detailsPDS.codePDS });
+              if (searchPds && searchPds.length === 1) {
+                var pdsLocal = searchPds[0];
+                pds.splice(pdsLocal, 1);
+                pds.push($scope.data.detailsPDS);
+
+                localStorage.setItem('pdslocal', JSON.stringify(pds))
+              }
+
+
+
+              $scope.edit = false;
+              $scope.data.motifchoisit = null;
+
+              $ionicPopup.show({
+                title: "Information",
+                template: 'réussi',
+                scope: $scope,
+                buttons: [
+                  {
+                    text: "Ok",
+                    type: "button-assertive",
+                  },
+                ],
               });
+            } else {
+              if (response.reponse == -83) {
+                $ionicPopup.show({
+                  title: "Information",
+                  template: 'Pds deja validee',
+                  scope: $scope,
+                  buttons: [
+                    {
+                      text: "Ok",
+                      type: "button-assertive",
+                    },
+                  ],
+                });
+              }
+            }
 
-              ApiModificationDetailPDS.modificationDetailPDS(ligneDetailTosend)
-                .success(
-                  function (response) {
+          }, (error) => {
+            $ionicLoading.hide();
+            $scope.Erreur(errorMessage);
+          }
+        )
 
-                    $ionicLoading.hide();
-                    if (response.reponse == 1) {
-
-                      $scope.data.detailsPDS.details[i].idMotif =
-                        $scope.data.motifchoisit.idMotif;
-                      $scope.data.detailsPDS.details[i].quantite = $scope.data.quantite;
-                      $scope.data.detailsPDS.details[i].codeArticle = $scope.data.artcilechoisit.code;
-                      $scope.data.detailsPDS.details[i].article = $scope.data.artcilechoisit.libelle;
-
-                      var pds = JSON.parse(localStorage.getItem('pdslocal'));
-
-                      var searchPds = $filter('filter')(pds, { codePDS: $scope.data.detailsPDS.codePDS });
-                      if (searchPds && searchPds.length === 1) {
-                        var pdsLocal = searchPds[0];
-                        pds.splice(pdsLocal, 1);
-                        pds.push($scope.data.detailsPDS);
-
-                        localStorage.setItem('pdslocal', JSON.stringify(pds))
-                      }
-
-
-
-                      $scope.edit = false;
-                      $scope.data.motifchoisit = null;
-
-                      $ionicPopup.show({
-                        title: "Information",
-                        template: 'réussi',
-                        scope: $scope,
-                        buttons: [
-                          {
-                            text: "Ok",
-                            type: "button-assertive",
-                          },
-                        ],
-                      });
-                    } else {
-                      if (response.reponse == -83) {
-                        $ionicPopup.show({
-                          title: "Information",
-                          template: 'Pds deja validee',
-                          scope: $scope,
-                          buttons: [
-                            {
-                              text: "Ok",
-                              type: "button-assertive",
-                            },
-                          ],
-                        });
-                      }
-                    }
-
-                  }, (error) => {
-                    $ionicLoading.hide();
-                    $scope.Erreur(errorMessage);
-                  }
-                )
-      
     };
     $scope.detailslistTauxPresence = function () {
       $ionicLoading.show({ content: 'Loading', animation: 'fade-in', showBackdrop: true, maxWidth: 200, showDelay: 0, duration: 10000 });
 
       ApiDetailsTauxPresences.getDetailsTauxPresences(codeTauxpresence)
-      .success(function (response) {
-        $ionicLoading.hide();
-        if (response) {
-          $scope.data.detaillisttauxpresences = response;
-          if(response.details){
-            $scope.details = response;
+        .success(function (response) {
+          $ionicLoading.hide();
+          if (response) {
+            $scope.data.detaillisttauxpresences = response;
+            if (response.details) {
+              $scope.details = response;
+            }
+
+            // console.log(" liste taux de presence", $scope.data.detaillisttauxpresences)
+            console.log('----------------------details----------------------');
+            console.log(response);
+          }
+        },
+          (error) => {
+            console.log(error);
+            $ionicLoading.hide();
           }
 
-         // console.log(" liste taux de presence", $scope.data.detaillisttauxpresences)
-         console.log('----------------------details----------------------');
-         console.log(response);
-        }
-      },
-        (error) => {
-          console.log(error);
-          $ionicLoading.hide();
-        }
-
-      );
+        );
     }
     $scope.detailslistTauxPresence();
-    
+
     $scope.goToNewTaux = function () {
       localStorage.setItem('prc', null);
       $state.transitionTo(
@@ -16216,12 +16291,12 @@ PLANNING DESTOCKEURS*/
         }
       );
     };
- 
 
-  
+
+
   })
 
- 
+
   //  Taux  presence controller
 
   //  Taux  presence controller
@@ -16236,11 +16311,11 @@ PLANNING DESTOCKEURS*/
     formatNewDate, ApiRecapFactPrc,
     SeparateurMillier,
     ApiListAgentChefZone,
-   
+
     ApiListArticle,
     ApiAddTauxPresence,
     ApiListTauxOperation,
-    ApiListGrossisteDestocke, $filter, ApiListventejour,ApiDetailsTauxPresences) {
+    ApiListGrossisteDestocke, $filter, ApiListventejour, ApiDetailsTauxPresences) {
     console.log('contoller Tauxpresence');
 
     $scope.data.recuperationarticle = {};
@@ -16255,17 +16330,17 @@ PLANNING DESTOCKEURS*/
     $scope.data.listoperations = [];
     $scope.data.operationchoisit = null;
     $scope.data.bol = false;
-  
+
 
     // $scope.showPopUp = function (libelle, etat, code = "") {
-      
+
     //   $ionicPopup.show({
     //     title: etat == 1 ? "Code: " + code : "",
     //     template:
     //       etat == 1
     //         ? libelle
     //         : '<img src="http://test-test.h-tsoft.com/{{libelle}}">',
-            
+
     //     scope: $scope,
     //     buttons: [
     //       {
@@ -16277,10 +16352,10 @@ PLANNING DESTOCKEURS*/
     // };
 
     $scope.editDetail = function (item, action) {
-      $scope.edit       = true;
-      $scope.action     = action;
-      item.idMotif      = "edit";
-      $scope.itemEdit   = item;
+      $scope.edit = true;
+      $scope.action = action;
+      item.idMotif = "edit";
+      $scope.itemEdit = item;
 
       for (var i = 0; i < $scope.data.detailsPDC.length; i++) {
         if (
@@ -16293,7 +16368,7 @@ PLANNING DESTOCKEURS*/
       }
 
     };
-  
+
     $scope.annulerEdit = function () {
       $scope.edit = false;
       $scope.data.artcilechoisit = null;
@@ -16353,20 +16428,20 @@ PLANNING DESTOCKEURS*/
       $scope.isLoaded = false;
       $scope.isCanceled = false;
 
-    $scope.data.telephone = null;
-    $scope.data.adresse = null;
-    $scope.data.raisonSociale = null;
-    
-    var details    = localStorage.getItem("detailstauxpresence");
-    $scope.details = JSON.parse(details)
+      $scope.data.telephone = null;
+      $scope.data.adresse = null;
+      $scope.data.raisonSociale = null;
 
-    if($scope.details){
-      console.log('Il est la');
-        $scope.codeTauxpresence     = $scope.details.codeTauxpresence;
-        $scope.data.telephone       = $scope.details.telephone;
-        $scope.data.adresse         = $scope.details.adresse;
-        $scope.data.raisonSociale   = $scope.details.raisonSociale;  
-    }
+      var details = localStorage.getItem("detailstauxpresence");
+      $scope.details = JSON.parse(details)
+
+      if ($scope.details) {
+        console.log('Il est la');
+        $scope.codeTauxpresence = $scope.details.codeTauxpresence;
+        $scope.data.telephone = $scope.details.telephone;
+        $scope.data.adresse = $scope.details.adresse;
+        $scope.data.raisonSociale = $scope.details.raisonSociale;
+      }
 
     };
 
@@ -16477,16 +16552,16 @@ PLANNING DESTOCKEURS*/
 
 
     };
-   
+
     ApiListClient.getListClient().success(function (response) {
 
       $ionicLoading.hide();
       if (response) {
         $scope.data.listtauxclients = response;
-        if($scope.details && $scope.details.codeClient){
+        if ($scope.details && $scope.details.codeClient) {
           var searchClient = $filter('filter')($scope.data.listtauxclients, { codeClient: $scope.details.codeClient })
-          if(searchClient && searchClient.length == 1){
-            $scope.data.clientchoisit  =searchClient[0]; 
+          if (searchClient && searchClient.length == 1) {
+            $scope.data.clientchoisit = searchClient[0];
           }
 
         }
@@ -16501,7 +16576,7 @@ PLANNING DESTOCKEURS*/
 
 
 
-    
+
     $scope.valideEdit = function () {
       if ($scope.data.motifchoisit && $scope.data.motifchoisit.idMotif !== "") {
         for (var i = 0; i < $scope.data.detailsPDC.length; i++) {
@@ -16703,10 +16778,10 @@ PLANNING DESTOCKEURS*/
       if (response) {
         $scope.data.listoperations = response;
         console.log('Ops', $scope.data.listoperations)
-        if($scope.details && $scope.details.idOperation){
+        if ($scope.details && $scope.details.idOperation) {
           var searchOp = $filter('filter')($scope.data.listoperations, { idOperation: $scope.details.idOperation })
-          if(searchOp && searchOp.length == 1){
-            $scope.data.operationchoisit  =searchOp[0]; 
+          if (searchOp && searchOp.length == 1) {
+            $scope.data.operationchoisit = searchOp[0];
           }
         }
       }
@@ -16718,39 +16793,38 @@ PLANNING DESTOCKEURS*/
     );
 
     $scope.selectArticle = function () {
-      if($scope.details && $scope.details.details)
-          {
-            console.log('details',$scope.details.details);
-            var details = [];
-            for(var i=0; i<$scope.details.details.length;i++){
-              details.push(
-                {
-                  code        :$scope.details.details[i].codeArticle,
-                  libelle     :$scope.details.details[i].libelle,
-                  categorie   :$scope.details.details[i].categorie,
-                  poids   :$scope.details.details[i].poids,
-                  present     :$scope.details.details[i].present == 1 ? true : false,
-                  ouvert      :$scope.details.details[i].ouvert  == 1 ? true : false
-                }
-              );
+      if ($scope.details && $scope.details.details) {
+        console.log('details', $scope.details.details);
+        var details = [];
+        for (var i = 0; i < $scope.details.details.length; i++) {
+          details.push(
+            {
+              code: $scope.details.details[i].codeArticle,
+              libelle: $scope.details.details[i].libelle,
+              categorie: $scope.details.details[i].categorie,
+              poids: $scope.details.details[i].poids,
+              present: $scope.details.details[i].present == 1 ? true : false,
+              ouvert: $scope.details.details[i].ouvert == 1 ? true : false
             }
+          );
+        }
 
-            if(details){
-              $scope.data.detailsPDC = details;
-            }
-            
-          }else{
-            // ApiListArticle.getListArticle().success(function (response) {
-      ApiListTauxArticle.getListTauxArticle().success(function (response) {
-        $ionicLoading.hide();
-        if (response) {
-          
-         // $scope.data.detailsPDC = response;
-         // $scope.data.recuperationarticle = $scope.data.listarticles;
-     //  console.log($scope.data.recuperationarticle);
-         $scope.data.detailsPDC = response;
-         console.log("recup",$scope.data.detailsPDC);
-            
+        if (details) {
+          $scope.data.detailsPDC = details;
+        }
+
+      } else {
+        // ApiListArticle.getListArticle().success(function (response) {
+        ApiListTauxArticle.getListTauxArticle().success(function (response) {
+          $ionicLoading.hide();
+          if (response) {
+
+            // $scope.data.detailsPDC = response;
+            // $scope.data.recuperationarticle = $scope.data.listarticles;
+            //  console.log($scope.data.recuperationarticle);
+            $scope.data.detailsPDC = response;
+            console.log("recup", $scope.data.detailsPDC);
+
             //  for(var i=0;i<$scope.details.details.length;i++){
             //    $scope.data.artcilechoisit = null;
             //    $scope.data.present        = null;
@@ -16761,7 +16835,7 @@ PLANNING DESTOCKEURS*/
             //           break;
             //       }
             //    }
-            
+
             //      if($scope.details.details[i].present == 1){
             //        $scope.data.present = true;
             //      }
@@ -16769,18 +16843,18 @@ PLANNING DESTOCKEURS*/
             //        $scope.data.ouvert = true;
             //      } 
             //      $scope.ajouter();
-           
+
             // }
-             
-        }
-      },
-        (error) => {
-          console.log(error);
-          $ionicLoading.hide();
-        }
-      );
+
           }
-      
+        },
+          (error) => {
+            console.log(error);
+            $ionicLoading.hide();
+          }
+        );
+      }
+
     }
 
     $scope.goToNewTaux = function () {
@@ -16827,20 +16901,20 @@ PLANNING DESTOCKEURS*/
     $scope.submit = function () {
 
       if ($scope.data.clientchoisit && $scope.data.operationchoisit
-         && $scope.data.raisonSociale && $scope.data.adresse
-         && $scope.data.telephone
+        && $scope.data.raisonSociale && $scope.data.adresse
+        && $scope.data.telephone
       ) {
         // var codeTauxpresence = $scope.data.user ? $scope.data.codeTauxpresence : "FTP-" + $scope.data.user.code + "-" + CodeGenere.getCodeGenere();
         var details = [];
         for (var j = 0; j < $scope.data.detailsPDC.length; j++) {
-          if($scope.data.detailsPDC[j].present == true){
+          if ($scope.data.detailsPDC[j].present == true) {
             $scope.data.detailsPDC[j].present
           }
-          if($scope.data.detailsPDC[j].ouvert == true){
+          if ($scope.data.detailsPDC[j].ouvert == true) {
             $scope.data.detailsPDC[j].ouvert
           }
 
-            details.push(
+          details.push(
             {
               codeArticle: $scope.data.detailsPDC[j].code ? $scope.data.detailsPDC[j].code : $scope.data.detailsPDC[j].codeArticle,
               present: $scope.data.detailsPDC[j].present,
@@ -16848,52 +16922,52 @@ PLANNING DESTOCKEURS*/
             }
           )
         }
-        var code  = "";
+        var code = "";
         var modif = 0;
         //var modif = false;
 
-        if(!$scope.details){
-          code  = "FTP-" + $scope.data.user.code + "-" + CodeGenere.getCodeGenere();
-        }else{
-         // modif  = true;
-          modif  = 1;
-          code  = $scope.details.codeTauxpresence;
+        if (!$scope.details) {
+          code = "FTP-" + $scope.data.user.code + "-" + CodeGenere.getCodeGenere();
+        } else {
+          // modif  = true;
+          modif = 1;
+          code = $scope.details.codeTauxpresence;
         }
 
         var values = {
-          codeTauxpresence      : code,
-          codeClient            : $scope.data.clientchoisit.codeClient,
-          idOperation           : $scope.data.operationchoisit.idOperation,
-          raisonSociale         : $scope.data.raisonSociale,
-          adresse               : $scope.data.adresse,
-          telephone             :""+ $scope.data.telephone,
-          codeCommerciale       : $scope.data.user.code,
-          position              : $scope.data.clientchoisit.position,
-          details               : details
+          codeTauxpresence: code,
+          codeClient: $scope.data.clientchoisit.codeClient,
+          idOperation: $scope.data.operationchoisit.idOperation,
+          raisonSociale: $scope.data.raisonSociale,
+          adresse: $scope.data.adresse,
+          telephone: "" + $scope.data.telephone,
+          codeCommerciale: $scope.data.user.code,
+          position: $scope.data.clientchoisit.position,
+          details: details
         };
 
         for (var j = 0; j < values.details.length; j++) {
-          if( values.details[j].present == true){
+          if (values.details[j].present == true) {
             values.details[j].present = 1;
-          }else{
+          } else {
             values.details[j].present = 0;
           }
-          if( values.details[j].ouvert == true){
+          if (values.details[j].ouvert == true) {
             values.details[j].ouvert = 1;
-            
-          }else{
+
+          } else {
             values.details[j].ouvert = 0;
           }
 
-          if( values.details[j].codeArticle !== 0){
+          if (values.details[j].codeArticle !== 0) {
             values.details[j].codeArticle = "" + values.details[j].codeArticle;
-            
-          }else{
-            values.details[j].codeArticle =values.details[j].codeArticle;
+
+          } else {
+            values.details[j].codeArticle = values.details[j].codeArticle;
           }
         }
-        console.log("values",values)
-        console.log("modif",modif)
+        console.log("values", values)
+        console.log("modif", modif)
         $ionicLoading.show({
           template: 'Traitement en cours...'
         });
@@ -16902,7 +16976,7 @@ PLANNING DESTOCKEURS*/
             $ionicLoading.hide();
             console.log(response.reponse)
             if (response.reponse == 1) {
-             
+
               $ionicPopup.show({
                 title: "Infos",
                 template: "réussi",
@@ -16924,7 +16998,7 @@ PLANNING DESTOCKEURS*/
                   }
                 );
               });
-            }else{
+            } else {
               $ionicPopup.show({
                 title: "Erreur",
                 template: "" + response.reponse,
@@ -16936,7 +17010,7 @@ PLANNING DESTOCKEURS*/
                   },
                 ],
               }).then(function (result) {
-                
+
               });
             }
 
@@ -16958,7 +17032,7 @@ PLANNING DESTOCKEURS*/
           ]
         })
       }
-      
+
     };
   })
   .controller('recouvrementCtrl', function (
@@ -17301,7 +17375,7 @@ PLANNING DESTOCKEURS*/
         var user = localStorage.getItem('user');
         user = JSON.parse(user);
         // console.log(user);
-          var params = {codeCommerciale:user.code, motRecherche: motsearch}
+        var params = { codeCommerciale: user.code, motRecherche: motsearch }
         return $http.post(url + '/facture/recherche.php', params);
       }
     }
@@ -17396,7 +17470,7 @@ PLANNING DESTOCKEURS*/
         var url = urlPhp.getUrl();
         var user = localStorage.getItem("user");
         user = JSON.parse(user);
-         console.log('----Detail taux presence----');
+        console.log('----Detail taux presence----');
         //  var params = {codeUtilisateur:user.code}
         return $http.post(url + "/tauxpresence/details.php", values);
       },
@@ -18417,13 +18491,9 @@ PLANNING DESTOCKEURS*/
 
     return {
       getUrl: function () {
-<<<<<<< HEAD
-         return "http://test-test.h-tsoft.com/apiagroline";
-      //  return "http://test-test.h-tsoft.com/apiagrolineprod";
-=======
-        //return "http://test-test.h-tsoft.com/apiagroline";
-        return "http://test-test.h-tsoft.com/apiagrolineprod";
->>>>>>> bb06e902533684486146e7182a06efc093a67285
+
+        return "http://test-test.h-tsoft.com/apiagroline";
+        //return "http://test-test.h-tsoft.com/apiagrolineprod";
         //return "http://htsoftdemo.com/apiccbm";
         //return "http://192.168.1.34/CCBM-serveur";
         //  return "http://mob-test.yosard.com/webservice";

@@ -27,7 +27,7 @@
           </button>
         </div>
       </div>
-      
+
 
       <!-- <label class="item-input-wrapper" style="height: 6%;" >
         <i class="icon ion-ios-search placeholder-icon"></i>
@@ -89,6 +89,22 @@
         .map {
           height: 150px !important;
         }
+
+        img {
+          width: 200px;
+          transition: transform .4s;
+        }
+
+        img:hover {
+         
+          -ms-transform: scale(11) translate(10px,10px);
+          /* IE 9 */
+          -webkit-transform: scale(11) translate(10px,10px);
+          /* Safari 3-8 */
+          transform: scale(11) translate(10px,10px);
+          overflow: hidden;
+         
+        }
       </style>
 
       <div class="list" ng-repeat="cli in data.clients">
@@ -98,11 +114,14 @@
 
           <img ng-if="!cli.photo" src="./img/client.png" style="width:10%; height: 10%;">
           <img ng-if="cli.photo" src="http://test-test.h-tsoft.com/{{cli.photo}}" style="width:10%; height: 10%;">
-          <div class="row" >
+          <div class="row">
             <div class="col">Coordonnees</div>
-            <div class="col" >
-              <p ng-if="cli.position && cli.position!=='' && cli.position!==',' && cli.position!==' '" style="white-space: pre-line;">{{ cli.position}}</p>
-              <span ng-if="!cli.position || cli.position=='' || cli.position==',' || cli.position==' '" class="badge badge-danger" style="background-color:  #ef473a !important;color: white;">Pas de coords.</span>            
+            <div class="col">
+              <p ng-if="cli.position && cli.position!=='' && cli.position!==',' && cli.position!==' '"
+                style="white-space: pre-line;" ng-click="goTogoogle(cli.position)">{{ cli.position}}</p>
+              <span ng-if="!cli.position || cli.position=='' || cli.position==',' || cli.position==' '"
+                class="badge badge-danger" style="background-color:  #ef473a !important;color: white;">Pas de
+                coords.</span>
             </div>
           </div>
 
@@ -173,8 +192,8 @@
               <p style="white-space: pre-line;">{{ cli.typepointvente}}</p>
             </div>
           </div>
-        
-          <div class="row">
+
+          <!-- <div class="row" >
               <div class="col">
                 <button slot="end" ng-click="getAdresseGoogleNew(cli)">
                   @ Google
@@ -184,41 +203,43 @@
               <div class="col">
                 <p text-wrap style="white-space: pre-line;">{{cli.adresseGoogle}}</p>
               </div>
+          </div> -->
+
+        </a>
+        <div class="row content-div" style="justify-content: space-between;">
+
+          <div class="col-4">
+            <button class="button button-clear button-assertive" style="color: white; ">
+              <button style="margin-left: -25px; position: absolute;  border: none;height: 10%; width: 70px;"
+                ng-click="goTocaClient(cli)">
+                Chiffre d'affaire
+              </button>
+            </button>
           </div>
-         
-      </a>
-      <div class="row content-div" style="justify-content: space-between;">
 
-        <div class="col-4">
-          <button class="button button-clear button-assertive"  style="color: white; ">
-           <button style="margin-left: -25px; position: absolute;  border: none;height: 10%; width: 70px;" ng-click="goTocaClient(cli)">
-            Chiffre d'affaire
-          </button>
-          </button>
+
+
+          <div class="col-4">
+            <button class="button button-clear button-assertive" style="color: white;">
+              <button style="margin-left: -45px; position: absolute; border: none; height: 10%; width: 70px;"
+                ng-click="goToNewCoordonnees(cli)">
+                Map
+              </button>
+            </button>
+          </div>
+
+          <div class="col-4">
+
+            <button class="button button-clear button-assertive" style="color: white;">
+              <button style=" margin-left: -70px; position: absolute; border: none; height: 10%; width: 70px;"
+                ng-click="goToNewClient(cli, 'edit')">
+                Modifier
+              </button>
+            </button>
+          </div>
+
         </div>
-
-       
-
-        <div class="col-4">
-          <button class="button button-clear button-assertive"  style="color: white;">
-           <button  style="margin-left: -45px; position: absolute; border: none; height: 10%; width: 70px;" ng-click="goToNewCoordonnees(cli)">
-            Map
-          </button>
-          </button>
-        </div>
-
-        <div class="col-4">
-
-          <button class="button button-clear button-assertive" 
-            style="color: white;">
-            <button  style=" margin-left: -70px; position: absolute; border: none; height: 10%; width: 70px;" ng-click="goToNewClient(cli, 'edit')">
-            Modifier
-          </button>
-          </button>
-        </div>
-
       </div>
-  </div>
   </div>
 
 

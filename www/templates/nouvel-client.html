@@ -119,10 +119,27 @@
 
             </div>
 
-            <div class="col">
+            <!-- <div class="col">
               <label class="item item-input">
                 <input type="text" id="marhe" ng-model="data.marche" placeholder="Marche">
               </label>
+            </div> -->
+              <div class="col" ng-if="!data.adresse" >
+                <button class="button button-block button-assertive"
+                  cancel-button="{{ 'fichevisite_select_pv_return' | translate }}"
+                  reset-button="{{ 'fichevisite_select_pv_cancel' | translate }}"
+                  cancel-search-button="{{ 'fichevisite_select_pv_clear' | translate }}"
+                  search-placeholder="{{ 'fichevisite_select_pv_search' | translate }}" modal-select=""
+                  ng-model="data.marchechoisit" options="data.listmarches" option-getter="getOptMarche(option)"
+                  modal-button-left="{{ 'fichevisite_select_pv_return' | translate }}" modal-title="Selection"
+                  has-search="true">
+                  <label for="" ng-if="!data.marchechoisit">Choisir un Marche</label>
+                  <label for="" ng-if="data.marchechoisit">{{data.marchechoisit.libelle}}</label>
+                  <div class="option">
+                    <h2> {{option.libelle}}</h2>
+                  </div>
+                </button>
+              
             </div>
 
           </div>
@@ -198,10 +215,10 @@
             </div>
 
 
-            <div class="col">
+            <div class="col" ng-if="!data.marchechoisit">
               <div class="list" >
                 <label class="item item-input">
-                  <input type="text" id="adresse" ng-model="data.adresse"  ng-style="setBackgroundAdresse()" placeholder=" Adresse client *">
+                  <input type="text" id="adresse" ng-model="data.adresse"  ng-style="setBackgroundAdresse()" placeholder=" Adresse client *" >
                 </label>
               </div>
             </div>
