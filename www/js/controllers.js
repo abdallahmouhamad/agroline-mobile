@@ -18595,7 +18595,7 @@ PLANNING DESTOCKEURS*/
         if (day < 10) {
           day = "0" + "" + day;
         }
-        var second = parseInt(d.getSeconds())
+        var second = parseInt(d.getSeconds()) 
         if (second < 10) {
           second = "0" + "" + second;
         }
