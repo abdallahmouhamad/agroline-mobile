@@ -225,13 +225,13 @@
         <div class="list" ng-if="initial == true ||  edit == true">
           <label class="item item-input">
             <span class="input-label">Quantité</span>
-            <input type="number" id="quantite" ng-model="data.quantite" placeholder="pack">
+            <input type="number" id="quantite" ng-model="data.quantite" placeholder="Pack">
           </label>
         </div>
         <div class="list" ng-if="initial == true ||  edit == true">
           <label class="item item-input">
             <span class="input-label">Prix unitaire</span>
-            <input type="number" id="prix" ng-model="data.prix" placeholder="cfa">
+            <input type="number" id="prix" ng-model="data.prix" placeholder="Cfa">
           </label>
         </div>
 
@@ -363,7 +363,7 @@
     </div>
     <div class="bar bar-footer footer-button">
       <button ng-click="submit()" class="button button-block button-assertive footer-button" type="submit"
-        name="submit"><span style="color:white">Valider la vente</span></button>
+        name="submit" ng-disabled="disable"><span style="color:white">Valider la vente</span></button>
     </div>
   </ion-pane>
 </ion-view>

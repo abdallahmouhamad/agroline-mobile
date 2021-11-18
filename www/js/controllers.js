@@ -938,17 +938,17 @@ PLANNING DESTOCKEURS*/
         var latLng = new google.maps.LatLng(lat, lng);
       }
     }
-    $scope.clickTest = function () {
-      console.log("coords", lat, lng);
-      // launchnavigator.navigate([lat, lng]);
-      document.addEventListener("deviceready", function () {
-        launchnavigator.navigate([50.279306, -5.163158], {
-          start: "50.342847, -4.749904"
-        });
-      }, false);
+    // $scope.clickTest = function () {
+    //   console.log("coords", lat, lng);
+    //   // launchnavigator.navigate([lat, lng]);
+    //   document.addEventListener("deviceready", function () {
+    //     launchnavigator.navigate([50.279306, -5.163158], {
+    //       start: "50.342847, -4.749904"
+    //     });
+    //   }, false);
 
 
-    };
+    // };
     var user = JSON.parse(localStorage.getItem("user"));
     $scope.getPosition = function () {
       $scope.nomclient = position.nom;
@@ -999,13 +999,13 @@ PLANNING DESTOCKEURS*/
               icon: "http://i.imgur.com/fDUI8bZ.png",
 
             });
-            var contentString = '<div><button ng-click="clickTest()"><a href= "https://www.google.com/maps/dir//@{{$scope.positionClient}}z">Lien Google</a></button></div>';
+            var contentString = '<div><button ><a href= "https://www.google.com/maps/dir//@{{$scope.positionClient}}z">Lien Google</a></button></div>';
             var compiled = $compile(contentString)($scope);
             // var url = "https://www.google.com/maps/place/"+ lat + "," + lng;
             var infoWindow = new google.maps.InfoWindow({
               content: "Point de vente!"
                 + "<br/>Raison social: " + $scope.nomclient
-                + "<br/>Adresse:"+ $scope.adresse
+                + "<br/>Adresse:" + $scope.adresse
                 + "<br/>"
                 + "<br/>" + contentString
 
@@ -1037,7 +1037,7 @@ PLANNING DESTOCKEURS*/
    }, false);*/
 
     $scope.getPosition();
-    $scope.clickTest();
+    // $scope.clickTest();
 
   })
 
@@ -3590,13 +3590,13 @@ PLANNING DESTOCKEURS*/
       showDelay: 0,
       duration: 10000,
     });
-    console.log("liststock 1" );
+    console.log("liststock 1");
 
     ApiListStock.getListStock().success(
-     
+
 
       function (response) {
-        console.log("liststock 2" );
+        console.log("liststock 2");
         $ionicLoading.hide();
         if (response) {
           $scope.data.listStock = response;
@@ -3628,7 +3628,11 @@ PLANNING DESTOCKEURS*/
     ApiCaClient,
     ApiRechercheClient,
     $cordovaGeolocation,
+    ApiPaginationclient,
     $window,
+    $timeout,
+    urlPhp,
+    $http,
     $ionicPopup,
     ApiListDepartement,
     ApiListLocalite,
@@ -3653,7 +3657,40 @@ PLANNING DESTOCKEURS*/
     var clientca = localStorage.getItem('clientca')
     $scope.clientCa = clientca ? JSON.parse(clientca) : null;
     var user = JSON.parse(localStorage.getItem("user"));
+
+
+    $scope.clientPage = [];
+    $scope.page = 0,
+    $scope.count = 20;
+    $scope.theEnd = false;
+
    
+
+    $scope.$on('$stateChangeSuccess', function () {
+      $scope.loadMore();
+    });
+
+    $scope.loadMore = function (argument) {
+      $scope.page++;
+      ApiPaginationclient.getPaginationclient($scope.page, $scope.count)
+      .success(function (response) {
+          console.log('items fetched: ' + response.length);
+          if (response && response.length > 0) {
+            angular.forEach(response, function (value, key) {
+              $scope.clientPage.push(value);
+            });
+          }
+          else {
+            $scope.theEnd = true;
+          }
+        })
+        .finally(function () {
+          $scope.$broadcast("scroll.infiniteScrollComplete");
+        });
+    };
+
+   
+
     $scope.getPosition = function () {
       $scope.nomclient = user.nom;
       var options = { timeout: 10000, enableHighAccuracy: true };
@@ -3791,13 +3828,13 @@ PLANNING DESTOCKEURS*/
 
     $scope.initvar = function () {
       $scope.data.clients = [];
-      $scope.data.positionclients= [];
+      $scope.data.positionclients = [];
       $scope.listClients();
       // $scope.selectDepartementByRegion();
       //  $scope.selectLocaliteByDepartement();
     };
     //Init variables of controller
-    $scope.goTogoogle= function (cli) {
+    $scope.goTogoogle = function (cli) {
       $scope.listClients();
       ApiListClient.getListClient().success(
         function (response) {
@@ -3811,7 +3848,7 @@ PLANNING DESTOCKEURS*/
           $ionicLoading.hide();
         }
       );
-      console.log("cli.position",cli.position);
+      console.log("cli.position", cli.position);
       $state.transitionTo(
         "http://www.google.com/maps/place/{{cli.position}}",
         {},
@@ -3923,14 +3960,14 @@ PLANNING DESTOCKEURS*/
 
     $scope.listClients = function () {
 
-      // console.log("This is stock module");
 
-      $ionicLoading.show({
-        content: "Loading",
-        animation: "fade-in",
-        showBackdrop: true,
-        maxWidth: 200,
-      });
+      // $ionicLoading.show({
+      //   content: "Loading",
+      //   animation: "fade-in",
+      //   showBackdrop: true,
+      //   maxWidth: 200,
+      // });
+
       // $scope.getAdresseGoogle();
       ApiListClient.getListClient().success(function (response) {
         $ionicLoading.hide();
@@ -3939,7 +3976,6 @@ PLANNING DESTOCKEURS*/
           $scope.data.clients = response;
           $scope.data.client = response;
         }
-        console.log(response);
 
         var adresses = [];
 
@@ -4727,14 +4763,14 @@ PLANNING DESTOCKEURS*/
       $scope.border = true;
       if ($scope.data.nom && $scope.data.telephone &&
         $scope.data.regionchoisit
+        && $scope.data.TypePointVentechoisit
         // && $scope.data.departementchoisit
         //  && $scope.data.localitechoisitchoisit
-        && $scope.data.TypePointVentechoisit
         // && $scope.data.marche
         // && $scope.data.modepaiementchoisit
         // && $scope.data.grossistechoisit
         // && $scope.data.position
-        && $scope.data.adresse
+        //&& $scope.data.adresse
         //  && $scope.data.telephone2
       ) {
 
@@ -4747,12 +4783,11 @@ PLANNING DESTOCKEURS*/
           idRegion: $scope.data.regionchoisit ? $scope.data.regionchoisit.idRegion : null,
           //idZone: $scope.data.zonechoisit ? $scope.data.zonechoisit.idZone : null,
           //idVille: $scope.data.villechoisit ? $scope.data.villechoisit.idVille : null,
-          //idMarche: $scope.data.marchechoisit ? $scope.data.marchechoisit.idMarche : null,
-
+          idMarche: $scope.data.marchechoisit ? $scope.data.marchechoisit.idMarche : null,
           idTypepointvente: $scope.data.TypePointVentechoisit ? $scope.data.TypePointVentechoisit.idTypepointvente : null,
           idDepartement: $scope.data.departementchoisit ? $scope.data.departementchoisit.idDepartement : null,
           idLocalite: $scope.data.localitechoisit ? $scope.data.localitechoisit.idLocalite : null,
-          marche: $scope.data.marche,
+          marche: $scope.data.marchechoisit ? $scope.data.marchechoisit.libelle : null,
           telephone: $scope.data.telephone,
           telephone2: $scope.data.telephone2,
           email: $scope.data.email ? $scope.data.email : $scope.data.nom + "@gmail.com",
@@ -4796,6 +4831,13 @@ PLANNING DESTOCKEURS*/
 
         if (!values.marche) {
           values.marche = " ";
+        }
+        // else{
+        //   values.marche =$scope.data.marchechoisit.libelle;
+        // }
+
+        if (!values.adresse) {
+          values.adresse = " ";
 
         }
 
@@ -10608,7 +10650,7 @@ PLANNING DESTOCKEURS*/
       $scope.data.prix = null;
       $scope.data.annulation = false;
       $scope.data.numFiche = null;
-
+      disable = false;
       $scope.initDetailPDS();
 
       if ($scope.data.pdsLocalToValide) {
@@ -11435,7 +11477,7 @@ PLANNING DESTOCKEURS*/
     }
     //localStorage.setItem("pds", null);
     $scope.submit = function (delet = null) {
-
+      disable = true;
       console.log("-----------------Value PDS-------------");
 
       //if ($scope.data.pds.codeGenere === $scope.data.code || delet !== null) {
@@ -11626,7 +11668,7 @@ PLANNING DESTOCKEURS*/
               localStorage.setItem("pds", null);
               localStorage.setItem('pdsLocalToValide', null)
               $scope.synchroStock();
-
+              
               $state.transitionTo(
                 "app.pds",
                 {},
@@ -11936,12 +11978,16 @@ PLANNING DESTOCKEURS*/
           showDelay: 0,
           duration: 10000,
         });
+        console.log("listes ventes...");
+
         ApiListFacturation.getListFacturation(code).success(
           function (response) {
             $ionicLoading.hide();
             if (response) {
               $scope.data.facturations = response;
               $scope.data.facturationTempon = response;
+              console.log("listes ventes", $scope.data.facturations);
+
             }
 
           },
@@ -12693,6 +12739,7 @@ PLANNING DESTOCKEURS*/
       $scope.data.listoperations = null;
       $scope.data.operationchoisi = null;
       // $scope.initDetailFCT();
+      disable = false;
     };
 
     $scope.getcodepds = function () {
@@ -13115,7 +13162,7 @@ PLANNING DESTOCKEURS*/
 
             $scope.data.listarticles = response;
 
-            console.log("article en stock",response);
+            console.log("article en stock", response);
           },
           (error) => {
             console.log(error);
@@ -13355,6 +13402,8 @@ PLANNING DESTOCKEURS*/
     }
 
     $scope.submit = function () {
+      
+
       var errorInput = '';
       $scope.initFact();
 
@@ -13467,7 +13516,7 @@ PLANNING DESTOCKEURS*/
 
 
       if (errorInput == '') {
-
+        disable = true;
         errorInput = ($scope.data.fact.details == null || $scope.data.fact.details.length == 0) && $scope.initial == true ? 'Impossible d\'inserer une facture sans artcile.' : '';
         errorInput = $scope.data.delaipaiement == null ? 'Veuillez mettre un delai de paiement' : ''
         if (errorInput == '') {
@@ -13500,7 +13549,7 @@ PLANNING DESTOCKEURS*/
 
                 if (response.reponse == 1) {
 
-
+                  
                   $ionicPopup.show({
                     title: "Infos",
                     template: "Insertion réussit",
@@ -17242,6 +17291,15 @@ PLANNING DESTOCKEURS*/
 
 
   })
+  .factory('ApiPaginationclient', function ($http,urlPhp) {
+    return {
+      getPaginationclient: function (page, count) {
+        var url = urlPhp.getUrl();
+       
+        return $http.get(url + "/client/liste.php?page=" + page + "&count=" + count);
+      }
+    };
+  })
   .factory('ApiPdsNoPayed', function ($http, urlPhp) {
     return {
       getPdsNoPayed: function (code) {
@@ -18493,7 +18551,7 @@ PLANNING DESTOCKEURS*/
       getUrl: function () {
 
         return "http://test-test.h-tsoft.com/apiagroline";
-        //return "http://test-test.h-tsoft.com/apiagrolineprod";
+        // return "http://test-test.h-tsoft.com/apiagrolineprod";
         //return "http://htsoftdemo.com/apiccbm";
         //return "http://192.168.1.34/CCBM-serveur";
         //  return "http://mob-test.yosard.com/webservice";

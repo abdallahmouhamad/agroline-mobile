@@ -2,7 +2,6 @@
   <div ng-app="starter">
     <ion-header translucent>
       <ion-toolbar>
-        <ion-title>Searchbar</ion-title>
       </ion-toolbar>
 
 
@@ -96,18 +95,18 @@
         }
 
         img:hover {
-         
-          -ms-transform: scale(11) translate(10px,10px);
+
+          -ms-transform: scale(10) translate(10px, 10px);
           /* IE 9 */
-          -webkit-transform: scale(11) translate(10px,10px);
+          -webkit-transform: scale(10) translate(10px, 10px);
           /* Safari 3-8 */
-          transform: scale(11) translate(10px,10px);
+          transform: scale(10) translate(10px, 10px);
           overflow: hidden;
-         
+
         }
       </style>
 
-      <div class="list" ng-repeat="cli in data.clients">
+      <div class="list" ng-repeat="cli in clientPage">
 
         <!-- <div class="list" ng-repeat="cli in data.ListRechercheClients | filter:motcle">-->
         <a class="item item-thumbnail-left">
@@ -240,12 +239,16 @@
 
         </div>
       </div>
+      <ion-infinite-scroll  on-infinite="loadMore()">
+      </ion-infinite-scroll>
   </div>
 
-
   </ion-content>
+
+
   <button class="button button-float bg" ng-click="goToNewClient(null,'new')">
     <i class="icon ion-plus"></i>
   </button>
   </div>
+
 </ion-view>
