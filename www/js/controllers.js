@@ -2161,7 +2161,7 @@ PLANNING DESTOCKEURS*/
                     maxWidth: 200,
                     showDelay: 0,
                     duration: 10000,
-                  });
+                  });  
                   while (
                     $scope.pvtempon.length <
                     $scope.pointvente.length - 1
