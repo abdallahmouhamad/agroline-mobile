@@ -18197,7 +18197,6 @@ PLANNING DESTOCKEURS*/
         console.log('-------------User-------');
         console.log(user);
         user = JSON.parse(user);
-
         return $http.post(url + '/inventaire/annuler.php', values);
       }
     }
@@ -18545,12 +18544,13 @@ PLANNING DESTOCKEURS*/
     };
   })
   .factory("urlPhp", function () {
-    var connect;
+    var connect;     
 
     return {
       getUrl: function () {
 
         return "http://test-test.h-tsoft.com/apiagroline";
+
         // return "http://test-test.h-tsoft.com/apiagrolineprod";
         //return "http://htsoftdemo.com/apiccbm";
         //return "http://192.168.1.34/CCBM-serveur";
