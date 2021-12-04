@@ -3152,8 +3152,8 @@ PLANNING DESTOCKEURS*/
       );
       $scope.getPosition().then(function (position) {
         console.log(position);
-        console.log(position.latitude);
-        console.log(position.longitude);
+        // console.log(position.latitude);
+        // console.log(position.longitude);
       });
 
     };
@@ -3761,6 +3761,7 @@ PLANNING DESTOCKEURS*/
 
       var mot = { motRecherche: $scope.data.searchValue };
       console.log("mot", mot)
+      $scope.loadMore();
       if ($scope.data.searchValue) {
         if (mot) {
           ApiRechercheClient.ListRechercheClient(mot)
@@ -3770,15 +3771,19 @@ PLANNING DESTOCKEURS*/
               $scope.data.ListRechercheClients = reponse;
               console.log(reponse);
               console.log("recherche 1", $scope.data.ListRechercheClients);
+              console.log("recherche 2", $scope.clientPage);
+
+              
               if (mot !== " ") {
-                $scope.data.clientTempon = $scope.data.client;
+                 $scope.data.clientTempon = $scope.data.client;
+                // $scope.data.clientTempon =  clientPage;
                 console.log("tem", $scope.data.clientTempon);
-                $scope.data.clients = $scope.data.ListRechercheClients;
+                $scope.clientPage = $scope.data.ListRechercheClients;
 
               }
               if (mot === " ") {
-                $scope.data.clients = [];
-                $scope.data.clients = $scope.data.clientTempon;
+                $scope.clientPage = [];
+                $scope.clientPage = $scope.data.clientTempon;
 
               }
             })
@@ -4005,6 +4010,8 @@ PLANNING DESTOCKEURS*/
     }
     $scope.initvar();
     $scope.recherche();
+    // $scope.getPosition();
+
 
     $scope.goToNewClient = function (item = null, sens) {
       localStorage.setItem('sens', sens)
@@ -4296,6 +4303,7 @@ PLANNING DESTOCKEURS*/
   })
   .controller("AddClientCtrl", function (
     $scope,
+    $translate,
     $state,
     $ionicLoading,
     ApiListClient,
@@ -18304,7 +18312,7 @@ PLANNING DESTOCKEURS*/
         var code = { codeUtilisateur: user.code }
 
         console.log(code);
-        console.log(url + '/grossiste/liste.php');
+        // console.log(url + '/grossiste/liste.php');
 
         return $http.post(url + '/grossiste/liste.php', code);
       }
@@ -18551,7 +18559,7 @@ PLANNING DESTOCKEURS*/
 
         return "http://test-test.h-tsoft.com/apiagroline";
 
-        // return "http://test-test.h-tsoft.com/apiagrolineprod";
+       //return "http://test-test.h-tsoft.com/apiagrolineprod";
         //return "http://htsoftdemo.com/apiccbm";
         //return "http://192.168.1.34/CCBM-serveur";
         //  return "http://mob-test.yosard.com/webservice";
