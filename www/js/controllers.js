@@ -1,5 +1,5 @@
-angular
-  .module("starter.controllers", ["pascalprecht.translate"])
+
+angular.module("starter.controllers", ["pascalprecht.translate"])
   // Accueil Controller
 
   .controller("DashCtrl", function ($scope) {
